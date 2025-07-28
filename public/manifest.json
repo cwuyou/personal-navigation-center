@@ -1,0 +1,68 @@
+{
+  "name": "个人导航中心",
+  "short_name": "导航中心",
+  "description": "个人书签管理和导航工具",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "utilities"],
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshot-narrow.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "添加书签",
+      "short_name": "添加",
+      "description": "快速添加新书签",
+      "url": "/?action=add",
+      "icons": [
+        {
+          "src": "/icon-add.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "搜索书签",
+      "short_name": "搜索",
+      "description": "搜索已保存的书签",
+      "url": "/?action=search",
+      "icons": [
+        {
+          "src": "/icon-search.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

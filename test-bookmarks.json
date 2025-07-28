@@ -1,0 +1,57 @@
+{
+  "categories": [
+    {
+      "id": "dev-tools",
+      "name": "开发工具",
+      "subCategories": [
+        {
+          "id": "editors",
+          "name": "代码编辑器",
+          "parentId": "dev-tools"
+        },
+        {
+          "id": "browsers",
+          "name": "浏览器工具",
+          "parentId": "dev-tools"
+        }
+      ]
+    },
+    {
+      "id": "learning",
+      "name": "学习资源",
+      "subCategories": [
+        {
+          "id": "docs",
+          "name": "文档",
+          "parentId": "learning"
+        }
+      ]
+    }
+  ],
+  "bookmarks": [
+    {
+      "id": "vscode",
+      "title": "Visual Studio Code",
+      "url": "https://code.visualstudio.com/",
+      "description": "微软开发的免费代码编辑器",
+      "subCategoryId": "editors",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "chrome-devtools",
+      "title": "Chrome DevTools",
+      "url": "https://developer.chrome.com/docs/devtools/",
+      "description": "Chrome 开发者工具文档",
+      "subCategoryId": "browsers",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "mdn",
+      "title": "MDN Web Docs",
+      "url": "https://developer.mozilla.org/",
+      "description": "Web开发权威文档",
+      "subCategoryId": "docs",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ]
+}
