@@ -43,6 +43,8 @@ interface BookmarkStore {
   addBookmark: (bookmark: Omit<Bookmark, "id" | "createdAt">) => void
   updateBookmark: (id: string, updates: Partial<Bookmark>) => void
   deleteBookmark: (id: string) => void
+  moveBookmark: (bookmarkId: string, targetSubCategoryId: string) => void
+  moveBookmarks: (bookmarkIds: string[], targetSubCategoryId: string) => void
 
   // Import/Export
   importBookmarks: (data: { categories: Category[]; bookmarks: Bookmark[] }) => void
@@ -224,6 +226,26 @@ export const useBookmarkStore = create<BookmarkStore>()(
       deleteBookmark: (id: string) => {
         set((state) => ({
           bookmarks: state.bookmarks.filter((bookmark) => bookmark.id !== id),
+        }))
+      },
+
+      moveBookmark: (bookmarkId: string, targetSubCategoryId: string) => {
+        set((state) => ({
+          bookmarks: state.bookmarks.map((bookmark) =>
+            bookmark.id === bookmarkId
+              ? { ...bookmark, subCategoryId: targetSubCategoryId }
+              : bookmark
+          ),
+        }))
+      },
+
+      moveBookmarks: (bookmarkIds: string[], targetSubCategoryId: string) => {
+        set((state) => ({
+          bookmarks: state.bookmarks.map((bookmark) =>
+            bookmarkIds.includes(bookmark.id)
+              ? { ...bookmark, subCategoryId: targetSubCategoryId }
+              : bookmark
+          ),
         }))
       },
 

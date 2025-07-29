@@ -62,8 +62,10 @@
 
   /* 布局样式 - 只影响书签网格 */
   .layout-list .bookmark-grid {
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    grid-template-columns: none !important;
   }
 
   /* 瀑布流布局 - 使用 CSS Grid 实现 */
@@ -184,7 +186,41 @@
 
   /* 列表布局的特殊样式 */
   .layout-list .bookmark-grid > * {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.25rem !important;
+    width: 100% !important;
+  }
+
+  /* 列表布局中的书签卡片样式调整 */
+  .layout-list .bookmark-card {
+    margin-bottom: 0 !important;
+  }
+
+  /* 列表布局中添加分隔线效果 */
+  .layout-list .bookmark-grid > *:not(:last-child) {
+    position: relative;
+  }
+
+  .layout-list .bookmark-grid > *:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    bottom: -0.125rem;
+    left: 1.25rem;
+    right: 1.25rem;
+    height: 1px;
+    background: linear-gradient(to right, transparent, hsl(var(--border) / 0.4), transparent);
+  }
+
+  /* 响应式优化：在小屏幕上调整间距和分隔线 */
+  @media (max-width: 640px) {
+    .layout-list .bookmark-grid > * {
+      margin-bottom: 0.1875rem !important;
+    }
+
+    .layout-list .bookmark-grid > *:not(:last-child)::after {
+      bottom: -0.09375rem;
+      left: 1rem;
+      right: 1rem;
+    }
   }
 
   /* 书签卡片悬停效果 - 只在悬停单个书签时显示按钮和改变标题颜色 */

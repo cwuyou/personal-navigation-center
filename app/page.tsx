@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { Sidebar } from "@/components/sidebar"
-import { MainContent } from "@/components/main-content"
+import { EnhancedMainContent } from "@/components/enhanced-main-content"
 import { PWAInstall } from "@/components/pwa-install"
 import { SettingsPanel } from "@/components/settings-panel"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
@@ -28,15 +28,25 @@ export default function HomePage() {
     trackActivity(bookmarkId, 'view')
   }
 
-  // 当点击二级分类时，设置对应的一级分类
-  const handleSubCategorySelect = (subCategoryId: string) => {
-    setSelectedSubCategory(subCategoryId)
-    // 找到对应的一级分类
-    const category = categories.find(cat =>
-      cat.subCategories.some(sub => sub.id === subCategoryId)
-    )
+  // 当点击分类时，设置对应的分类和子分类
+  const handleSubCategorySelect = (categoryOrSubCategoryId: string) => {
+    // 首先检查是否是一级分类ID
+    const category = categories.find(cat => cat.id === categoryOrSubCategoryId)
+
     if (category) {
+      // 如果是一级分类，设置为选中该分类，不选择具体子分类
       setSelectedCategory(category.id)
+      setSelectedSubCategory(null)
+    } else {
+      // 如果是子分类ID，按原逻辑处理
+      setSelectedSubCategory(categoryOrSubCategoryId)
+      // 找到对应的一级分类
+      const parentCategory = categories.find(cat =>
+        cat.subCategories.some(sub => sub.id === categoryOrSubCategoryId)
+      )
+      if (parentCategory) {
+        setSelectedCategory(parentCategory.id)
+      }
     }
   }
 
@@ -69,7 +79,7 @@ export default function HomePage() {
           }}
         />
 
-        <MainContent
+        <EnhancedMainContent
           searchQuery={searchQuery}
           selectedCategory={selectedCategory}
           selectedSubCategory={selectedSubCategory}

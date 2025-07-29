@@ -3,11 +3,12 @@
 import { cn } from "@/lib/utils"
 
 import { useState } from "react"
-import { ExternalLink, Edit2, Trash2, Globe, Eye } from "lucide-react"
+import { ExternalLink, Edit2, Trash2, Globe, Eye, FolderOpen } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { EditBookmarkDialog } from "@/components/edit-bookmark-dialog"
 import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog"
+import { MoveBookmarkDialog } from "@/components/move-bookmark-dialog"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 
 interface BookmarkCardProps {
@@ -25,6 +26,7 @@ interface BookmarkCardProps {
 export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [moveDialogOpen, setMoveDialogOpen] = useState(false)
   const { deleteBookmark } = useBookmarkStore()
 
   const handleClick = () => {
@@ -107,6 +109,18 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
               <Button
                 variant="ghost"
                 size="sm"
+                className="h-7 w-7 p-0 hover:bg-orange-500/10 hover:text-orange-600 rounded-md"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setMoveDialogOpen(true)
+                }}
+                title="移动书签"
+              >
+                <FolderOpen className="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
                 className="h-7 w-7 p-0 hover:bg-primary/10 hover:text-primary rounded-md"
                 onClick={(e) => {
                   e.stopPropagation()
@@ -136,6 +150,13 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
       </Card>
 
       <EditBookmarkDialog open={editDialogOpen} onOpenChange={setEditDialogOpen} bookmark={bookmark} />
+
+      <MoveBookmarkDialog
+        open={moveDialogOpen}
+        onOpenChange={setMoveDialogOpen}
+        bookmarkIds={[bookmark.id]}
+        currentSubCategoryId={bookmark.subCategoryId}
+      />
 
       <DeleteConfirmDialog
         open={deleteDialogOpen}
