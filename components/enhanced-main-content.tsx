@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { CheckSquare, X, Settings } from "lucide-react"
+import { CheckSquare, X } from "lucide-react"
 import { BookmarkCard } from "@/components/bookmark-card"
 import { SelectableBookmarkCard } from "@/components/selectable-bookmark-card"
 import { EnhancedBookmarkCard } from "@/components/enhanced-bookmark-card"
@@ -9,7 +9,7 @@ import { AddBookmarkCard } from "@/components/add-bookmark-card"
 import { SearchResults } from "@/components/search-results"
 import { BookmarkPreview } from "@/components/bookmark-preview"
 import { BatchSelectionToolbar } from "@/components/batch-selection-toolbar"
-import { DisplaySettingsPanel } from "@/components/display-settings-panel"
+import { DropdownDisplaySettings } from "@/components/dropdown-display-settings"
 import { DynamicBookmarkGrid } from "@/components/dynamic-bookmark-grid"
 import { Button } from "@/components/ui/button"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
@@ -98,6 +98,12 @@ export function EnhancedMainContent({
     setIsSelectionMode(false)
   }
 
+  // 移动完成后的处理
+  const handleMoveComplete = () => {
+    setSelectedBookmarkIds([])
+    setIsSelectionMode(false)
+  }
+
   // 获取当前分类
   const currentCategory = selectedCategory 
     ? categories.find(cat => cat.id === selectedCategory)
@@ -175,7 +181,7 @@ export function EnhancedMainContent({
                       </>
                     )}
                   </Button>
-                  <DisplaySettingsPanel />
+                  <DropdownDisplaySettings />
                 </div>
               )}
             </div>
@@ -248,6 +254,7 @@ export function EnhancedMainContent({
           selectedBookmarkIds={selectedBookmarkIds}
           onClearSelection={clearSelection}
           onDeleteSelected={handleBatchDelete}
+          onMoveComplete={handleMoveComplete}
         />
 
         {previewBookmark && (
@@ -275,7 +282,7 @@ export function EnhancedMainContent({
               发现和管理您的书签收藏，让每一个链接都触手可及
             </p>
             <p className="text-xs text-muted-foreground/80 mt-2">
-              💡 点击&quot;管理书签&quot;进入分类页面，使用批量选择和移动功能
+              💡 点击分类标题进入分类页面，使用批量选择和移动功能
             </p>
             <div className="flex items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6 text-xs sm:text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
@@ -318,19 +325,6 @@ export function EnhancedMainContent({
                     {categoryBookmarks.length} 个书签
                   </span>
                 </div>
-
-                {/* 管理按钮 */}
-                {categoryBookmarks.length > 0 && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onSubCategorySelect(category.id)}
-                    className="h-8 text-xs hover:bg-primary/5"
-                  >
-                    <Settings className="w-3 h-3 mr-1" />
-                    管理书签
-                  </Button>
-                )}
               </div>
 
               {/* 二级分类胶囊标签 */}

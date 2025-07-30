@@ -1,10 +1,11 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X } from "lucide-react"
+import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Input } from "@/components/ui/input"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 
 interface Category {
@@ -37,11 +38,16 @@ export function Sidebar({
   selectedSubCategory,
   onCategorySelect,
 }: SidebarProps) {
-  const { categories, updateCategory, updateSubCategory } = useBookmarkStore()
+  const { categories, updateCategory, updateSubCategory, deleteCategory, deleteSubCategory } = useBookmarkStore()
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [deletingCategory, setDeletingCategory] = useState<Category | SubCategory | null>(null)
+
+  // 批量选择状态
+  const [isBatchMode, setIsBatchMode] = useState(false)
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<Set<string>>(new Set())
+  const [batchDeleteDialogOpen, setBatchDeleteDialogOpen] = useState(false)
 
   // 内联编辑状态
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -60,9 +66,52 @@ export function Sidebar({
   }
 
   const handleCategoryClick = (category: Category) => {
-    toggleCategory(category.id)
-    // 点击分类时，显示整个分类的概览，不自动选择子分类
-    onCategorySelect(category.id, null)
+    if (isBatchMode) {
+      // 批量模式下，点击切换选择状态
+      toggleCategorySelection(category.id)
+    } else {
+      toggleCategory(category.id)
+      // 点击分类时，显示整个分类的概览，不自动选择子分类
+      onCategorySelect(category.id, null)
+    }
+  }
+
+  // 批量选择相关函数
+  const toggleBatchMode = () => {
+    setIsBatchMode(!isBatchMode)
+    setSelectedCategoryIds(new Set())
+  }
+
+  const toggleCategorySelection = (categoryId: string) => {
+    const newSelected = new Set(selectedCategoryIds)
+    if (newSelected.has(categoryId)) {
+      newSelected.delete(categoryId)
+    } else {
+      newSelected.add(categoryId)
+    }
+    setSelectedCategoryIds(newSelected)
+  }
+
+  const selectAllCategories = () => {
+    const allCategoryIds = new Set(categories.map(cat => cat.id))
+    setSelectedCategoryIds(allCategoryIds)
+  }
+
+  const clearSelection = () => {
+    setSelectedCategoryIds(new Set())
+  }
+
+  const handleBatchDelete = () => {
+    setBatchDeleteDialogOpen(true)
+  }
+
+  const confirmBatchDelete = () => {
+    selectedCategoryIds.forEach(categoryId => {
+      deleteCategory(categoryId)
+    })
+    setSelectedCategoryIds(new Set())
+    setIsBatchMode(false)
+    setBatchDeleteDialogOpen(false)
   }
 
   // 开始内联编辑
@@ -132,16 +181,51 @@ export function Sidebar({
     <div className="w-64 border-r bg-muted/10">
       <div className="p-4 border-b">
         <div className="flex items-center justify-between">
-          <h2 className="font-semibold">分类导航</h2>
+          <h2 className="font-semibold text-base">分类导航</h2>
           <div className="flex items-center space-x-1">
-            <Button variant="ghost" size="sm" onClick={() => setAddDialogOpen(true)}>
-              <Plus className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm" onClick={onToggleCollapse}>
-              <PanelLeftClose className="h-4 w-4" />
-            </Button>
+            {!isBatchMode ? (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => setAddDialogOpen(true)} title="添加分类">
+                  <Plus className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" onClick={toggleBatchMode} title="批量管理">
+                  <CheckSquare className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" onClick={onToggleCollapse} title="收起侧边栏">
+                  <PanelLeftClose className="h-4 w-4" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" onClick={selectAllCategories} title="全选">
+                  <CheckSquare className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleBatchDelete}
+                  disabled={selectedCategoryIds.size === 0}
+                  className="text-destructive hover:text-destructive"
+                  title="删除选中"
+                >
+                  <Trash className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" onClick={toggleBatchMode} title="退出批量模式">
+                  <X className="h-4 w-4" />
+                </Button>
+              </>
+            )}
           </div>
         </div>
+
+        {/* 批量模式提示 */}
+        {isBatchMode && (
+          <div className="mt-2 text-xs text-muted-foreground">
+            {selectedCategoryIds.size > 0
+              ? `已选择 ${selectedCategoryIds.size} 个分类`
+              : "点击分类进行选择"}
+          </div>
+        )}
       </div>
 
       <ScrollArea className="flex-1 h-[calc(100vh-8rem)]">
@@ -151,7 +235,8 @@ export function Sidebar({
               <div
                 className={cn(
                   "group flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-accent",
-                  selectedCategory === category.id && "bg-accent",
+                  selectedCategory === category.id && !isBatchMode && "bg-accent",
+                  isBatchMode && selectedCategoryIds.has(category.id) && "bg-blue-50 border border-blue-200",
                 )}
               >
                 <div
@@ -159,10 +244,24 @@ export function Sidebar({
                   onClick={() => handleCategoryClick(category)}
                 >
                   <div className="flex items-center">
-                    {expandedCategories.has(category.id) ? (
-                      <ChevronDown className="h-4 w-4 mr-2" />
+                    {isBatchMode ? (
+                      <div className="w-4 h-4 mr-2 flex items-center justify-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedCategoryIds.has(category.id)}
+                          onChange={() => toggleCategorySelection(category.id)}
+                          className="w-3 h-3"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </div>
                     ) : (
-                      <ChevronRight className="h-4 w-4 mr-2" />
+                      <>
+                        {expandedCategories.has(category.id) ? (
+                          <ChevronDown className="h-4 w-4 mr-2" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4 mr-2" />
+                        )}
+                      </>
                     )}
                   </div>
                   {editingId === category.id ? (
@@ -173,7 +272,7 @@ export function Sidebar({
                         onChange={(e) => setEditingValue(e.target.value)}
                         onKeyDown={handleKeyDown}
                         onBlur={saveEditing}
-                        className="h-6 text-sm font-medium px-2 py-0 border-primary/50 focus:border-primary inline-edit-input"
+                        className="h-6 text-sm font-semibold px-2 py-0 border-primary/50 focus:border-primary inline-edit-input"
                         autoFocus
                       />
                       <Button
@@ -195,7 +294,7 @@ export function Sidebar({
                     </div>
                   ) : (
                     <span
-                      className="text-sm font-medium cursor-pointer hover:text-primary transition-colors flex-1 editable-text"
+                      className="text-sm font-semibold cursor-pointer hover:text-primary transition-colors flex-1 editable-text"
                       onDoubleClick={(e) => {
                         e.stopPropagation()
                         startEditing(category.id, category.name, 'category')
@@ -206,35 +305,47 @@ export function Sidebar({
                     </span>
                   )}
                 </div>
-                <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 w-6 p-0"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      startEditing(category.id, category.name, 'category')
-                    }}
-                    title="编辑分类名称"
-                  >
-                    <Edit2 className="h-3 w-3" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 w-6 p-0"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setDeletingCategory(category)
-                      setDeleteDialogOpen(true)
-                    }}
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
+                {!isBatchMode && (
+                  <div className="opacity-0 group-hover:opacity-100 flex items-center">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <MoreHorizontal className="h-3 w-3" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-32">
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            startEditing(category.id, category.name, 'category')
+                          }}
+                        >
+                          <Edit2 className="h-3 w-3 mr-2" />
+                          编辑
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setDeletingCategory(category)
+                            setDeleteDialogOpen(true)
+                          }}
+                          className="text-destructive focus:text-destructive"
+                        >
+                          <Trash2 className="h-3 w-3 mr-2" />
+                          删除
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                )}
               </div>
 
-              {expandedCategories.has(category.id) && (
+              {!isBatchMode && expandedCategories.has(category.id) && (
                 <div className="ml-6 mt-1">
                   {category.subCategories.map((subCategory: SubCategory) => (
                     <div
@@ -253,7 +364,7 @@ export function Sidebar({
                             onChange={(e) => setEditingValue(e.target.value)}
                             onKeyDown={handleKeyDown}
                             onBlur={saveEditing}
-                            className="h-6 text-sm px-2 py-0 border-primary/50 focus:border-primary inline-edit-input"
+                            className="h-6 text-sm font-medium px-2 py-0 border-primary/50 focus:border-primary inline-edit-input"
                             autoFocus
                           />
                           <Button
@@ -275,7 +386,7 @@ export function Sidebar({
                         </div>
                       ) : (
                         <span
-                          className="cursor-pointer hover:text-primary transition-colors flex-1 editable-text"
+                          className="text-sm font-medium cursor-pointer hover:text-primary transition-colors flex-1 editable-text"
                           onDoubleClick={(e) => {
                             e.stopPropagation()
                             startEditing(subCategory.id, subCategory.name, 'subcategory')
@@ -285,31 +396,41 @@ export function Sidebar({
                           {subCategory.name}
                         </span>
                       )}
-                      <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            startEditing(subCategory.id, subCategory.name, 'subcategory')
-                          }}
-                          title="编辑子分类名称"
-                        >
-                          <Edit2 className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setDeletingCategory(subCategory)
-                            setDeleteDialogOpen(true)
-                          }}
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
+                      <div className="opacity-0 group-hover:opacity-100 flex items-center">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <MoreHorizontal className="h-3 w-3" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-32">
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                startEditing(subCategory.id, subCategory.name, 'subcategory')
+                              }}
+                            >
+                              <Edit2 className="h-3 w-3 mr-2" />
+                              编辑
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setDeletingCategory(subCategory)
+                                setDeleteDialogOpen(true)
+                              }}
+                              className="text-destructive focus:text-destructive"
+                            >
+                              <Trash2 className="h-3 w-3 mr-2" />
+                              删除
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </div>
                   ))}
@@ -329,12 +450,31 @@ export function Sidebar({
           title="删除分类"
           description={`确定要删除分类"${String(deletingCategory?.name || '')}"吗？此操作将同时删除该分类下的所有子分类和书签。`}
           onConfirm={() => {
-            // TODO: Implement delete category
+            if (deletingCategory) {
+              // 检查是否是主分类还是子分类
+              if ('parentId' in deletingCategory) {
+                // 是子分类
+                deleteSubCategory(deletingCategory.id)
+              } else {
+                // 是主分类
+                deleteCategory(deletingCategory.id)
+              }
+            }
             setDeletingCategory(null)
           }}
           onClose={() => setDeletingCategory(null)}
         />
       )}
+
+      {/* 批量删除确认对话框 */}
+      <DeleteConfirmDialog
+        open={batchDeleteDialogOpen}
+        onOpenChange={setBatchDeleteDialogOpen}
+        title="批量删除分类"
+        description={`确定要删除选中的 ${selectedCategoryIds.size} 个分类吗？此操作将同时删除这些分类下的所有子分类和书签，且无法撤销。`}
+        onConfirm={confirmBatchDelete}
+        onClose={() => setBatchDeleteDialogOpen(false)}
+      />
     </div>
   )
 }

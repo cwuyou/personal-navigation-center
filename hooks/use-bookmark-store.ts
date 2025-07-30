@@ -49,7 +49,12 @@ interface BookmarkStore {
   moveBookmarks: (bookmarkIds: string[], targetSubCategoryId: string) => void
 
   // Import/Export
-  importBookmarks: (data: { categories: Category[]; bookmarks: Bookmark[] }) => void
+  importBookmarks: (data: { categories: Category[]; bookmarks: Bookmark[] }) => Promise<{
+    newCategories: number
+    newSubCategories: number
+    newBookmarks: number
+    skippedBookmarks: number
+  }>
   exportBookmarks: () => { categories: Category[]; bookmarks: Bookmark[] }
 
   // Initialize with default data
@@ -253,10 +258,124 @@ export const useBookmarkStore = create<BookmarkStore>()(
       },
 
       importBookmarks: async (data) => {
-        set((state) => ({
-          categories: [...state.categories, ...data.categories],
-          bookmarks: [...state.bookmarks, ...data.bookmarks],
-        }))
+        return new Promise((resolve) => {
+          set((state) => {
+            const existingCategories = [...state.categories]
+            const existingBookmarks = [...state.bookmarks]
+
+            // 统计信息
+            let newCategories = 0
+            let newSubCategories = 0
+            let newBookmarks = 0
+            let skippedBookmarks = 0
+
+            // 用于存储新创建的分类和子分类的映射
+            const categoryMapping = new Map<string, string>() // 旧ID -> 新ID
+            const subCategoryMapping = new Map<string, string>() // 旧ID -> 新ID
+
+            // 处理分类：检查是否已存在同名分类
+            data.categories.forEach((newCategory: any) => {
+              const existingCategory = existingCategories.find(
+                cat => cat.name.toLowerCase() === newCategory.name.toLowerCase()
+              )
+
+              if (existingCategory) {
+                // 分类已存在，使用现有分类ID
+                categoryMapping.set(newCategory.id, existingCategory.id)
+
+                // 处理子分类
+                newCategory.subCategories.forEach((newSubCategory: any) => {
+                  const existingSubCategory = existingCategory.subCategories.find(
+                    sub => sub.name.toLowerCase() === newSubCategory.name.toLowerCase()
+                  )
+
+                  if (existingSubCategory) {
+                    // 子分类已存在，使用现有子分类ID
+                    subCategoryMapping.set(newSubCategory.id, existingSubCategory.id)
+                  } else {
+                    // 子分类不存在，创建新的子分类
+                    const newSubCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+                    subCategoryMapping.set(newSubCategory.id, newSubCategoryId)
+
+                    existingCategory.subCategories.push({
+                      id: newSubCategoryId,
+                      name: newSubCategory.name,
+                      parentId: existingCategory.id
+                    })
+                    newSubCategories++
+                  }
+                })
+              } else {
+                // 分类不存在，创建新分类
+                const newCategoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+                categoryMapping.set(newCategory.id, newCategoryId)
+
+                const newCategoryData = {
+                  id: newCategoryId,
+                  name: newCategory.name,
+                  subCategories: [] as any[]
+                }
+
+                // 处理新分类的子分类
+                newCategory.subCategories.forEach((newSubCategory: any) => {
+                  const newSubCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+                  subCategoryMapping.set(newSubCategory.id, newSubCategoryId)
+
+                  newCategoryData.subCategories.push({
+                    id: newSubCategoryId,
+                    name: newSubCategory.name,
+                    parentId: newCategoryId
+                  })
+                  newSubCategories++
+                })
+
+                existingCategories.push(newCategoryData)
+                newCategories++
+              }
+            })
+
+            // 处理书签：检查是否已存在相同URL的书签
+            data.bookmarks.forEach((newBookmark: any) => {
+              const targetSubCategoryId = subCategoryMapping.get(newBookmark.subCategoryId)
+
+              if (targetSubCategoryId) {
+                // 检查该子分类下是否已存在相同URL的书签
+                const existingBookmark = existingBookmarks.find(
+                  bookmark => bookmark.subCategoryId === targetSubCategoryId &&
+                             bookmark.url.toLowerCase() === newBookmark.url.toLowerCase()
+                )
+
+                if (!existingBookmark) {
+                  // 书签不存在，添加新书签
+                  const newBookmarkId = `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+                  existingBookmarks.push({
+                    ...newBookmark,
+                    id: newBookmarkId,
+                    subCategoryId: targetSubCategoryId,
+                    createdAt: new Date()
+                  })
+                  newBookmarks++
+                } else {
+                  // 书签已存在，跳过
+                  skippedBookmarks++
+                }
+              }
+            })
+
+            // 返回统计信息
+            resolve({
+              newCategories,
+              newSubCategories,
+              newBookmarks,
+              skippedBookmarks
+            })
+
+            return {
+              categories: existingCategories,
+              bookmarks: existingBookmarks
+            }
+          })
+        })
       },
 
       exportBookmarks: () => {

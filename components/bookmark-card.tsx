@@ -76,15 +76,15 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
                 </div>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm sm:text-base text-foreground truncate mb-1.5 bookmark-group-hover:text-primary transition-colors" title={bookmark.title}>
+                <h3 className="font-medium text-xs sm:text-sm text-foreground truncate mb-1.5 bookmark-group-hover:text-primary transition-colors" title={bookmark.title}>
                   {bookmark.title}
                 </h3>
                 {bookmark.description && (
-                  <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed mb-2" title={bookmark.description}>
+                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-2" title={bookmark.description}>
                     {bookmark.description}
                   </p>
                 )}
-                <div className="mt-2 flex items-center text-xs text-muted-foreground">
+                <div className="mt-2 flex items-center text-xs text-muted-foreground/70">
                   <ExternalLink className="w-3 h-3 mr-1 flex-shrink-0" />
                   <span className="truncate">
                     {new URL(bookmark.url).hostname}

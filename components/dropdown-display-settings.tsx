@@ -5,13 +5,10 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Select,
   SelectContent,
@@ -24,7 +21,7 @@ import { useDisplaySettings, type CardLayout, type GridColumns } from "@/hooks/u
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
-export function DisplaySettingsPanel() {
+export function DropdownDisplaySettings() {
   const { settings, updateSettings, resetSettings } = useDisplaySettings()
   const [screenInfo, setScreenInfo] = useState({ width: 0, breakpoint: '' })
 
@@ -51,22 +48,13 @@ export function DisplaySettingsPanel() {
     return () => window.removeEventListener('resize', updateScreenInfo)
   }, [])
 
-  // 检查当前的布局模式
-  const getCurrentLayoutMode = () => {
-    if (typeof window === 'undefined') return 'grid'
-    const root = document.documentElement
-    if (root.classList.contains('layout-masonry')) return 'masonry'
-    if (root.classList.contains('layout-list')) return 'list'
-    return 'grid'
-  }
+
 
   const handleToggle = (key: keyof typeof settings, value: boolean) => {
     updateSettings({ [key]: value })
   }
 
-  const handleLayoutChange = (layout: CardLayout) => {
-    updateSettings({ cardLayout: layout })
-  }
+
 
   const handleGridColumnsChange = (screen: keyof typeof settings.gridColumns, columns: GridColumns) => {
     updateSettings({
@@ -94,28 +82,45 @@ export function DisplaySettingsPanel() {
   }
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="gap-2">
           <Settings className="h-4 w-4" />
           显示设置
         </Button>
-      </SheetTrigger>
-      <SheetContent className="w-[400px] sm:w-[540px]">
-        <SheetHeader>
-          <SheetTitle>显示设置</SheetTitle>
-          <SheetDescription>
-            自定义书签卡片的显示方式和布局
-          </SheetDescription>
-        </SheetHeader>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className="w-80 p-0 max-h-[70vh] overflow-y-auto shadow-xl border border-border/20 bg-background/95 backdrop-blur-sm rounded-lg animate-in slide-in-from-top-2 duration-200"
+        align="end"
+        sideOffset={12}
+      >
+        <div className="p-4 border-b border-border/50">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-sm text-foreground">显示设置</h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                自定义书签卡片的显示方式和布局
+              </p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={resetSettings}
+              className="h-8 px-2 text-xs hover:bg-muted/50"
+            >
+              <RotateCcw className="h-3 w-3 mr-1" />
+              重置
+            </Button>
+          </div>
+        </div>
 
-        <div className="space-y-6 py-6">
+        <div className="p-4 space-y-5">
           {/* 显示内容开关 */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">显示内容</h3>
-            <div className="space-y-3">
+          <div className="space-y-3">
+            <h4 className="text-sm font-medium text-foreground">显示内容</h4>
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="show-cover" className="text-sm font-normal">
+                <Label htmlFor="show-cover" className="text-xs font-normal">
                   显示封面图片
                 </Label>
                 <Switch
@@ -126,7 +131,7 @@ export function DisplaySettingsPanel() {
               </div>
               
               <div className="flex items-center justify-between">
-                <Label htmlFor="show-favicon" className="text-sm font-normal">
+                <Label htmlFor="show-favicon" className="text-xs font-normal">
                   显示网站图标
                 </Label>
                 <Switch
@@ -137,18 +142,7 @@ export function DisplaySettingsPanel() {
               </div>
 
               <div className="flex items-center justify-between">
-                <Label htmlFor="show-title" className="text-sm font-normal">
-                  显示标题
-                </Label>
-                <Switch
-                  id="show-title"
-                  checked={settings.showTitle}
-                  onCheckedChange={(checked) => handleToggle('showTitle', checked)}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <Label htmlFor="show-description" className="text-sm font-normal">
+                <Label htmlFor="show-description" className="text-xs font-normal">
                   显示描述
                 </Label>
                 <Switch
@@ -159,18 +153,7 @@ export function DisplaySettingsPanel() {
               </div>
 
               <div className="flex items-center justify-between">
-                <Label htmlFor="show-url" className="text-sm font-normal">
-                  显示网址
-                </Label>
-                <Switch
-                  id="show-url"
-                  checked={settings.showUrl}
-                  onCheckedChange={(checked) => handleToggle('showUrl', checked)}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <Label htmlFor="show-tags" className="text-sm font-normal">
+                <Label htmlFor="show-tags" className="text-xs font-normal">
                   显示标签
                 </Label>
                 <Switch
@@ -179,34 +162,30 @@ export function DisplaySettingsPanel() {
                   onCheckedChange={(checked) => handleToggle('showTags', checked)}
                 />
               </div>
+
+              <div className="flex items-center justify-between">
+                <Label htmlFor="show-url" className="text-xs font-normal">
+                  显示网址
+                </Label>
+                <Switch
+                  id="show-url"
+                  checked={settings.showUrl}
+                  onCheckedChange={(checked) => handleToggle('showUrl', checked)}
+                />
+              </div>
             </div>
           </div>
 
-          <Separator />
+          <Separator className="bg-border/50" />
 
-          {/* 布局设置 */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">布局设置</h3>
-            
-            <div className="space-y-3">
-              <div className="space-y-2">
-                <Label className="text-sm font-normal">卡片布局</Label>
-                <Select value={settings.cardLayout} onValueChange={handleLayoutChange}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="compact">紧凑</SelectItem>
-                    <SelectItem value="comfortable">舒适</SelectItem>
-                    <SelectItem value="spacious">宽松</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-normal">卡片圆角</Label>
+          {/* 卡片样式 */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-medium text-foreground">卡片样式</h4>
+            <div className="space-y-2">
+              <div className="space-y-1">
+                <Label className="text-xs font-normal">卡片圆角</Label>
                 <Select value={settings.cardRadius} onValueChange={handleCardRadiusChange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-8">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -221,47 +200,27 @@ export function DisplaySettingsPanel() {
             </div>
           </div>
 
-          <Separator />
+          <div className="p-3 bg-muted/30 rounded-lg">
+            <p className="text-xs text-muted-foreground">
+              💡 显示密度设置已移至页面顶部的设置面板中，可统一控制页面和卡片的紧凑程度。
+            </p>
+          </div>
 
-          {/* 网格列数设置 */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium">网格列数</h3>
-              <div className="flex items-center space-x-2 text-xs text-muted-foreground">
-                <Monitor className="w-3 h-3" />
-                <span>{screenInfo.width}px</span>
-                <span className="px-2 py-1 bg-primary/10 text-primary rounded">
-                  {screenInfo.breakpoint}
-                </span>
-              </div>
-            </div>
+          <Separator className="bg-border/50" />
 
-            {/* 布局模式警告 */}
-            {getCurrentLayoutMode() !== 'grid' && (
-              <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                <div className="flex items-start space-x-2">
-                  <div className="w-4 h-4 rounded-full bg-yellow-400 flex-shrink-0 mt-0.5"></div>
-                  <div className="text-sm">
-                    <p className="font-medium text-yellow-800 dark:text-yellow-200">
-                      当前布局模式：{getCurrentLayoutMode() === 'masonry' ? '瀑布流' : '列表'}
-                    </p>
-                    <p className="text-yellow-700 dark:text-yellow-300 mt-1">
-                      网格列数设置仅在"网格"布局模式下生效。请在主题设置中切换到网格布局。
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className={cn("text-sm font-normal", isActiveBreakpoint('mobile') && "text-primary font-medium")}>
-                  手机 {isActiveBreakpoint('mobile') && '(当前生效)'}
+          {/* 网格列数 */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-medium text-foreground">网格列数</h4>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <Label className={cn("text-xs font-normal", isActiveBreakpoint('mobile') && "text-primary font-medium")}>
+                  手机 {isActiveBreakpoint('mobile') && '(当前)'}
                 </Label>
                 <Select 
                   value={settings.gridColumns.mobile.toString()} 
                   onValueChange={(value) => handleGridColumnsChange('mobile', parseInt(value) as GridColumns)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-8">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -271,15 +230,15 @@ export function DisplaySettingsPanel() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label className={cn("text-sm font-normal", isActiveBreakpoint('tablet') && "text-primary font-medium")}>
-                  平板 {isActiveBreakpoint('tablet') && '(当前生效)'}
+              <div className="space-y-1">
+                <Label className={cn("text-xs font-normal", isActiveBreakpoint('tablet') && "text-primary font-medium")}>
+                  平板 {isActiveBreakpoint('tablet') && '(当前)'}
                 </Label>
                 <Select 
                   value={settings.gridColumns.tablet.toString()} 
                   onValueChange={(value) => handleGridColumnsChange('tablet', parseInt(value) as GridColumns)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-8">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -290,15 +249,15 @@ export function DisplaySettingsPanel() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label className={cn("text-sm font-normal", isActiveBreakpoint('desktop') && "text-primary font-medium")}>
-                  桌面 {isActiveBreakpoint('desktop') && '(当前生效)'}
+              <div className="space-y-1">
+                <Label className={cn("text-xs font-normal", isActiveBreakpoint('desktop') && "text-primary font-medium")}>
+                  桌面 {isActiveBreakpoint('desktop') && '(当前)'}
                 </Label>
                 <Select 
                   value={settings.gridColumns.desktop.toString()} 
                   onValueChange={(value) => handleGridColumnsChange('desktop', parseInt(value) as GridColumns)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-8">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -311,15 +270,15 @@ export function DisplaySettingsPanel() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label className={cn("text-sm font-normal", isActiveBreakpoint('large') && "text-primary font-medium")}>
-                  大屏 {isActiveBreakpoint('large') && '(当前生效)'}
+              <div className="space-y-1">
+                <Label className={cn("text-xs font-normal", isActiveBreakpoint('large') && "text-primary font-medium")}>
+                  大屏 {isActiveBreakpoint('large') && '(当前)'}
                 </Label>
                 <Select 
                   value={settings.gridColumns.large.toString()} 
                   onValueChange={(value) => handleGridColumnsChange('large', parseInt(value) as GridColumns)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-8">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -336,18 +295,8 @@ export function DisplaySettingsPanel() {
           </div>
 
 
-
-          <Separator />
-
-          {/* 重置按钮 */}
-          <div className="flex justify-center">
-            <Button variant="outline" onClick={resetSettings} className="gap-2">
-              <RotateCcw className="h-4 w-4" />
-              重置为默认设置
-            </Button>
-          </div>
         </div>
-      </SheetContent>
-    </Sheet>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

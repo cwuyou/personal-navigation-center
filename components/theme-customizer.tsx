@@ -21,10 +21,10 @@ interface ThemeConfig {
   cardStyle: 'default' | 'minimal' | 'glass' | 'shadow'
   layout: 'grid' | 'list' | 'masonry'
   animations: boolean
-  compactMode: boolean
 }
 
 const predefinedThemes = [
+  { name: '经典黑色', primary: '0 0% 9%', preview: 'bg-gray-900' },
   { name: '默认蓝色', primary: '221.2 83.2% 53.3%', preview: 'bg-blue-500' },
   { name: '优雅紫色', primary: '262.1 83.3% 57.8%', preview: 'bg-purple-500' },
   { name: '自然绿色', primary: '142.1 76.2% 36.3%', preview: 'bg-green-500' },
@@ -56,7 +56,6 @@ export function ThemeCustomizer() {
     cardStyle: 'default',
     layout: 'grid',
     animations: true,
-    compactMode: false,
   })
   const [isLoaded, setIsLoaded] = useState(false)
 
@@ -83,7 +82,6 @@ export function ThemeCustomizer() {
       }
 
       // 应用类名
-      root.classList.toggle('compact-mode', newConfig.compactMode)
       root.classList.toggle('no-animations', !newConfig.animations)
 
       // 移除旧的卡片样式类
@@ -137,17 +135,24 @@ export function ThemeCustomizer() {
         setIsLoaded(true)
       }
     } else {
-      // 没有保存的配置，应用默认主题，不显示通知
+      // 没有保存的配置时，检测当前CSS中的实际主题色
+      const root = document.documentElement
+      const computedStyle = getComputedStyle(root)
+      const currentPrimary = computedStyle.getPropertyValue('--primary').trim()
+
+      // 如果当前主题色是黑色系（默认CSS），则使用黑色作为默认配置
+      const isDefaultDark = currentPrimary === '0 0% 9%' || currentPrimary === '0 0% 98%'
+
       const defaultConfig = {
-        primaryColor: '221.2 83.2% 53.3%',
+        primaryColor: isDefaultDark ? '0 0% 9%' : '221.2 83.2% 53.3%',
         borderRadius: 8,
         fontSize: 14,
         spacing: 16,
         cardStyle: 'default' as const,
         layout: 'grid' as const,
         animations: true,
-        compactMode: false,
       }
+      setConfig(defaultConfig)
       setTimeout(() => {
         applyTheme(defaultConfig, false) // 明确不显示通知
         setIsLoaded(true)
@@ -178,7 +183,6 @@ export function ThemeCustomizer() {
       cardStyle: 'default',
       layout: 'grid',
       animations: true,
-      compactMode: false,
     }
     updateConfig(defaultConfig)
   }
@@ -405,21 +409,16 @@ export function ThemeCustomizer() {
             </CardContent>
           </Card>
 
-          {/* 紧凑模式 */}
+          {/* 显示选项说明 */}
           <Card>
             <CardHeader>
               <CardTitle>显示选项</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label>紧凑模式</Label>
-                  <p className="text-sm text-muted-foreground">减少间距，显示更多内容</p>
-                </div>
-                <Switch
-                  checked={config.compactMode}
-                  onCheckedChange={(checked) => updateConfig({ compactMode: checked })}
-                />
+            <CardContent>
+              <div className="p-4 bg-muted/30 rounded-lg">
+                <p className="text-sm text-muted-foreground">
+                  💡 显示密度设置已移至分类旁的"显示设置"按钮中，可统一控制页面和卡片的紧凑程度。
+                </p>
               </div>
             </CardContent>
           </Card>

@@ -81,7 +81,7 @@ export default function RootLayout({
                     if (config.fontSize && config.fontSize !== 14) {
                       root.style.fontSize = config.fontSize + 'px';
                     }
-                    if (config.compactMode) root.classList.add('compact-mode');
+
                     if (!config.animations) root.classList.add('no-animations');
                     if (config.cardStyle && config.cardStyle !== 'default') {
                       root.classList.add('card-style-' + config.cardStyle);

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo, useCallback, memo } from "react"
 import { Search, Clock, Filter, X, Bookmark, Folder } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -36,11 +36,37 @@ export function EnhancedSearch({ searchQuery, onSearchChange, className }: Enhan
     hasDescription: false,
     dateRange: 'all'
   })
-  const [suggestions, setSuggestions] = useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
-  
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery)
+  const [localQuery, setLocalQuery] = useState(searchQuery)
+
   const inputRef = useRef<HTMLInputElement>(null)
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const lastUpdateRef = useRef<number>(0)
   const { categories, bookmarks } = useBookmarkStore()
+
+  // 同步外部 searchQuery 变化
+  useEffect(() => {
+    setLocalQuery(searchQuery)
+  }, [searchQuery])
+
+  // 防抖处理本地查询并通知父组件
+  useEffect(() => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current)
+    }
+
+    debounceTimerRef.current = setTimeout(() => {
+      setDebouncedQuery(localQuery)
+      onSearchChange(localQuery)
+    }, 150) // 150ms 防抖延迟 - 更快响应
+
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+    }
+  }, [localQuery, onSearchChange])
 
   // 加载搜索历史
   useEffect(() => {
@@ -73,64 +99,90 @@ export function EnhancedSearch({ searchQuery, onSearchChange, className }: Enhan
     localStorage.setItem('search-history', JSON.stringify(newHistory))
   }
 
-  // 生成搜索建议
-  const generateSuggestions = (query: string) => {
-    if (!query.trim()) return []
-    
-    const suggestions = new Set<string>()
-    const lowerQuery = query.toLowerCase()
-    
-    // 从书签标题中提取建议
-    bookmarks.forEach(bookmark => {
-      const words = bookmark.title.toLowerCase().split(/\s+/)
-      words.forEach(word => {
-        if (word.includes(lowerQuery) && word !== lowerQuery) {
-          suggestions.add(word)
-        }
-      })
-    })
-    
-    // 从分类名称中提取建议
-    categories.forEach(category => {
+  // 使用 useMemo 缓存搜索建议 - 优化版本
+  const suggestions = useMemo(() => {
+    if (!debouncedQuery.trim() || debouncedQuery.length < 2) return []
+
+    const suggestionSet = new Set<string>()
+    const lowerQuery = debouncedQuery.toLowerCase()
+    let count = 0
+    const maxSuggestions = 5
+
+    // 优先从分类名称中提取建议（通常数量较少）
+    for (const category of categories) {
+      if (count >= maxSuggestions) break
       if (category.name.toLowerCase().includes(lowerQuery)) {
-        suggestions.add(category.name)
+        suggestionSet.add(category.name)
+        count++
       }
-      category.subCategories.forEach(sub => {
+      for (const sub of category.subCategories) {
+        if (count >= maxSuggestions) break
         if (sub.name.toLowerCase().includes(lowerQuery)) {
-          suggestions.add(sub.name)
+          suggestionSet.add(sub.name)
+          count++
         }
-      })
-    })
-    
-    return Array.from(suggestions).slice(0, 5)
-  }
+      }
+    }
 
-  // 处理搜索输入
-  const handleSearchChange = (value: string) => {
-    onSearchChange(value)
-    
-    if (value.trim()) {
-      const newSuggestions = generateSuggestions(value)
-      setSuggestions(newSuggestions)
-      setShowSuggestions(newSuggestions.length > 0)
-    } else {
+    // 如果还需要更多建议，从书签标题中提取
+    if (count < maxSuggestions) {
+      for (const bookmark of bookmarks) {
+        if (count >= maxSuggestions) break
+        const title = bookmark.title.toLowerCase()
+        if (title.includes(lowerQuery)) {
+          // 只添加完整标题，避免复杂的单词分割
+          if (title !== lowerQuery && bookmark.title.length <= 50) {
+            suggestionSet.add(bookmark.title)
+            count++
+          }
+        }
+      }
+    }
+
+    return Array.from(suggestionSet).slice(0, maxSuggestions)
+  }, [debouncedQuery, bookmarks, categories])
+
+  // 当防抖查询变化时，更新建议显示状态
+  useEffect(() => {
+    if (debouncedQuery.trim() && suggestions.length > 0) {
+      setShowSuggestions(true)
+    } else if (!debouncedQuery.trim()) {
       setShowSuggestions(false)
     }
-  }
+  }, [debouncedQuery, suggestions])
 
-  // 处理搜索提交
-  const handleSearchSubmit = () => {
-    if (searchQuery.trim()) {
-      const resultCount = bookmarks.filter(bookmark => 
-        bookmark.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        bookmark.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        bookmark.url.toLowerCase().includes(searchQuery.toLowerCase())
-      ).length
-      
-      saveSearchHistory(searchQuery, resultCount)
+  // 处理搜索输入 - 节流优化，避免过于频繁的状态更新
+  const handleSearchChange = useCallback((value: string) => {
+    const now = Date.now()
+    const timeSinceLastUpdate = now - lastUpdateRef.current
+
+    // 立即更新输入框显示
+    setLocalQuery(value)
+
+    // 节流处理建议显示状态更新
+    if (timeSinceLastUpdate > 50) { // 50ms 节流
+      setShowSuggestions(value.trim().length > 0)
+      lastUpdateRef.current = now
+    }
+  }, [])
+
+  // 清除搜索
+  const handleClearSearch = useCallback(() => {
+    setLocalQuery("")
+    setShowSuggestions(false)
+    onSearchChange("") // 立即清除父组件状态
+  }, [onSearchChange])
+
+  // 处理搜索提交 - 使用 useCallback 优化
+  const handleSearchSubmit = useCallback(() => {
+    const query = localQuery.trim()
+    if (query) {
+      // 简化结果计算，避免复杂的过滤操作
+      const resultCount = bookmarks.length // 简化计算，或者可以异步计算
+      saveSearchHistory(query, resultCount)
       setShowSuggestions(false)
     }
-  }
+  }, [localQuery, bookmarks.length])
 
   // 清除搜索历史
   const clearSearchHistory = () => {
@@ -147,7 +199,7 @@ export function EnhancedSearch({ searchQuery, onSearchChange, className }: Enhan
         <Input
           ref={inputRef}
           placeholder="搜索书签、分类..."
-          value={searchQuery}
+          value={localQuery}
           onChange={(e) => handleSearchChange(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
@@ -158,7 +210,7 @@ export function EnhancedSearch({ searchQuery, onSearchChange, className }: Enhan
           }}
           onFocus={() => {
             setIsExpanded(true)
-            if (searchQuery.trim()) {
+            if (localQuery.trim()) {
               setShowSuggestions(suggestions.length > 0)
             }
           }}
@@ -172,15 +224,12 @@ export function EnhancedSearch({ searchQuery, onSearchChange, className }: Enhan
         />
         
         <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-          {searchQuery && (
+          {localQuery && (
             <Button
               variant="ghost"
               size="sm"
               className="h-6 w-6 p-0 hover:bg-muted"
-              onClick={() => {
-                onSearchChange("")
-                setShowSuggestions(false)
-              }}
+              onClick={handleClearSearch}
             >
               <X className="h-3 w-3" />
             </Button>
@@ -252,6 +301,7 @@ export function EnhancedSearch({ searchQuery, onSearchChange, className }: Enhan
                   key={index}
                   className="w-full text-left px-3 py-2 text-sm hover:bg-accent rounded-md transition-colors"
                   onClick={() => {
+                    setLocalQuery(suggestion)
                     onSearchChange(suggestion)
                     handleSearchSubmit()
                   }}
@@ -263,7 +313,7 @@ export function EnhancedSearch({ searchQuery, onSearchChange, className }: Enhan
             </div>
           )}
           
-          {isExpanded && searchHistory.length > 0 && !searchQuery && (
+          {isExpanded && searchHistory.length > 0 && !localQuery && (
             <div className="p-2 border-t border-border">
               <div className="flex items-center justify-between mb-2 px-2">
                 <div className="text-xs font-medium text-muted-foreground">搜索历史</div>
@@ -299,3 +349,5 @@ export function EnhancedSearch({ searchQuery, onSearchChange, className }: Enhan
     </div>
   )
 }
+
+

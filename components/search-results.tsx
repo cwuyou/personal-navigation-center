@@ -1,8 +1,8 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useCallback } from "react"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
-import { BookmarkCard } from "@/components/bookmark-card"
+import { EnhancedBookmarkCard } from "@/components/enhanced-bookmark-card"
 import { Badge } from "@/components/ui/badge"
 
 interface SearchResultsProps {
@@ -18,31 +18,42 @@ export function SearchResults({ searchQuery, onPreview }: SearchResultsProps) {
 
     const query = searchQuery.toLowerCase()
 
-    const matchedCategories = categories.filter(
-      (category) =>
-        category.name.toLowerCase().includes(query) ||
-        category.subCategories.some((sub: any) => sub.name.toLowerCase().includes(query)),
-    )
+    // 优化分类搜索 - 减少嵌套循环
+    const matchedCategories = categories.filter((category) => {
+      if (category.name.toLowerCase().includes(query)) return true
+      return category.subCategories.some((sub: any) =>
+        sub.name.toLowerCase().includes(query)
+      )
+    })
 
-    const matchedBookmarks = bookmarks.filter(
-      (bookmark) =>
-        bookmark.title.toLowerCase().includes(query) ||
-        bookmark.description?.toLowerCase().includes(query) ||
-        bookmark.url.toLowerCase().includes(query),
-    )
+    // 优化书签搜索 - 提前计算小写字符串
+    const matchedBookmarks = bookmarks.filter((bookmark) => {
+      const titleLower = bookmark.title.toLowerCase()
+      const descLower = bookmark.description?.toLowerCase() || ''
+      const urlLower = bookmark.url.toLowerCase()
+
+      return titleLower.includes(query) ||
+             descLower.includes(query) ||
+             urlLower.includes(query)
+    })
 
     return { categories: matchedCategories, bookmarks: matchedBookmarks }
   }, [searchQuery, categories, bookmarks])
 
-  const getCategoryPath = (subCategoryId: string) => {
-    for (const category of categories) {
-      const subCategory = category.subCategories.find((sub: any) => sub.id === subCategoryId)
-      if (subCategory) {
-        return `${category.name} > ${subCategory.name}`
-      }
-    }
-    return ""
-  }
+  // 使用 useMemo 缓存分类路径映射
+  const categoryPathMap = useMemo(() => {
+    const pathMap = new Map<string, string>()
+    categories.forEach(category => {
+      category.subCategories.forEach((sub: any) => {
+        pathMap.set(sub.id, `${category.name} > ${sub.name}`)
+      })
+    })
+    return pathMap
+  }, [categories])
+
+  const getCategoryPath = useCallback((subCategoryId: string) => {
+    return categoryPathMap.get(subCategoryId) || ""
+  }, [categoryPathMap])
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -74,7 +85,7 @@ export function SearchResults({ searchQuery, onPreview }: SearchResultsProps) {
           <div className="bookmark-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {searchResults.bookmarks.map((bookmark) => (
               <div key={bookmark.id} className="space-y-2">
-                <BookmarkCard bookmark={bookmark} onPreview={onPreview} />
+                <EnhancedBookmarkCard bookmark={bookmark} onPreview={onPreview} />
                 <div className="text-xs text-muted-foreground px-2">{getCategoryPath(bookmark.subCategoryId)}</div>
               </div>
             ))}

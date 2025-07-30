@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
+import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 
 interface MoveBookmarkDialogProps {
@@ -19,6 +20,7 @@ interface MoveBookmarkDialogProps {
   onOpenChange: (open: boolean) => void
   bookmarkIds: string[]
   currentSubCategoryId?: string
+  onMoveComplete?: () => void
 }
 
 export function MoveBookmarkDialog({
@@ -26,16 +28,34 @@ export function MoveBookmarkDialog({
   onOpenChange,
   bookmarkIds,
   currentSubCategoryId,
+  onMoveComplete,
 }: MoveBookmarkDialogProps) {
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>("")
   const { categories, moveBookmarks } = useBookmarkStore()
+  const { toast } = useToast()
 
   const handleMove = () => {
     if (!selectedSubCategoryId || bookmarkIds.length === 0) return
 
+    // 获取目标分类信息用于显示
+    const targetCategory = categories.find(cat =>
+      cat.subCategories.some(sub => sub.id === selectedSubCategoryId)
+    )
+    const targetSubCategory = targetCategory?.subCategories.find(sub => sub.id === selectedSubCategoryId)
+
     moveBookmarks(bookmarkIds, selectedSubCategoryId)
+
+    // 显示成功提示
+    toast({
+      title: "移动成功",
+      description: `已将 ${bookmarkIds.length} 个书签移动到「${targetCategory?.name} - ${targetSubCategory?.name}」`,
+    })
+
     onOpenChange(false)
     setSelectedSubCategoryId("")
+
+    // 通知父组件移动完成，用于清理选择状态
+    onMoveComplete?.()
   }
 
   const handleCancel = () => {

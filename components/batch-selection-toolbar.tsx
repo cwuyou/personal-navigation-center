@@ -10,6 +10,7 @@ interface BatchSelectionToolbarProps {
   selectedBookmarkIds: string[]
   onClearSelection: () => void
   onDeleteSelected: () => void
+  onMoveComplete?: () => void
   className?: string
 }
 
@@ -17,6 +18,7 @@ export function BatchSelectionToolbar({
   selectedBookmarkIds,
   onClearSelection,
   onDeleteSelected,
+  onMoveComplete,
   className,
 }: BatchSelectionToolbarProps) {
   const [moveDialogOpen, setMoveDialogOpen] = useState(false)
@@ -78,6 +80,7 @@ export function BatchSelectionToolbar({
         open={moveDialogOpen}
         onOpenChange={setMoveDialogOpen}
         bookmarkIds={selectedBookmarkIds}
+        onMoveComplete={onMoveComplete}
       />
     </>
   )

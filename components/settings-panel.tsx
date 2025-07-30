@@ -22,6 +22,8 @@ import {
 import { useTheme } from "next-themes"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import { useDisplaySettings, type CardLayout } from "@/hooks/use-display-settings"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface SettingsPanelProps {
   isOpen: boolean
@@ -30,6 +32,7 @@ interface SettingsPanelProps {
 
 // 预设主题
 const predefinedThemes = [
+  { name: '经典黑色', primary: '0 0% 9%', preview: 'bg-gray-900' },
   { name: '默认蓝色', primary: '221.2 83.2% 53.3%', preview: 'bg-blue-500' },
   { name: '优雅紫色', primary: '262.1 83.3% 57.8%', preview: 'bg-purple-500' },
   { name: '自然绿色', primary: '142.1 76.2% 36.3%', preview: 'bg-green-500' },
@@ -47,13 +50,13 @@ const layoutOptions = [
 
 export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
   const { theme, setTheme } = useTheme()
+  const { settings: displaySettings, updateSettings: updateDisplaySettings } = useDisplaySettings()
   const [config, setConfig] = useState({
     primaryColor: '221.2 83.2% 53.3%',
     borderRadius: 8,
     fontSize: 14,
     layout: 'grid',
     animations: true,
-    compactMode: false,
   })
   const [isLoaded, setIsLoaded] = useState(false)
   const [isClient, setIsClient] = useState(false)
@@ -82,7 +85,6 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
       }
       
       // 应用类名
-      root.classList.toggle('compact-mode', newConfig.compactMode)
       root.classList.toggle('no-animations', !newConfig.animations)
       
       // 移除旧的布局类
@@ -118,6 +120,24 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
         setIsLoaded(true)
       }
     } else {
+      // 没有保存的配置时，检测当前CSS中的实际主题色
+      const root = document.documentElement
+      const computedStyle = getComputedStyle(root)
+      const currentPrimary = computedStyle.getPropertyValue('--primary').trim()
+
+      // 如果当前主题色是黑色系（默认CSS），则使用黑色作为默认配置
+      const isDefaultDark = currentPrimary === '0 0% 9%' || currentPrimary === '0 0% 98%'
+
+      const defaultConfig = {
+        primaryColor: isDefaultDark ? '0 0% 9%' : '221.2 83.2% 53.3%',
+        borderRadius: 8,
+        fontSize: 14,
+        layout: 'grid',
+        animations: true,
+        compactMode: false,
+      }
+
+      setConfig(defaultConfig)
       setTimeout(() => {
         setIsLoaded(true)
       }, 100)
@@ -133,6 +153,25 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
       localStorage.setItem('theme-config', JSON.stringify(newConfig))
     }
   }
+
+  // 处理显示密度变化
+  const handleDisplayDensityChange = (layout: CardLayout) => {
+    updateDisplaySettings({ cardLayout: layout })
+
+    // 同时控制全局紧凑模式
+    if (typeof window !== 'undefined') {
+      const root = document.documentElement
+      root.classList.toggle('compact-mode', layout === 'compact')
+    }
+  }
+
+  // 初始化时应用显示密度设置
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const root = document.documentElement
+      root.classList.toggle('compact-mode', displaySettings.cardLayout === 'compact')
+    }
+  }, [displaySettings.cardLayout])
 
   return (
     <>
@@ -316,17 +355,6 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-sm">紧凑模式</Label>
-                    <p className="text-xs text-muted-foreground">减少间距，显示更多内容</p>
-                  </div>
-                  <Switch
-                    checked={config.compactMode}
-                    onCheckedChange={(checked) => updateConfig({ compactMode: checked })}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
                     <Label className="text-sm">动画效果</Label>
                     <p className="text-xs text-muted-foreground">启用过渡动画和悬停效果</p>
                   </div>
@@ -334,6 +362,23 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
                     checked={config.animations}
                     onCheckedChange={(checked) => updateConfig({ animations: checked })}
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm">显示密度</Label>
+                  <Select value={displaySettings.cardLayout} onValueChange={handleDisplayDensityChange}>
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="compact">紧凑 - 显示更多内容</SelectItem>
+                      <SelectItem value="comfortable">舒适 - 平衡的间距</SelectItem>
+                      <SelectItem value="spacious">宽松 - 更大的间距</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">
+                    同时影响页面整体间距和卡片布局
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -384,6 +429,28 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
                 }}
               >
                 重置设置
+              </Button>
+
+              <Button
+                variant="destructive"
+                size="sm"
+                className="w-full justify-start"
+                onClick={() => {
+                  if (confirm('确定要清空所有数据吗？此操作将删除所有书签、分类、设置、搜索历史等数据，且不可撤销！')) {
+                    if (confirm('最后确认：这将清空应用的所有数据，包括：\n• 所有书签和分类\n• 主题和显示设置\n• 搜索历史和用户活动\n• PWA安装状态\n\n确定要继续吗？')) {
+                      // 清空所有localStorage数据
+                      localStorage.clear()
+
+                      // 清空sessionStorage（如果有的话）
+                      sessionStorage.clear()
+
+                      alert('所有数据已清空，页面将自动刷新')
+                      window.location.reload()
+                    }
+                  }
+                }}
+              >
+                清空所有数据
               </Button>
             </CardContent>
           </Card>

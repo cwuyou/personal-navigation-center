@@ -19,6 +19,12 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
   const [loading, setLoading] = useState(false)
   const [dragOver, setDragOver] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
+  const [importStats, setImportStats] = useState<{
+    newCategories: number
+    newSubCategories: number
+    newBookmarks: number
+    skippedBookmarks: number
+  } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { importBookmarks } = useBookmarkStore()
   const { toast } = useToast()
@@ -26,28 +32,43 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
   const processFile = async (file: File) => {
     console.log("开始导入文件:", file.name, file.type)
     setLoading(true)
+    setImportStats(null) // 重置统计信息
 
     try {
       const text = await file.text()
       console.log("文件内容长度:", text.length)
 
+      let stats
       if (file.name.endsWith(".html")) {
         console.log("导入HTML格式")
-        await importFromHTML(text)
+        stats = await importFromHTML(text)
       } else if (file.name.endsWith(".json")) {
         console.log("导入JSON格式")
-        await importFromJSON(text)
+        stats = await importFromJSON(text)
       } else {
         throw new Error("不支持的文件格式")
       }
 
-      console.log("导入成功")
+      console.log("导入成功", stats)
+
+      // 生成详细的导入结果描述
+      const descriptions = []
+      if (stats.newCategories > 0) descriptions.push(`新增 ${stats.newCategories} 个分类`)
+      if (stats.newSubCategories > 0) descriptions.push(`新增 ${stats.newSubCategories} 个子分类`)
+      if (stats.newBookmarks > 0) descriptions.push(`新增 ${stats.newBookmarks} 个书签`)
+      if (stats.skippedBookmarks > 0) descriptions.push(`跳过 ${stats.skippedBookmarks} 个重复书签`)
+
+      const description = descriptions.length > 0
+        ? descriptions.join('，')
+        : '没有新增内容（所有数据已存在）'
+
       toast({
-        title: "导入成功",
-        description: "书签已成功导入到您的导航中心",
+        title: "导入完成",
+        description: description,
       })
 
-      onOpenChange(false)
+      // 不立即关闭对话框，让用户查看统计信息
+      // onOpenChange(false)
     } catch (error) {
       console.error("导入失败:", error)
       toast({
@@ -55,6 +76,7 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
         description: error instanceof Error ? error.message : "导入过程中发生错误",
         variant: "destructive",
       })
+      setImportStats(null)
     } finally {
       setLoading(false)
       if (fileInputRef.current) {
@@ -106,13 +128,17 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
     const doc = parser.parseFromString(html, "text/html")
     const bookmarkData = parseBookmarkHTML(doc)
     console.log("解析HTML得到的数据:", bookmarkData)
-    await importBookmarks(bookmarkData)
+    const stats = await importBookmarks(bookmarkData)
+    setImportStats(stats)
+    return stats
   }
 
   const importFromJSON = async (json: string) => {
     const data = JSON.parse(json)
     console.log("解析JSON得到的数据:", data)
-    await importBookmarks(data)
+    const stats = await importBookmarks(data)
+    setImportStats(stats)
+    return stats
   }
 
   const parseBookmarkHTML = (doc: Document) => {
@@ -219,16 +245,76 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
         </DialogHeader>
 
         <div className="space-y-4">
-          <div>
-            <h3 className="font-medium mb-2">支持的文件格式</h3>
-            <div className="text-sm text-muted-foreground">
+          {/* 导入统计信息 */}
+          {importStats && (
+            <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-3">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <h3 className="font-medium text-green-800 dark:text-green-200">导入完成</h3>
+              </div>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">新增分类：</span>
+                    <span className="font-medium">{importStats.newCategories}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">新增子分类：</span>
+                    <span className="font-medium">{importStats.newSubCategories}</span>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">新增书签：</span>
+                    <span className="font-medium text-green-600">{importStats.newBookmarks}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">跳过重复：</span>
+                    <span className="font-medium text-orange-600">{importStats.skippedBookmarks}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 pt-3 border-t border-green-200 dark:border-green-800">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">
+                    智能去重已启用，避免了重复导入
+                  </span>
+                  <Button
+                    size="sm"
+                    onClick={() => onOpenChange(false)}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    完成
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="bg-muted/30 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-medium">支持的文件格式</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setHelpOpen(true)}
+                className="text-xs"
+              >
+                <HelpCircle className="w-3 h-3 mr-1" />
+                详细说明
+              </Button>
+            </div>
+            <div className="text-sm text-muted-foreground space-y-2">
               <div className="flex items-center space-x-2">
-                <FileText className="w-4 h-4" />
+                <FileText className="w-4 h-4 text-blue-500" />
                 <span>HTML 文件（浏览器书签导出）</span>
               </div>
-              <div className="flex items-center space-x-2 mt-1">
-                <FileText className="w-4 h-4" />
+              <div className="flex items-center space-x-2">
+                <FileText className="w-4 h-4 text-green-500" />
                 <span>JSON 文件（自定义格式）</span>
+              </div>
+              <div className="text-xs text-muted-foreground mt-2 p-2 bg-blue-50 dark:bg-blue-950/20 rounded border-l-2 border-blue-500">
+                💡 智能导入：自动匹配现有分类，避免重复书签
               </div>
             </div>
           </div>

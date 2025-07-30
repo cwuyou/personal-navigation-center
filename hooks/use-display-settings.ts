@@ -23,8 +23,6 @@ export interface DisplaySettings {
   }
   
   // 卡片样式
-  showCardBorder: boolean // 显示卡片边框
-  showCardShadow: boolean // 显示卡片阴影
   cardRadius: 'none' | 'sm' | 'md' | 'lg' | 'xl' // 卡片圆角
 }
 
@@ -53,8 +51,6 @@ const defaultSettings: DisplaySettings = {
   },
   
   // 卡片样式
-  showCardBorder: true,
-  showCardShadow: true,
   cardRadius: 'lg',
 }
 

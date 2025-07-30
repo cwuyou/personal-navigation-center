@@ -223,20 +223,25 @@ export function SettingsDialog({ children }: SettingsDialogProps) {
                       >
                         重置所有设置
                       </Button>
-                      <Button 
-                        variant="destructive" 
+                      <Button
+                        variant="destructive"
                         size="sm"
                         onClick={() => {
-                          if (confirm('确定要删除所有数据吗？此操作不可撤销！')) {
-                            if (confirm('最后确认：这将删除所有书签、分类和设置，确定继续吗？')) {
+                          if (confirm('确定要清空所有数据吗？此操作将删除所有书签、分类、设置、搜索历史等数据，且不可撤销！')) {
+                            if (confirm('最后确认：这将清空应用的所有数据，包括：\n• 所有书签和分类\n• 主题和显示设置\n• 搜索历史和用户活动\n• PWA安装状态\n\n确定要继续吗？')) {
+                              // 清空所有localStorage数据
                               localStorage.clear()
-                              alert('所有数据已删除，页面将刷新')
+
+                              // 清空sessionStorage（如果有的话）
+                              sessionStorage.clear()
+
+                              alert('所有数据已清空，页面将自动刷新')
                               window.location.reload()
                             }
                           }
                         }}
                       >
-                        删除所有数据
+                        清空所有数据
                       </Button>
                     </div>
                   </div>

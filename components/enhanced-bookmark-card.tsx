@@ -89,12 +89,10 @@ export function EnhancedBookmarkCard({ bookmark, onPreview, onEdit }: EnhancedBo
 
   return (
     <>
-      <Card 
+      <Card
         className={cn(
           "bookmark-card bookmark-group cursor-pointer transition-all duration-300 bg-card/80 backdrop-blur-sm group",
-          "hover:shadow-lg hover:scale-[1.02]",
-          settings.showCardBorder ? "border-border/50" : "border-transparent",
-          settings.showCardShadow ? "shadow-sm" : "shadow-none",
+          "hover:shadow-lg hover:scale-[1.02] border-border/20 shadow-sm",
           getCardRadius()
         )}
         onClick={handleClick}
@@ -144,8 +142,8 @@ export function EnhancedBookmarkCard({ bookmark, onPreview, onEdit }: EnhancedBo
                 {/* 标题 */}
                 {settings.showTitle && (
                   <h3 className={cn(
-                    "font-semibold text-foreground bookmark-group-hover:text-primary transition-colors",
-                    settings.cardLayout === 'compact' ? "text-sm mb-1" : "text-base mb-2",
+                    "font-medium text-foreground bookmark-group-hover:text-primary transition-colors",
+                    settings.cardLayout === 'compact' ? "text-xs mb-1" : "text-sm mb-2",
                     "line-clamp-2"  // 最多显示2行标题
                   )}>
                     {bookmark.title}
@@ -156,9 +154,9 @@ export function EnhancedBookmarkCard({ bookmark, onPreview, onEdit }: EnhancedBo
                 {settings.showDescription && bookmark.description && (
                   <p className={cn(
                     "text-muted-foreground leading-relaxed",
-                    settings.cardLayout === 'compact' ? "text-xs line-clamp-2 mb-2" : 
-                    settings.cardLayout === 'comfortable' ? "text-sm line-clamp-3 mb-3" :
-                    "text-sm line-clamp-4 mb-4"
+                    settings.cardLayout === 'compact' ? "text-xs line-clamp-2 mb-2" :
+                    settings.cardLayout === 'comfortable' ? "text-xs line-clamp-3 mb-3" :
+                    "text-xs line-clamp-4 mb-4"
                   )}>
                     {bookmark.description}
                   </p>
@@ -166,7 +164,7 @@ export function EnhancedBookmarkCard({ bookmark, onPreview, onEdit }: EnhancedBo
 
                 {/* 网址 */}
                 {settings.showUrl && (
-                  <div className="flex items-center text-xs text-muted-foreground mb-2">
+                  <div className="flex items-center text-xs text-muted-foreground/70 mb-2">
                     <ExternalLink className="w-3 h-3 mr-1 flex-shrink-0" />
                     <span className="truncate">
                       {new URL(bookmark.url).hostname}
