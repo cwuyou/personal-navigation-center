@@ -56,9 +56,15 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
     compactMode: false,
   })
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isClient, setIsClient] = useState(false)
+
+  // 确保只在客户端渲染
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   // 应用主题配置
-  const applyTheme = useCallback((newConfig: any, showNotification = false) => {
+  const applyTheme = useCallback((newConfig: typeof config, showNotification = false) => {
     if (typeof window === 'undefined') return
     
     try {

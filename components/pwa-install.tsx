@@ -79,7 +79,7 @@ export function PWAInstall() {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
           console.log('SW registered: ', registration)
-          
+
           // 检查更新
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing
@@ -101,7 +101,8 @@ export function PWAInstall() {
           })
         })
         .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError)
+          console.warn('SW registration failed: ', registrationError)
+          // Service Worker 注册失败不应该阻止应用运行
         })
     }
 

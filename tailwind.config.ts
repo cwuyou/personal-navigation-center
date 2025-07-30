@@ -10,6 +10,20 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "*.{js,ts,jsx,tsx,mdx}"
   ],
+  safelist: [
+    // 网格列数类名
+    'grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6',
+    'sm:grid-cols-1', 'sm:grid-cols-2', 'sm:grid-cols-3', 'sm:grid-cols-4', 'sm:grid-cols-5', 'sm:grid-cols-6',
+    'lg:grid-cols-1', 'lg:grid-cols-2', 'lg:grid-cols-3', 'lg:grid-cols-4', 'lg:grid-cols-5', 'lg:grid-cols-6',
+    '2xl:grid-cols-1', '2xl:grid-cols-2', '2xl:grid-cols-3', '2xl:grid-cols-4', '2xl:grid-cols-5', '2xl:grid-cols-6',
+    // 间距类名
+    'gap-3', 'gap-4', 'gap-6', 'gap-8',
+    'sm:gap-6', 'sm:gap-8',
+    // 布局类名
+    'layout-grid', 'layout-list', 'layout-masonry',
+    // 其他动态类名
+    'compact-mode', 'no-animations'
+  ],
   theme: {
   	extend: {
   		colors: {

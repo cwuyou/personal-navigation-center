@@ -21,6 +21,8 @@ interface Bookmark {
   url: string
   description?: string
   favicon?: string
+  coverImage?: string  // 封面图片URL
+  tags?: string[]      // 标签
   subCategoryId: string
   createdAt: Date
 }
@@ -52,6 +54,7 @@ interface BookmarkStore {
 
   // Initialize with default data
   initializeStore: () => void
+  resetStore: () => void
 }
 
 const defaultCategories: Category[] = [
@@ -263,17 +266,38 @@ export const useBookmarkStore = create<BookmarkStore>()(
 
       initializeStore: () => {
         const { categories, bookmarks } = get()
-        if (categories.length === 0) {
+
+        // 验证数据格式
+        const isValidData = categories.every(cat =>
+          typeof cat.id === 'string' &&
+          typeof cat.name === 'string' &&
+          Array.isArray(cat.subCategories) &&
+          cat.subCategories.every(sub =>
+            typeof sub.id === 'string' &&
+            typeof sub.name === 'string' &&
+            typeof sub.parentId === 'string'
+          )
+        )
+
+        if (categories.length === 0 || !isValidData) {
+          // 如果数据无效，重置为默认数据
           set({
             categories: defaultCategories,
             bookmarks: defaultBookmarks,
           })
         }
       },
+
+      resetStore: () => {
+        set({
+          categories: defaultCategories,
+          bookmarks: defaultBookmarks,
+        })
+      },
     }),
     {
       name: "bookmark-store",
-      version: 1,
+      version: 2, // 增加版本号以强制重置
     },
   ),
 )

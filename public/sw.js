@@ -6,8 +6,8 @@ const DYNAMIC_CACHE = 'dynamic-v1'
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
-  '/icon-192x192.png',
-  '/icon-512x512.png',
+  '/placeholder-logo.png',
+  '/placeholder-logo.svg',
   // 添加其他静态资源
 ]
 
@@ -21,12 +21,20 @@ const CACHE_PATTERNS = [
 // 安装事件 - 缓存静态资源
 self.addEventListener('install', (event) => {
   console.log('Service Worker: Installing...')
-  
+
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
         console.log('Service Worker: Caching static assets')
-        return cache.addAll(STATIC_ASSETS)
+        // 逐个添加资源，避免因为某个资源失败导致整个缓存失败
+        return Promise.allSettled(
+          STATIC_ASSETS.map(url =>
+            cache.add(url).catch(error => {
+              console.warn(`Failed to cache ${url}:`, error)
+              return null
+            })
+          )
+        )
       })
       .then(() => {
         console.log('Service Worker: Static assets cached')
@@ -34,6 +42,8 @@ self.addEventListener('install', (event) => {
       })
       .catch((error) => {
         console.error('Service Worker: Failed to cache static assets', error)
+        // 即使缓存失败也要继续安装
+        return self.skipWaiting()
       })
   )
 })
@@ -173,8 +183,8 @@ self.addEventListener('push', (event) => {
   
   const options = {
     body: event.data ? event.data.text() : '您有新的书签更新',
-    icon: '/icon-192x192.png',
-    badge: '/icon-192x192.png',
+    icon: '/placeholder-logo.png',
+    badge: '/placeholder-logo.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -184,12 +194,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'explore',
         title: '查看',
-        icon: '/icon-add.png'
+        icon: '/placeholder-logo.png'
       },
       {
         action: 'close',
         title: '关闭',
-        icon: '/icon-close.png'
+        icon: '/placeholder-logo.png'
       }
     ]
   }

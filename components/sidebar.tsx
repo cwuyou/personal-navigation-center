@@ -1,12 +1,24 @@
 "use client"
 
-import { useState } from "react"
-import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
+import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Input } from "@/components/ui/input"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
+
+interface Category {
+  id: string
+  name: string
+  subCategories: SubCategory[]
+}
+
+interface SubCategory {
+  id: string
+  name: string
+  parentId: string
+}
 import { AddCategoryDialog } from "@/components/add-category-dialog"
-import { EditCategoryDialog } from "@/components/edit-category-dialog"
 import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog"
 import { cn } from "@/lib/utils"
 
@@ -25,13 +37,17 @@ export function Sidebar({
   selectedSubCategory,
   onCategorySelect,
 }: SidebarProps) {
-  const { categories } = useBookmarkStore()
+  const { categories, updateCategory, updateSubCategory } = useBookmarkStore()
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
   const [addDialogOpen, setAddDialogOpen] = useState(false)
-  const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [editingCategory, setEditingCategory] = useState<any>(null)
-  const [deletingCategory, setDeletingCategory] = useState<any>(null)
+  const [deletingCategory, setDeletingCategory] = useState<Category | SubCategory | null>(null)
+
+  // 内联编辑状态
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editingValue, setEditingValue] = useState("")
+  const [editingType, setEditingType] = useState<'category' | 'subcategory'>('category')
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const toggleCategory = (categoryId: string) => {
     const newExpanded = new Set(expandedCategories)
@@ -43,11 +59,58 @@ export function Sidebar({
     setExpandedCategories(newExpanded)
   }
 
-  const handleCategoryClick = (category: any) => {
+  const handleCategoryClick = (category: Category) => {
     toggleCategory(category.id)
-    const firstSubCategory = category.subCategories[0]
-    onCategorySelect(category.id, firstSubCategory?.id)
+    // 点击分类时，显示整个分类的概览，不自动选择子分类
+    onCategorySelect(category.id, null)
   }
+
+  // 开始内联编辑
+  const startEditing = (id: string, currentName: string, type: 'category' | 'subcategory') => {
+    setEditingId(id)
+    setEditingValue(currentName)
+    setEditingType(type)
+  }
+
+  // 取消编辑
+  const cancelEditing = () => {
+    setEditingId(null)
+    setEditingValue("")
+  }
+
+  // 保存编辑
+  const saveEditing = () => {
+    if (!editingId || !editingValue.trim()) return
+
+    const trimmedValue = editingValue.trim()
+
+    if (editingType === 'category') {
+      // 更新分类名称
+      updateCategory(editingId, trimmedValue)
+    } else {
+      // 更新子分类名称
+      updateSubCategory(editingId, trimmedValue)
+    }
+
+    cancelEditing()
+  }
+
+  // 处理键盘事件
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      saveEditing()
+    } else if (e.key === 'Escape') {
+      cancelEditing()
+    }
+  }
+
+  // 自动聚焦输入框
+  useEffect(() => {
+    if (editingId && inputRef.current) {
+      inputRef.current.focus()
+      inputRef.current.select()
+    }
+  }, [editingId])
 
   const handleSubCategoryClick = (categoryId: string, subCategoryId: string) => {
     onCategorySelect(categoryId, subCategoryId)
@@ -91,13 +154,57 @@ export function Sidebar({
                   selectedCategory === category.id && "bg-accent",
                 )}
               >
-                <div className="flex items-center flex-1" onClick={() => handleCategoryClick(category)}>
-                  {expandedCategories.has(category.id) ? (
-                    <ChevronDown className="h-4 w-4 mr-2" />
+                <div
+                  className="flex items-center flex-1 cursor-pointer"
+                  onClick={() => handleCategoryClick(category)}
+                >
+                  <div className="flex items-center">
+                    {expandedCategories.has(category.id) ? (
+                      <ChevronDown className="h-4 w-4 mr-2" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4 mr-2" />
+                    )}
+                  </div>
+                  {editingId === category.id ? (
+                    <div className="flex items-center flex-1 gap-1">
+                      <Input
+                        ref={inputRef}
+                        value={editingValue}
+                        onChange={(e) => setEditingValue(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        onBlur={saveEditing}
+                        className="h-6 text-sm font-medium px-2 py-0 border-primary/50 focus:border-primary inline-edit-input"
+                        autoFocus
+                      />
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-5 w-5 p-0"
+                        onClick={saveEditing}
+                      >
+                        <Check className="h-3 w-3 text-green-600" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-5 w-5 p-0"
+                        onClick={cancelEditing}
+                      >
+                        <X className="h-3 w-3 text-red-600" />
+                      </Button>
+                    </div>
                   ) : (
-                    <ChevronRight className="h-4 w-4 mr-2" />
+                    <span
+                      className="text-sm font-medium cursor-pointer hover:text-primary transition-colors flex-1 editable-text"
+                      onDoubleClick={(e) => {
+                        e.stopPropagation()
+                        startEditing(category.id, category.name, 'category')
+                      }}
+                      title="双击编辑分类名称"
+                    >
+                      {category.name}
+                    </span>
                   )}
-                  <span className="text-sm font-medium">{category.name}</span>
                 </div>
                 <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1">
                   <Button
@@ -106,9 +213,9 @@ export function Sidebar({
                     className="h-6 w-6 p-0"
                     onClick={(e) => {
                       e.stopPropagation()
-                      setEditingCategory(category)
-                      setEditDialogOpen(true)
+                      startEditing(category.id, category.name, 'category')
                     }}
+                    title="编辑分类名称"
                   >
                     <Edit2 className="h-3 w-3" />
                   </Button>
@@ -129,16 +236,55 @@ export function Sidebar({
 
               {expandedCategories.has(category.id) && (
                 <div className="ml-6 mt-1">
-                  {category.subCategories.map((subCategory: any) => (
+                  {category.subCategories.map((subCategory: SubCategory) => (
                     <div
                       key={subCategory.id}
                       className={cn(
                         "group flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-accent text-sm",
                         selectedSubCategory === subCategory.id && "bg-accent",
                       )}
-                      onClick={() => handleSubCategoryClick(category.id, subCategory.id)}
+                      onClick={() => editingId !== subCategory.id && handleSubCategoryClick(category.id, subCategory.id)}
                     >
-                      <span>{subCategory.name}</span>
+                      {editingId === subCategory.id ? (
+                        <div className="flex items-center flex-1 gap-1">
+                          <Input
+                            ref={inputRef}
+                            value={editingValue}
+                            onChange={(e) => setEditingValue(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            onBlur={saveEditing}
+                            className="h-6 text-sm px-2 py-0 border-primary/50 focus:border-primary inline-edit-input"
+                            autoFocus
+                          />
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-5 w-5 p-0"
+                            onClick={saveEditing}
+                          >
+                            <Check className="h-3 w-3 text-green-600" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-5 w-5 p-0"
+                            onClick={cancelEditing}
+                          >
+                            <X className="h-3 w-3 text-red-600" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <span
+                          className="cursor-pointer hover:text-primary transition-colors flex-1 editable-text"
+                          onDoubleClick={(e) => {
+                            e.stopPropagation()
+                            startEditing(subCategory.id, subCategory.name, 'subcategory')
+                          }}
+                          title="双击编辑子分类名称"
+                        >
+                          {subCategory.name}
+                        </span>
+                      )}
                       <div className="opacity-0 group-hover:opacity-100 flex items-center space-x-1">
                         <Button
                           variant="ghost"
@@ -146,9 +292,9 @@ export function Sidebar({
                           className="h-6 w-6 p-0"
                           onClick={(e) => {
                             e.stopPropagation()
-                            setEditingCategory(subCategory)
-                            setEditDialogOpen(true)
+                            startEditing(subCategory.id, subCategory.name, 'subcategory')
                           }}
+                          title="编辑子分类名称"
                         >
                           <Edit2 className="h-3 w-3" />
                         </Button>
@@ -176,21 +322,12 @@ export function Sidebar({
 
       <AddCategoryDialog open={addDialogOpen} onOpenChange={setAddDialogOpen} />
 
-      {editingCategory && (
-        <EditCategoryDialog
-          open={editDialogOpen}
-          onOpenChange={setEditDialogOpen}
-          category={editingCategory}
-          onClose={() => setEditingCategory(null)}
-        />
-      )}
-
       {deletingCategory && (
         <DeleteConfirmDialog
           open={deleteDialogOpen}
           onOpenChange={setDeleteDialogOpen}
           title="删除分类"
-          description={`确定要删除分类"${deletingCategory.name}"吗？此操作将同时删除该分类下的所有子分类和书签。`}
+          description={`确定要删除分类"${String(deletingCategory?.name || '')}"吗？此操作将同时删除该分类下的所有子分类和书签。`}
           onConfirm={() => {
             // TODO: Implement delete category
             setDeletingCategory(null)

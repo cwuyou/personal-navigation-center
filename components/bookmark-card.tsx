@@ -50,7 +50,7 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
   return (
     <>
       <Card className="bookmark-card bookmark-group cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-border/50 bg-card/80 backdrop-blur-sm">
-        <CardContent className="card-content p-5">
+        <CardContent className="card-content p-4 sm:p-5">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-start space-x-3 flex-1 min-w-0" onClick={handleClick}>
               <div className="flex-shrink-0 mt-0.5">
@@ -76,11 +76,11 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
                 </div>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm text-foreground truncate mb-1 bookmark-group-hover:text-primary transition-colors">
+                <h3 className="font-semibold text-sm sm:text-base text-foreground truncate mb-1.5 bookmark-group-hover:text-primary transition-colors" title={bookmark.title}>
                   {bookmark.title}
                 </h3>
                 {bookmark.description && (
-                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed mb-2" title={bookmark.description}>
                     {bookmark.description}
                   </p>
                 )}

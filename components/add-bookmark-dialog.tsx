@@ -20,6 +20,8 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
   const [title, setTitle] = useState("")
   const [url, setUrl] = useState("")
   const [description, setDescription] = useState("")
+  const [coverImage, setCoverImage] = useState("")
+  const [tags, setTags] = useState("")
   const [loading, setLoading] = useState(false)
 
   const { addBookmark } = useBookmarkStore()
@@ -58,16 +60,24 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
 
     if (!title.trim() || !url.trim()) return
 
+    const tagsArray = tags.trim()
+      ? tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
+      : undefined
+
     addBookmark({
       title: title.trim(),
       url: url.trim(),
       description: description.trim() || undefined,
+      coverImage: coverImage.trim() || undefined,
+      tags: tagsArray,
       subCategoryId,
     })
 
     setTitle("")
     setUrl("")
     setDescription("")
+    setCoverImage("")
+    setTags("")
     onOpenChange(false)
   }
 
@@ -113,6 +123,28 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
               placeholder="简短描述这个网站的用途"
               rows={3}
             />
+          </div>
+
+          <div>
+            <Label htmlFor="coverImage">封面图片</Label>
+            <Input
+              id="coverImage"
+              type="url"
+              value={coverImage}
+              onChange={(e) => setCoverImage(e.target.value)}
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="tags">标签</Label>
+            <Input
+              id="tags"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              placeholder="标签1, 标签2, 标签3"
+            />
+            <p className="text-xs text-muted-foreground mt-1">用逗号分隔多个标签</p>
           </div>
 
           <div className="flex justify-end space-x-2">

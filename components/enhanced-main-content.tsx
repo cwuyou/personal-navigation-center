@@ -4,12 +4,27 @@ import { useState, useCallback } from "react"
 import { CheckSquare, X, Settings } from "lucide-react"
 import { BookmarkCard } from "@/components/bookmark-card"
 import { SelectableBookmarkCard } from "@/components/selectable-bookmark-card"
+import { EnhancedBookmarkCard } from "@/components/enhanced-bookmark-card"
 import { AddBookmarkCard } from "@/components/add-bookmark-card"
 import { SearchResults } from "@/components/search-results"
 import { BookmarkPreview } from "@/components/bookmark-preview"
 import { BatchSelectionToolbar } from "@/components/batch-selection-toolbar"
+import { DisplaySettingsPanel } from "@/components/display-settings-panel"
+import { DynamicBookmarkGrid } from "@/components/dynamic-bookmark-grid"
 import { Button } from "@/components/ui/button"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
+
+interface Bookmark {
+  id: string
+  title: string
+  url: string
+  description?: string
+  favicon?: string
+  coverImage?: string
+  tags?: string[]
+  subCategoryId: string
+  createdAt: Date
+}
 import { cn } from "@/lib/utils"
 
 interface EnhancedMainContentProps {
@@ -27,14 +42,14 @@ export function EnhancedMainContent({
   onSubCategorySelect,
   sidebarCollapsed,
 }: EnhancedMainContentProps) {
-  const [previewBookmark, setPreviewBookmark] = useState<any>(null)
+  const [previewBookmark, setPreviewBookmark] = useState<Bookmark | null>(null)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [selectedBookmarkIds, setSelectedBookmarkIds] = useState<string[]>([])
   
   const { categories, bookmarks, deleteBookmark } = useBookmarkStore()
 
   // 处理预览
-  const handlePreview = useCallback((bookmark: any) => {
+  const handlePreview = useCallback((bookmark: Bookmark) => {
     setPreviewBookmark(bookmark)
   }, [])
 
@@ -106,6 +121,7 @@ export function EnhancedMainContent({
           {previewBookmark && (
             <BookmarkPreview
               bookmark={previewBookmark}
+              isOpen={!!previewBookmark}
               onClose={() => setPreviewBookmark(null)}
             />
           )}
@@ -159,6 +175,7 @@ export function EnhancedMainContent({
                       </>
                     )}
                   </Button>
+                  <DisplaySettingsPanel />
                 </div>
               )}
             </div>
@@ -189,20 +206,28 @@ export function EnhancedMainContent({
           </div>
 
           {/* Bookmarks grid */}
-          <div className="bookmark-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+          <DynamicBookmarkGrid>
             {currentBookmarks.map((bookmark) => (
-              <SelectableBookmarkCard 
-                key={bookmark.id} 
-                bookmark={bookmark} 
-                onPreview={handlePreview}
-                isSelectionMode={isSelectionMode}
-                isSelected={selectedBookmarkIds.includes(bookmark.id)}
-                onSelectionChange={handleBookmarkSelection}
-              />
+              isSelectionMode ? (
+                <SelectableBookmarkCard
+                  key={bookmark.id}
+                  bookmark={bookmark}
+                  onPreview={handlePreview}
+                  isSelectionMode={isSelectionMode}
+                  isSelected={selectedBookmarkIds.includes(bookmark.id)}
+                  onSelectionChange={handleBookmarkSelection}
+                />
+              ) : (
+                <EnhancedBookmarkCard
+                  key={bookmark.id}
+                  bookmark={bookmark}
+                  onPreview={handlePreview}
+                />
+              )
             ))}
 
             {selectedSubCategory && !isSelectionMode && <AddBookmarkCard subCategoryId={selectedSubCategory} />}
-          </div>
+          </DynamicBookmarkGrid>
 
           {currentBookmarks.length === 0 && selectedSubCategory && (
             <div className="text-center mt-16">
@@ -228,6 +253,7 @@ export function EnhancedMainContent({
         {previewBookmark && (
           <BookmarkPreview
             bookmark={previewBookmark}
+            isOpen={!!previewBookmark}
             onClose={() => setPreviewBookmark(null)}
           />
         )}
@@ -249,7 +275,7 @@ export function EnhancedMainContent({
               发现和管理您的书签收藏，让每一个链接都触手可及
             </p>
             <p className="text-xs text-muted-foreground/80 mt-2">
-              💡 点击"管理书签"进入分类页面，使用批量选择和移动功能
+              💡 点击&quot;管理书签&quot;进入分类页面，使用批量选择和移动功能
             </p>
             <div className="flex items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6 text-xs sm:text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
@@ -307,14 +333,35 @@ export function EnhancedMainContent({
                 )}
               </div>
 
+              {/* 二级分类胶囊标签 */}
+              {category.subCategories.length > 0 && (
+                <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
+                  {category.subCategories.map((subCategory) => (
+                    <button
+                      key={subCategory.id}
+                      className={cn(
+                        "px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200",
+                        "hover:scale-105 hover:shadow-md border touch-manipulation",
+                        firstSubCategory?.id === subCategory.id
+                          ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg border-primary/20"
+                          : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground border-border/50"
+                      )}
+                      onClick={() => onSubCategorySelect(subCategory.id)}
+                    >
+                      {subCategory.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {/* 书签网格 */}
-              <div className="bookmark-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              <DynamicBookmarkGrid>
                 {firstSubCategoryBookmarks.slice(0, 7).map((bookmark) => (
-                  <BookmarkCard key={bookmark.id} bookmark={bookmark} onPreview={handlePreview} />
+                  <EnhancedBookmarkCard key={bookmark.id} bookmark={bookmark} onPreview={handlePreview} />
                 ))}
 
                 {firstSubCategory && <AddBookmarkCard subCategoryId={firstSubCategory.id} />}
-              </div>
+              </DynamicBookmarkGrid>
             </div>
           )
         })}
@@ -323,6 +370,7 @@ export function EnhancedMainContent({
       {previewBookmark && (
         <BookmarkPreview
           bookmark={previewBookmark}
+          isOpen={!!previewBookmark}
           onClose={() => setPreviewBookmark(null)}
         />
       )}
