@@ -2,6 +2,8 @@
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
+import { getFaviconUrl } from "@/lib/metadata-fetcher"
+import { backgroundEnhancer, type EnhancementProgress } from "@/lib/background-metadata-enhancer"
 
 interface Category {
   id: string
@@ -30,6 +32,7 @@ interface Bookmark {
 interface BookmarkStore {
   categories: Category[]
   bookmarks: Bookmark[]
+  enhancementProgress: EnhancementProgress | null
 
   // Category actions
   addCategory: (name: string) => void
@@ -49,13 +52,18 @@ interface BookmarkStore {
   moveBookmarks: (bookmarkIds: string[], targetSubCategoryId: string) => void
 
   // Import/Export
-  importBookmarks: (data: { categories: Category[]; bookmarks: Bookmark[] }) => Promise<{
+  importBookmarks: (data: { categories: Category[]; bookmarks: Bookmark[] }, options?: { enableBackgroundEnhancement?: boolean }) => Promise<{
     newCategories: number
     newSubCategories: number
     newBookmarks: number
     skippedBookmarks: number
   }>
   exportBookmarks: () => { categories: Category[]; bookmarks: Bookmark[] }
+
+  // Background enhancement
+  startBackgroundEnhancement: (bookmarkIds?: string[]) => Promise<void>
+  stopBackgroundEnhancement: () => void
+  getEnhancementStats: () => { totalSites: number, categories: string[] }
 
   // Initialize with default data
   initializeStore: () => void
@@ -148,6 +156,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
     (set, get) => ({
       categories: [],
       bookmarks: [],
+      enhancementProgress: null,
 
       addCategory: (name: string) => {
         const newCategory: Category = {
@@ -257,125 +266,143 @@ export const useBookmarkStore = create<BookmarkStore>()(
         }))
       },
 
-      importBookmarks: async (data) => {
-        return new Promise((resolve) => {
-          set((state) => {
-            const existingCategories = [...state.categories]
-            const existingBookmarks = [...state.bookmarks]
+      importBookmarks: async (data, options: { enableBackgroundEnhancement?: boolean } = {}) => {
+        const { enableBackgroundEnhancement = true } = options
+        const { categories: existingCategories, bookmarks: existingBookmarks } = get()
 
-            // 统计信息
-            let newCategories = 0
-            let newSubCategories = 0
-            let newBookmarks = 0
-            let skippedBookmarks = 0
+        console.log(`🚀 开始快速导入 ${data.bookmarks.length} 个书签...`)
+        const startTime = Date.now()
 
-            // 用于存储新创建的分类和子分类的映射
-            const categoryMapping = new Map<string, string>() // 旧ID -> 新ID
-            const subCategoryMapping = new Map<string, string>() // 旧ID -> 新ID
+        // 统计信息
+        let newCategories = 0
+        let newSubCategories = 0
+        let newBookmarks = 0
+        let skippedBookmarks = 0
 
-            // 处理分类：检查是否已存在同名分类
-            data.categories.forEach((newCategory: any) => {
-              const existingCategory = existingCategories.find(
-                cat => cat.name.toLowerCase() === newCategory.name.toLowerCase()
+        // 用于存储新创建的分类和子分类的映射
+        const categoryMapping = new Map<string, string>() // 旧ID -> 新ID
+        const subCategoryMapping = new Map<string, string>() // 旧ID -> 新ID
+
+        // 处理分类：检查是否已存在同名分类
+        data.categories.forEach((newCategory: any) => {
+          const existingCategory = existingCategories.find(
+            cat => cat.name.toLowerCase() === newCategory.name.toLowerCase()
+          )
+
+          if (existingCategory) {
+            // 分类已存在，使用现有分类ID
+            categoryMapping.set(newCategory.id, existingCategory.id)
+
+            // 处理子分类
+            newCategory.subCategories.forEach((newSubCategory: any) => {
+              const existingSubCategory = existingCategory.subCategories.find(
+                sub => sub.name.toLowerCase() === newSubCategory.name.toLowerCase()
               )
 
-              if (existingCategory) {
-                // 分类已存在，使用现有分类ID
-                categoryMapping.set(newCategory.id, existingCategory.id)
-
-                // 处理子分类
-                newCategory.subCategories.forEach((newSubCategory: any) => {
-                  const existingSubCategory = existingCategory.subCategories.find(
-                    sub => sub.name.toLowerCase() === newSubCategory.name.toLowerCase()
-                  )
-
-                  if (existingSubCategory) {
-                    // 子分类已存在，使用现有子分类ID
-                    subCategoryMapping.set(newSubCategory.id, existingSubCategory.id)
-                  } else {
-                    // 子分类不存在，创建新的子分类
-                    const newSubCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-                    subCategoryMapping.set(newSubCategory.id, newSubCategoryId)
-
-                    existingCategory.subCategories.push({
-                      id: newSubCategoryId,
-                      name: newSubCategory.name,
-                      parentId: existingCategory.id
-                    })
-                    newSubCategories++
-                  }
-                })
+              if (existingSubCategory) {
+                // 子分类已存在，使用现有子分类ID
+                subCategoryMapping.set(newSubCategory.id, existingSubCategory.id)
               } else {
-                // 分类不存在，创建新分类
-                const newCategoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-                categoryMapping.set(newCategory.id, newCategoryId)
+                // 子分类不存在，创建新的子分类
+                const newSubCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+                subCategoryMapping.set(newSubCategory.id, newSubCategoryId)
 
-                const newCategoryData = {
-                  id: newCategoryId,
-                  name: newCategory.name,
-                  subCategories: [] as any[]
-                }
-
-                // 处理新分类的子分类
-                newCategory.subCategories.forEach((newSubCategory: any) => {
-                  const newSubCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-                  subCategoryMapping.set(newSubCategory.id, newSubCategoryId)
-
-                  newCategoryData.subCategories.push({
-                    id: newSubCategoryId,
-                    name: newSubCategory.name,
-                    parentId: newCategoryId
-                  })
-                  newSubCategories++
+                existingCategory.subCategories.push({
+                  id: newSubCategoryId,
+                  name: newSubCategory.name,
+                  parentId: existingCategory.id
                 })
-
-                existingCategories.push(newCategoryData)
-                newCategories++
+                newSubCategories++
               }
             })
+          } else {
+            // 分类不存在，创建新分类
+            const newCategoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+            categoryMapping.set(newCategory.id, newCategoryId)
 
-            // 处理书签：检查是否已存在相同URL的书签
-            data.bookmarks.forEach((newBookmark: any) => {
-              const targetSubCategoryId = subCategoryMapping.get(newBookmark.subCategoryId)
-
-              if (targetSubCategoryId) {
-                // 检查该子分类下是否已存在相同URL的书签
-                const existingBookmark = existingBookmarks.find(
-                  bookmark => bookmark.subCategoryId === targetSubCategoryId &&
-                             bookmark.url.toLowerCase() === newBookmark.url.toLowerCase()
-                )
-
-                if (!existingBookmark) {
-                  // 书签不存在，添加新书签
-                  const newBookmarkId = `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-                  existingBookmarks.push({
-                    ...newBookmark,
-                    id: newBookmarkId,
-                    subCategoryId: targetSubCategoryId,
-                    createdAt: new Date()
-                  })
-                  newBookmarks++
-                } else {
-                  // 书签已存在，跳过
-                  skippedBookmarks++
-                }
-              }
-            })
-
-            // 返回统计信息
-            resolve({
-              newCategories,
-              newSubCategories,
-              newBookmarks,
-              skippedBookmarks
-            })
-
-            return {
-              categories: existingCategories,
-              bookmarks: existingBookmarks
+            const newCategoryData = {
+              id: newCategoryId,
+              name: newCategory.name,
+              subCategories: [] as any[]
             }
-          })
+
+            // 处理新分类的子分类
+            newCategory.subCategories.forEach((newSubCategory: any) => {
+              const newSubCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+              subCategoryMapping.set(newSubCategory.id, newSubCategoryId)
+
+              newCategoryData.subCategories.push({
+                id: newSubCategoryId,
+                name: newSubCategory.name,
+                parentId: newCategoryId
+              })
+              newSubCategories++
+            })
+
+            existingCategories.push(newCategoryData)
+            newCategories++
+          }
         })
+
+        // 快速导入书签（只做基本处理）
+        const importedBookmarkIds: string[] = []
+        data.bookmarks.forEach((newBookmark: any) => {
+          const targetSubCategoryId = subCategoryMapping.get(newBookmark.subCategoryId)
+
+          if (targetSubCategoryId) {
+            // 检查该子分类下是否已存在相同URL的书签
+            const existingBookmark = existingBookmarks.find(
+              bookmark => bookmark.subCategoryId === targetSubCategoryId &&
+                         bookmark.url.toLowerCase() === newBookmark.url.toLowerCase()
+            )
+
+            if (!existingBookmark) {
+              // 书签不存在，快速导入
+              const newBookmarkId = `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+              existingBookmarks.push({
+                ...newBookmark,
+                id: newBookmarkId,
+                subCategoryId: targetSubCategoryId,
+                favicon: newBookmark.favicon || getFaviconUrl(newBookmark.url), // 添加基本favicon
+                createdAt: new Date()
+              })
+
+              importedBookmarkIds.push(newBookmarkId)
+              newBookmarks++
+            } else {
+              // 书签已存在，跳过
+              skippedBookmarks++
+            }
+          }
+        })
+
+        // 更新状态
+        set({
+          categories: existingCategories,
+          bookmarks: existingBookmarks
+        })
+
+        const endTime = Date.now()
+        const duration = ((endTime - startTime) / 1000).toFixed(1)
+        console.log(`✅ 快速导入完成！耗时 ${duration}s，导入了 ${newBookmarks} 个书签`)
+
+        // 如果启用后台增强，异步开始增强过程
+        if (enableBackgroundEnhancement && importedBookmarkIds.length > 0) {
+          console.log(`🔄 自动启动后台增强服务，将为 ${importedBookmarkIds.length} 个书签获取详细信息...`)
+
+          // 异步启动后台增强（不阻塞返回）
+          setTimeout(() => {
+            get().startBackgroundEnhancement(importedBookmarkIds)
+          }, 500) // 稍微延长一点时间，让用户看到导入完成的反馈
+        }
+
+        return {
+          newCategories,
+          newSubCategories,
+          newBookmarks,
+          skippedBookmarks
+        }
       },
 
       exportBookmarks: () => {
@@ -412,6 +439,94 @@ export const useBookmarkStore = create<BookmarkStore>()(
           categories: defaultCategories,
           bookmarks: defaultBookmarks,
         })
+      },
+
+      // 后台增强相关方法
+      startBackgroundEnhancement: async (bookmarkIds?: string[]) => {
+        const { bookmarks } = get()
+
+        // 确定要增强的书签（判断条件与按钮组件保持一致）
+        const targetBookmarks = bookmarkIds
+          ? bookmarks.filter(bookmark => bookmarkIds.includes(bookmark.id))
+          : bookmarks.filter(bookmark => !bookmark.description || bookmark.description.length < 20)
+
+        if (targetBookmarks.length === 0) {
+          console.log('📝 没有需要增强的书签')
+          return
+        }
+
+        const isAutomatic = !!bookmarkIds
+        const actionType = isAutomatic ? '自动' : '手动'
+        console.log(`🚀 开始${actionType}增强 ${targetBookmarks.length} 个书签...`)
+
+        try {
+          let enhancedCount = 0
+          await backgroundEnhancer.enhanceBookmarks(targetBookmarks, {
+            onProgress: (progress) => {
+              set({ enhancementProgress: progress })
+            },
+            onUpdate: (bookmarkId, metadata) => {
+              // 实时更新书签信息
+              set((state) => {
+                const updatedBookmarks = state.bookmarks.map(bookmark =>
+                  bookmark.id === bookmarkId
+                    ? {
+                        ...bookmark,
+                        title: metadata.title || bookmark.title,
+                        description: metadata.description || bookmark.description,
+                        favicon: metadata.favicon || bookmark.favicon,
+                        coverImage: metadata.coverImage || bookmark.coverImage,  // 更新封面图片
+                      }
+                    : bookmark
+                )
+
+                // 调试日志：检查更新后的书签
+                const updatedBookmark = updatedBookmarks.find(b => b.id === bookmarkId)
+                if (updatedBookmark) {
+                  console.log(`📝 更新书签: ${updatedBookmark.title}`)
+                  console.log(`   描述长度: ${updatedBookmark.description?.length || 0}`)
+                  console.log(`   封面图片: ${updatedBookmark.coverImage ? '有' : '无'}`)
+                  console.log(`   新描述: ${updatedBookmark.description?.substring(0, 50)}...`)
+                }
+
+                return { bookmarks: updatedBookmarks }
+              })
+              enhancedCount++
+            },
+            batchSize: 8,
+            delay: 150
+          })
+
+          console.log(`✅ ${actionType}增强完成！成功增强了 ${enhancedCount} 个书签`)
+
+          // 增强完成后，重新检查需要增强的书签数量
+          const { bookmarks: updatedBookmarks } = get()
+          const remainingBookmarks = updatedBookmarks.filter(
+            bookmark => !bookmark.description || bookmark.description.length < 20
+          )
+          console.log(`📊 增强后统计：还有 ${remainingBookmarks.length} 个书签需要增强`)
+
+          // 如果是自动增强，显示友好的完成提示
+          if (isAutomatic && enhancedCount > 0) {
+            console.log(`🎉 您的 ${enhancedCount} 个书签现在拥有了详细的描述信息！`)
+          }
+        } catch (error) {
+          console.error(`❌ ${actionType}增强失败:`, error)
+        } finally {
+          // 清除进度状态
+          setTimeout(() => {
+            set({ enhancementProgress: null })
+          }, 2000)
+        }
+      },
+
+      stopBackgroundEnhancement: () => {
+        backgroundEnhancer.stop()
+        set({ enhancementProgress: null })
+      },
+
+      getEnhancementStats: () => {
+        return backgroundEnhancer.getPresetStats()
       },
     }),
     {

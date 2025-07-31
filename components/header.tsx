@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ImportDialog } from "@/components/import-dialog"
 import { AboutDialog } from "@/components/about-dialog"
+import { EnhanceBookmarksButton } from "@/components/enhance-bookmarks-button"
 import { ImportHelpDialog } from "@/components/import-help-dialog"
 import { EnhancedSearch } from "@/components/enhanced-search"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
@@ -114,96 +115,278 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
     const doc = parser.parseFromString(html, "text/html")
     const bookmarkData = parseBookmarkHTML(doc)
     console.log("解析HTML得到的数据:", bookmarkData)
-    await importBookmarks(bookmarkData)
+    await importBookmarks(bookmarkData, { enableBackgroundEnhancement: true })
   }
 
   const importFromJSON = async (json: string) => {
     const data = JSON.parse(json)
     console.log("解析JSON得到的数据:", data)
-    await importBookmarks(data)
+    await importBookmarks(data, { enableBackgroundEnhancement: true })
   }
 
   const parseBookmarkHTML = (doc: Document) => {
     const categories: any[] = []
     const bookmarks: any[] = []
 
-    // Find all DT elements which typically contain folders or bookmarks
-    const dtElements = doc.querySelectorAll("dt")
-
-    dtElements.forEach((dt) => {
-      const h3 = dt.querySelector("h3")
-      const a = dt.querySelector("a")
+    // 递归解析书签文件夹结构
+    const parseFolder = (element: Element, parentCategoryId?: string, level: number = 0, isBookmarkBar: boolean = false): void => {
+      const h3 = element.querySelector(":scope > h3")
+      const dl = element.querySelector(":scope > dl")
 
       if (h3) {
-        // This is a folder/category
-        const categoryName = h3.textContent?.trim() || "Unnamed Category"
-        const categoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        const folderName = h3.textContent?.trim() || "Unnamed Folder"
 
-        const category = {
-          id: categoryId,
-          name: categoryName,
-          subCategories: [],
-        }
+        if (isBookmarkBar) {
+          // 处理书签栏：其子文件夹成为一级分类，直接书签放入"未分类书签"
+          if (dl) {
+            const childDts = dl.querySelectorAll(":scope > dt")
+            let hasDirectBookmarks = false
 
-        // Look for nested folders and bookmarks
-        const nextDl = dt.querySelector("dl")
-        if (nextDl) {
-          const subDts = nextDl.querySelectorAll("dt")
-          const subCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+            childDts.forEach((childDt) => {
+              const childH3 = childDt.querySelector(":scope > h3")
+              const childA = childDt.querySelector(":scope > a")
 
-          category.subCategories.push({
-            id: subCategoryId,
-            name: "Default",
-            parentId: categoryId,
-          })
+              if (childH3) {
+                // 子文件夹，创建为一级分类
+                const categoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+                const category = {
+                  id: categoryId,
+                  name: childH3.textContent?.trim() || "Unnamed Category",
+                  subCategories: [],
+                }
+                categories.push(category)
 
-          subDts.forEach((subDt) => {
-            const subA = subDt.querySelector("a")
-            if (subA) {
-              bookmarks.push({
-                id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-                title: subA.textContent?.trim() || "Unnamed Bookmark",
-                url: subA.getAttribute("href") || "",
-                subCategoryId: subCategoryId,
+                // 递归处理这个文件夹
+                parseFolder(childDt, categoryId, 1)
+              } else if (childA) {
+                // 直接书签，需要放入"未分类书签"分类
+                hasDirectBookmarks = true
+              }
+            })
+
+            // 如果有直接书签，创建"未分类书签"分类
+            if (hasDirectBookmarks) {
+              const uncategorizedId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+              const uncategorizedSubId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+              categories.push({
+                id: uncategorizedId,
+                name: "未分类书签",
+                subCategories: [{
+                  id: uncategorizedSubId,
+                  name: "默认",
+                  parentId: uncategorizedId,
+                }],
+              })
+
+              // 处理直接书签
+              childDts.forEach((childDt) => {
+                const childA = childDt.querySelector(":scope > a")
+                if (childA) {
+                  parseBookmark(childDt, uncategorizedSubId)
+                }
               })
             }
-          })
+          }
+        } else if (level === 1 && parentCategoryId) {
+          // 一级分类下的处理
+          const parentCategory = categories.find(cat => cat.id === parentCategoryId)
+          if (!parentCategory) return
+
+          if (dl) {
+            const childDts = dl.querySelectorAll(":scope > dt")
+            let hasDirectBookmarks = false
+
+            // 先检查是否有直接书签
+            childDts.forEach((childDt) => {
+              const childA = childDt.querySelector(":scope > a")
+              if (childA) {
+                hasDirectBookmarks = true
+              }
+            })
+
+            // 如果有直接书签，创建默认子分类
+            if (hasDirectBookmarks) {
+              const defaultSubId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+              parentCategory.subCategories.push({
+                id: defaultSubId,
+                name: "默认",
+                parentId: parentCategoryId,
+              })
+
+              // 处理直接书签
+              childDts.forEach((childDt) => {
+                const childA = childDt.querySelector(":scope > a")
+                if (childA) {
+                  parseBookmark(childDt, defaultSubId)
+                }
+              })
+            }
+
+            // 处理子文件夹
+            childDts.forEach((childDt) => {
+              const childH3 = childDt.querySelector(":scope > h3")
+              if (childH3) {
+                const subFolderName = childH3.textContent?.trim() || "Unnamed Folder"
+                const subCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+                parentCategory.subCategories.push({
+                  id: subCategoryId,
+                  name: subFolderName,
+                  parentId: parentCategoryId,
+                })
+
+                // 递归处理子文件夹内容，包括更深层的文件夹
+                parseSubFolder(childDt, subCategoryId, subFolderName)
+              }
+            })
+          }
         }
-
-        categories.push(category)
-      } else if (a) {
-        // This is a direct bookmark (not in a folder)
-        if (categories.length === 0) {
-          // Create a default category
-          const defaultCategoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-          const defaultSubCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-
-          categories.push({
-            id: defaultCategoryId,
-            name: "Imported Bookmarks",
-            subCategories: [
-              {
-                id: defaultSubCategoryId,
-                name: "Default",
-                parentId: defaultCategoryId,
-              },
-            ],
-          })
+      } else {
+        // 不是文件夹，可能是书签
+        const currentSubCategoryId = getCurrentSubCategoryId(parentCategoryId)
+        if (currentSubCategoryId) {
+          parseBookmark(element, currentSubCategoryId)
         }
+      }
+    }
 
-        const lastCategory = categories[categories.length - 1]
-        const subCategoryId = lastCategory.subCategories[0]?.id
+    // 处理子文件夹及其更深层内容
+    const parseSubFolder = (element: Element, subCategoryId: string, parentFolderName: string): void => {
+      const dl = element.querySelector(":scope > dl")
+      if (!dl) return
 
-        if (subCategoryId) {
+      const childDts = dl.querySelectorAll(":scope > dt")
+      childDts.forEach((childDt) => {
+        const childH3 = childDt.querySelector(":scope > h3")
+        const childA = childDt.querySelector(":scope > a")
+
+        if (childA) {
+          // 直接书签
+          parseBookmark(childDt, subCategoryId)
+        } else if (childH3) {
+          // 更深层的文件夹，将其书签扁平化到当前子分类，并添加前缀
+          const deepFolderName = childH3.textContent?.trim() || "Unnamed Folder"
+          const prefix = `[${deepFolderName}] `
+          parseDeepFolder(childDt, subCategoryId, prefix)
+        }
+      })
+    }
+
+    // 处理更深层文件夹，将书签扁平化并添加前缀
+    const parseDeepFolder = (element: Element, subCategoryId: string, prefix: string): void => {
+      const dl = element.querySelector(":scope > dl")
+      if (!dl) return
+
+      const childDts = dl.querySelectorAll(":scope > dt")
+      childDts.forEach((childDt) => {
+        const childH3 = childDt.querySelector(":scope > h3")
+        const childA = childDt.querySelector(":scope > a")
+
+        if (childA) {
+          // 书签，添加前缀
+          const originalTitle = childA.textContent?.trim() || "Unnamed Bookmark"
           bookmarks.push({
             id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            title: a.textContent?.trim() || "Unnamed Bookmark",
-            url: a.getAttribute("href") || "",
+            title: prefix + originalTitle,
+            url: childA.getAttribute("href") || "",
             subCategoryId: subCategoryId,
+          })
+        } else if (childH3) {
+          // 更深层文件夹，继续递归
+          const deepFolderName = childH3.textContent?.trim() || "Unnamed Folder"
+          const newPrefix = prefix + `[${deepFolderName}] `
+          parseDeepFolder(childDt, subCategoryId, newPrefix)
+        }
+      })
+    }
+
+    // 解析书签
+    const parseBookmark = (element: Element, subCategoryId: string): void => {
+      const a = element.querySelector(":scope > a")
+      if (a) {
+        bookmarks.push({
+          id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          title: a.textContent?.trim() || "Unnamed Bookmark",
+          url: a.getAttribute("href") || "",
+          subCategoryId: subCategoryId,
+        })
+      }
+    }
+
+    // 获取当前可用的子分类ID
+    const getCurrentSubCategoryId = (parentCategoryId?: string): string | null => {
+      if (parentCategoryId) {
+        const parentCategory = categories.find(cat => cat.id === parentCategoryId)
+        if (parentCategory && parentCategory.subCategories.length > 0) {
+          return parentCategory.subCategories[0].id
+        }
+      }
+
+      // 如果没有合适的子分类，创建一个默认分类
+      if (categories.length === 0) {
+        const defaultCategoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        const defaultSubCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+        categories.push({
+          id: defaultCategoryId,
+          name: "导入的书签",
+          subCategories: [{
+            id: defaultSubCategoryId,
+            name: "默认",
+            parentId: defaultCategoryId,
+          }],
+        })
+
+        return defaultSubCategoryId
+      }
+
+      return null
+    }
+
+    // 查找书签栏根目录
+    const bookmarkBar = doc.querySelector('h1')
+    let rootDl = null
+
+    if (bookmarkBar) {
+      rootDl = bookmarkBar.nextElementSibling
+      while (rootDl && rootDl.tagName !== 'DL') {
+        rootDl = rootDl.nextElementSibling
+      }
+    }
+
+    if (!rootDl) {
+      // 如果找不到标准结构，回退到查找所有顶级DT元素
+      rootDl = doc.querySelector('dl')
+    }
+
+    if (rootDl) {
+      const topLevelDts = rootDl.querySelectorAll(":scope > dt")
+
+      // 检查第一个DT是否是书签栏
+      if (topLevelDts.length > 0) {
+        const firstDt = topLevelDts[0]
+        const firstH3 = firstDt.querySelector(":scope > h3")
+
+        if (firstH3 && (firstH3.textContent?.trim() === "书签栏" ||
+                       firstH3.textContent?.trim() === "Bookmarks bar" ||
+                       firstH3.textContent?.trim() === "Bookmarks Bar" ||
+                       firstH3.hasAttribute("PERSONAL_TOOLBAR_FOLDER"))) {
+          // 这是书签栏，特殊处理
+          parseFolder(firstDt, undefined, 0, true)
+
+          // 处理其他顶级文件夹（如果有的话）
+          for (let i = 1; i < topLevelDts.length; i++) {
+            parseFolder(topLevelDts[i], undefined, 0, false)
+          }
+        } else {
+          // 不是标准的书签栏结构，按普通方式处理
+          topLevelDts.forEach((dt) => {
+            parseFolder(dt, undefined, 0, false)
           })
         }
       }
-    })
+    }
 
     return { categories, bookmarks }
   }
@@ -227,10 +410,13 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
         />
 
         <div className="flex items-center space-x-2">
+          {/* 增强书签按钮 */}
+          <EnhanceBookmarksButton />
+
           {/* 导入按钮 - 卡片式 */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="ghost" size="sm">
                 <Upload className="h-4 w-4 mr-2" />
                 导入
               </Button>

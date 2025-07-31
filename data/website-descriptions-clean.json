@@ -1,0 +1,420 @@
+{
+  "github.com": {
+    "title": "GitHub",
+    "description": "全球最大的代码托管平台，提供Git版本控制、项目管理、团队协作、CI/CD等完整的软件开发生命周期管理功能",
+    "category": "开发工具",
+    "tags": [
+      "代码托管",
+      "版本控制",
+      "协作",
+      "开源"
+    ],
+    "coverImage": "https://github.githubassets.com/images/modules/site/social-cards/github-social.png"
+  },
+  "gitlab.com": {
+    "title": "GitLab",
+    "description": "完整的DevOps平台，提供Git仓库管理、CI/CD、项目管理等一体化开发解决方案",
+    "category": "开发工具",
+    "tags": [
+      "Git",
+      "DevOps",
+      "CI/CD",
+      "项目管理"
+    ],
+    "coverImage": "https://about.gitlab.com/images/press/logo/png/gitlab-logo-gray-rgb.png"
+  },
+  "bitbucket.org": {
+    "title": "Bitbucket",
+    "description": "Atlassian旗下的Git代码托管平台，与Jira、Confluence深度集成的企业级解决方案",
+    "category": "开发工具",
+    "tags": [
+      "Git",
+      "代码托管",
+      "Atlassian",
+      "企业级"
+    ],
+    "coverImage": "https://wac-cdn.atlassian.com/dam/jcr:e2a6f06f-b3d5-4002-aed3-73539c56a2eb/bitbucket_rgb_blue.png"
+  },
+  "vscode.dev": {
+    "title": "VS Code for the Web",
+    "description": "微软VS Code的Web版本，无需安装即可在浏览器中进行代码编辑和开发",
+    "category": "开发工具",
+    "tags": [
+      "在线IDE",
+      "代码编辑器",
+      "Web开发",
+      "微软"
+    ],
+    "coverImage": "https://code.visualstudio.com/assets/images/code-stable.png"
+  },
+  "codepen.io": {
+    "title": "CodePen",
+    "description": "前端开发者的在线代码编辑器和社区，用于展示HTML、CSS、JavaScript作品",
+    "category": "开发工具",
+    "tags": [
+      "前端开发",
+      "在线编辑器",
+      "代码展示",
+      "社区"
+    ],
+    "coverImage": "https://cpwebassets.codepen.io/assets/social/facebook-default-05cf522ae1d4c215ae0f09d866562a9b8b1fdb74e0f742b3bdfa2768226c9e4d.png"
+  },
+  "jsfiddle.net": {
+    "title": "JSFiddle",
+    "description": "在线JavaScript、HTML、CSS代码测试和分享平台，快速原型开发工具",
+    "category": "开发工具",
+    "tags": [
+      "JavaScript",
+      "在线编辑器",
+      "代码测试",
+      "原型开发"
+    ],
+    "coverImage": "https://jsfiddle.net/img/logo.png"
+  },
+  "replit.com": {
+    "title": "Replit",
+    "description": "云端集成开发环境，支持50+编程语言的在线编程和协作平台",
+    "category": "开发工具",
+    "tags": [
+      "云端IDE",
+      "在线编程",
+      "多语言支持",
+      "协作开发"
+    ],
+    "coverImage": "https://replit.com/public/images/og-image.png"
+  },
+  "codesandbox.io": {
+    "title": "CodeSandbox",
+    "description": "专为Web开发优化的在线IDE，支持React、Vue、Angular等现代前端框架",
+    "category": "开发工具",
+    "tags": [
+      "在线IDE",
+      "前端框架",
+      "React",
+      "Vue"
+    ],
+    "coverImage": "https://codesandbox.io/static/img/banner.png"
+  },
+  "stackblitz.com": {
+    "title": "StackBlitz",
+    "description": "基于VS Code的在线IDE，专为Angular、React、Vue等现代Web开发而设计",
+    "category": "开发工具",
+    "tags": [
+      "在线IDE",
+      "VS Code",
+      "现代Web开发",
+      "即时预览"
+    ],
+    "coverImage": "https://c.staticblitz.com/assets/icon-stackblitz.png"
+  },
+  "vercel.com": {
+    "title": "Vercel",
+    "description": "现代Web应用的部署平台，专为前端框架优化，提供全球CDN和无服务器函数",
+    "category": "开发工具",
+    "tags": [
+      "部署平台",
+      "前端框架",
+      "CDN",
+      "无服务器"
+    ],
+    "coverImage": "https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png"
+  },
+  "netlify.com": {
+    "title": "Netlify",
+    "description": "现代Web开发平台，提供持续部署、表单处理、身份验证等全栈解决方案",
+    "category": "开发工具",
+    "tags": [
+      "Web部署",
+      "JAMstack",
+      "持续部署",
+      "全栈平台"
+    ],
+    "coverImage": "https://www.netlify.com/img/press/logos/logomark.png"
+  },
+  "heroku.com": {
+    "title": "Heroku",
+    "description": "云应用平台，支持多种编程语言，简化应用部署和扩展的PaaS服务",
+    "category": "开发工具",
+    "tags": [
+      "云平台",
+      "PaaS",
+      "应用部署",
+      "多语言支持"
+    ],
+    "coverImage": "https://www.heroku.com/images/logos/heroku-logo-light-300x100.png"
+  },
+  "docker.com": {
+    "title": "Docker",
+    "description": "容器化平台，简化应用打包、分发和部署，现代软件开发的基础设施工具",
+    "category": "开发工具",
+    "tags": [
+      "容器化",
+      "DevOps",
+      "应用部署",
+      "微服务"
+    ],
+    "coverImage": "https://www.docker.com/sites/default/files/d8/2019-07/horizontal-logo-monochromatic-white.png"
+  },
+  "kubernetes.io": {
+    "title": "Kubernetes",
+    "description": "开源容器编排平台，自动化容器应用的部署、扩展和管理",
+    "category": "开发工具",
+    "tags": [
+      "容器编排",
+      "云原生",
+      "自动化部署",
+      "微服务"
+    ],
+    "coverImage": "https://kubernetes.io/images/kubernetes-horizontal-color.png"
+  },
+  "jenkins.io": {
+    "title": "Jenkins",
+    "description": "开源自动化服务器，支持构建、测试和部署任何项目的CI/CD工具",
+    "category": "开发工具",
+    "tags": [
+      "CI/CD",
+      "自动化",
+      "构建工具",
+      "DevOps"
+    ],
+    "coverImage": "https://www.jenkins.io/images/logos/jenkins/jenkins.png"
+  },
+  "sentry.io": {
+    "title": "Sentry",
+    "description": "应用监控和错误追踪平台，帮助开发者快速发现、诊断和修复问题",
+    "category": "开发工具",
+    "tags": [
+      "错误监控",
+      "性能监控",
+      "调试工具",
+      "应用监控"
+    ],
+    "coverImage": "https://sentry-brand.storage.googleapis.com/sentry-logo-black.png"
+  },
+  "mongodb.com": {
+    "title": "MongoDB",
+    "description": "现代应用的数据库，文档型NoSQL数据库的领导者，支持灵活的数据模型",
+    "category": "开发工具",
+    "tags": [
+      "NoSQL数据库",
+      "文档数据库",
+      "云数据库",
+      "现代应用"
+    ],
+    "coverImage": "https://webassets.mongodb.com/_com_assets/cms/mongodb_logo1-76twgcu2dm.png"
+  },
+  "redis.io": {
+    "title": "Redis",
+    "description": "内存数据结构存储，用作数据库、缓存和消息代理的高性能键值存储",
+    "category": "开发工具",
+    "tags": [
+      "内存数据库",
+      "缓存",
+      "键值存储",
+      "高性能"
+    ],
+    "coverImage": "https://redis.io/images/redis-white.png"
+  },
+  "postgresql.org": {
+    "title": "PostgreSQL",
+    "description": "世界上最先进的开源关系数据库，以可靠性、功能丰富性和性能著称",
+    "category": "开发工具",
+    "tags": [
+      "关系数据库",
+      "开源数据库",
+      "SQL",
+      "企业级"
+    ],
+    "coverImage": "https://www.postgresql.org/media/img/about/press/elephant.png"
+  },
+  "mysql.com": {
+    "title": "MySQL",
+    "description": "世界上最流行的开源数据库，为Web应用提供可靠、高性能的数据存储",
+    "category": "开发工具",
+    "tags": [
+      "关系数据库",
+      "开源数据库",
+      "Web应用",
+      "高性能"
+    ],
+    "coverImage": "https://labs.mysql.com/common/logos/mysql-logo.svg"
+  },
+  "firebase.google.com": {
+    "title": "Firebase",
+    "description": "Google的移动和Web应用开发平台，提供后端服务、数据库和分析工具",
+    "category": "开发工具",
+    "tags": [
+      "移动开发",
+      "后端服务",
+      "实时数据库",
+      "Google"
+    ],
+    "coverImage": "https://firebase.google.com/downloads/brand/PNG/logo-logomark.png"
+  },
+  "supabase.com": {
+    "title": "Supabase",
+    "description": "开源的Firebase替代方案，提供数据库、认证、实时订阅和存储服务",
+    "category": "开发工具",
+    "tags": [
+      "开源",
+      "后端服务",
+      "PostgreSQL",
+      "实时数据"
+    ],
+    "coverImage": "https://supabase.com/brand-assets/supabase-logo-wordmark--light.png"
+  },
+  "cloudflare.com": {
+    "title": "Cloudflare",
+    "description": "全球云平台，提供CDN、DNS、DDoS防护和Web安全服务",
+    "category": "开发工具",
+    "tags": ["CDN", "DNS", "Web安全", "DDoS防护"],
+    "coverImage": "https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"
+  },
+  "coursera.org": {
+    "title": "Coursera",
+    "description": "全球领先的在线学习平台，提供来自顶尖大学和公司的课程和学位项目",
+    "category": "在线教育",
+    "tags": ["在线课程", "大学课程", "职业发展", "认证证书"],
+    "coverImage": "https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://coursera-course-photos.s3.amazonaws.com/fb/03e450d8d011e682d37b99d7b3b6/coursera-logo-square.png"
+  },
+  "edx.org": {
+    "title": "edX",
+    "description": "哈佛和MIT创立的在线教育平台，提供高质量的大学级别课程",
+    "category": "在线教育",
+    "tags": ["大学课程", "免费教育", "哈佛", "MIT"],
+    "coverImage": "https://www.edx.org/images/logos/edx-logo-elm.svg"
+  },
+  "udacity.com": {
+    "title": "Udacity",
+    "description": "专注于技术技能的在线教育平台，提供纳米学位和职业导向的课程",
+    "category": "在线教育",
+    "tags": ["技术教育", "纳米学位", "职业技能", "编程培训"],
+    "coverImage": "https://www.udacity.com/images/svgs/udacity-tt-logo.svg"
+  },
+  "udemy.com": {
+    "title": "Udemy",
+    "description": "全球最大的在线学习市场，涵盖各种技能和兴趣的课程",
+    "category": "在线教育",
+    "tags": ["在线课程", "技能学习", "多样化课程", "自主学习"],
+    "coverImage": "https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg"
+  },
+  "khanacademy.org": {
+    "title": "Khan Academy",
+    "description": "免费的世界级教育平台，为任何人、任何地方提供免费的优质教育",
+    "category": "在线教育",
+    "tags": ["免费教育", "K-12教育", "数学", "科学"],
+    "coverImage": "https://cdn.kastatic.org/images/khan-logo-dark-background.png"
+  },
+  "codecademy.com": {
+    "title": "Codecademy",
+    "description": "交互式编程学习平台，通过实践项目学习编程技能",
+    "category": "编程学习",
+    "tags": ["编程教育", "交互式学习", "实践项目", "代码练习"],
+    "coverImage": "https://www.codecademy.com/favicon.ico"
+  },
+  "freecodecamp.org": {
+    "title": "freeCodeCamp",
+    "description": "免费的编程学习平台，提供全栈Web开发课程和项目实践",
+    "category": "编程学习",
+    "tags": ["免费编程", "全栈开发", "Web开发", "开源教育"],
+    "coverImage": "https://www.freecodecamp.org/news/content/images/2019/05/fcc_meta_1920X1080-indigo.png"
+  },
+  "leetcode.com": {
+    "title": "LeetCode",
+    "description": "编程面试准备平台，提供算法和数据结构题目练习",
+    "category": "编程学习",
+    "tags": ["算法练习", "面试准备", "编程竞赛", "技术面试"],
+    "coverImage": "https://leetcode.com/static/images/LeetCode_logo_rvs.png"
+  },
+  "hackerrank.com": {
+    "title": "HackerRank",
+    "description": "编程技能评估和练习平台，为开发者提供编程挑战，为企业提供技术招聘解决方案",
+    "category": "编程学习",
+    "tags": ["编程挑战", "技能评估", "技术招聘", "算法练习"],
+    "coverImage": "https://hrcdn.net/fcore/assets/brand/logo-new-white-green-a5cb16e0ca.svg"
+  },
+  "stackoverflow.com": {
+    "title": "Stack Overflow",
+    "description": "全球最大的程序员问答社区，解决编程问题的首选平台",
+    "category": "技术社区",
+    "tags": ["编程问答", "技术社区", "问题解决", "开发者"],
+    "coverImage": "https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon@2.png"
+  },
+  "facebook.com": {
+    "title": "Facebook",
+    "description": "全球最大的社交网络平台，连接世界各地的人们分享生活和建立联系",
+    "category": "社交媒体",
+    "tags": ["社交网络", "分享生活", "全球连接", "Meta"],
+    "coverImage": "https://www.facebook.com/images/fb_icon_325x325.png"
+  },
+  "instagram.com": {
+    "title": "Instagram",
+    "description": "图片和视频分享社交平台，以视觉内容为主的社交体验",
+    "category": "社交媒体",
+    "tags": ["图片分享", "视频分享", "视觉社交", "Meta"],
+    "coverImage": "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png"
+  },
+  "linkedin.com": {
+    "title": "LinkedIn",
+    "description": "全球最大的职业社交网络，专注于职业发展和商务联系",
+    "category": "社交媒体",
+    "tags": ["职业社交", "商务网络", "求职招聘", "职业发展"],
+    "coverImage": "https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca"
+  },
+  "tiktok.com": {
+    "title": "TikTok",
+    "description": "短视频分享平台，以创意短视频内容和音乐为特色的社交应用",
+    "category": "社交媒体",
+    "tags": ["短视频", "音乐视频", "创意内容", "年轻用户"],
+    "coverImage": "https://sf16-website-login.neutral.ttwstatic.com/obj/tiktok_web_login_static/tiktok/webapp/main/webapp-desktop/8152caf0c8e8bc67ae0d.png"
+  },
+  "discord.com": {
+    "title": "Discord",
+    "description": "面向游戏玩家和社区的语音、视频和文字聊天平台",
+    "category": "社交媒体",
+    "tags": ["游戏社交", "语音聊天", "社区平台", "实时通讯"],
+    "coverImage": "https://discord.com/assets/f9bb9c4af2b9c32a2c5ee0014661546d.png"
+  },
+  "slack.com": {
+    "title": "Slack",
+    "description": "团队协作和沟通平台，为工作场所提供即时消息和文件分享",
+    "category": "协作工具",
+    "tags": ["团队协作", "工作沟通", "即时消息", "文件分享"],
+    "coverImage": "https://a.slack-edge.com/80588/marketing/img/meta/slack_hash_256.png"
+  },
+  "miro.com": {
+    "title": "Miro",
+    "description": "在线协作白板平台，支持团队头脑风暴、流程图和项目规划",
+    "category": "协作工具",
+    "tags": ["在线白板", "团队协作", "头脑风暴", "流程图"],
+    "coverImage": "https://miro.com/static/images/page/mr-logo-primary.svg"
+  },
+  "airtable.com": {
+    "title": "Airtable",
+    "description": "现代数据库平台，结合电子表格的简单性和数据库的强大功能",
+    "category": "生产力工具",
+    "tags": ["数据库", "电子表格", "项目管理", "数据组织"],
+    "coverImage": "https://static.airtable.com/images/logoMarkColor.svg"
+  },
+  "asana.com": {
+    "title": "Asana",
+    "description": "团队项目管理工具，帮助团队组织、跟踪和管理工作",
+    "category": "项目管理",
+    "tags": ["项目管理", "团队协作", "任务跟踪", "工作组织"],
+    "coverImage": "https://luna1.co/eb0187.png"
+  },
+  "monday.com": {
+    "title": "monday.com",
+    "description": "工作管理平台，帮助团队规划、跟踪和交付项目",
+    "category": "项目管理",
+    "tags": ["工作管理", "项目跟踪", "团队协作", "任务管理"],
+    "coverImage": "https://dapulse-res.cloudinary.com/image/upload/f_auto,q_auto/remote_mondaycom_static/img/monday-logo-x2.png"
+  },
+  "clickup.com": {
+    "title": "ClickUp",
+    "description": "一体化生产力平台，集项目管理、文档、目标跟踪于一体",
+    "category": "项目管理",
+    "tags": ["生产力平台", "项目管理", "文档管理", "目标跟踪"],
+    "coverImage": "https://clickup.com/landing/images/logo-clickup_color.svg"
+  }
+}

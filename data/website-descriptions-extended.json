@@ -1,0 +1,723 @@
+{
+  "vscode.dev": {
+    "title": "VS Code for the Web",
+    "description": "微软VS Code的Web版本，无需安装即可在浏览器中进行代码编辑和开发",
+    "category": "开发工具",
+    "tags": ["在线IDE", "代码编辑器", "Web开发", "微软"],
+    "coverImage": "https://code.visualstudio.com/assets/images/code-stable.png"
+  },
+  "atom.io": {
+    "title": "Atom",
+    "description": "GitHub开发的开源文本编辑器，高度可定制的现代编程工具",
+    "category": "开发工具",
+    "tags": ["文本编辑器", "开源", "GitHub", "可定制"],
+    "coverImage": "https://github.githubassets.com/images/modules/logos_page/Octocat.png"
+  },
+  "sublimetext.com": {
+    "title": "Sublime Text",
+    "description": "高性能的文本编辑器，以速度快、功能强大和界面简洁著称",
+    "category": "开发工具",
+    "tags": ["文本编辑器", "高性能", "编程工具", "跨平台"],
+    "coverImage": "https://www.sublimetext.com/images/logo.svg"
+  },
+  "vim.org": {
+    "title": "Vim",
+    "description": "高度可配置的文本编辑器，程序员的经典选择，以高效的键盘操作著称",
+    "category": "开发工具",
+    "tags": ["文本编辑器", "命令行", "高效编辑", "开源"],
+    "coverImage": "https://www.vim.org/images/vim_header.gif"
+  },
+  "neovim.io": {
+    "title": "Neovim",
+    "description": "Vim的现代化重构版本，保持Vim的核心理念同时提供更好的扩展性",
+    "category": "开发工具",
+    "tags": ["文本编辑器", "Vim", "现代化", "可扩展"],
+    "coverImage": "https://neovim.io/images/logo@2x.png"
+  },
+  "emacs.org": {
+    "title": "GNU Emacs",
+    "description": "可扩展、可定制的文本编辑器，功能强大的编程环境",
+    "category": "开发工具",
+    "tags": ["文本编辑器", "GNU", "可扩展", "编程环境"],
+    "coverImage": "https://www.gnu.org/software/emacs/images/emacs.png"
+  },
+  "jetbrains.com": {
+    "title": "JetBrains",
+    "description": "专业开发工具提供商，IntelliJ IDEA、PyCharm、WebStorm等IDE的开发者",
+    "category": "开发工具",
+    "tags": ["IDE", "专业工具", "IntelliJ", "开发环境"],
+    "coverImage": "https://www.jetbrains.com/company/brand/img/jetbrains_logo.svg"
+  },
+  "eclipse.org": {
+    "title": "Eclipse IDE",
+    "description": "开源集成开发环境，主要用于Java开发，支持多种编程语言",
+    "category": "开发工具",
+    "tags": ["IDE", "Java开发", "开源", "集成环境"],
+    "coverImage": "https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-foundation-white-orange.svg"
+  },
+  "android.com": {
+    "title": "Android Developers",
+    "description": "Android应用开发官方平台，提供开发工具、文档和资源",
+    "category": "开发工具",
+    "tags": ["移动开发", "Android", "官方文档", "开发平台"],
+    "coverImage": "https://developer.android.com/images/brand/Android_Robot.png"
+  },
+  "developer.apple.com": {
+    "title": "Apple Developer",
+    "description": "苹果开发者平台，iOS、macOS、watchOS应用开发的官方资源",
+    "category": "开发工具",
+    "tags": ["iOS开发", "苹果", "移动开发", "官方平台"],
+    "coverImage": "https://developer.apple.com/assets/elements/icons/xcode-12/xcode-12-96x96_2x.png"
+  },
+  "flutter.dev": {
+    "title": "Flutter",
+    "description": "Google开发的跨平台UI框架，用于构建移动、Web和桌面应用",
+    "category": "开发工具",
+    "tags": ["跨平台", "移动开发", "Google", "UI框架"],
+    "coverImage": "https://storage.googleapis.com/cms-storage-bucket/70760bf1e88b184bb1bc.png"
+  },
+  "reactnative.dev": {
+    "title": "React Native",
+    "description": "Facebook开发的跨平台移动应用框架，使用React构建原生移动应用",
+    "category": "开发工具",
+    "tags": ["跨平台", "移动开发", "React", "Facebook"],
+    "coverImage": "https://reactnative.dev/img/header_logo.svg"
+  },
+  "ionic.io": {
+    "title": "Ionic",
+    "description": "开源移动应用开发框架，使用Web技术构建跨平台移动应用",
+    "category": "开发工具",
+    "tags": ["移动开发", "跨平台", "Web技术", "开源"],
+    "coverImage": "https://ionicframework.com/img/meta/logo.png"
+  },
+  "xamarin.com": {
+    "title": "Xamarin",
+    "description": "微软的跨平台移动开发解决方案，使用C#构建iOS和Android应用",
+    "category": "开发工具",
+    "tags": ["跨平台", "移动开发", "C#", "微软"],
+    "coverImage": "https://docs.microsoft.com/en-us/xamarin/media/shared/xamarin-logo.png"
+  },
+  "unity.com": {
+    "title": "Unity",
+    "description": "领先的游戏开发引擎，支持2D和3D游戏开发，跨平台发布",
+    "category": "开发工具",
+    "tags": ["游戏开发", "3D引擎", "跨平台", "游戏引擎"],
+    "coverImage": "https://unity.com/logo-unity-web.png"
+  },
+  "unrealengine.com": {
+    "title": "Unreal Engine",
+    "description": "Epic Games开发的游戏引擎，以高质量3D图形和强大功能著称",
+    "category": "开发工具",
+    "tags": ["游戏引擎", "3D图形", "Epic Games", "高质量"],
+    "coverImage": "https://cdn2.unrealengine.com/ue-logo-stacked-unreal-engine-w-677x545-fac11de0943f.png"
+  },
+  "godotengine.org": {
+    "title": "Godot Engine",
+    "description": "开源游戏引擎，轻量级且功能完整，支持2D和3D游戏开发",
+    "category": "开发工具",
+    "tags": ["游戏引擎", "开源", "轻量级", "2D/3D"],
+    "coverImage": "https://godotengine.org/themes/godotengine/assets/logo.svg"
+  },
+  "blender.org": {
+    "title": "Blender",
+    "description": "开源3D创作套件，支持建模、动画、渲染、视频编辑等功能",
+    "category": "开发工具",
+    "tags": ["3D建模", "动画制作", "开源", "创作工具"],
+    "coverImage": "https://www.blender.org/wp-content/uploads/2019/07/blender_logo_socket.png"
+  },
+  "sketch.com": {
+    "title": "Sketch",
+    "description": "专业的数字设计工具，专注于UI/UX设计，Mac平台的设计标准",
+    "category": "设计工具",
+    "tags": ["UI设计", "UX设计", "Mac", "数字设计"],
+    "coverImage": "https://www.sketch.com/images/pages/press/sketch-press-kit/app-icons/sketch-mac-icon@2x.png"
+  },
+  "adobe.com": {
+    "title": "Adobe Creative Cloud",
+    "description": "创意软件套件，包括Photoshop、Illustrator、Premiere等专业创作工具",
+    "category": "设计工具",
+    "tags": ["创意软件", "专业设计", "图像处理", "视频编辑"],
+    "coverImage": "https://www.adobe.com/content/dam/cc/icons/Creative_Cloud.svg"
+  },
+  "canva.com": {
+    "title": "Canva",
+    "description": "在线设计平台，提供丰富的模板和设计工具，让设计变得简单",
+    "category": "设计工具",
+    "tags": ["在线设计", "模板设计", "图形设计", "易用性"],
+    "coverImage": "https://static.canva.com/static/images/canva_logo_white_2018.png"
+  },
+  "framer.com": {
+    "title": "Framer",
+    "description": "交互设计和原型制作工具，专注于高保真原型和动画设计",
+    "category": "设计工具",
+    "tags": ["原型设计", "交互设计", "动画", "高保真"],
+    "coverImage": "https://www.framer.com/images/favicons/favicon.svg"
+  },
+  "invisionapp.com": {
+    "title": "InVision",
+    "description": "数字产品设计平台，提供原型制作、协作和设计系统管理",
+    "category": "设计工具",
+    "tags": ["原型制作", "设计协作", "数字产品", "设计系统"],
+    "coverImage": "https://www.invisionapp.com/ecms/assets/downloads/press/InVision_Logo_Pink.png"
+  },
+  "principle.design": {
+    "title": "Principle",
+    "description": "动画和交互设计工具，专注于创建流畅的用户界面动画",
+    "category": "设计工具",
+    "tags": ["动画设计", "交互设计", "UI动画", "原型工具"],
+    "coverImage": "https://principleformac.com/img/principle-icon.png"
+  },
+  "zeplin.io": {
+    "title": "Zeplin",
+    "description": "设计交付平台，连接设计师和开发者，简化设计到代码的转换",
+    "category": "设计工具",
+    "tags": ["设计交付", "设计协作", "代码生成", "团队工具"],
+    "coverImage": "https://zeplin.io/img/favicon/apple-touch-icon.png"
+  },
+  "marvel.app": {
+    "title": "Marvel",
+    "description": "简单的设计、原型和协作平台，让产品设计变得更加高效",
+    "category": "设计工具",
+    "tags": ["原型设计", "设计协作", "产品设计", "简单易用"],
+    "coverImage": "https://marvelapp.com/img/marvel-logo.svg"
+  },
+  "miro.com": {
+    "title": "Miro",
+    "description": "在线协作白板平台，支持团队头脑风暴、流程图和项目规划",
+    "category": "协作工具",
+    "tags": ["在线白板", "团队协作", "头脑风暴", "流程图"],
+    "coverImage": "https://miro.com/static/images/page/mr-logo-primary.svg"
+  },
+  "mural.co": {
+    "title": "MURAL",
+    "description": "数字工作空间，为团队提供视觉协作和创新思维工具",
+    "category": "协作工具",
+    "tags": ["视觉协作", "团队工作", "创新思维", "数字白板"],
+    "coverImage": "https://www.mural.co/static/images/logo-mural-color.svg"
+  },
+  "whimsical.com": {
+    "title": "Whimsical",
+    "description": "视觉工作空间，提供流程图、线框图、思维导图等可视化工具",
+    "category": "协作工具",
+    "tags": ["流程图", "线框图", "思维导图", "可视化"],
+    "coverImage": "https://whimsical.com/static/images/logo.svg"
+  },
+  "lucidchart.com": {
+    "title": "Lucidchart",
+    "description": "智能图表制作平台，支持流程图、组织架构图、网络图等",
+    "category": "协作工具",
+    "tags": ["流程图", "图表制作", "组织架构", "智能图表"],
+    "coverImage": "https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/what-is-a-flowchart/discovery/flowchart-symbols@2x.png"
+  },
+  "draw.io": {
+    "title": "draw.io",
+    "description": "免费的在线图表制作工具，支持多种图表类型和云存储集成",
+    "category": "协作工具",
+    "tags": ["免费工具", "图表制作", "在线工具", "云存储"],
+    "coverImage": "https://app.diagrams.net/images/logo.png"
+  },
+  "mindmeister.com": {
+    "title": "MindMeister",
+    "description": "在线思维导图工具，支持团队协作和实时编辑",
+    "category": "协作工具",
+    "tags": ["思维导图", "在线协作", "实时编辑", "团队工具"],
+    "coverImage": "https://www.mindmeister.com/static/images/logo_meister_suite.svg"
+  },
+  "xmind.net": {
+    "title": "XMind",
+    "description": "专业思维导图软件，提供丰富的图表类型和美观的视觉效果",
+    "category": "协作工具",
+    "tags": ["思维导图", "专业软件", "图表类型", "视觉效果"],
+    "coverImage": "https://www.xmind.net/xmind/assets/images/logo@2x.png"
+  },
+  "milanote.com": {
+    "title": "Milanote",
+    "description": "创意项目的笔记和组织工具，专为设计师和创意工作者设计",
+    "category": "协作工具",
+    "tags": ["创意笔记", "项目组织", "设计师工具", "创意工作"],
+    "coverImage": "https://milanote.com/static/images/milanote-logo.svg"
+  },
+  "airtable.com": {
+    "title": "Airtable",
+    "description": "现代数据库平台，结合电子表格的简单性和数据库的强大功能",
+    "category": "生产力工具",
+    "tags": ["数据库", "电子表格", "项目管理", "数据组织"],
+    "coverImage": "https://static.airtable.com/images/logoMarkColor.svg"
+  },
+  "monday.com": {
+    "title": "monday.com",
+    "description": "工作管理平台，帮助团队规划、跟踪和交付项目",
+    "category": "项目管理",
+    "tags": ["工作管理", "项目跟踪", "团队协作", "任务管理"],
+    "coverImage": "https://dapulse-res.cloudinary.com/image/upload/f_auto,q_auto/remote_mondaycom_static/img/monday-logo-x2.png"
+  },
+  "asana.com": {
+    "title": "Asana",
+    "description": "团队项目管理工具，帮助团队组织、跟踪和管理工作",
+    "category": "项目管理",
+    "tags": ["项目管理", "团队协作", "任务跟踪", "工作组织"],
+    "coverImage": "https://luna1.co/eb0187.png"
+  },
+  "clickup.com": {
+    "title": "ClickUp",
+    "description": "一体化生产力平台，集项目管理、文档、目标跟踪于一体",
+    "category": "项目管理",
+    "tags": ["生产力平台", "项目管理", "文档管理", "目标跟踪"],
+    "coverImage": "https://clickup.com/landing/images/logo-clickup_color.svg"
+  },
+  "linear.app": {
+    "title": "Linear",
+    "description": "现代问题跟踪和项目管理工具，专为高性能团队设计",
+    "category": "项目管理",
+    "tags": ["问题跟踪", "项目管理", "高性能团队", "现代工具"],
+    "coverImage": "https://linear.app/favicon/apple-touch-icon.png"
+  },
+  "height.app": {
+    "title": "Height",
+    "description": "智能项目管理工具，自动化工作流程和任务管理",
+    "category": "项目管理",
+    "tags": ["智能管理", "自动化", "工作流程", "任务管理"],
+    "coverImage": "https://height.app/static/logo.svg"
+  },
+  "coursera.org": {
+    "title": "Coursera",
+    "description": "全球领先的在线学习平台，提供来自顶尖大学和公司的课程和学位项目",
+    "category": "在线教育",
+    "tags": ["在线课程", "大学课程", "职业发展", "认证证书"],
+    "coverImage": "https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://coursera-course-photos.s3.amazonaws.com/fb/03e450d8d011e682d37b99d7b3b6/coursera-logo-square.png"
+  },
+  "edx.org": {
+    "title": "edX",
+    "description": "哈佛和MIT创立的在线教育平台，提供高质量的大学级别课程",
+    "category": "在线教育",
+    "tags": ["大学课程", "免费教育", "哈佛", "MIT"],
+    "coverImage": "https://www.edx.org/images/logos/edx-logo-elm.svg"
+  },
+  "udacity.com": {
+    "title": "Udacity",
+    "description": "专注于技术技能的在线教育平台，提供纳米学位和职业导向的课程",
+    "category": "在线教育",
+    "tags": ["技术教育", "纳米学位", "职业技能", "编程培训"],
+    "coverImage": "https://www.udacity.com/images/svgs/udacity-tt-logo.svg"
+  },
+  "udemy.com": {
+    "title": "Udemy",
+    "description": "全球最大的在线学习市场，涵盖各种技能和兴趣的课程",
+    "category": "在线教育",
+    "tags": ["在线课程", "技能学习", "多样化课程", "自主学习"],
+    "coverImage": "https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg"
+  },
+  "khanacademy.org": {
+    "title": "Khan Academy",
+    "description": "免费的世界级教育平台，为任何人、任何地方提供免费的优质教育",
+    "category": "在线教育",
+    "tags": ["免费教育", "K-12教育", "数学", "科学"],
+    "coverImage": "https://cdn.kastatic.org/images/khan-logo-dark-background.png"
+  },
+  "codecademy.com": {
+    "title": "Codecademy",
+    "description": "交互式编程学习平台，通过实践项目学习编程技能",
+    "category": "编程学习",
+    "tags": ["编程教育", "交互式学习", "实践项目", "代码练习"],
+    "coverImage": "https://www.codecademy.com/favicon.ico"
+  },
+  "freecodecamp.org": {
+    "title": "freeCodeCamp",
+    "description": "免费的编程学习平台，提供全栈Web开发课程和项目实践",
+    "category": "编程学习",
+    "tags": ["免费编程", "全栈开发", "Web开发", "开源教育"],
+    "coverImage": "https://www.freecodecamp.org/news/content/images/2019/05/fcc_meta_1920X1080-indigo.png"
+  },
+  "leetcode.com": {
+    "title": "LeetCode",
+    "description": "编程面试准备平台，提供算法和数据结构题目练习",
+    "category": "编程学习",
+    "tags": ["算法练习", "面试准备", "编程竞赛", "技术面试"],
+    "coverImage": "https://leetcode.com/static/images/LeetCode_logo_rvs.png"
+  },
+  "hackerrank.com": {
+    "title": "HackerRank",
+    "description": "编程技能评估和练习平台，为开发者提供编程挑战，为企业提供技术招聘解决方案",
+    "category": "编程学习",
+    "tags": ["编程挑战", "技能评估", "技术招聘", "算法练习"],
+    "coverImage": "https://hrcdn.net/fcore/assets/brand/logo-new-white-green-a5cb16e0ca.svg"
+  },
+  "codewars.com": {
+    "title": "Codewars",
+    "description": "通过编程挑战提升技能的平台，支持多种编程语言的练习",
+    "category": "编程学习",
+    "tags": ["编程挑战", "技能提升", "多语言", "社区学习"],
+    "coverImage": "https://www.codewars.com/packs/assets/logo.61192cf7.svg"
+  },
+  "exercism.io": {
+    "title": "Exercism",
+    "description": "免费的编程练习平台，提供导师指导和代码审查",
+    "category": "编程学习",
+    "tags": ["编程练习", "导师指导", "代码审查", "免费学习"],
+    "coverImage": "https://exercism.io/assets/icons/exercism-with-logo-black-b427c06c6a068ba9f391734115e4d22dfa876d1d.svg"
+  },
+  "pluralsight.com": {
+    "title": "Pluralsight",
+    "description": "技术技能发展平台，为IT专业人士提供深度的技术培训课程",
+    "category": "在线教育",
+    "tags": ["技术培训", "IT技能", "专业发展", "企业培训"],
+    "coverImage": "https://www.pluralsight.com/content/dam/pluralsight2/logos/pluralsight-logo-vrt-color-2.png"
+  },
+  "lynda.com": {
+    "title": "LinkedIn Learning",
+    "description": "LinkedIn旗下的在线学习平台，提供商业、技术和创意技能课程",
+    "category": "在线教育",
+    "tags": ["职业技能", "商业课程", "技术培训", "LinkedIn"],
+    "coverImage": "https://static.licdn.com/sc/h/dxf91zhqd2z6b0bwg85ktm5s4"
+  },
+  "skillshare.com": {
+    "title": "Skillshare",
+    "description": "创意技能学习社区，专注于设计、商业、技术等创意领域的课程",
+    "category": "在线教育",
+    "tags": ["创意技能", "设计课程", "创意社区", "实践项目"],
+    "coverImage": "https://static.skillshare.com/assets/images/header-logo-new.svg"
+  },
+  "masterclass.com": {
+    "title": "MasterClass",
+    "description": "世界级专家授课的在线课程平台，涵盖各个领域的大师级教学",
+    "category": "在线教育",
+    "tags": ["大师课程", "专家教学", "高端教育", "多领域学习"],
+    "coverImage": "https://www.masterclass.com/course-images/attachments/HyS_9tpSz/1920x1080_MC_Generic_16x9.jpg"
+  },
+  "brilliant.org": {
+    "title": "Brilliant",
+    "description": "通过互动问题和可视化学习数学、科学和计算机科学",
+    "category": "在线教育",
+    "tags": ["数学学习", "科学教育", "互动学习", "可视化"],
+    "coverImage": "https://brilliant.org/site_media/uploads/images/brilliant-logo-small.original.png"
+  },
+  "datacamp.com": {
+    "title": "DataCamp",
+    "description": "数据科学和分析技能学习平台，专注于Python、R、SQL等数据工具",
+    "category": "数据科学",
+    "tags": ["数据科学", "Python", "R语言", "数据分析"],
+    "coverImage": "https://www.datacamp.com/datacamp-sq-logo.svg"
+  },
+  "kaggle.com": {
+    "title": "Kaggle",
+    "description": "Google旗下的数据科学竞赛平台，提供数据集、竞赛和学习资源",
+    "category": "数据科学",
+    "tags": ["数据竞赛", "机器学习", "数据集", "Google"],
+    "coverImage": "https://www.kaggle.com/static/images/site-logo.png"
+  },
+  "towardsdatascience.com": {
+    "title": "Towards Data Science",
+    "description": "Medium上的数据科学出版物，分享数据科学、机器学习的最新见解",
+    "category": "数据科学",
+    "tags": ["数据科学", "机器学习", "技术文章", "Medium"],
+    "coverImage": "https://miro.medium.com/max/1200/1*6_fgYnisCa9V21mHcLjmTA.png"
+  },
+  "fast.ai": {
+    "title": "fast.ai",
+    "description": "让深度学习变得易于理解和应用的教育平台，提供实用的AI课程",
+    "category": "人工智能",
+    "tags": ["深度学习", "AI教育", "实用课程", "机器学习"],
+    "coverImage": "https://www.fast.ai/images/fastai_logo.png"
+  },
+  "deeplearning.ai": {
+    "title": "DeepLearning.AI",
+    "description": "Andrew Ng创立的深度学习教育平台，提供专业的AI和机器学习课程",
+    "category": "人工智能",
+    "tags": ["深度学习", "Andrew Ng", "AI课程", "机器学习"],
+    "coverImage": "https://www.deeplearning.ai/wp-content/uploads/2021/02/LogoFiles_DeepLearning_PrimaryLogo.png"
+  },
+  "coursera.org/specializations/deep-learning": {
+    "title": "Deep Learning Specialization",
+    "description": "Coursera上的深度学习专项课程，由Andrew Ng教授主讲",
+    "category": "人工智能",
+    "tags": ["深度学习", "专项课程", "Andrew Ng", "神经网络"],
+    "coverImage": "https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://coursera-course-photos.s3.amazonaws.com/fb/03e450d8d011e682d37b99d7b3b6/coursera-logo-square.png"
+  },
+  "tensorflow.org": {
+    "title": "TensorFlow",
+    "description": "Google开源的机器学习框架，提供完整的生态系统用于机器学习",
+    "category": "人工智能",
+    "tags": ["机器学习", "深度学习", "Google", "开源框架"],
+    "coverImage": "https://www.tensorflow.org/images/tf_logo_social.png"
+  },
+  "pytorch.org": {
+    "title": "PyTorch",
+    "description": "Facebook开发的深度学习框架，以动态计算图和易用性著称",
+    "category": "人工智能",
+    "tags": ["深度学习", "动态图", "Facebook", "研究框架"],
+    "coverImage": "https://pytorch.org/assets/images/pytorch-logo.png"
+  },
+  "scikit-learn.org": {
+    "title": "scikit-learn",
+    "description": "Python机器学习库，提供简单高效的数据挖掘和数据分析工具",
+    "category": "数据科学",
+    "tags": ["机器学习", "Python", "数据挖掘", "开源库"],
+    "coverImage": "https://scikit-learn.org/stable/_static/scikit-learn-logo-small.png"
+  },
+  "pandas.pydata.org": {
+    "title": "pandas",
+    "description": "Python数据分析库，提供高性能、易用的数据结构和数据分析工具",
+    "category": "数据科学",
+    "tags": ["数据分析", "Python", "数据处理", "开源库"],
+    "coverImage": "https://pandas.pydata.org/static/img/pandas_white.svg"
+  },
+  "numpy.org": {
+    "title": "NumPy",
+    "description": "Python科学计算的基础包，提供多维数组对象和数学函数",
+    "category": "数据科学",
+    "tags": ["科学计算", "Python", "数组计算", "数学库"],
+    "coverImage": "https://numpy.org/images/logos/numpy.svg"
+  },
+  "matplotlib.org": {
+    "title": "Matplotlib",
+    "description": "Python绘图库，用于创建静态、动画和交互式可视化",
+    "category": "数据科学",
+    "tags": ["数据可视化", "Python", "绘图库", "图表制作"],
+    "coverImage": "https://matplotlib.org/_static/logo2_compressed.svg"
+  },
+  "seaborn.pydata.org": {
+    "title": "Seaborn",
+    "description": "基于matplotlib的Python数据可视化库，提供高级统计图表",
+    "category": "数据科学",
+    "tags": ["数据可视化", "统计图表", "Python", "matplotlib"],
+    "coverImage": "https://seaborn.pydata.org/_static/logo-wide-lightbg.svg"
+  },
+  "plotly.com": {
+    "title": "Plotly",
+    "description": "交互式数据可视化平台，支持多种编程语言的图表制作",
+    "category": "数据科学",
+    "tags": ["交互式图表", "数据可视化", "多语言支持", "Web图表"],
+    "coverImage": "https://plotly.com/all_static/images/plotly-logo.png"
+  },
+  "jupyter.org": {
+    "title": "Jupyter",
+    "description": "开源的交互式计算环境，支持多种编程语言的笔记本开发",
+    "category": "数据科学",
+    "tags": ["交互式计算", "笔记本", "数据科学", "多语言"],
+    "coverImage": "https://jupyter.org/assets/logos/rectanglelogo-greytext-orangebody-greymoons.svg"
+  },
+  "colab.research.google.com": {
+    "title": "Google Colab",
+    "description": "Google提供的免费Jupyter笔记本环境，支持GPU和TPU加速",
+    "category": "数据科学",
+    "tags": ["Jupyter", "免费GPU", "云计算", "Google"],
+    "coverImage": "https://colab.research.google.com/img/colab_favicon_256px.png"
+  },
+  "observablehq.com": {
+    "title": "Observable",
+    "description": "数据可视化和探索平台，使用JavaScript创建交互式数据故事",
+    "category": "数据科学",
+    "tags": ["数据可视化", "JavaScript", "交互式", "数据故事"],
+    "coverImage": "https://static.observableusercontent.com/files/7b2b6b1b8b5c8b1b8b5c8b1b8b5c8b1b8b5c8b1b"
+  },
+  "facebook.com": {
+    "title": "Facebook",
+    "description": "全球最大的社交网络平台，连接世界各地的人们分享生活和建立联系",
+    "category": "社交媒体",
+    "tags": ["社交网络", "分享生活", "全球连接", "Meta"],
+    "coverImage": "https://www.facebook.com/images/fb_icon_325x325.png"
+  },
+  "instagram.com": {
+    "title": "Instagram",
+    "description": "图片和视频分享社交平台，以视觉内容为主的社交体验",
+    "category": "社交媒体",
+    "tags": ["图片分享", "视频分享", "视觉社交", "Meta"],
+    "coverImage": "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png"
+  },
+  "linkedin.com": {
+    "title": "LinkedIn",
+    "description": "全球最大的职业社交网络，专注于职业发展和商务联系",
+    "category": "社交媒体",
+    "tags": ["职业社交", "商务网络", "求职招聘", "职业发展"],
+    "coverImage": "https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca"
+  },
+  "tiktok.com": {
+    "title": "TikTok",
+    "description": "短视频分享平台，以创意短视频内容和音乐为特色的社交应用",
+    "category": "社交媒体",
+    "tags": ["短视频", "音乐视频", "创意内容", "年轻用户"],
+    "coverImage": "https://sf16-website-login.neutral.ttwstatic.com/obj/tiktok_web_login_static/tiktok/webapp/main/webapp-desktop/8152caf0c8e8bc67ae0d.png"
+  },
+  "snapchat.com": {
+    "title": "Snapchat",
+    "description": "多媒体消息应用，以阅后即焚的消息和AR滤镜著称",
+    "category": "社交媒体",
+    "tags": ["阅后即焚", "AR滤镜", "多媒体消息", "年轻社交"],
+    "coverImage": "https://www.snapchat.com/favicon.ico"
+  },
+  "pinterest.com": {
+    "title": "Pinterest",
+    "description": "图片发现和收藏平台，通过视觉搜索发现创意和灵感",
+    "category": "社交媒体",
+    "tags": ["图片收藏", "创意发现", "视觉搜索", "灵感平台"],
+    "coverImage": "https://s.pinimg.com/webapp/style/images/logo_trans_144x144-5e37c0c6.png"
+  },
+  "tumblr.com": {
+    "title": "Tumblr",
+    "description": "微博客平台，支持多媒体内容发布和创意表达",
+    "category": "社交媒体",
+    "tags": ["微博客", "多媒体", "创意表达", "个性化"],
+    "coverImage": "https://assets.tumblr.com/images/logo_page/logo_page_assets/tumblr_logo_blue.png"
+  },
+  "discord.com": {
+    "title": "Discord",
+    "description": "面向游戏玩家和社区的语音、视频和文字聊天平台",
+    "category": "社交媒体",
+    "tags": ["游戏社交", "语音聊天", "社区平台", "实时通讯"],
+    "coverImage": "https://discord.com/assets/f9bb9c4af2b9c32a2c5ee0014661546d.png"
+  },
+  "slack.com": {
+    "title": "Slack",
+    "description": "团队协作和沟通平台，为工作场所提供即时消息和文件分享",
+    "category": "协作工具",
+    "tags": ["团队协作", "工作沟通", "即时消息", "文件分享"],
+    "coverImage": "https://a.slack-edge.com/80588/marketing/img/meta/slack_hash_256.png"
+  },
+  "telegram.org": {
+    "title": "Telegram",
+    "description": "注重隐私和安全的即时通讯应用，支持大群组和频道功能",
+    "category": "社交媒体",
+    "tags": ["即时通讯", "隐私安全", "大群组", "频道功能"],
+    "coverImage": "https://telegram.org/img/t_logo.png"
+  },
+  "whatsapp.com": {
+    "title": "WhatsApp",
+    "description": "全球流行的即时通讯应用，提供端到端加密的消息服务",
+    "category": "社交媒体",
+    "tags": ["即时通讯", "端到端加密", "全球通讯", "Meta"],
+    "coverImage": "https://static.whatsapp.net/rsrc.php/v3/yz/r/ujTY9i_Jhs1.png"
+  },
+  "wechat.com": {
+    "title": "WeChat",
+    "description": "腾讯开发的多功能社交应用，集聊天、支付、小程序于一体",
+    "category": "社交媒体",
+    "tags": ["多功能社交", "移动支付", "小程序", "腾讯"],
+    "coverImage": "https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png"
+  },
+  "weibo.com": {
+    "title": "新浪微博",
+    "description": "中国领先的社交媒体平台，实时分享和发现热点话题",
+    "category": "社交媒体",
+    "tags": ["中文社交", "热点话题", "实时分享", "微博客"],
+    "coverImage": "https://weibo.com/favicon.ico"
+  },
+  "douyin.com": {
+    "title": "抖音",
+    "description": "中国版TikTok，短视频创作和分享平台，引领短视频潮流",
+    "category": "社交媒体",
+    "tags": ["短视频", "创作平台", "娱乐内容", "字节跳动"],
+    "coverImage": "https://lf1-cdn-tos.bytegoofy.com/goofy/ies/douyin_web/public/favicon.ico"
+  },
+  "xiaohongshu.com": {
+    "title": "小红书",
+    "description": "生活方式分享平台，以美妆、时尚、旅行等生活内容为主",
+    "category": "社交媒体",
+    "tags": ["生活方式", "美妆时尚", "种草平台", "生活分享"],
+    "coverImage": "https://www.xiaohongshu.com/favicon.ico"
+  },
+  "bbc.com": {
+    "title": "BBC",
+    "description": "英国广播公司，全球权威的新闻媒体，提供客观公正的新闻报道",
+    "category": "新闻媒体",
+    "tags": ["权威新闻", "国际新闻", "英国媒体", "客观报道"],
+    "coverImage": "https://www.bbc.co.uk/iplayer/images/ic/1920x1080/p01k5sml.jpg"
+  },
+  "cnn.com": {
+    "title": "CNN",
+    "description": "美国有线电视新闻网，24小时全球新闻报道和深度分析",
+    "category": "新闻媒体",
+    "tags": ["美国新闻", "24小时新闻", "深度分析", "国际报道"],
+    "coverImage": "https://cdn.cnn.com/cnn/.e/img/3.0/global/misc/cnn-logo.png"
+  },
+  "nytimes.com": {
+    "title": "The New York Times",
+    "description": "纽约时报，美国权威报纸，以深度报道和调查新闻著称",
+    "category": "新闻媒体",
+    "tags": ["权威报纸", "深度报道", "调查新闻", "美国媒体"],
+    "coverImage": "https://www.nytimes.com/vi-assets/static-assets/nyt-logo-185x26.svg"
+  },
+  "reuters.com": {
+    "title": "Reuters",
+    "description": "路透社，全球领先的新闻通讯社，提供及时准确的国际新闻",
+    "category": "新闻媒体",
+    "tags": ["新闻通讯社", "国际新闻", "及时报道", "金融新闻"],
+    "coverImage": "https://www.reuters.com/pf/resources/images/reuters/reuters-default.png"
+  },
+  "apnews.com": {
+    "title": "Associated Press",
+    "description": "美联社，全球最大的新闻合作社，提供客观中立的新闻报道",
+    "category": "新闻媒体",
+    "tags": ["新闻合作社", "客观中立", "全球新闻", "权威报道"],
+    "coverImage": "https://apnews.com/apple-touch-icon.png"
+  },
+  "theguardian.com": {
+    "title": "The Guardian",
+    "description": "英国卫报，独立媒体，以进步观点和深度报道著称",
+    "category": "新闻媒体",
+    "tags": ["独立媒体", "进步观点", "深度报道", "英国媒体"],
+    "coverImage": "https://assets.guim.co.uk/images/guardian-logo-rss.c45beb1bafa34b347ac1ab67a6e58395.png"
+  },
+  "wsj.com": {
+    "title": "The Wall Street Journal",
+    "description": "华尔街日报，全球权威的商业和金融新闻媒体",
+    "category": "新闻媒体",
+    "tags": ["商业新闻", "金融报道", "权威媒体", "经济分析"],
+    "coverImage": "https://s.wsj.net/img/meta/wsj-social-share.png"
+  },
+  "bloomberg.com": {
+    "title": "Bloomberg",
+    "description": "彭博社，全球领先的商业、金融信息和新闻服务提供商",
+    "category": "新闻媒体",
+    "tags": ["金融新闻", "商业信息", "市场数据", "经济报道"],
+    "coverImage": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iayWDRdoEKQQ/v1/1200x630.png"
+  },
+  "forbes.com": {
+    "title": "Forbes",
+    "description": "福布斯，全球知名的商业杂志，关注企业家、投资和财富",
+    "category": "新闻媒体",
+    "tags": ["商业杂志", "企业家", "财富榜", "投资资讯"],
+    "coverImage": "https://www.forbes.com/favicon.ico"
+  },
+  "techcrunch.com": {
+    "title": "TechCrunch",
+    "description": "科技新闻网站，专注于创业公司、新技术和科技行业动态",
+    "category": "科技媒体",
+    "tags": ["科技新闻", "创业公司", "新技术", "科技行业"],
+    "coverImage": "https://techcrunch.com/wp-content/uploads/2015/02/cropped-cropped-favicon-gradient.png"
+  },
+  "theverge.com": {
+    "title": "The Verge",
+    "description": "科技媒体，关注科技、科学、艺术和文化的交叉领域",
+    "category": "科技媒体",
+    "tags": ["科技媒体", "科学文化", "产品评测", "未来科技"],
+    "coverImage": "https://cdn.vox-cdn.com/uploads/chorus_asset/file/7395359/android-chrome-192x192.0.png"
+  },
+  "wired.com": {
+    "title": "WIRED",
+    "description": "连线杂志，探索技术如何改变文化、经济和政治",
+    "category": "科技媒体",
+    "tags": ["科技文化", "未来趋势", "技术影响", "创新思维"],
+    "coverImage": "https://www.wired.com/verso/static/wired/assets/favicon.ico"
+  },
+  "arstechnica.com": {
+    "title": "Ars Technica",
+    "description": "技术新闻和信息网站，提供深度的技术分析和评论",
+    "category": "科技媒体",
+    "tags": ["技术分析", "深度评论", "科技新闻", "专业报道"],
+    "coverImage": "https://cdn.arstechnica.net/wp-content/uploads/2016/10/cropped-ars-logo-512_480-32x32.png"
+  },
+  "engadget.com": {
+    "title": "Engadget",
+    "description": "消费电子产品新闻网站，关注最新的科技产品和趋势",
+    "category": "科技媒体",
+    "tags": ["消费电子", "产品评测", "科技趋势", "数码产品"],
+    "coverImage": "https://s.blogcdn.com/www.engadget.com/media/2013/11/favicon-160.png"
+  },
+  "mashable.com": {
+    "title": "Mashable",
+    "description": "数字文化媒体，关注科技、数字文化和社交媒体",
+    "category": "科技媒体",
+    "tags": ["数字文化", "社交媒体", "科技趋势", "网络文化"],
+    "coverImage": "https://mashable.com/favicon.ico"
+  }
+}

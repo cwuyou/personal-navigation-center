@@ -232,7 +232,7 @@ export function EnhancedMainContent({
               )
             ))}
 
-            {selectedSubCategory && !isSelectionMode && <AddBookmarkCard subCategoryId={selectedSubCategory} />}
+            {selectedSubCategory && !isSelectionMode && currentBookmarks.length > 0 && <AddBookmarkCard subCategoryId={selectedSubCategory} />}
           </DynamicBookmarkGrid>
 
           {currentBookmarks.length === 0 && selectedSubCategory && (

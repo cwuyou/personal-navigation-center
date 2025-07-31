@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/sidebar"
 import { EnhancedMainContent } from "@/components/enhanced-main-content"
 import { PWAInstall } from "@/components/pwa-install"
 import { SettingsPanel } from "@/components/settings-panel"
+import { EnhancementProgress } from "@/components/enhancement-progress"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useSmartRecommendations } from "@/hooks/use-smart-recommendations"
 
@@ -96,6 +97,9 @@ export default function HomePage() {
         isOpen={settingsPanelOpen}
         onToggle={() => setSettingsPanelOpen(!settingsPanelOpen)}
       />
+
+      {/* 后台增强进度 */}
+      <EnhancementProgress />
     </div>
   )
 }

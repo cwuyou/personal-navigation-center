@@ -5,7 +5,8 @@ import type React from "react"
 import { useState, useRef } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Upload, FileText, HelpCircle } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Upload, FileText, HelpCircle, Globe } from "lucide-react"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useToast } from "@/hooks/use-toast"
 import { ImportHelpDialog } from "@/components/import-help-dialog"
@@ -19,6 +20,8 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
   const [loading, setLoading] = useState(false)
   const [dragOver, setDragOver] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
+  const [enableBackgroundEnhancement, setEnableBackgroundEnhancement] = useState(true)
+  const [loadingMessage, setLoadingMessage] = useState("")
   const [importStats, setImportStats] = useState<{
     newCategories: number
     newSubCategories: number
@@ -33,17 +36,21 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
     console.log("开始导入文件:", file.name, file.type)
     setLoading(true)
     setImportStats(null) // 重置统计信息
+    setLoadingMessage("正在读取文件...")
 
     try {
       const text = await file.text()
       console.log("文件内容长度:", text.length)
+      setLoadingMessage("正在解析书签数据...")
 
       let stats
       if (file.name.endsWith(".html")) {
         console.log("导入HTML格式")
+        setLoadingMessage("正在快速导入书签...")
         stats = await importFromHTML(text)
       } else if (file.name.endsWith(".json")) {
         console.log("导入JSON格式")
+        setLoadingMessage("正在快速导入书签...")
         stats = await importFromJSON(text)
       } else {
         throw new Error("不支持的文件格式")
@@ -58,9 +65,14 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
       if (stats.newBookmarks > 0) descriptions.push(`新增 ${stats.newBookmarks} 个书签`)
       if (stats.skippedBookmarks > 0) descriptions.push(`跳过 ${stats.skippedBookmarks} 个重复书签`)
 
-      const description = descriptions.length > 0
+      let description = descriptions.length > 0
         ? descriptions.join('，')
         : '没有新增内容（所有数据已存在）'
+
+      // 如果启用了自动增强且有新书签，添加增强提示
+      if (enableBackgroundEnhancement && stats.newBookmarks > 0) {
+        description += '\n🔄 正在后台自动增强书签描述信息...'
+      }
 
       toast({
         title: "导入完成",
@@ -79,6 +91,7 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
       setImportStats(null)
     } finally {
       setLoading(false)
+      setLoadingMessage("")
       if (fileInputRef.current) {
         fileInputRef.current.value = ""
       }
@@ -128,7 +141,7 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
     const doc = parser.parseFromString(html, "text/html")
     const bookmarkData = parseBookmarkHTML(doc)
     console.log("解析HTML得到的数据:", bookmarkData)
-    const stats = await importBookmarks(bookmarkData)
+    const stats = await importBookmarks(bookmarkData, { enableBackgroundEnhancement })
     setImportStats(stats)
     return stats
   }
@@ -136,7 +149,7 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
   const importFromJSON = async (json: string) => {
     const data = JSON.parse(json)
     console.log("解析JSON得到的数据:", data)
-    const stats = await importBookmarks(data)
+    const stats = await importBookmarks(data, { enableBackgroundEnhancement })
     setImportStats(stats)
     return stats
   }
@@ -145,83 +158,265 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
     const categories: any[] = []
     const bookmarks: any[] = []
 
-    // Find all DT elements which typically contain folders or bookmarks
-    const dtElements = doc.querySelectorAll("dt")
-
-    dtElements.forEach((dt) => {
-      const h3 = dt.querySelector("h3")
-      const a = dt.querySelector("a")
+    // 递归解析书签文件夹结构
+    const parseFolder = (element: Element, parentCategoryId?: string, level: number = 0, isBookmarkBar: boolean = false): void => {
+      const h3 = element.querySelector(":scope > h3")
+      const dl = element.querySelector(":scope > dl")
 
       if (h3) {
-        // This is a folder/category
-        const categoryName = h3.textContent?.trim() || "Unnamed Category"
-        const categoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        const folderName = h3.textContent?.trim() || "Unnamed Folder"
 
-        const category = {
-          id: categoryId,
-          name: categoryName,
-          subCategories: [],
-        }
+        if (isBookmarkBar) {
+          // 处理书签栏：其子文件夹成为一级分类，直接书签放入"未分类书签"
+          if (dl) {
+            const childDts = dl.querySelectorAll(":scope > dt")
+            let hasDirectBookmarks = false
 
-        // Look for nested folders and bookmarks
-        const nextDl = dt.querySelector("dl")
-        if (nextDl) {
-          const subDts = nextDl.querySelectorAll("dt")
-          const subCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+            childDts.forEach((childDt) => {
+              const childH3 = childDt.querySelector(":scope > h3")
+              const childA = childDt.querySelector(":scope > a")
 
-          category.subCategories.push({
-            id: subCategoryId,
-            name: "Default",
-            parentId: categoryId,
-          })
+              if (childH3) {
+                // 子文件夹，创建为一级分类
+                const categoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+                const category = {
+                  id: categoryId,
+                  name: childH3.textContent?.trim() || "Unnamed Category",
+                  subCategories: [],
+                }
+                categories.push(category)
 
-          subDts.forEach((subDt) => {
-            const subA = subDt.querySelector("a")
-            if (subA) {
-              bookmarks.push({
-                id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-                title: subA.textContent?.trim() || "Unnamed Bookmark",
-                url: subA.getAttribute("href") || "",
-                subCategoryId: subCategoryId,
+                // 递归处理这个文件夹
+                parseFolder(childDt, categoryId, 1)
+              } else if (childA) {
+                // 直接书签，需要放入"未分类书签"分类
+                hasDirectBookmarks = true
+              }
+            })
+
+            // 如果有直接书签，创建"未分类书签"分类
+            if (hasDirectBookmarks) {
+              const uncategorizedId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+              const uncategorizedSubId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+              categories.push({
+                id: uncategorizedId,
+                name: "未分类书签",
+                subCategories: [{
+                  id: uncategorizedSubId,
+                  name: "默认",
+                  parentId: uncategorizedId,
+                }],
+              })
+
+              // 处理直接书签
+              childDts.forEach((childDt) => {
+                const childA = childDt.querySelector(":scope > a")
+                if (childA) {
+                  parseBookmark(childDt, uncategorizedSubId)
+                }
               })
             }
-          })
+          }
+        } else if (level === 1 && parentCategoryId) {
+          // 一级分类下的处理
+          const parentCategory = categories.find(cat => cat.id === parentCategoryId)
+          if (!parentCategory) return
+
+          if (dl) {
+            const childDts = dl.querySelectorAll(":scope > dt")
+            let hasDirectBookmarks = false
+
+            // 先检查是否有直接书签
+            childDts.forEach((childDt) => {
+              const childA = childDt.querySelector(":scope > a")
+              if (childA) {
+                hasDirectBookmarks = true
+              }
+            })
+
+            // 如果有直接书签，创建默认子分类
+            if (hasDirectBookmarks) {
+              const defaultSubId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+              parentCategory.subCategories.push({
+                id: defaultSubId,
+                name: "默认",
+                parentId: parentCategoryId,
+              })
+
+              // 处理直接书签
+              childDts.forEach((childDt) => {
+                const childA = childDt.querySelector(":scope > a")
+                if (childA) {
+                  parseBookmark(childDt, defaultSubId)
+                }
+              })
+            }
+
+            // 处理子文件夹
+            childDts.forEach((childDt) => {
+              const childH3 = childDt.querySelector(":scope > h3")
+              if (childH3) {
+                const subFolderName = childH3.textContent?.trim() || "Unnamed Folder"
+                const subCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+                parentCategory.subCategories.push({
+                  id: subCategoryId,
+                  name: subFolderName,
+                  parentId: parentCategoryId,
+                })
+
+                // 递归处理子文件夹内容，包括更深层的文件夹
+                parseSubFolder(childDt, subCategoryId, subFolderName)
+              }
+            })
+          }
         }
-
-        categories.push(category)
-      } else if (a) {
-        // This is a direct bookmark (not in a folder)
-        if (categories.length === 0) {
-          // Create a default category
-          const defaultCategoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-          const defaultSubCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-
-          categories.push({
-            id: defaultCategoryId,
-            name: "Imported Bookmarks",
-            subCategories: [
-              {
-                id: defaultSubCategoryId,
-                name: "Default",
-                parentId: defaultCategoryId,
-              },
-            ],
-          })
+      } else {
+        // 不是文件夹，可能是书签
+        const currentSubCategoryId = getCurrentSubCategoryId(parentCategoryId)
+        if (currentSubCategoryId) {
+          parseBookmark(element, currentSubCategoryId)
         }
+      }
+    }
 
-        const lastCategory = categories[categories.length - 1]
-        const subCategoryId = lastCategory.subCategories[0]?.id
+    // 处理子文件夹及其更深层内容
+    const parseSubFolder = (element: Element, subCategoryId: string, parentFolderName: string): void => {
+      const dl = element.querySelector(":scope > dl")
+      if (!dl) return
 
-        if (subCategoryId) {
+      const childDts = dl.querySelectorAll(":scope > dt")
+      childDts.forEach((childDt) => {
+        const childH3 = childDt.querySelector(":scope > h3")
+        const childA = childDt.querySelector(":scope > a")
+
+        if (childA) {
+          // 直接书签
+          parseBookmark(childDt, subCategoryId)
+        } else if (childH3) {
+          // 更深层的文件夹，将其书签扁平化到当前子分类，并添加前缀
+          const deepFolderName = childH3.textContent?.trim() || "Unnamed Folder"
+          const prefix = `[${deepFolderName}] `
+          parseDeepFolder(childDt, subCategoryId, prefix)
+        }
+      })
+    }
+
+    // 处理更深层文件夹，将书签扁平化并添加前缀
+    const parseDeepFolder = (element: Element, subCategoryId: string, prefix: string): void => {
+      const dl = element.querySelector(":scope > dl")
+      if (!dl) return
+
+      const childDts = dl.querySelectorAll(":scope > dt")
+      childDts.forEach((childDt) => {
+        const childH3 = childDt.querySelector(":scope > h3")
+        const childA = childDt.querySelector(":scope > a")
+
+        if (childA) {
+          // 书签，添加前缀
+          const originalTitle = childA.textContent?.trim() || "Unnamed Bookmark"
           bookmarks.push({
             id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            title: a.textContent?.trim() || "Unnamed Bookmark",
-            url: a.getAttribute("href") || "",
+            title: prefix + originalTitle,
+            url: childA.getAttribute("href") || "",
             subCategoryId: subCategoryId,
+          })
+        } else if (childH3) {
+          // 更深层文件夹，继续递归
+          const deepFolderName = childH3.textContent?.trim() || "Unnamed Folder"
+          const newPrefix = prefix + `[${deepFolderName}] `
+          parseDeepFolder(childDt, subCategoryId, newPrefix)
+        }
+      })
+    }
+
+    // 解析书签
+    const parseBookmark = (element: Element, subCategoryId: string): void => {
+      const a = element.querySelector(":scope > a")
+      if (a) {
+        bookmarks.push({
+          id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          title: a.textContent?.trim() || "Unnamed Bookmark",
+          url: a.getAttribute("href") || "",
+          subCategoryId: subCategoryId,
+        })
+      }
+    }
+
+    // 获取当前可用的子分类ID
+    const getCurrentSubCategoryId = (parentCategoryId?: string): string | null => {
+      if (parentCategoryId) {
+        const parentCategory = categories.find(cat => cat.id === parentCategoryId)
+        if (parentCategory && parentCategory.subCategories.length > 0) {
+          return parentCategory.subCategories[0].id
+        }
+      }
+
+      // 如果没有合适的子分类，创建一个默认分类
+      if (categories.length === 0) {
+        const defaultCategoryId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        const defaultSubCategoryId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+        categories.push({
+          id: defaultCategoryId,
+          name: "导入的书签",
+          subCategories: [{
+            id: defaultSubCategoryId,
+            name: "默认",
+            parentId: defaultCategoryId,
+          }],
+        })
+
+        return defaultSubCategoryId
+      }
+
+      return null
+    }
+
+    // 查找书签栏根目录
+    const bookmarkBar = doc.querySelector('h1')
+    let rootDl = null
+
+    if (bookmarkBar) {
+      rootDl = bookmarkBar.nextElementSibling
+      while (rootDl && rootDl.tagName !== 'DL') {
+        rootDl = rootDl.nextElementSibling
+      }
+    }
+
+    if (!rootDl) {
+      // 如果找不到标准结构，回退到查找所有顶级DT元素
+      rootDl = doc.querySelector('dl')
+    }
+
+    if (rootDl) {
+      const topLevelDts = rootDl.querySelectorAll(":scope > dt")
+
+      // 检查第一个DT是否是书签栏
+      if (topLevelDts.length > 0) {
+        const firstDt = topLevelDts[0]
+        const firstH3 = firstDt.querySelector(":scope > h3")
+
+        if (firstH3 && (firstH3.textContent?.trim() === "书签栏" ||
+                       firstH3.textContent?.trim() === "Bookmarks bar" ||
+                       firstH3.textContent?.trim() === "Bookmarks Bar" ||
+                       firstH3.hasAttribute("PERSONAL_TOOLBAR_FOLDER"))) {
+          // 这是书签栏，特殊处理
+          parseFolder(firstDt, undefined, 0, true)
+
+          // 处理其他顶级文件夹（如果有的话）
+          for (let i = 1; i < topLevelDts.length; i++) {
+            parseFolder(topLevelDts[i], undefined, 0, false)
+          }
+        } else {
+          // 不是标准的书签栏结构，按普通方式处理
+          topLevelDts.forEach((dt) => {
+            parseFolder(dt, undefined, 0, false)
           })
         }
       }
-    })
+    }
 
     return { categories, bookmarks }
   }
@@ -319,6 +514,49 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
             </div>
           </div>
 
+          {/* 导入选项 */}
+          <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+            <div className="flex items-start space-x-3">
+              <Checkbox
+                id="background-enhancement"
+                checked={enableBackgroundEnhancement}
+                onCheckedChange={setEnableBackgroundEnhancement}
+                disabled={loading}
+              />
+              <div className="space-y-1">
+                <label
+                  htmlFor="background-enhancement"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                >
+                  <div className="flex items-center space-x-2">
+                    <Globe className="w-4 h-4 text-green-600" />
+                    <span>自动智能增强</span>
+                  </div>
+                </label>
+                <p className="text-xs text-muted-foreground">
+                  导入完成后自动在后台为书签获取详细描述和图标，让您的书签更加丰富完整
+                </p>
+                {enableBackgroundEnhancement ? (
+                  <div className="text-xs mt-2 space-y-1">
+                    <p className="text-green-600">
+                      ✨ 已启用：导入后将自动开始智能增强
+                    </p>
+                    <p className="text-blue-600">
+                      🚀 无感体验：后台处理，不影响正常使用
+                    </p>
+                    <p className="text-purple-600">
+                      📚 预置数据库：已覆盖150+知名网站
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-orange-600 mt-1">
+                    ⚠️ 未启用：导入的书签将保持原始信息，不会自动增强
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
           {/* 隐藏的文件输入框 */}
           <input
             ref={fileInputRef}
@@ -347,15 +585,23 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
             <div className="space-y-2">
               <p className="text-sm font-medium">
                 {loading
-                  ? "导入中..."
+                  ? loadingMessage || "导入中..."
                   : dragOver
                     ? "释放文件开始导入"
                     : "点击选择文件或拖拽文件到此处"
                 }
               </p>
-              <p className="text-xs text-muted-foreground">
-                支持 HTML 和 JSON 格式
-              </p>
+              {loading ? (
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  支持 HTML 和 JSON 格式
+                </p>
+              )}
             </div>
           </div>
 
