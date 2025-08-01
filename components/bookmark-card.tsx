@@ -3,13 +3,14 @@
 import { cn } from "@/lib/utils"
 
 import { useState } from "react"
-import { ExternalLink, Edit2, Trash2, Globe, Eye, FolderOpen } from "lucide-react"
+import { ExternalLink, Edit2, Trash2, Globe, Eye, FolderOpen, Copy } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { EditBookmarkDialog } from "@/components/edit-bookmark-dialog"
 import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog"
 import { MoveBookmarkDialog } from "@/components/move-bookmark-dialog"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
+import { toast } from "sonner"
 
 interface BookmarkCardProps {
   bookmark: {
@@ -36,6 +37,16 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
   const handleDelete = () => {
     deleteBookmark(bookmark.id)
     setDeleteDialogOpen(false)
+  }
+
+  const handleCopyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(bookmark.url)
+      toast.success('网址已复制到剪贴板')
+    } catch (error) {
+      console.error('复制失败:', error)
+      toast.error('复制失败，请手动复制')
+    }
   }
 
   const getFaviconUrl = (url: string) => {
@@ -129,6 +140,18 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
                 title="编辑书签"
               >
                 <Edit2 className="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 p-0 hover:bg-green-500/10 hover:text-green-600 rounded-md"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleCopyUrl()
+                }}
+                title="复制网址"
+              >
+                <Copy className="h-3.5 w-3.5" />
               </Button>
               <Button
                 variant="ghost"

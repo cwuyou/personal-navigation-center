@@ -2231,5 +2231,1785 @@
     "category": "图像处理",
     "tags": ["开源", "图像编辑", "免费", "专业工具"],
     "coverImage": "https://www.gimp.org/favicon.ico"
+  },
+
+  "blender.org": {
+    "title": "Blender",
+    "description": "免费开源的3D创作套件，支持建模、动画、渲染、后期制作等",
+    "category": "3D设计",
+    "tags": ["3D建模", "动画", "开源", "免费"],
+    "coverImage": "https://www.blender.org/favicon.ico"
+  },
+  "autodesk.com": {
+    "title": "Autodesk",
+    "description": "专业设计软件公司，提供AutoCAD、Maya、3ds Max等行业标准工具",
+    "category": "3D设计",
+    "tags": ["专业设计", "AutoCAD", "Maya", "3ds Max"],
+    "coverImage": "https://www.autodesk.com/favicon.ico"
+  },
+  "sketchfab.com": {
+    "title": "Sketchfab",
+    "description": "3D模型分享和展示平台，支持VR/AR的3D内容社区",
+    "category": "3D设计",
+    "tags": ["3D模型", "VR", "AR", "3D社区"],
+    "coverImage": "https://sketchfab.com/favicon.ico"
+  },
+  "unity.com": {
+    "title": "Unity",
+    "description": "跨平台游戏引擎，用于创建2D、3D、VR和AR游戏及应用",
+    "category": "游戏开发",
+    "tags": ["游戏引擎", "跨平台", "VR", "AR"],
+    "coverImage": "https://unity.com/favicon.ico"
+  },
+  "unrealengine.com": {
+    "title": "Unreal Engine",
+    "description": "Epic Games开发的游戏引擎，以高质量图形和实时渲染著称",
+    "category": "游戏开发",
+    "tags": ["游戏引擎", "高质量图形", "实时渲染", "Epic Games"],
+    "coverImage": "https://www.unrealengine.com/favicon.ico"
+  },
+  "godotengine.org": {
+    "title": "Godot",
+    "description": "免费开源的游戏引擎，支持2D和3D游戏开发",
+    "category": "游戏开发",
+    "tags": ["游戏引擎", "开源", "免费", "2D/3D"],
+    "coverImage": "https://godotengine.org/favicon.ico"
+  },
+
+  "adobe.com": {
+    "title": "Adobe",
+    "description": "创意软件领导者，提供Photoshop、Illustrator、Premiere等专业工具",
+    "category": "创意软件",
+    "tags": ["创意软件", "Photoshop", "Illustrator", "专业工具"],
+    "coverImage": "https://www.adobe.com/favicon.ico"
+  },
+  "sketch.com": {
+    "title": "Sketch",
+    "description": "Mac平台的矢量设计工具，UI/UX设计师的专业选择",
+    "category": "创意软件",
+    "tags": ["矢量设计", "UI设计", "Mac", "专业工具"],
+    "coverImage": "https://www.sketch.com/favicon.ico"
+  },
+  "affinity.serif.com": {
+    "title": "Affinity",
+    "description": "专业创意软件套件，Adobe Creative Suite的高性价比替代方案",
+    "category": "创意软件",
+    "tags": ["创意软件", "高性价比", "专业工具", "Adobe替代"],
+    "coverImage": "https://affinity.serif.com/favicon.ico"
+  },
+  "procreate.art": {
+    "title": "Procreate",
+    "description": "iPad上的数字绘画应用，艺术家和插画师的创作工具",
+    "category": "创意软件",
+    "tags": ["数字绘画", "iPad", "艺术创作", "插画"],
+    "coverImage": "https://procreate.art/favicon.ico"
+  },
+
+  "loom.com": {
+    "title": "Loom",
+    "description": "屏幕录制和视频消息工具，简化异步沟通和教学",
+    "category": "视频工具",
+    "tags": ["屏幕录制", "视频消息", "异步沟通", "教学"],
+    "coverImage": "https://www.loom.com/favicon.ico"
+  },
+  "obs.live": {
+    "title": "OBS Studio",
+    "description": "免费开源的视频录制和直播软件，内容创作者的首选工具",
+    "category": "视频工具",
+    "tags": ["视频录制", "直播", "开源", "内容创作"],
+    "coverImage": "https://obsproject.com/favicon.ico"
+  },
+  "camtasia.com": {
+    "title": "Camtasia",
+    "description": "屏幕录制和视频编辑软件，专业的教学视频制作工具",
+    "category": "视频工具",
+    "tags": ["屏幕录制", "视频编辑", "教学视频", "专业工具"],
+    "coverImage": "https://www.techsmith.com/favicon.ico"
+  },
+  "davinciresolve.com": {
+    "title": "DaVinci Resolve",
+    "description": "专业视频编辑、调色和音频后期制作软件",
+    "category": "视频工具",
+    "tags": ["视频编辑", "调色", "音频后期", "专业软件"],
+    "coverImage": "https://www.blackmagicdesign.com/favicon.ico"
+  },
+  "filmora.wondershare.com": {
+    "title": "Filmora",
+    "description": "易用的视频编辑软件，适合初学者和内容创作者",
+    "category": "视频工具",
+    "tags": ["视频编辑", "易用", "初学者", "内容创作"],
+    "coverImage": "https://filmora.wondershare.com/favicon.ico"
+  },
+
+  "elastic.co": {
+    "title": "Elastic",
+    "description": "搜索和数据分析平台，Elasticsearch、Kibana等产品的开发者",
+    "category": "数据分析",
+    "tags": ["搜索引擎", "数据分析", "Elasticsearch", "Kibana"],
+    "coverImage": "https://www.elastic.co/favicon.ico"
+  },
+  "tableau.com": {
+    "title": "Tableau",
+    "description": "数据可视化和商业智能平台，帮助用户理解和分析数据",
+    "category": "数据分析",
+    "tags": ["数据可视化", "商业智能", "数据分析", "企业级"],
+    "coverImage": "https://www.tableau.com/favicon.ico"
+  },
+  "powerbi.microsoft.com": {
+    "title": "Power BI",
+    "description": "微软的商业分析工具，将数据转化为可操作的洞察",
+    "category": "数据分析",
+    "tags": ["商业分析", "微软", "数据洞察", "企业级"],
+    "coverImage": "https://powerbi.microsoft.com/favicon.ico"
+  },
+  "looker.com": {
+    "title": "Looker",
+    "description": "现代商业智能平台，Google Cloud的数据平台解决方案",
+    "category": "数据分析",
+    "tags": ["商业智能", "Google Cloud", "数据平台", "现代BI"],
+    "coverImage": "https://looker.com/favicon.ico"
+  },
+  "metabase.com": {
+    "title": "Metabase",
+    "description": "开源商业智能工具，简单易用的数据可视化和分析平台",
+    "category": "数据分析",
+    "tags": ["开源", "商业智能", "数据可视化", "简单易用"],
+    "coverImage": "https://www.metabase.com/favicon.ico"
+  },
+
+  "kaggle.com": {
+    "title": "Kaggle",
+    "description": "数据科学竞赛平台，Google旗下的机器学习和数据科学社区",
+    "category": "数据科学",
+    "tags": ["数据竞赛", "机器学习", "数据科学", "Google"],
+    "coverImage": "https://www.kaggle.com/favicon.ico"
+  },
+  "databricks.com": {
+    "title": "Databricks",
+    "description": "统一分析平台，为大数据和机器学习提供协作环境",
+    "category": "数据科学",
+    "tags": ["大数据", "机器学习", "协作平台", "统一分析"],
+    "coverImage": "https://databricks.com/favicon.ico"
+  },
+  "snowflake.com": {
+    "title": "Snowflake",
+    "description": "云数据平台，为数据仓库、数据湖和数据应用提供解决方案",
+    "category": "数据科学",
+    "tags": ["云数据", "数据仓库", "数据湖", "数据平台"],
+    "coverImage": "https://www.snowflake.com/favicon.ico"
+  },
+  "palantir.com": {
+    "title": "Palantir",
+    "description": "大数据分析公司，为政府和企业提供数据集成和分析平台",
+    "category": "数据科学",
+    "tags": ["大数据", "数据集成", "企业级", "数据分析"],
+    "coverImage": "https://www.palantir.com/favicon.ico"
+  },
+  "alteryx.com": {
+    "title": "Alteryx",
+    "description": "自助式数据分析平台，让业务分析师能够轻松处理和分析数据",
+    "category": "数据科学",
+    "tags": ["自助分析", "数据处理", "业务分析", "易用性"],
+    "coverImage": "https://www.alteryx.com/favicon.ico"
+  },
+
+  "etsy.com": {
+    "title": "Etsy",
+    "description": "手工艺品和创意商品市场，连接创作者和买家的独特电商平台",
+    "category": "电商平台",
+    "tags": ["手工艺品", "创意商品", "独立创作者", "个性化"],
+    "coverImage": "https://www.etsy.com/favicon.ico"
+  },
+  "wayfair.com": {
+    "title": "Wayfair",
+    "description": "在线家居用品零售商，提供家具、装饰和家居改善产品",
+    "category": "电商平台",
+    "tags": ["家居用品", "家具", "装饰", "在线零售"],
+    "coverImage": "https://www.wayfair.com/favicon.ico"
+  },
+  "overstock.com": {
+    "title": "Overstock",
+    "description": "在线折扣零售商，提供家居、珠宝、服装等商品",
+    "category": "电商平台",
+    "tags": ["折扣零售", "家居", "珠宝", "服装"],
+    "coverImage": "https://www.overstock.com/favicon.ico"
+  },
+  "wish.com": {
+    "title": "Wish",
+    "description": "移动电商平台，以低价商品和个性化推荐著称",
+    "category": "电商平台",
+    "tags": ["移动电商", "低价商品", "个性化推荐", "全球购"],
+    "coverImage": "https://www.wish.com/favicon.ico"
+  },
+  "poshmark.com": {
+    "title": "Poshmark",
+    "description": "社交电商平台，专注于时尚和生活方式商品的买卖",
+    "category": "电商平台",
+    "tags": ["社交电商", "时尚", "生活方式", "二手交易"],
+    "coverImage": "https://poshmark.com/favicon.ico"
+  },
+
+  "booking.com": {
+    "title": "Booking.com",
+    "description": "全球领先的在线住宿预订平台，提供酒店、民宿等住宿服务",
+    "category": "旅行服务",
+    "tags": ["住宿预订", "酒店", "民宿", "全球旅行"],
+    "coverImage": "https://cf.bstatic.com/static/img/favicon/booking_logo_retina/favicon-32x32.png"
+  },
+  "expedia.com": {
+    "title": "Expedia",
+    "description": "在线旅行服务平台，提供机票、酒店、租车等一站式旅行服务",
+    "category": "旅行服务",
+    "tags": ["在线旅行", "机票", "酒店", "租车"],
+    "coverImage": "https://www.expedia.com/favicon.ico"
+  },
+  "tripadvisor.com": {
+    "title": "TripAdvisor",
+    "description": "旅行评论和预订网站，提供酒店、餐厅、景点的用户评价",
+    "category": "旅行服务",
+    "tags": ["旅行评论", "用户评价", "酒店餐厅", "景点推荐"],
+    "coverImage": "https://static.tacdn.com/favicon.ico"
+  },
+  "kayak.com": {
+    "title": "Kayak",
+    "description": "旅行搜索引擎，比较机票、酒店、租车价格的元搜索平台",
+    "category": "旅行服务",
+    "tags": ["旅行搜索", "价格比较", "机票酒店", "元搜索"],
+    "coverImage": "https://www.kayak.com/favicon.ico"
+  },
+  "skyscanner.com": {
+    "title": "Skyscanner",
+    "description": "全球旅行搜索引擎，帮助用户找到最便宜的机票和酒店",
+    "category": "旅行服务",
+    "tags": ["机票搜索", "价格比较", "全球旅行", "便宜机票"],
+    "coverImage": "https://www.skyscanner.com/favicon.ico"
+  },
+  "pluralsight.com": {
+    "title": "Pluralsight",
+    "description": "技术技能学习平台，专注于软件开发、IT和创意技能培训",
+    "category": "在线教育",
+    "tags": ["技术培训", "软件开发", "IT技能", "创意技能"],
+    "coverImage": "https://www.pluralsight.com/favicon.ico"
+  },
+  "lynda.com": {
+    "title": "LinkedIn Learning",
+    "description": "LinkedIn的在线学习平台，提供商业、技术和创意技能课程",
+    "category": "在线教育",
+    "tags": ["职业技能", "商业技能", "技术课程", "LinkedIn"],
+    "coverImage": "https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca"
+  },
+  "skillshare.com": {
+    "title": "Skillshare",
+    "description": "创意技能学习社区，专注于设计、商业、技术等创意领域",
+    "category": "在线教育",
+    "tags": ["创意技能", "设计", "创意社区", "实践项目"],
+    "coverImage": "https://static.skillshare.com/favicon.ico"
+  },
+  "masterclass.com": {
+    "title": "MasterClass",
+    "description": "名人大师课平台，世界知名专家教授各领域技能",
+    "category": "在线教育",
+    "tags": ["名人课程", "大师课", "专家教学", "高端教育"],
+    "coverImage": "https://www.masterclass.com/favicon.ico"
+  },
+
+  "twilio.com": {
+    "title": "Twilio",
+    "description": "云通信平台，为开发者提供短信、语音、视频等通信API",
+    "category": "开发者服务",
+    "tags": ["云通信", "API", "短信", "语音视频"],
+    "coverImage": "https://www.twilio.com/favicon.ico"
+  },
+  "auth0.com": {
+    "title": "Auth0",
+    "description": "身份验证和授权平台，为应用提供安全的用户身份管理",
+    "category": "开发者服务",
+    "tags": ["身份验证", "用户管理", "安全", "API"],
+    "coverImage": "https://auth0.com/favicon.ico"
+  },
+  "okta.com": {
+    "title": "Okta",
+    "description": "企业身份和访问管理平台，提供单点登录和多因素认证",
+    "category": "开发者服务",
+    "tags": ["身份管理", "单点登录", "多因素认证", "企业安全"],
+    "coverImage": "https://www.okta.com/favicon.ico"
+  },
+  "algolia.com": {
+    "title": "Algolia",
+    "description": "搜索即服务平台，为网站和应用提供快速、相关的搜索体验",
+    "category": "开发者服务",
+    "tags": ["搜索服务", "搜索API", "快速搜索", "相关性"],
+    "coverImage": "https://www.algolia.com/favicon.ico"
+  },
+  "pusher.com": {
+    "title": "Pusher",
+    "description": "实时通信API，为应用添加实时功能如聊天、通知、协作",
+    "category": "开发者服务",
+    "tags": ["实时通信", "WebSocket", "聊天", "通知"],
+    "coverImage": "https://pusher.com/favicon.ico"
+  },
+
+  "segment.com": {
+    "title": "Segment",
+    "description": "客户数据平台，统一收集、清理和控制客户数据",
+    "category": "营销技术",
+    "tags": ["客户数据", "数据统一", "数据管道", "客户分析"],
+    "coverImage": "https://segment.com/favicon.ico"
+  },
+  "amplitude.com": {
+    "title": "Amplitude",
+    "description": "产品分析平台，帮助团队理解用户行为和产品使用情况",
+    "category": "营销技术",
+    "tags": ["产品分析", "用户行为", "数据分析", "产品优化"],
+    "coverImage": "https://amplitude.com/favicon.ico"
+  },
+  "mixpanel.com": {
+    "title": "Mixpanel",
+    "description": "用户分析平台，跟踪用户与产品的交互并提供深度洞察",
+    "category": "营销技术",
+    "tags": ["用户分析", "事件跟踪", "用户洞察", "产品分析"],
+    "coverImage": "https://mixpanel.com/favicon.ico"
+  },
+  "hotjar.com": {
+    "title": "Hotjar",
+    "description": "用户体验分析工具，提供热图、录屏、反馈等用户行为洞察",
+    "category": "营销技术",
+    "tags": ["用户体验", "热图", "录屏", "用户反馈"],
+    "coverImage": "https://www.hotjar.com/favicon.ico"
+  },
+  "optimizely.com": {
+    "title": "Optimizely",
+    "description": "实验和个性化平台，通过A/B测试优化数字体验",
+    "category": "营销技术",
+    "tags": ["A/B测试", "实验平台", "个性化", "转化优化"],
+    "coverImage": "https://www.optimizely.com/favicon.ico"
+  },
+
+  "notion.so": {
+    "title": "Notion",
+    "description": "一体化工作空间，集笔记、数据库、任务管理、wiki于一体的协作平台",
+    "category": "生产力工具",
+    "tags": ["一体化工作空间", "笔记", "数据库", "协作"],
+    "coverImage": "https://www.notion.so/favicon.ico"
+  },
+  "obsidian.md": {
+    "title": "Obsidian",
+    "description": "知识管理工具，基于链接思维的第二大脑笔记应用",
+    "category": "知识管理",
+    "tags": ["知识管理", "链接思维", "笔记", "第二大脑"],
+    "coverImage": "https://obsidian.md/favicon.ico"
+  },
+  "roamresearch.com": {
+    "title": "Roam Research",
+    "description": "网络化思维工具，支持双向链接的知识图谱笔记系统",
+    "category": "知识管理",
+    "tags": ["网络化思维", "双向链接", "知识图谱", "研究工具"],
+    "coverImage": "https://roamresearch.com/favicon.ico"
+  },
+  "logseq.com": {
+    "title": "Logseq",
+    "description": "开源的本地优先知识管理工具，支持块级引用和图谱视图",
+    "category": "知识管理",
+    "tags": ["开源", "本地优先", "块级引用", "图谱视图"],
+    "coverImage": "https://logseq.com/favicon.ico"
+  },
+  "remnote.com": {
+    "title": "RemNote",
+    "description": "学习和知识管理工具，结合笔记和间隔重复的学习系统",
+    "category": "知识管理",
+    "tags": ["学习工具", "间隔重复", "知识管理", "记忆增强"],
+    "coverImage": "https://www.remnote.com/favicon.ico"
+  },
+
+  "evernote.com": {
+    "title": "Evernote",
+    "description": "数字笔记应用，帮助用户捕获、组织和分享想法和信息",
+    "category": "笔记应用",
+    "tags": ["数字笔记", "信息组织", "跨平台", "文档扫描"],
+    "coverImage": "https://evernote.com/favicon.ico"
+  },
+  "onenote.microsoft.com": {
+    "title": "Microsoft OneNote",
+    "description": "微软的数字笔记本，支持手写、绘图和多媒体内容",
+    "category": "笔记应用",
+    "tags": ["数字笔记本", "手写", "绘图", "微软"],
+    "coverImage": "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/onenote_48x1.svg"
+  },
+  "bear.app": {
+    "title": "Bear",
+    "description": "优雅的Markdown笔记应用，专为写作和笔记而设计",
+    "category": "笔记应用",
+    "tags": ["Markdown", "优雅设计", "写作", "Mac/iOS"],
+    "coverImage": "https://bear.app/favicon.ico"
+  },
+  "simplenote.com": {
+    "title": "Simplenote",
+    "description": "简洁的跨平台笔记应用，专注于纯文本笔记和同步",
+    "category": "笔记应用",
+    "tags": ["简洁", "跨平台", "纯文本", "同步"],
+    "coverImage": "https://simplenote.com/favicon.ico"
+  },
+  "standardnotes.org": {
+    "title": "Standard Notes",
+    "description": "注重隐私和安全的笔记应用，端到端加密保护用户数据",
+    "category": "笔记应用",
+    "tags": ["隐私保护", "端到端加密", "安全", "开源"],
+    "coverImage": "https://standardnotes.org/favicon.ico"
+  },
+
+  "discord.gg": {
+    "title": "Discord",
+    "description": "面向游戏玩家和社区的语音、视频和文字聊天平台",
+    "category": "社交媒体",
+    "tags": ["游戏社交", "语音聊天", "社区平台", "实时通讯"],
+    "coverImage": "https://discord.com/assets/f9bb9c4af2b9c32a2c5ee0014661546d.png"
+  },
+  "telegram.org": {
+    "title": "Telegram",
+    "description": "注重隐私和安全的即时通讯应用，支持大群组和频道",
+    "category": "即时通讯",
+    "tags": ["即时通讯", "隐私安全", "大群组", "频道"],
+    "coverImage": "https://telegram.org/favicon.ico"
+  },
+  "signal.org": {
+    "title": "Signal",
+    "description": "端到端加密的私密通讯应用，注重用户隐私和安全",
+    "category": "即时通讯",
+    "tags": ["端到端加密", "隐私通讯", "安全", "开源"],
+    "coverImage": "https://signal.org/favicon.ico"
+  },
+  "whatsapp.com": {
+    "title": "WhatsApp",
+    "description": "全球流行的即时通讯应用，Meta旗下的消息和语音通话服务",
+    "category": "即时通讯",
+    "tags": ["即时通讯", "语音通话", "全球流行", "Meta"],
+    "coverImage": "https://static.whatsapp.net/rsrc.php/v3/yz/r/ujTY9i_Jhs1.png"
+  },
+  "wechat.com": {
+    "title": "WeChat",
+    "description": "腾讯微信，中国最大的社交平台，集聊天、支付、小程序于一体",
+    "category": "即时通讯",
+    "tags": ["社交平台", "移动支付", "小程序", "腾讯"],
+    "coverImage": "https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png"
+  },
+
+  "github.io": {
+    "title": "GitHub Pages",
+    "description": "GitHub提供的静态网站托管服务，直接从GitHub仓库发布网站",
+    "category": "网站托管",
+    "tags": ["静态托管", "GitHub", "免费托管", "开发者"],
+    "coverImage": "https://github.githubassets.com/images/modules/site/social-cards/github-social.png"
+  },
+  "pages.dev": {
+    "title": "Cloudflare Pages",
+    "description": "Cloudflare的静态网站托管平台，提供快速的全球CDN和部署",
+    "category": "网站托管",
+    "tags": ["静态托管", "CDN", "快速部署", "Cloudflare"],
+    "coverImage": "https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"
+  },
+  "surge.sh": {
+    "title": "Surge",
+    "description": "简单的静态网站发布平台，一条命令即可部署前端项目",
+    "category": "网站托管",
+    "tags": ["静态发布", "简单部署", "前端项目", "命令行"],
+    "coverImage": "https://surge.sh/favicon.ico"
+  },
+  "now.sh": {
+    "title": "Vercel",
+    "description": "现代Web应用的部署平台，专为前端框架优化，提供全球CDN和无服务器函数",
+    "category": "网站托管",
+    "tags": ["部署平台", "前端框架", "CDN", "无服务器"],
+    "coverImage": "https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png"
+  },
+  "render.com": {
+    "title": "Render",
+    "description": "现代云平台，提供静态网站、Web服务和数据库的统一部署",
+    "category": "网站托管",
+    "tags": ["云平台", "统一部署", "Web服务", "数据库"],
+    "coverImage": "https://render.com/favicon.ico"
+  },
+
+  "stackoverflow.co": {
+    "title": "Stack Overflow",
+    "description": "全球最大的程序员问答社区，解决编程问题的首选平台",
+    "category": "技术社区",
+    "tags": ["编程问答", "技术社区", "问题解决", "开发者"],
+    "coverImage": "https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon@2.png"
+  },
+  "dev.to": {
+    "title": "DEV Community",
+    "description": "开发者社区平台，分享编程知识和经验的技术博客社区",
+    "category": "技术社区",
+    "tags": ["开发者社区", "技术博客", "知识分享", "编程"],
+    "coverImage": "https://dev.to/favicon.ico"
+  },
+  "hashnode.com": {
+    "title": "Hashnode",
+    "description": "开发者博客平台，为程序员提供技术写作和社区交流",
+    "category": "技术社区",
+    "tags": ["技术博客", "开发者", "写作平台", "社区"],
+    "coverImage": "https://hashnode.com/favicon.ico"
+  },
+  "medium.com": {
+    "title": "Medium",
+    "description": "在线发布平台，高质量文章和思想分享的社区",
+    "category": "内容平台",
+    "tags": ["在线发布", "高质量文章", "思想分享", "写作"],
+    "coverImage": "https://miro.medium.com/max/195/1*emiGsBgJu2KHWyjluhKXQw.png"
+  },
+  "substack.com": {
+    "title": "Substack",
+    "description": "独立写作和订阅平台，让作者直接与读者建立联系",
+    "category": "内容平台",
+    "tags": ["独立写作", "订阅平台", "作者经济", "新闻通讯"],
+    "coverImage": "https://substack.com/favicon.ico"
+  },
+
+  "codewars.com": {
+    "title": "Codewars",
+    "description": "编程挑战平台，通过解决编程题提升编程技能",
+    "category": "编程练习",
+    "tags": ["编程挑战", "算法练习", "技能提升", "编程题"],
+    "coverImage": "https://www.codewars.com/favicon.ico"
+  },
+  "exercism.org": {
+    "title": "Exercism",
+    "description": "免费编程练习平台，提供导师指导的编程学习",
+    "category": "编程练习",
+    "tags": ["编程练习", "导师指导", "免费学习", "多语言"],
+    "coverImage": "https://exercism.org/favicon.ico"
+  },
+  "topcoder.com": {
+    "title": "TopCoder",
+    "description": "竞技编程平台，全球程序员竞赛和众包开发社区",
+    "category": "编程练习",
+    "tags": ["竞技编程", "程序员竞赛", "众包开发", "算法"],
+    "coverImage": "https://www.topcoder.com/favicon.ico"
+  },
+  "codeforces.com": {
+    "title": "Codeforces",
+    "description": "编程竞赛平台，举办算法编程比赛和练习",
+    "category": "编程练习",
+    "tags": ["编程竞赛", "算法比赛", "竞技编程", "练习"],
+    "coverImage": "https://codeforces.org/favicon.ico"
+  },
+  "atcoder.jp": {
+    "title": "AtCoder",
+    "description": "日本编程竞赛平台，高质量的算法竞赛和练习题",
+    "category": "编程练习",
+    "tags": ["日本竞赛", "算法竞赛", "高质量题目", "编程练习"],
+    "coverImage": "https://img.atcoder.jp/assets/favicon.ico"
+  },
+
+  "w3schools.com": {
+    "title": "W3Schools",
+    "description": "Web开发教程网站，提供HTML、CSS、JavaScript等技术教程",
+    "category": "编程教程",
+    "tags": ["Web开发", "HTML", "CSS", "JavaScript"],
+    "coverImage": "https://www.w3schools.com/favicon.ico"
+  },
+  "mdn.mozilla.org": {
+    "title": "MDN Web Docs",
+    "description": "Mozilla开发者网络，Web技术的权威文档和教程",
+    "category": "编程教程",
+    "tags": ["Web文档", "Mozilla", "权威教程", "Web标准"],
+    "coverImage": "https://developer.mozilla.org/favicon-48x48.png"
+  },
+  "css-tricks.com": {
+    "title": "CSS-Tricks",
+    "description": "CSS技巧和前端开发资源网站，提供实用的CSS教程",
+    "category": "编程教程",
+    "tags": ["CSS技巧", "前端开发", "实用教程", "Web设计"],
+    "coverImage": "https://css-tricks.com/favicon.ico"
+  },
+  "smashingmagazine.com": {
+    "title": "Smashing Magazine",
+    "description": "Web设计和开发杂志，提供高质量的设计和开发文章",
+    "category": "编程教程",
+    "tags": ["Web设计", "开发杂志", "高质量文章", "设计"],
+    "coverImage": "https://www.smashingmagazine.com/favicon.ico"
+  },
+  "a11yproject.com": {
+    "title": "The A11Y Project",
+    "description": "Web无障碍性资源网站，推广包容性设计和开发",
+    "category": "编程教程",
+    "tags": ["无障碍性", "包容性设计", "Web标准", "可访问性"],
+    "coverImage": "https://www.a11yproject.com/favicon.ico"
+  },
+
+  "npmjs.com": {
+    "title": "npm",
+    "description": "Node.js包管理器，JavaScript生态系统的包仓库",
+    "category": "包管理",
+    "tags": ["包管理", "Node.js", "JavaScript", "开源库"],
+    "coverImage": "https://static.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png"
+  },
+  "pypi.org": {
+    "title": "PyPI",
+    "description": "Python包索引，Python软件包的官方仓库",
+    "category": "包管理",
+    "tags": ["Python包", "包索引", "软件仓库", "开源"],
+    "coverImage": "https://pypi.org/static/images/logo-small.svg"
+  },
+  "rubygems.org": {
+    "title": "RubyGems",
+    "description": "Ruby编程语言的包管理系统和软件库",
+    "category": "包管理",
+    "tags": ["Ruby包", "包管理", "软件库", "Gem"],
+    "coverImage": "https://rubygems.org/favicon.ico"
+  },
+  "packagist.org": {
+    "title": "Packagist",
+    "description": "PHP包的主要仓库，Composer包管理器的默认源",
+    "category": "包管理",
+    "tags": ["PHP包", "Composer", "包仓库", "依赖管理"],
+    "coverImage": "https://packagist.org/favicon.ico"
+  },
+  "crates.io": {
+    "title": "Crates.io",
+    "description": "Rust编程语言的包注册表，Cargo包管理器的官方源",
+    "category": "包管理",
+    "tags": ["Rust包", "Cargo", "包注册表", "系统编程"],
+    "coverImage": "https://crates.io/favicon.ico"
+  },
+  "jsbin.com": {
+    "title": "JS Bin",
+    "description": "协作式JavaScript调试工具，实时预览和分享代码片段",
+    "category": "在线编辑器",
+    "tags": ["JavaScript调试", "协作", "实时预览", "代码分享"],
+    "coverImage": "https://jsbin.com/favicon.ico"
+  },
+  "codeshare.io": {
+    "title": "Codeshare",
+    "description": "实时代码共享工具，支持多人协作编程和代码审查",
+    "category": "在线编辑器",
+    "tags": ["代码共享", "实时协作", "多人编程", "代码审查"],
+    "coverImage": "https://codeshare.io/favicon.ico"
+  },
+  "glitch.com": {
+    "title": "Glitch",
+    "description": "协作编程平台，快速构建和部署Web应用的社区",
+    "category": "在线编辑器",
+    "tags": ["协作编程", "Web应用", "快速部署", "社区"],
+    "coverImage": "https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Flogo-day.svg"
+  },
+
+  "atlassian.net": {
+    "title": "Atlassian",
+    "description": "企业协作软件公司，Jira、Confluence、Trello等产品的开发者",
+    "category": "企业软件",
+    "tags": ["企业协作", "项目管理", "团队工具", "软件开发"],
+    "coverImage": "https://wac-cdn.atlassian.com/dam/jcr:e348b562-4152-4cdc-8a55-3d297e509cc8/Atlassian-horizontal-blue-rgb.svg"
+  },
+  "oracle.com": {
+    "title": "Oracle",
+    "description": "企业软件公司，提供数据库、云服务和企业应用解决方案",
+    "category": "企业软件",
+    "tags": ["数据库", "企业软件", "云服务", "Oracle"],
+    "coverImage": "https://www.oracle.com/favicon.ico"
+  },
+  "sap.com": {
+    "title": "SAP",
+    "description": "企业软件巨头，提供ERP、CRM和企业管理解决方案",
+    "category": "企业软件",
+    "tags": ["ERP", "企业管理", "CRM", "企业软件"],
+    "coverImage": "https://www.sap.com/favicon.ico"
+  },
+  "servicenow.com": {
+    "title": "ServiceNow",
+    "description": "企业服务管理平台，数字化工作流程和IT服务管理",
+    "category": "企业软件",
+    "tags": ["服务管理", "工作流程", "IT服务", "企业平台"],
+    "coverImage": "https://www.servicenow.com/favicon.ico"
+  },
+  "workday.com": {
+    "title": "Workday",
+    "description": "企业云应用，专注于人力资源和财务管理",
+    "category": "企业软件",
+    "tags": ["人力资源", "财务管理", "企业云", "HR软件"],
+    "coverImage": "https://www.workday.com/favicon.ico"
+  },
+
+  "zoom.com": {
+    "title": "Zoom",
+    "description": "领先的视频会议和远程协作平台，为远程工作和在线教育提供解决方案",
+    "category": "视频会议",
+    "tags": ["视频会议", "远程协作", "在线教育", "企业通讯"],
+    "coverImage": "https://st1.zoom.us/zoom.ico"
+  },
+  "gotomeeting.com": {
+    "title": "GoToMeeting",
+    "description": "专业视频会议软件，为企业提供可靠的在线会议解决方案",
+    "category": "视频会议",
+    "tags": ["视频会议", "企业会议", "在线会议", "专业软件"],
+    "coverImage": "https://www.gotomeeting.com/favicon.ico"
+  },
+  "bluejeans.com": {
+    "title": "BlueJeans",
+    "description": "企业级视频会议平台，Verizon旗下的专业会议解决方案",
+    "category": "视频会议",
+    "tags": ["企业级", "视频会议", "Verizon", "专业会议"],
+    "coverImage": "https://www.bluejeans.com/favicon.ico"
+  },
+  "whereby.com": {
+    "title": "Whereby",
+    "description": "简单易用的视频会议工具，无需下载即可使用的浏览器会议",
+    "category": "视频会议",
+    "tags": ["简单易用", "浏览器会议", "无需下载", "视频通话"],
+    "coverImage": "https://whereby.com/favicon.ico"
+  },
+  "jitsi.org": {
+    "title": "Jitsi Meet",
+    "description": "开源视频会议解决方案，免费的安全视频会议平台",
+    "category": "视频会议",
+    "tags": ["开源", "免费", "安全", "视频会议"],
+    "coverImage": "https://jitsi.org/favicon.ico"
+  },
+  "crello.com": {
+    "title": "Crello",
+    "description": "在线图形设计工具，提供动画和静态设计模板",
+    "category": "设计平台",
+    "tags": ["图形设计", "动画设计", "设计模板", "在线工具"],
+    "coverImage": "https://crello.com/favicon.ico"
+  },
+  "designwizard.com": {
+    "title": "DesignWizard",
+    "description": "在线设计工具，提供专业的图形设计模板和编辑功能",
+    "category": "设计平台",
+    "tags": ["专业设计", "图形模板", "在线编辑", "设计工具"],
+    "coverImage": "https://www.designwizard.com/favicon.ico"
+  },
+  "snappa.com": {
+    "title": "Snappa",
+    "description": "快速图形设计工具，专为非设计师打造的简单设计平台",
+    "category": "设计平台",
+    "tags": ["快速设计", "非设计师", "简单平台", "图形工具"],
+    "coverImage": "https://snappa.com/favicon.ico"
+  },
+  "easil.com": {
+    "title": "Easil",
+    "description": "品牌设计平台，帮助企业创建一致的品牌视觉内容",
+    "category": "设计平台",
+    "tags": ["品牌设计", "视觉内容", "企业设计", "品牌一致性"],
+    "coverImage": "https://about.easil.com/favicon.ico"
+  },
+
+  "mailgun.com": {
+    "title": "Mailgun",
+    "description": "开发者邮件服务，为应用提供可靠的邮件发送API",
+    "category": "邮件服务",
+    "tags": ["邮件API", "开发者工具", "邮件发送", "可靠服务"],
+    "coverImage": "https://www.mailgun.com/favicon.ico"
+  },
+  "postmark.com": {
+    "title": "Postmark",
+    "description": "事务性邮件服务，专注于应用邮件的快速可靠投递",
+    "category": "邮件服务",
+    "tags": ["事务性邮件", "快速投递", "应用邮件", "可靠性"],
+    "coverImage": "https://postmarkapp.com/favicon.ico"
+  },
+  "amazonses.com": {
+    "title": "Amazon SES",
+    "description": "亚马逊简单邮件服务，可扩展的云端邮件发送平台",
+    "category": "邮件服务",
+    "tags": ["亚马逊", "云端邮件", "可扩展", "邮件平台"],
+    "coverImage": "https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png"
+  },
+  "sparkpost.com": {
+    "title": "SparkPost",
+    "description": "邮件投递服务，为企业提供高性能的邮件发送解决方案",
+    "category": "邮件服务",
+    "tags": ["邮件投递", "高性能", "企业服务", "邮件解决方案"],
+    "coverImage": "https://www.sparkpost.com/favicon.ico"
+  },
+  "mandrill.com": {
+    "title": "Mandrill",
+    "description": "Mailchimp的事务性邮件服务，为应用提供邮件发送功能",
+    "category": "邮件服务",
+    "tags": ["事务性邮件", "Mailchimp", "应用邮件", "邮件功能"],
+    "coverImage": "https://mandrillapp.com/favicon.ico"
+  },
+
+  "cloudinary.com": {
+    "title": "Cloudinary",
+    "description": "云端媒体管理平台，提供图片和视频的存储、优化和交付",
+    "category": "媒体服务",
+    "tags": ["媒体管理", "图片优化", "视频处理", "云端存储"],
+    "coverImage": "https://cloudinary.com/favicon.ico"
+  },
+  "imagekit.io": {
+    "title": "ImageKit",
+    "description": "实时图像优化和CDN服务，提升网站图片加载性能",
+    "category": "媒体服务",
+    "tags": ["图像优化", "CDN", "性能提升", "实时处理"],
+    "coverImage": "https://imagekit.io/favicon.ico"
+  },
+  "uploadcare.com": {
+    "title": "Uploadcare",
+    "description": "文件上传和处理服务，为开发者提供完整的文件管理解决方案",
+    "category": "媒体服务",
+    "tags": ["文件上传", "文件处理", "开发者工具", "文件管理"],
+    "coverImage": "https://uploadcare.com/favicon.ico"
+  },
+  "filestack.com": {
+    "title": "Filestack",
+    "description": "文件上传和转换API，为应用添加强大的文件处理功能",
+    "category": "媒体服务",
+    "tags": ["文件上传", "文件转换", "API服务", "文件处理"],
+    "coverImage": "https://www.filestack.com/favicon.ico"
+  },
+  "kraken.io": {
+    "title": "Kraken.io",
+    "description": "图片优化服务，减少图片文件大小而不损失质量",
+    "category": "媒体服务",
+    "tags": ["图片优化", "文件压缩", "质量保持", "性能优化"],
+    "coverImage": "https://kraken.io/favicon.ico"
+  },
+  "reddit.com/r/gaming": {
+    "title": "Reddit Gaming",
+    "description": "Reddit游戏社区，全球最大的游戏讨论和新闻聚合平台",
+    "category": "游戏社区",
+    "tags": ["游戏讨论", "新闻聚合", "社区", "Reddit"],
+    "coverImage": "https://www.redditstatic.com/desktop2x/img/favicon/apple-icon-57x57.png"
+  },
+  "gamedev.net": {
+    "title": "GameDev.net",
+    "description": "游戏开发者社区，提供游戏开发教程、资源和讨论",
+    "category": "游戏开发",
+    "tags": ["游戏开发", "开发教程", "开发者社区", "游戏资源"],
+    "coverImage": "https://www.gamedev.net/favicon.ico"
+  },
+  "itch.io": {
+    "title": "itch.io",
+    "description": "独立游戏发布平台，支持创作者直接向玩家销售游戏",
+    "category": "游戏平台",
+    "tags": ["独立游戏", "游戏发布", "创作者", "游戏销售"],
+    "coverImage": "https://itch.io/favicon.ico"
+  },
+  "gamejolt.com": {
+    "title": "Game Jolt",
+    "description": "独立游戏社区和发布平台，发现和分享独立游戏",
+    "category": "游戏平台",
+    "tags": ["独立游戏", "游戏社区", "游戏发现", "游戏分享"],
+    "coverImage": "https://gamejolt.com/favicon.ico"
+  },
+  "deviantart.com": {
+    "title": "DeviantArt",
+    "description": "全球最大的艺术社区，艺术家展示和分享作品的平台",
+    "category": "创意展示",
+    "tags": ["艺术社区", "艺术作品", "创意分享", "艺术家"],
+    "coverImage": "https://www.deviantart.com/favicon.ico"
+  },
+  "artstation.com": {
+    "title": "ArtStation",
+    "description": "专业艺术家作品展示平台，游戏、电影、媒体艺术的聚集地",
+    "category": "创意展示",
+    "tags": ["专业艺术", "游戏艺术", "电影艺术", "作品展示"],
+    "coverImage": "https://www.artstation.com/favicon.ico"
+  },
+  "500px.com": {
+    "title": "500px",
+    "description": "摄影师社区和作品展示平台，高质量摄影作品的聚集地",
+    "category": "创意展示",
+    "tags": ["摄影社区", "摄影作品", "高质量", "摄影师"],
+    "coverImage": "https://500px.com/favicon.ico"
+  },
+  "flickr.com": {
+    "title": "Flickr",
+    "description": "Yahoo旗下的照片分享和存储服务，摄影爱好者的社区",
+    "category": "创意展示",
+    "tags": ["照片分享", "照片存储", "摄影社区", "Yahoo"],
+    "coverImage": "https://combo.staticflickr.com/pw/favicon.ico"
+  },
+
+  "producthunt.com": {
+    "title": "Product Hunt",
+    "description": "新产品发现平台，每日展示最新的科技产品和创新",
+    "category": "产品发现",
+    "tags": ["新产品", "科技产品", "创新", "产品发现"],
+    "coverImage": "https://ph-static.imgix.net/ph-ios-icon.png"
+  },
+  "betalist.com": {
+    "title": "BetaList",
+    "description": "创业公司和新产品的Beta测试平台，发现早期产品",
+    "category": "产品发现",
+    "tags": ["Beta测试", "创业公司", "早期产品", "新产品"],
+    "coverImage": "https://betalist.com/favicon.ico"
+  },
+  "launchingnext.com": {
+    "title": "Launching Next",
+    "description": "即将发布的产品和服务预告平台，提前发现新产品",
+    "category": "产品发现",
+    "tags": ["产品预告", "即将发布", "新产品", "产品发现"],
+    "coverImage": "https://www.launchingnext.com/favicon.ico"
+  },
+  "startupstash.com": {
+    "title": "Startup Stash",
+    "description": "创业工具和资源目录，为创业者提供精选工具",
+    "category": "创业资源",
+    "tags": ["创业工具", "资源目录", "创业者", "工具推荐"],
+    "coverImage": "https://startupstash.com/favicon.ico"
+  },
+  "indiehackers.com": {
+    "title": "Indie Hackers",
+    "description": "独立创业者社区，分享创业经验和商业见解",
+    "category": "创业资源",
+    "tags": ["独立创业", "创业社区", "商业见解", "创业经验"],
+    "coverImage": "https://www.indiehackers.com/favicon.ico"
+  },
+
+  "crunchbase.com": {
+    "title": "Crunchbase",
+    "description": "创业公司和投资数据库，提供公司信息和融资数据",
+    "category": "商业数据",
+    "tags": ["创业数据", "投资信息", "公司数据库", "融资数据"],
+    "coverImage": "https://www.crunchbase.com/favicon.ico"
+  },
+  "pitchbook.com": {
+    "title": "PitchBook",
+    "description": "私募股权和风险投资数据平台，专业的投资市场分析",
+    "category": "商业数据",
+    "tags": ["私募股权", "风险投资", "投资数据", "市场分析"],
+    "coverImage": "https://pitchbook.com/favicon.ico"
+  },
+  "cbinsights.com": {
+    "title": "CB Insights",
+    "description": "市场情报平台，提供科技趋势和投资分析",
+    "category": "商业数据",
+    "tags": ["市场情报", "科技趋势", "投资分析", "商业洞察"],
+    "coverImage": "https://www.cbinsights.com/favicon.ico"
+  },
+  "owler.com": {
+    "title": "Owler",
+    "description": "竞争情报平台，跟踪公司新闻和竞争对手动态",
+    "category": "商业数据",
+    "tags": ["竞争情报", "公司新闻", "竞争对手", "商业监控"],
+    "coverImage": "https://www.owler.com/favicon.ico"
+  },
+  "similarweb.com": {
+    "title": "SimilarWeb",
+    "description": "网站分析和市场情报平台，提供网站流量和竞争分析",
+    "category": "网站分析",
+    "tags": ["网站分析", "流量分析", "竞争分析", "市场情报"],
+    "coverImage": "https://www.similarweb.com/favicon.ico"
+  },
+
+  "alexa.com": {
+    "title": "Alexa",
+    "description": "亚马逊的网站分析服务，提供网站排名和流量数据",
+    "category": "网站分析",
+    "tags": ["网站排名", "流量数据", "网站分析", "亚马逊"],
+    "coverImage": "https://www.alexa.com/favicon.ico"
+  },
+  "semrush.com": {
+    "title": "SEMrush",
+    "description": "数字营销工具套件，提供SEO、PPC和内容营销分析",
+    "category": "SEO工具",
+    "tags": ["SEO", "数字营销", "PPC", "内容营销"],
+    "coverImage": "https://www.semrush.com/favicon.ico"
+  },
+  "ahrefs.com": {
+    "title": "Ahrefs",
+    "description": "SEO工具集，提供关键词研究、链接分析和竞争对手分析",
+    "category": "SEO工具",
+    "tags": ["SEO工具", "关键词研究", "链接分析", "竞争分析"],
+    "coverImage": "https://ahrefs.com/favicon.ico"
+  },
+  "moz.com": {
+    "title": "Moz",
+    "description": "SEO软件和资源平台，提供搜索引擎优化工具和教育",
+    "category": "SEO工具",
+    "tags": ["SEO软件", "搜索优化", "SEO教育", "营销工具"],
+    "coverImage": "https://moz.com/favicon.ico"
+  },
+  "screamingtrog.co.uk": {
+    "title": "Screaming Frog",
+    "description": "SEO爬虫工具，分析网站结构和SEO问题",
+    "category": "SEO工具",
+    "tags": ["SEO爬虫", "网站分析", "SEO问题", "网站结构"],
+    "coverImage": "https://www.screamingfrog.co.uk/favicon.ico"
+  },
+  "freepik.com": {
+    "title": "Freepik",
+    "description": "免费和付费的设计资源平台，提供矢量图、照片和PSD文件",
+    "category": "素材资源",
+    "tags": ["设计资源", "矢量图", "PSD文件", "免费素材"],
+    "coverImage": "https://www.freepik.com/favicon.ico"
+  },
+  "shutterstock.com": {
+    "title": "Shutterstock",
+    "description": "全球领先的素材库，提供照片、矢量图、插画和视频",
+    "category": "素材资源",
+    "tags": ["素材库", "照片", "矢量图", "视频素材"],
+    "coverImage": "https://www.shutterstock.com/favicon.ico"
+  },
+  "gettyimages.com": {
+    "title": "Getty Images",
+    "description": "专业图片和视频素材库，高质量的商业用途素材",
+    "category": "素材资源",
+    "tags": ["专业图片", "视频素材", "商业用途", "高质量"],
+    "coverImage": "https://www.gettyimages.com/favicon.ico"
+  },
+  "istock.com": {
+    "title": "iStock",
+    "description": "Getty Images旗下的素材平台，提供实惠的图片和视频",
+    "category": "素材资源",
+    "tags": ["实惠素材", "图片视频", "Getty Images", "商业素材"],
+    "coverImage": "https://www.istockphoto.com/favicon.ico"
+  },
+
+  "mozilla.org": {
+    "title": "Mozilla",
+    "description": "开源软件基金会，Firefox浏览器和开放Web标准的推动者",
+    "category": "开源组织",
+    "tags": ["开源", "Firefox", "Web标准", "非营利"],
+    "coverImage": "https://www.mozilla.org/favicon.ico"
+  },
+  "apache.org": {
+    "title": "Apache Software Foundation",
+    "description": "Apache软件基金会，支持众多开源项目的非营利组织",
+    "category": "开源组织",
+    "tags": ["Apache", "开源项目", "软件基金会", "非营利"],
+    "coverImage": "https://www.apache.org/favicon.ico"
+  },
+  "eclipse.org": {
+    "title": "Eclipse Foundation",
+    "description": "Eclipse基金会，支持Eclipse IDE和开源协作的组织",
+    "category": "开源组织",
+    "tags": ["Eclipse", "IDE", "开源协作", "开发工具"],
+    "coverImage": "https://www.eclipse.org/favicon.ico"
+  },
+  "fsf.org": {
+    "title": "Free Software Foundation",
+    "description": "自由软件基金会，推广自由软件和用户权利的组织",
+    "category": "开源组织",
+    "tags": ["自由软件", "用户权利", "开源倡导", "GNU"],
+    "coverImage": "https://www.fsf.org/favicon.ico"
+  },
+  "linuxfoundation.org": {
+    "title": "Linux Foundation",
+    "description": "Linux基金会，支持Linux和开源技术发展的非营利组织",
+    "category": "开源组织",
+    "tags": ["Linux", "开源技术", "技术发展", "非营利"],
+    "coverImage": "https://www.linuxfoundation.org/favicon.ico"
+  },
+
+  "w3.org": {
+    "title": "W3C",
+    "description": "万维网联盟，制定Web标准和协议的国际组织",
+    "category": "标准组织",
+    "tags": ["Web标准", "W3C", "协议制定", "国际组织"],
+    "coverImage": "https://www.w3.org/favicon.ico"
+  },
+  "whatwg.org": {
+    "title": "WHATWG",
+    "description": "Web超文本应用技术工作组，HTML和相关技术的标准制定者",
+    "category": "标准组织",
+    "tags": ["HTML标准", "Web技术", "标准制定", "浏览器"],
+    "coverImage": "https://whatwg.org/favicon.ico"
+  },
+  "ecma-international.org": {
+    "title": "Ecma International",
+    "description": "Ecma国际，JavaScript(ECMAScript)等标准的制定组织",
+    "category": "标准组织",
+    "tags": ["JavaScript标准", "ECMAScript", "技术标准", "国际组织"],
+    "coverImage": "https://www.ecma-international.org/favicon.ico"
+  },
+  "iso.org": {
+    "title": "ISO",
+    "description": "国际标准化组织，制定国际标准的全球性组织",
+    "category": "标准组织",
+    "tags": ["国际标准", "ISO", "标准化", "全球组织"],
+    "coverImage": "https://www.iso.org/favicon.ico"
+  },
+  "ietf.org": {
+    "title": "IETF",
+    "description": "互联网工程任务组，制定互联网技术标准的开放组织",
+    "category": "标准组织",
+    "tags": ["互联网标准", "技术协议", "开放组织", "网络技术"],
+    "coverImage": "https://www.ietf.org/favicon.ico"
+  },
+
+  "codeproject.com": {
+    "title": "CodeProject",
+    "description": "程序员社区和知识分享平台，提供编程文章和代码示例",
+    "category": "技术社区",
+    "tags": ["程序员社区", "编程文章", "代码示例", "知识分享"],
+    "coverImage": "https://www.codeproject.com/favicon.ico"
+  },
+  "dzone.com": {
+    "title": "DZone",
+    "description": "开发者社区和技术资源平台，提供编程教程和技术新闻",
+    "category": "技术社区",
+    "tags": ["开发者社区", "技术资源", "编程教程", "技术新闻"],
+    "coverImage": "https://dzone.com/favicon.ico"
+  },
+  "lobste.rs": {
+    "title": "Lobsters",
+    "description": "技术新闻聚合社区，专注于高质量的技术讨论",
+    "category": "技术社区",
+    "tags": ["技术新闻", "高质量讨论", "技术聚合", "开发者"],
+    "coverImage": "https://lobste.rs/favicon.ico"
+  },
+  "news.ycombinator.com": {
+    "title": "Hacker News",
+    "description": "Y Combinator的技术新闻社区，创业和技术讨论的聚集地",
+    "category": "技术社区",
+    "tags": ["技术新闻", "创业讨论", "Y Combinator", "黑客文化"],
+    "coverImage": "https://news.ycombinator.com/favicon.ico"
+  },
+  "slashdot.org": {
+    "title": "Slashdot",
+    "description": "技术新闻和讨论网站，面向技术爱好者的新闻聚合平台",
+    "category": "技术社区",
+    "tags": ["技术新闻", "技术讨论", "新闻聚合", "技术爱好者"],
+    "coverImage": "https://slashdot.org/favicon.ico"
+  },
+
+  "coursehero.com": {
+    "title": "Course Hero",
+    "description": "学习资源平台，提供课程材料、学习指南和在线辅导",
+    "category": "学习资源",
+    "tags": ["学习资源", "课程材料", "学习指南", "在线辅导"],
+    "coverImage": "https://www.coursehero.com/favicon.ico"
+  },
+  "chegg.com": {
+    "title": "Chegg",
+    "description": "学生服务平台，提供教科书租赁、在线辅导和学习工具",
+    "category": "学习资源",
+    "tags": ["学生服务", "教科书", "在线辅导", "学习工具"],
+    "coverImage": "https://www.chegg.com/favicon.ico"
+  },
+  "quizlet.com": {
+    "title": "Quizlet",
+    "description": "学习工具平台，通过闪卡和游戏帮助学生记忆和学习",
+    "category": "学习资源",
+    "tags": ["学习工具", "闪卡", "记忆游戏", "学生学习"],
+    "coverImage": "https://quizlet.com/favicon.ico"
+  },
+  "studyblue.com": {
+    "title": "StudyBlue",
+    "description": "数字学习平台，提供闪卡、学习指南和协作学习工具",
+    "category": "学习资源",
+    "tags": ["数字学习", "闪卡", "学习指南", "协作学习"],
+    "coverImage": "https://www.studyblue.com/favicon.ico"
+  },
+  "brainscape.com": {
+    "title": "Brainscape",
+    "description": "智能闪卡平台，使用认知科学优化学习效率",
+    "category": "学习资源",
+    "tags": ["智能闪卡", "认知科学", "学习效率", "记忆优化"],
+    "coverImage": "https://www.brainscape.com/favicon.ico"
+  },
+
+  "goodreads.com": {
+    "title": "Goodreads",
+    "description": "读书社交平台，发现、评价和分享图书的读者社区",
+    "category": "阅读平台",
+    "tags": ["读书社交", "图书推荐", "读者社区", "书评"],
+    "coverImage": "https://www.goodreads.com/favicon.ico"
+  },
+  "audible.com": {
+    "title": "Audible",
+    "description": "亚马逊旗下的有声书平台，提供丰富的有声读物内容",
+    "category": "阅读平台",
+    "tags": ["有声书", "亚马逊", "音频内容", "阅读"],
+    "coverImage": "https://www.audible.com/favicon.ico"
+  },
+  "scribd.com": {
+    "title": "Scribd",
+    "description": "数字图书馆，提供电子书、有声书和文档的订阅服务",
+    "category": "阅读平台",
+    "tags": ["数字图书馆", "电子书", "有声书", "订阅服务"],
+    "coverImage": "https://www.scribd.com/favicon.ico"
+  },
+  "kindle.amazon.com": {
+    "title": "Kindle",
+    "description": "亚马逊Kindle电子书平台，全球最大的电子书商店",
+    "category": "阅读平台",
+    "tags": ["电子书", "Kindle", "亚马逊", "数字阅读"],
+    "coverImage": "https://m.media-amazon.com/images/G/01/gc/designs/livepreview/amazon_dkblue_noto_email_v2016_us-main._CB468775337_.png"
+  },
+  "kobo.com": {
+    "title": "Kobo",
+    "description": "电子书平台和阅读器，提供多样化的数字阅读体验",
+    "category": "阅读平台",
+    "tags": ["电子书", "阅读器", "数字阅读", "多样化"],
+    "coverImage": "https://www.kobo.com/favicon.ico"
+  },
+
+  "duolingo.com": {
+    "title": "Duolingo",
+    "description": "免费语言学习应用，通过游戏化方式学习多种语言",
+    "category": "语言学习",
+    "tags": ["语言学习", "免费", "游戏化", "多语言"],
+    "coverImage": "https://d35aaqx5ub95lt.cloudfront.net/favicon.ico"
+  },
+  "babbel.com": {
+    "title": "Babbel",
+    "description": "专业语言学习平台，提供实用的语言课程和对话练习",
+    "category": "语言学习",
+    "tags": ["专业语言", "实用课程", "对话练习", "语言学习"],
+    "coverImage": "https://www.babbel.com/favicon.ico"
+  },
+  "rosettastone.com": {
+    "title": "Rosetta Stone",
+    "description": "知名语言学习软件，通过沉浸式方法学习外语",
+    "category": "语言学习",
+    "tags": ["语言软件", "沉浸式学习", "外语学习", "知名品牌"],
+    "coverImage": "https://www.rosettastone.com/favicon.ico"
+  },
+  "busuu.com": {
+    "title": "Busuu",
+    "description": "社交语言学习平台，与母语者互动学习语言",
+    "category": "语言学习",
+    "tags": ["社交学习", "母语者", "互动学习", "语言交流"],
+    "coverImage": "https://www.busuu.com/favicon.ico"
+  },
+  "memrise.com": {
+    "title": "Memrise",
+    "description": "记忆学习平台，使用科学方法帮助记忆语言和知识",
+    "category": "语言学习",
+    "tags": ["记忆学习", "科学方法", "语言记忆", "知识学习"],
+    "coverImage": "https://www.memrise.com/favicon.ico"
+  },
+
+  "wolframalpha.com": {
+    "title": "Wolfram Alpha",
+    "description": "计算知识引擎，提供数学、科学和工程计算服务",
+    "category": "计算工具",
+    "tags": ["计算引擎", "数学计算", "科学计算", "知识查询"],
+    "coverImage": "https://www.wolframalpha.com/favicon.ico"
+  },
+  "desmos.com": {
+    "title": "Desmos",
+    "description": "在线图形计算器，数学教育和可视化的强大工具",
+    "category": "计算工具",
+    "tags": ["图形计算器", "数学教育", "数学可视化", "在线工具"],
+    "coverImage": "https://www.desmos.com/favicon.ico"
+  },
+  "geogebra.org": {
+    "title": "GeoGebra",
+    "description": "动态数学软件，结合几何、代数和微积分的教育工具",
+    "category": "计算工具",
+    "tags": ["动态数学", "几何", "代数", "教育软件"],
+    "coverImage": "https://www.geogebra.org/favicon.ico"
+  },
+  "symbolab.com": {
+    "title": "Symbolab",
+    "description": "数学求解器，提供步骤详解的数学问题解答",
+    "category": "计算工具",
+    "tags": ["数学求解", "步骤详解", "数学问题", "学习辅助"],
+    "coverImage": "https://www.symbolab.com/favicon.ico"
+  },
+  "mathway.com": {
+    "title": "Mathway",
+    "description": "数学问题求解器，涵盖从基础数学到高等数学的各个领域",
+    "category": "计算工具",
+    "tags": ["数学求解器", "基础数学", "高等数学", "问题解答"],
+    "coverImage": "https://www.mathway.com/favicon.ico"
+  },
+
+  "weather.com": {
+    "title": "Weather.com",
+    "description": "Weather Channel官方网站，提供准确的天气预报和气象信息",
+    "category": "生活信息",
+    "tags": ["天气预报", "气象信息", "Weather Channel", "生活服务"],
+    "coverImage": "https://weather.com/favicon.ico"
+  },
+  "accuweather.com": {
+    "title": "AccuWeather",
+    "description": "精确天气预报服务，提供详细的天气信息和预警",
+    "category": "生活信息",
+    "tags": ["精确天气", "天气预警", "详细信息", "气象服务"],
+    "coverImage": "https://www.accuweather.com/favicon.ico"
+  },
+  "timeanddate.com": {
+    "title": "Time and Date",
+    "description": "时间和日期信息网站，提供世界时钟、日历和时区信息",
+    "category": "生活信息",
+    "tags": ["世界时钟", "日历", "时区", "时间信息"],
+    "coverImage": "https://www.timeanddate.com/favicon.ico"
+  },
+  "worldclock.com": {
+    "title": "World Clock",
+    "description": "世界时钟网站，显示全球各地的当前时间",
+    "category": "生活信息",
+    "tags": ["世界时钟", "全球时间", "时区查询", "时间工具"],
+    "coverImage": "https://www.worldclock.com/favicon.ico"
+  },
+  "calculator.net": {
+    "title": "Calculator.net",
+    "description": "在线计算器集合，提供各种专业和日常计算工具",
+    "category": "生活信息",
+    "tags": ["在线计算器", "计算工具", "专业计算", "日常计算"],
+    "coverImage": "https://www.calculator.net/favicon.ico"
+  },
+
+  "imdb.com": {
+    "title": "IMDb",
+    "description": "互联网电影数据库，全球最权威的电影、电视剧信息平台",
+    "category": "娱乐信息",
+    "tags": ["电影数据库", "电视剧", "影评", "娱乐信息"],
+    "coverImage": "https://www.imdb.com/favicon.ico"
+  },
+  "rottentomatoes.com": {
+    "title": "Rotten Tomatoes",
+    "description": "电影评论聚合网站，提供专业影评和观众评分",
+    "category": "娱乐信息",
+    "tags": ["电影评论", "影评聚合", "评分", "电影推荐"],
+    "coverImage": "https://www.rottentomatoes.com/favicon.ico"
+  },
+  "metacritic.com": {
+    "title": "Metacritic",
+    "description": "媒体评论聚合网站，提供电影、游戏、音乐的综合评分",
+    "category": "娱乐信息",
+    "tags": ["媒体评论", "综合评分", "电影游戏", "评论聚合"],
+    "coverImage": "https://www.metacritic.com/favicon.ico"
+  },
+  "allmusic.com": {
+    "title": "AllMusic",
+    "description": "音乐数据库和评论网站，提供全面的音乐信息和评价",
+    "category": "娱乐信息",
+    "tags": ["音乐数据库", "音乐评论", "音乐信息", "艺术家"],
+    "coverImage": "https://www.allmusic.com/favicon.ico"
+  },
+  "last.fm": {
+    "title": "Last.fm",
+    "description": "音乐发现和推荐平台，基于听歌习惯的个性化音乐服务",
+    "category": "娱乐信息",
+    "tags": ["音乐发现", "个性化推荐", "听歌记录", "音乐社交"],
+    "coverImage": "https://www.last.fm/favicon.ico"
+  },
+
+  "maps.google.com": {
+    "title": "Google Maps",
+    "description": "Google地图服务，提供全球地图、导航和本地信息",
+    "category": "地图导航",
+    "tags": ["地图服务", "导航", "本地信息", "Google"],
+    "coverImage": "https://maps.gstatic.com/favicon/favicon.ico"
+  },
+  "openstreetmap.org": {
+    "title": "OpenStreetMap",
+    "description": "开源地图项目，由社区协作创建的免费世界地图",
+    "category": "地图导航",
+    "tags": ["开源地图", "社区协作", "免费地图", "开放数据"],
+    "coverImage": "https://www.openstreetmap.org/favicon.ico"
+  },
+  "waze.com": {
+    "title": "Waze",
+    "description": "社区驱动的导航应用，提供实时交通信息和路线优化",
+    "category": "地图导航",
+    "tags": ["社区导航", "实时交通", "路线优化", "众包数据"],
+    "coverImage": "https://www.waze.com/favicon.ico"
+  },
+  "mapquest.com": {
+    "title": "MapQuest",
+    "description": "在线地图和导航服务，提供路线规划和地图搜索",
+    "category": "地图导航",
+    "tags": ["在线地图", "路线规划", "地图搜索", "导航服务"],
+    "coverImage": "https://www.mapquest.com/favicon.ico"
+  },
+  "here.com": {
+    "title": "HERE Maps",
+    "description": "HERE地图服务，提供企业级位置服务和地图解决方案",
+    "category": "地图导航",
+    "tags": ["企业地图", "位置服务", "地图解决方案", "HERE"],
+    "coverImage": "https://www.here.com/favicon.ico"
+  },
+
+  "translate.yandex.com": {
+    "title": "Yandex Translate",
+    "description": "Yandex翻译服务，支持多种语言的在线翻译工具",
+    "category": "翻译工具",
+    "tags": ["Yandex翻译", "多语言", "在线翻译", "俄语"],
+    "coverImage": "https://translate.yandex.com/favicon.ico"
+  },
+  "reverso.net": {
+    "title": "Reverso",
+    "description": "多功能翻译平台，提供翻译、词典和语言学习工具",
+    "category": "翻译工具",
+    "tags": ["多功能翻译", "词典", "语言学习", "上下文翻译"],
+    "coverImage": "https://www.reverso.net/favicon.ico"
+  },
+  "linguee.com": {
+    "title": "Linguee",
+    "description": "双语词典和翻译搜索引擎，提供上下文翻译示例",
+    "category": "翻译工具",
+    "tags": ["双语词典", "翻译搜索", "上下文示例", "专业翻译"],
+    "coverImage": "https://www.linguee.com/favicon.ico"
+  },
+  "dict.cc": {
+    "title": "Dict.cc",
+    "description": "多语言在线词典，提供详细的词汇翻译和例句",
+    "category": "翻译工具",
+    "tags": ["多语言词典", "词汇翻译", "例句", "语言学习"],
+    "coverImage": "https://www.dict.cc/favicon.ico"
+  },
+  "bab.la": {
+    "title": "Bab.la",
+    "description": "语言门户网站，提供词典、翻译和语言学习资源",
+    "category": "翻译工具",
+    "tags": ["语言门户", "词典翻译", "语言资源", "多语言"],
+    "coverImage": "https://www.bab.la/favicon.ico"
+  },
+
+  "archive.org": {
+    "title": "Internet Archive",
+    "description": "互联网档案馆，保存网页、书籍、电影等数字文化遗产",
+    "category": "数字档案",
+    "tags": ["互联网档案", "数字保存", "文化遗产", "免费资源"],
+    "coverImage": "https://archive.org/favicon.ico"
+  },
+  "waybackmachine.org": {
+    "title": "Wayback Machine",
+    "description": "网页时光机，查看网站历史版本的数字档案工具",
+    "category": "数字档案",
+    "tags": ["网页历史", "时光机", "数字档案", "网站备份"],
+    "coverImage": "https://web.archive.org/favicon.ico"
+  },
+  "libgen.is": {
+    "title": "Library Genesis",
+    "description": "数字图书馆，提供学术书籍和论文的免费访问",
+    "category": "数字档案",
+    "tags": ["数字图书馆", "学术资源", "免费书籍", "研究资料"],
+    "coverImage": "https://libgen.is/favicon.ico"
+  },
+  "sci-hub.se": {
+    "title": "Sci-Hub",
+    "description": "学术论文免费访问平台，打破学术出版的付费壁垒",
+    "category": "数字档案",
+    "tags": ["学术论文", "免费访问", "科研资源", "开放科学"],
+    "coverImage": "https://sci-hub.se/favicon.ico"
+  },
+
+  "espn.com": {
+    "title": "ESPN",
+    "description": "全球领先的体育媒体网站，提供体育新闻、比分、分析和直播服务",
+    "category": "体育媒体",
+    "tags": ["体育新闻", "比分直播", "体育分析", "运动资讯"],
+    "coverImage": "https://espn.com/favicon.ico"
+  },
+  "nba.com": {
+    "title": "NBA",
+    "description": "美国职业篮球联赛官方网站，提供比赛直播、球员统计和篮球资讯",
+    "category": "体育媒体",
+    "tags": ["篮球", "NBA", "比赛直播", "球员统计"],
+    "coverImage": "https://nba.com/favicon.ico"
+  },
+  "nfl.com": {
+    "title": "NFL",
+    "description": "美国职业橄榄球联盟官方网站，提供比赛信息、球队动态和橄榄球新闻",
+    "category": "体育媒体",
+    "tags": ["橄榄球", "NFL", "比赛信息", "球队动态"],
+    "coverImage": "https://nfl.com/favicon.ico"
+  },
+  "fifa.com": {
+    "title": "FIFA",
+    "description": "国际足球联合会官方网站，提供世界杯、足球赛事和全球足球资讯",
+    "category": "体育媒体",
+    "tags": ["足球", "世界杯", "FIFA", "国际足球"],
+    "coverImage": "https://fifa.com/favicon.ico"
+  },
+  "olympics.com": {
+    "title": "Olympics",
+    "description": "国际奥委会官方网站，提供奥运会信息、运动员资料和奥林匹克运动资讯",
+    "category": "体育媒体",
+    "tags": ["奥运会", "奥林匹克", "运动员", "体育赛事"],
+    "coverImage": "https://olympics.com/favicon.ico"
+  },
+  "bleacherreport.com": {
+    "title": "Bleacher Report",
+    "description": "体育新闻和分析网站，提供各类体育项目的深度报道和评论",
+    "category": "体育媒体",
+    "tags": ["体育新闻", "体育分析", "深度报道", "体育评论"],
+    "coverImage": "https://bleacherreport.com/favicon.ico"
+  },
+  "autotrader.com": {
+    "title": "AutoTrader",
+    "description": "美国最大的汽车交易平台，提供新车和二手车买卖服务",
+    "category": "汽车服务",
+    "tags": ["汽车交易", "二手车", "新车", "汽车买卖"],
+    "coverImage": "https://autotrader.com/favicon.ico"
+  },
+  "cars.com": {
+    "title": "Cars.com",
+    "description": "汽车信息和交易网站，帮助用户研究、比较和购买汽车",
+    "category": "汽车服务",
+    "tags": ["汽车信息", "汽车比较", "汽车购买", "汽车研究"],
+    "coverImage": "https://cars.com/favicon.ico"
+  },
+  "edmunds.com": {
+    "title": "Edmunds",
+    "description": "汽车评测和价格指导网站，提供专业的汽车评价和购车建议",
+    "category": "汽车服务",
+    "tags": ["汽车评测", "价格指导", "购车建议", "汽车评价"],
+    "coverImage": "https://edmunds.com/favicon.ico"
+  },
+  "kelleybluebook.com": {
+    "title": "Kelley Blue Book",
+    "description": "权威的汽车价值评估网站，提供汽车估价和市场价格信息",
+    "category": "汽车服务",
+    "tags": ["汽车估价", "市场价格", "价值评估", "汽车价值"],
+    "coverImage": "https://kelleybluebook.com/favicon.ico"
+  },
+  "motortrend.com": {
+    "title": "Motor Trend",
+    "description": "权威汽车杂志网站，提供汽车评测、新车资讯和汽车文化内容",
+    "category": "汽车媒体",
+    "tags": ["汽车评测", "新车资讯", "汽车杂志", "汽车文化"],
+    "coverImage": "https://motortrend.com/favicon.ico"
+  },
+  "caranddriver.com": {
+    "title": "Car and Driver",
+    "description": "知名汽车媒体，提供专业的汽车测试、评价和汽车行业新闻",
+    "category": "汽车媒体",
+    "tags": ["汽车测试", "汽车评价", "汽车新闻", "专业评测"],
+    "coverImage": "https://caranddriver.com/favicon.ico"
+  },
+  "roadandtrack.com": {
+    "title": "Road & Track",
+    "description": "专注于性能汽车的媒体网站，提供跑车评测和赛车运动资讯",
+    "category": "汽车媒体",
+    "tags": ["性能汽车", "跑车评测", "赛车运动", "汽车性能"],
+    "coverImage": "https://roadandtrack.com/favicon.ico"
+  },
+  "zillow.com": {
+    "title": "Zillow",
+    "description": "美国最大的房地产信息网站，提供房屋估价、买卖和租赁服务",
+    "category": "房产服务",
+    "tags": ["房地产", "房屋估价", "房屋买卖", "房屋租赁"],
+    "coverImage": "https://zillow.com/favicon.ico"
+  },
+  "realtor.com": {
+    "title": "Realtor.com",
+    "description": "美国房地产经纪人协会官方网站，提供房源搜索和房地产服务",
+    "category": "房产服务",
+    "tags": ["房源搜索", "房地产经纪", "房产信息", "房屋买卖"],
+    "coverImage": "https://realtor.com/favicon.ico"
+  },
+  "redfin.com": {
+    "title": "Redfin",
+    "description": "科技驱动的房地产公司，提供在线房屋搜索和房地产经纪服务",
+    "category": "房产服务",
+    "tags": ["科技房产", "房屋搜索", "房地产科技", "在线房产"],
+    "coverImage": "https://redfin.com/favicon.ico"
+  },
+  "trulia.com": {
+    "title": "Trulia",
+    "description": "房地产搜索网站，提供房屋信息、社区数据和房产市场分析",
+    "category": "房产服务",
+    "tags": ["房屋信息", "社区数据", "房产分析", "房产搜索"],
+    "coverImage": "https://trulia.com/favicon.ico"
+  },
+  "apartments.com": {
+    "title": "Apartments.com",
+    "description": "美国最大的公寓租赁网站，帮助用户找到理想的租赁公寓",
+    "category": "房产服务",
+    "tags": ["公寓租赁", "租房", "公寓搜索", "租赁服务"],
+    "coverImage": "https://apartments.com/favicon.ico"
+  },
+  "rent.com": {
+    "title": "Rent.com",
+    "description": "在线租房平台，提供公寓、房屋和其他租赁物业的搜索服务",
+    "category": "房产服务",
+    "tags": ["在线租房", "租赁平台", "房屋租赁", "租房搜索"],
+    "coverImage": "https://rent.com/favicon.ico"
+  },
+  "loopnet.com": {
+    "title": "LoopNet",
+    "description": "商业地产信息平台，专注于办公楼、零售、工业等商业物业交易",
+    "category": "房产服务",
+    "tags": ["商业地产", "办公楼", "商业物业", "地产投资"],
+    "coverImage": "https://loopnet.com/favicon.ico"
+  },
+  "crexi.com": {
+    "title": "Crexi",
+    "description": "商业地产交易平台，提供商业物业买卖和投资分析工具",
+    "category": "房产服务",
+    "tags": ["商业地产交易", "投资分析", "商业物业", "地产投资"],
+    "coverImage": "https://crexi.com/favicon.ico"
+  },
+  "compass.com": {
+    "title": "Compass",
+    "description": "科技驱动的房地产经纪公司，提供现代化的房产买卖服务",
+    "category": "房产服务",
+    "tags": ["房地产经纪", "科技房产", "房产买卖", "现代化服务"],
+    "coverImage": "https://compass.com/favicon.ico"
+  },
+  "opendoor.com": {
+    "title": "Opendoor",
+    "description": "数字化房屋买卖平台，提供即时房屋估价和快速交易服务",
+    "category": "房产服务",
+    "tags": ["数字化房产", "即时估价", "快速交易", "房屋买卖"],
+    "coverImage": "https://opendoor.com/favicon.ico"
+  },
+  "offerpad.com": {
+    "title": "OfferPad",
+    "description": "房屋即买即卖平台，为房主提供便捷的房屋交易解决方案",
+    "category": "房产服务",
+    "tags": ["房屋交易", "即买即卖", "便捷交易", "房产解决方案"],
+    "coverImage": "https://offerpad.com/favicon.ico"
+  },
+  "mls.com": {
+    "title": "MLS",
+    "description": "多重上市服务系统，房地产专业人士使用的房源数据库",
+    "category": "房产服务",
+    "tags": ["房源数据库", "多重上市", "房地产专业", "MLS系统"],
+    "coverImage": "https://mls.com/favicon.ico"
+  },
+  "rentals.com": {
+    "title": "Rentals.com",
+    "description": "综合租赁平台，提供公寓、房屋、度假租赁等多种租赁服务",
+    "category": "房产服务",
+    "tags": ["综合租赁", "度假租赁", "租赁服务", "多元化租房"],
+    "coverImage": "https://rentals.com/favicon.ico"
+  },
+  "padmapper.com": {
+    "title": "PadMapper",
+    "description": "地图式租房搜索网站，通过地图界面帮助用户找到理想租房",
+    "category": "房产服务",
+    "tags": ["地图租房", "租房搜索", "地理位置", "可视化租房"],
+    "coverImage": "https://padmapper.com/favicon.ico"
+  },
+  "hotpads.com": {
+    "title": "HotPads",
+    "description": "Zillow旗下的租房平台，提供地图搜索和租房信息服务",
+    "category": "房产服务",
+    "tags": ["租房平台", "地图搜索", "Zillow", "租房信息"],
+    "coverImage": "https://hotpads.com/favicon.ico"
+  },
+  "forrent.com": {
+    "title": "ForRent.com",
+    "description": "专业租房网站，帮助租客找到公寓、联排别墅和其他租赁物业",
+    "category": "房产服务",
+    "tags": ["专业租房", "公寓租赁", "联排别墅", "租赁物业"],
+    "coverImage": "https://forrent.com/favicon.ico"
+  },
+  "apartmentlist.com": {
+    "title": "Apartment List",
+    "description": "智能租房平台，使用算法匹配租客需求和公寓资源",
+    "category": "房产服务",
+    "tags": ["智能租房", "算法匹配", "租客需求", "公寓资源"],
+    "coverImage": "https://apartmentlist.com/favicon.ico"
+  },
+  "rentometer.com": {
+    "title": "Rentometer",
+    "description": "租金比较工具，帮助用户了解当地租金水平和市场价格",
+    "category": "房产服务",
+    "tags": ["租金比较", "市场价格", "租金水平", "价格分析"],
+    "coverImage": "https://rentometer.com/favicon.ico"
+  },
+  "rentberry.com": {
+    "title": "RentBerry",
+    "description": "现代化租房平台，提供在线申请、数字签约和租金支付服务",
+    "category": "房产服务",
+    "tags": ["现代化租房", "在线申请", "数字签约", "租金支付"],
+    "coverImage": "https://rentberry.com/favicon.ico"
+  },
+  "zumper.com": {
+    "title": "Zumper",
+    "description": "移动优先的租房平台，专注于城市公寓租赁市场",
+    "category": "房产服务",
+    "tags": ["移动租房", "城市公寓", "租赁市场", "移动优先"],
+    "coverImage": "https://zumper.com/favicon.ico"
+  },
+  "abodo.com": {
+    "title": "Abodo",
+    "description": "学生公寓租赁平台，专门为大学生提供校园周边住房服务",
+    "category": "房产服务",
+    "tags": ["学生公寓", "大学生租房", "校园住房", "学生服务"],
+    "coverImage": "https://abodo.com/favicon.ico"
+  },
+  "places4students.com": {
+    "title": "Places4Students",
+    "description": "学生住房搜索平台，连接学生与校园附近的住房资源",
+    "category": "房产服务",
+    "tags": ["学生住房", "校园住房", "学生租房", "住房搜索"],
+    "coverImage": "https://places4students.com/favicon.ico"
+  },
+  "uloop.com": {
+    "title": "Uloop",
+    "description": "大学生生活服务平台，提供住房、工作、买卖等校园服务",
+    "category": "教育服务",
+    "tags": ["大学生服务", "校园生活", "学生住房", "校园服务"],
+    "coverImage": "https://uloop.com/favicon.ico"
+  },
+  "collegeboxes.com": {
+    "title": "College Boxes",
+    "description": "大学生行李存储和运输服务，解决学生搬家和存储需求",
+    "category": "教育服务",
+    "tags": ["学生服务", "行李存储", "搬家服务", "大学生"],
+    "coverImage": "https://collegeboxes.com/favicon.ico"
+  },
+  "dormify.com": {
+    "title": "Dormify",
+    "description": "大学宿舍装饰和用品网站，为学生提供宿舍生活用品",
+    "category": "教育服务",
+    "tags": ["宿舍装饰", "学生用品", "宿舍生活", "大学生"],
+    "coverImage": "https://dormify.com/favicon.ico"
+  },
+  "petco.com": {
+    "title": "Petco",
+    "description": "宠物用品零售商，提供宠物食品、玩具、护理用品和宠物服务",
+    "category": "宠物服务",
+    "tags": ["宠物用品", "宠物食品", "宠物护理", "宠物服务"],
+    "coverImage": "https://petco.com/favicon.ico"
+  },
+  "petsmart.com": {
+    "title": "PetSmart",
+    "description": "宠物专业零售商，提供宠物用品、美容、训练和寄养服务",
+    "category": "宠物服务",
+    "tags": ["宠物零售", "宠物美容", "宠物训练", "宠物寄养"],
+    "coverImage": "https://petsmart.com/favicon.ico"
+  },
+  "chewy.com": {
+    "title": "Chewy",
+    "description": "在线宠物用品商店，提供宠物食品、药品和用品的便捷配送服务",
+    "category": "宠物服务",
+    "tags": ["在线宠物店", "宠物配送", "宠物药品", "宠物食品"],
+    "coverImage": "https://chewy.com/favicon.ico"
+  },
+  "rover.com": {
+    "title": "Rover",
+    "description": "宠物看护服务平台，连接宠物主人与专业的宠物看护者",
+    "category": "宠物服务",
+    "tags": ["宠物看护", "宠物寄养", "遛狗服务", "宠物照顾"],
+    "coverImage": "https://rover.com/favicon.ico"
+  },
+  "wag.com": {
+    "title": "Wag",
+    "description": "按需宠物服务应用，提供遛狗、宠物看护和训练服务",
+    "category": "宠物服务",
+    "tags": ["按需宠物服务", "遛狗应用", "宠物看护", "宠物训练"],
+    "coverImage": "https://wag.com/favicon.ico"
+  },
+  "vetstreet.com": {
+    "title": "VetStreet",
+    "description": "宠物健康信息网站，提供宠物护理建议和兽医专业知识",
+    "category": "宠物服务",
+    "tags": ["宠物健康", "兽医知识", "宠物护理", "宠物医疗"],
+    "coverImage": "https://vetstreet.com/favicon.ico"
+  },
+  "petfinder.com": {
+    "title": "Petfinder",
+    "description": "宠物收养平台，帮助用户找到可收养的宠物和救助组织",
+    "category": "宠物服务",
+    "tags": ["宠物收养", "救助组织", "宠物救助", "收养平台"],
+    "coverImage": "https://petfinder.com/favicon.ico"
+  },
+  "adopt-a-pet.com": {
+    "title": "Adopt-a-Pet",
+    "description": "宠物收养网站，连接宠物救助组织和潜在的宠物收养者",
+    "category": "宠物服务",
+    "tags": ["宠物收养", "救助动物", "收养服务", "动物救助"],
+    "coverImage": "https://adopt-a-pet.com/favicon.ico"
+  },
+  "aspca.org": {
+    "title": "ASPCA",
+    "description": "美国防止虐待动物协会，致力于动物保护和宠物福利",
+    "category": "宠物服务",
+    "tags": ["动物保护", "宠物福利", "动物救助", "慈善组织"],
+    "coverImage": "https://aspca.org/favicon.ico"
   }
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Upload, Info, Menu, Settings, FileText, HelpCircle } from "lucide-react"
+import { Upload, Info, Menu, Settings, FileText, HelpCircle, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -11,9 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ImportDialog } from "@/components/import-dialog"
 import { AboutDialog } from "@/components/about-dialog"
-import { EnhanceBookmarksButton } from "@/components/enhance-bookmarks-button"
+
 import { ImportHelpDialog } from "@/components/import-help-dialog"
 import { EnhancedSearch } from "@/components/enhanced-search"
+import { AddBookmarkDialog } from "@/components/add-bookmark-dialog"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useToast } from "@/hooks/use-toast"
 
@@ -22,17 +23,32 @@ interface HeaderProps {
   onSearchChange: (query: string) => void
   onLogoClick?: () => void
   onSettingsClick?: () => void
+  selectedSubCategory?: string | null
 }
 
-export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsClick }: HeaderProps) {
+export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsClick, selectedSubCategory }: HeaderProps) {
   const [importDialogOpen, setImportDialogOpen] = useState(false)
   const [aboutDialogOpen, setAboutDialogOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
+  const [addBookmarkOpen, setAddBookmarkOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [dragOver, setDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const { importBookmarks } = useBookmarkStore()
+  const { importBookmarks, categories } = useBookmarkStore()
   const { toast } = useToast()
+
+  // 获取默认的子分类ID（用于全局添加书签）
+  const getDefaultSubCategoryId = () => {
+    if (selectedSubCategory) return selectedSubCategory
+
+    // 如果没有选中的子分类，使用第一个可用的子分类
+    for (const category of categories) {
+      if (category.subCategories.length > 0) {
+        return category.subCategories[0].id
+      }
+    }
+    return null
+  }
 
   const processFile = async (file: File) => {
     console.log("开始导入文件:", file.name, file.type)
@@ -410,8 +426,17 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
         />
 
         <div className="flex items-center space-x-2">
-          {/* 增强书签按钮 */}
-          <EnhanceBookmarksButton />
+          {/* 添加书签按钮 */}
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => setAddBookmarkOpen(true)}
+            disabled={!getDefaultSubCategoryId()}
+            className="bg-primary hover:bg-primary/90"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            添加书签
+          </Button>
 
           {/* 导入按钮 - 卡片式 */}
           <DropdownMenu>
@@ -518,6 +543,15 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
       <ImportDialog open={importDialogOpen} onOpenChange={setImportDialogOpen} />
       <AboutDialog open={aboutDialogOpen} onOpenChange={setAboutDialogOpen} />
       <ImportHelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
+
+      {/* 全局添加书签对话框 */}
+      {getDefaultSubCategoryId() && (
+        <AddBookmarkDialog
+          open={addBookmarkOpen}
+          onOpenChange={setAddBookmarkOpen}
+          subCategoryId={getDefaultSubCategoryId()!}
+        />
+      )}
     </header>
   )
 }

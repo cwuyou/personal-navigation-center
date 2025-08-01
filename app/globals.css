@@ -37,6 +37,62 @@
     animation: none !important;
   }
 
+  /* 修复黑色主题在深色模式下的可见性问题 */
+  .dark-black-theme-fix .bg-gradient-to-r.from-primary.to-primary\/70.bg-clip-text.text-transparent {
+    background: linear-gradient(to right, hsl(var(--foreground)), hsl(var(--foreground) / 0.7)) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    color: transparent !important;
+  }
+
+  .dark-black-theme-fix .bookmark-group:hover .bookmark-group-hover\:text-primary {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .dark-black-theme-fix .text-primary {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .dark-black-theme-fix .text-primary-foreground {
+    color: hsl(var(--background)) !important;
+  }
+
+  .dark-black-theme-fix .bg-primary\/5 {
+    background-color: hsl(var(--foreground) / 0.05) !important;
+  }
+
+  .dark-black-theme-fix .bg-primary\/10 {
+    background-color: hsl(var(--foreground) / 0.1) !important;
+  }
+
+  .dark-black-theme-fix .border-primary\/30 {
+    border-color: hsl(var(--foreground) / 0.3) !important;
+  }
+
+  .dark-black-theme-fix .border-primary\/50 {
+    border-color: hsl(var(--foreground) / 0.5) !important;
+  }
+
+  /* 修复二级分类胶囊标签的选中状态 */
+  .dark-black-theme-fix .bg-gradient-to-r.from-primary.to-primary\/80 {
+    background: linear-gradient(to right, hsl(var(--foreground)), hsl(var(--foreground) / 0.8)) !important;
+  }
+
+  .dark-black-theme-fix .bg-gradient-to-r.from-primary.to-primary\/80.text-primary-foreground {
+    color: hsl(var(--background)) !important;
+  }
+
+  /* 修复用户点击选中的二级分类标签（enhanced-main-content中的简化样式） */
+  .dark-black-theme-fix .bg-primary.text-primary-foreground {
+    background: hsl(var(--foreground)) !important;
+    color: hsl(var(--background)) !important;
+  }
+
+  /* 修复边框颜色 */
+  .dark-black-theme-fix .border-primary\/20 {
+    border-color: hsl(var(--foreground) / 0.2) !important;
+  }
+
   /* 卡片样式变体 */
   .card-style-minimal .border {
     border-width: 1px;
@@ -288,7 +344,7 @@
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
+    --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;

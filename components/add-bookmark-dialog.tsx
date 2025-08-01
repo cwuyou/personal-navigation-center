@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
+import websiteDescriptions from '@/data/website-descriptions-1000plus.json'
 
 interface AddBookmarkDialogProps {
   open: boolean
@@ -26,10 +27,36 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
 
   const { addBookmark } = useBookmarkStore()
 
+  const getPresetData = (url: string) => {
+    try {
+      const domain = new URL(url).hostname.replace(/^www\./, '')
+      const preset = (websiteDescriptions as any)[domain]
+
+      if (preset) {
+        console.log(`✅ 找到预置数据: ${preset.title}`)
+        return {
+          title: preset.title,
+          description: preset.description,
+          coverImage: preset.coverImage
+        }
+      } else {
+        console.log(`❌ 未找到预置数据: ${domain}`)
+      }
+    } catch (error) {
+      console.warn('Failed to parse URL:', url, error)
+    }
+    return null
+  }
+
   const fetchPageTitle = async (url: string) => {
     try {
-      // In a real app, you'd need a backend service to fetch page titles due to CORS
-      // For now, we'll extract domain name as fallback
+      // 首先尝试从预置数据库获取
+      const presetData = getPresetData(url)
+      if (presetData) {
+        return presetData.title
+      }
+
+      // 如果没有预置数据，提取域名作为备用
       const domain = new URL(url).hostname
       return domain.replace("www.", "")
     } catch {
@@ -40,15 +67,26 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
   const handleUrlChange = async (newUrl: string) => {
     setUrl(newUrl)
 
-    if (newUrl && !title && newUrl.startsWith("http")) {
+    if (newUrl && newUrl.startsWith("http")) {
       setLoading(true)
       try {
-        const pageTitle = await fetchPageTitle(newUrl)
-        if (pageTitle && !title) {
-          setTitle(pageTitle)
+        // 尝试从预置数据库获取完整信息
+        const presetData = getPresetData(newUrl)
+
+        if (presetData) {
+          // 如果找到预置数据，自动填充所有字段
+          if (!title) setTitle(presetData.title)
+          if (!description) setDescription(presetData.description)
+          if (!coverImage && presetData.coverImage) setCoverImage(presetData.coverImage)
+        } else {
+          // 如果没有预置数据，只获取标题
+          const pageTitle = await fetchPageTitle(newUrl)
+          if (pageTitle && !title) {
+            setTitle(pageTitle)
+          }
         }
       } catch (error) {
-        console.error("Failed to fetch page title:", error)
+        console.error("Failed to fetch page data:", error)
       } finally {
         setLoading(false)
       }

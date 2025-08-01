@@ -354,7 +354,7 @@ export function EnhancedMainContent({
                   <EnhancedBookmarkCard key={bookmark.id} bookmark={bookmark} onPreview={handlePreview} />
                 ))}
 
-                {firstSubCategory && <AddBookmarkCard subCategoryId={firstSubCategory.id} />}
+
               </DynamicBookmarkGrid>
             </div>
           )

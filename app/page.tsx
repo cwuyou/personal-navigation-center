@@ -65,6 +65,7 @@ export default function HomePage() {
         onSearchChange={setSearchQuery}
         onLogoClick={handleBackToHome}
         onSettingsClick={() => setSettingsPanelOpen(true)}
+        selectedSubCategory={selectedSubCategory}
       />
 
       <div className="flex">

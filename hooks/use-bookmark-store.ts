@@ -60,7 +60,7 @@ interface BookmarkStore {
   }>
   exportBookmarks: () => { categories: Category[]; bookmarks: Bookmark[] }
 
-  // Background enhancement
+  // Automatic enhancement (triggered after import)
   startBackgroundEnhancement: (bookmarkIds?: string[]) => Promise<void>
   stopBackgroundEnhancement: () => void
   getEnhancementStats: () => { totalSites: number, categories: string[] }
@@ -441,14 +441,20 @@ export const useBookmarkStore = create<BookmarkStore>()(
         })
       },
 
-      // 后台增强相关方法
+      // 自动增强相关方法（导入书签后自动触发）
       startBackgroundEnhancement: async (bookmarkIds?: string[]) => {
         const { bookmarks } = get()
 
-        // 确定要增强的书签（判断条件与按钮组件保持一致）
-        const targetBookmarks = bookmarkIds
+        // 确定要增强的书签
+        let targetBookmarks = bookmarkIds
           ? bookmarks.filter(bookmark => bookmarkIds.includes(bookmark.id))
           : bookmarks.filter(bookmark => !bookmark.description || bookmark.description.length < 20)
+
+        // 进一步过滤，确保只包含真正需要增强的书签
+        // 这样可以确保进度显示的总数与实际处理的数量一致
+        targetBookmarks = targetBookmarks.filter(bookmark =>
+          !bookmark.description || bookmark.description.length < 20
+        )
 
         if (targetBookmarks.length === 0) {
           console.log('📝 没有需要增强的书签')
@@ -456,7 +462,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
         }
 
         const isAutomatic = !!bookmarkIds
-        const actionType = isAutomatic ? '自动' : '手动'
+        const actionType = isAutomatic ? '自动' : '批量'
         console.log(`🚀 开始${actionType}增强 ${targetBookmarks.length} 个书签...`)
 
         try {

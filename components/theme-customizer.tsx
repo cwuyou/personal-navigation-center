@@ -25,7 +25,7 @@ interface ThemeConfig {
 
 const predefinedThemes = [
   { name: '经典黑色', primary: '0 0% 9%', preview: 'bg-gray-900' },
-  { name: '默认蓝色', primary: '221.2 83.2% 53.3%', preview: 'bg-blue-500' },
+  { name: '科技蓝色', primary: '221.2 83.2% 53.3%', preview: 'bg-blue-500' },
   { name: '优雅紫色', primary: '262.1 83.3% 57.8%', preview: 'bg-purple-500' },
   { name: '自然绿色', primary: '142.1 76.2% 36.3%', preview: 'bg-green-500' },
   { name: '温暖橙色', primary: '24.6 95% 53.1%', preview: 'bg-orange-500' },
@@ -58,6 +58,41 @@ export function ThemeCustomizer() {
     animations: true,
   })
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isClient, setIsClient] = useState(false)
+
+  // 确保只在客户端渲染
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // 监听主题模式变化，重新应用修复逻辑
+  useEffect(() => {
+    if (!isClient || !isLoaded) return
+
+    const handleThemeChange = () => {
+      // 延迟一点时间确保DOM已更新
+      setTimeout(() => {
+        applyTheme(config, false)
+      }, 100)
+    }
+
+    // 监听class变化（深色/浅色模式切换）
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          handleThemeChange()
+        }
+      })
+    })
+
+    const root = document.documentElement
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+
+    return () => observer.disconnect()
+  }, [isClient, isLoaded, config, applyTheme])
 
   // 应用主题配置
   const applyTheme = useCallback((newConfig: ThemeConfig, showNotification = false) => {
@@ -75,6 +110,17 @@ export function ThemeCustomizer() {
       // 同时更新相关的主色调变量
       root.style.setProperty('--primary-foreground', '0 0% 98%', 'important')
       root.style.setProperty('--ring', newConfig.primaryColor, 'important')
+
+      // 修复黑色主题在深色模式下的可见性问题
+      const isDarkMode = root.classList.contains('dark')
+      const isBlackTheme = newConfig.primaryColor === '0 0% 9%'
+
+      if (isDarkMode && isBlackTheme) {
+        // 在深色模式下使用黑色主题时，添加特殊类来修复可见性
+        root.classList.add('dark-black-theme-fix')
+      } else {
+        root.classList.remove('dark-black-theme-fix')
+      }
 
       // 应用字体大小
       if (newConfig.fontSize !== 14) {
@@ -140,11 +186,11 @@ export function ThemeCustomizer() {
       const computedStyle = getComputedStyle(root)
       const currentPrimary = computedStyle.getPropertyValue('--primary').trim()
 
-      // 如果当前主题色是黑色系（默认CSS），则使用黑色作为默认配置
-      const isDefaultDark = currentPrimary === '0 0% 9%' || currentPrimary === '0 0% 98%'
+      // 检测当前主题色，默认使用科技蓝色
+      const isBluTheme = currentPrimary === '221.2 83.2% 53.3%'
 
       const defaultConfig = {
-        primaryColor: isDefaultDark ? '0 0% 9%' : '221.2 83.2% 53.3%',
+        primaryColor: '221.2 83.2% 53.3%', // 默认使用科技蓝色
         borderRadius: 8,
         fontSize: 14,
         spacing: 16,

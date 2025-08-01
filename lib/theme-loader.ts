@@ -15,6 +15,17 @@ export function loadSavedTheme() {
       root.style.setProperty('--radius', `${config.borderRadius}px`, 'important')
       root.style.setProperty('--primary-foreground', '0 0% 98%', 'important')
       root.style.setProperty('--ring', config.primaryColor, 'important')
+
+      // 修复黑色主题在深色模式下的可见性问题
+      const isDarkMode = root.classList.contains('dark')
+      const isBlackTheme = config.primaryColor === '0 0% 9%'
+
+      if (isDarkMode && isBlackTheme) {
+        // 在深色模式下使用黑色主题时，添加特殊类来修复可见性
+        root.classList.add('dark-black-theme-fix')
+      } else {
+        root.classList.remove('dark-black-theme-fix')
+      }
       
       // 应用字体大小
       if (config.fontSize && config.fontSize !== 14) {

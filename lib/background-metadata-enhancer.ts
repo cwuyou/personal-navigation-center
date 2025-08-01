@@ -195,7 +195,7 @@ class BackgroundMetadataEnhancer {
     console.log(`🔄 开始增强书签: ${bookmark.title} (${bookmark.url})`)
     console.log(`   当前描述长度: ${bookmark.description?.length || 0}`)
 
-    // 如果已有描述且足够详细，跳过（与按钮组件的判断条件保持一致）
+    // 如果已有描述且足够详细，跳过
     if (bookmark.description && bookmark.description.length >= 20) {
       console.log(`⏭️ 跳过书签 ${bookmark.title}：描述已足够详细`)
       return null

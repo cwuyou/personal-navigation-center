@@ -20,10 +20,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { MoreHorizontal, ExternalLink, Edit, Trash2, Globe, Eye } from "lucide-react"
+import { MoreHorizontal, ExternalLink, Edit, Trash2, Globe, Eye, Copy } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useDisplaySettings } from "@/hooks/use-display-settings"
+import { EditBookmarkDialog } from "@/components/edit-bookmark-dialog"
+import { toast } from "sonner"
 
 interface Bookmark {
   id: string
@@ -40,11 +42,11 @@ interface Bookmark {
 interface EnhancedBookmarkCardProps {
   bookmark: Bookmark
   onPreview?: (bookmark: Bookmark) => void
-  onEdit?: (bookmark: Bookmark) => void
 }
 
-export function EnhancedBookmarkCard({ bookmark, onPreview, onEdit }: EnhancedBookmarkCardProps) {
+export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCardProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [imageError, setImageError] = useState(false)
   const { deleteBookmark } = useBookmarkStore()
   const { settings } = useDisplaySettings()
@@ -56,6 +58,16 @@ export function EnhancedBookmarkCard({ bookmark, onPreview, onEdit }: EnhancedBo
   const handleDelete = () => {
     deleteBookmark(bookmark.id)
     setDeleteDialogOpen(false)
+  }
+
+  const handleCopyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(bookmark.url)
+      toast.success('网址已复制到剪贴板')
+    } catch (error) {
+      console.error('复制失败:', error)
+      toast.error('复制失败，请手动复制')
+    }
   }
 
   const getFaviconUrl = (url: string) => {
@@ -204,13 +216,15 @@ export function EnhancedBookmarkCard({ bookmark, onPreview, onEdit }: EnhancedBo
                     预览
                   </DropdownMenuItem>
                 )}
-                {onEdit && (
-                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEdit(bookmark) }}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    编辑
-                  </DropdownMenuItem>
-                )}
-                <DropdownMenuItem 
+                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setEditDialogOpen(true) }}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  编辑
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleCopyUrl() }}>
+                  <Copy className="mr-2 h-4 w-4" />
+                  复制网址
+                </DropdownMenuItem>
+                <DropdownMenuItem
                   onClick={(e) => { e.stopPropagation(); setDeleteDialogOpen(true) }}
                   className="text-destructive"
                 >
@@ -222,6 +236,13 @@ export function EnhancedBookmarkCard({ bookmark, onPreview, onEdit }: EnhancedBo
           </div>
         </CardContent>
       </Card>
+
+      {/* 编辑书签对话框 */}
+      <EditBookmarkDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        bookmark={bookmark}
+      />
 
       {/* 删除确认对话框 */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
