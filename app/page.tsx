@@ -69,10 +69,10 @@ export default function LandingPage() {
               <Badge variant="secondary" className="text-base px-4 py-2 font-medium">
                 🚀 个人导航中心
               </Badge>
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight">
-                打造完美的
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-wide leading-tight">
+                <span className="tracking-wider">打造完美的</span>
                 <br />
-                <span className="text-primary">个人主页</span>
+                <span className="text-primary tracking-wider">个人主页</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-medium">
                 将浏览器的<strong className="text-foreground">起始页</strong>转换为强大的导航中心。

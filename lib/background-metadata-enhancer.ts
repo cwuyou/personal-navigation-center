@@ -188,7 +188,6 @@ export class BackgroundMetadataEnhancer {
     return null
   }
 
-
   /**
    * 增强单个书签的元数据（公共接口，用于单个书签添加）
    */
