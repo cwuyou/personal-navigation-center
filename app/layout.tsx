@@ -5,6 +5,8 @@ import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from 'sonner'
+import Script from 'next/script'
+import { GoogleAnalytics } from '@/components/google-analytics'
 
 import ErrorBoundary from '@/components/error-boundary'
 
@@ -158,6 +160,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
+        <GoogleAnalytics />
         <ErrorBoundary>
           <ThemeProvider
             attribute="class"
