@@ -98,7 +98,7 @@ export function useSmartRecommendations() {
     // 基于标题的相似度
     const title1Words = bookmark1.title.toLowerCase().split(/\s+/)
     const title2Words = bookmark2.title.toLowerCase().split(/\s+/)
-    const commonWords = title1Words.filter(word => title2Words.includes(word))
+    const commonWords = title1Words.filter((word: string) => title2Words.includes(word))
     score += (commonWords.length / Math.max(title1Words.length, title2Words.length)) * 0.4
 
     // 基于分类的相似度

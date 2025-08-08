@@ -15,12 +15,12 @@ export interface WebsiteMetadata {
 /**
  * 从URL获取网站的favicon
  */
-export function getFaviconUrl(url: string): string | null {
+export function getFaviconUrl(url: string): string | undefined {
   try {
     const domain = new URL(url).hostname
     return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`
   } catch {
-    return null
+    return undefined
   }
 }
 
@@ -50,20 +50,10 @@ export async function fetchWebsiteMetadata(url: string): Promise<WebsiteMetadata
       return localMetadata
     }
 
-    // 对于重要网站，尝试获取更详细的信息
-    if (shouldFetchDetailedMetadata(url)) {
-      try {
-        const detailedMetadata = await fetchDetailedMetadata(url)
-        return {
-          ...localMetadata,
-          ...detailedMetadata,
-          // 保留本地生成的favicon（更可靠）
-          favicon: localMetadata.favicon
-        }
-      } catch (error) {
-        console.warn(`Failed to fetch detailed metadata for ${url}:`, error)
-      }
-    }
+    // 🔧 修复：移除外部API调用，直接使用本地生成的元数据
+    console.log('ℹ️ 使用本地生成的元数据，跳过外部API调用')
+
+    // 直接返回本地生成的元数据，不再调用外部API
 
     return localMetadata
   } catch (error) {
@@ -94,54 +84,9 @@ function generateLocalMetadata(url: string): WebsiteMetadata {
   }
 }
 
-/**
- * 判断是否需要获取详细元数据
- */
-function shouldFetchDetailedMetadata(url: string): boolean {
-  const domain = extractSiteName(url).toLowerCase()
 
-  // 对于知名网站，本地描述已经足够好，不需要API
-  const wellKnownSites = [
-    'github', 'stackoverflow', 'mdn', 'google', 'youtube', 'bilibili',
-    'zhihu', 'juejin', 'csdn', 'npmjs', 'docker', 'aws', 'microsoft'
-  ]
 
-  if (wellKnownSites.some(site => domain.includes(site))) {
-    return false
-  }
 
-  // 对于不太知名的网站，可能需要获取详细信息
-  return true
-}
-
-/**
- * 获取详细的网页元数据（使用API）
- */
-async function fetchDetailedMetadata(url: string): Promise<Partial<WebsiteMetadata>> {
-  // 使用更快的API或者自建服务
-  const apiUrl = `https://api.microlink.io/?url=${encodeURIComponent(url)}&fields=title,description`
-
-  const response = await fetch(apiUrl, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-    },
-    // 设置较短的超时时间
-    signal: AbortSignal.timeout(3000)
-  })
-
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`)
-  }
-
-  const result = await response.json()
-  const data = result.data
-
-  return {
-    title: data?.title || undefined,
-    description: data?.description || undefined,
-  }
-}
 
 /**
  * 批量获取多个URL的元数据
@@ -225,12 +170,9 @@ function categorizeUrls(urls: string[]): { fastUrls: string[], slowUrls: string[
   const fastUrls: string[] = []
   const slowUrls: string[] = []
 
+  // 🔧 修复：移除外部API调用，所有URL都使用快速本地生成
   for (const url of urls) {
-    if (shouldFetchDetailedMetadata(url)) {
-      slowUrls.push(url)
-    } else {
-      fastUrls.push(url)
-    }
+    fastUrls.push(url) // 所有URL都使用本地生成，不再调用外部API
   }
 
   return { fastUrls, slowUrls }

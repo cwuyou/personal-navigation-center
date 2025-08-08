@@ -6,13 +6,22 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from 'sonner'
 
+import ErrorBoundary from '@/components/error-boundary'
+
 export const metadata: Metadata = {
-  title: '个人导航中心',
-  description: '个人书签管理和导航工具',
-  keywords: ['书签', '导航', '个人工具', '书签管理'],
-  authors: [{ name: '个人导航中心' }],
-  creator: '个人导航中心',
-  publisher: '个人导航中心',
+  title: {
+    default: 'My Homepage - Personal Start Page & Bookmark Manager | 个人主页导航中心',
+    template: '%s | My Homepage'
+  },
+  description: 'Create your perfect personal homepage and start page. Manage bookmarks intelligently, organize your favorite websites, and build a custom navigation center. MyHomepage.one - 打造专属的个人主页和起始页，智能管理书签，快速访问常用网站。',
+  keywords: [
+    'my homepage', 'start page', 'startpage', 'bookmarks', 'personal homepage',
+    'bookmark manager', 'navigation center', 'custom start page', 'homepage creator',
+    '个人主页', '起始页', '书签管理', '导航中心', '自定义主页', '个人导航'
+  ],
+  authors: [{ name: 'My Homepage', url: 'https://myhomepage.one' }],
+  creator: 'My Homepage',
+  publisher: 'My Homepage',
   formatDetection: {
     email: false,
     address: false,
@@ -22,19 +31,46 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: '个人导航中心',
+    title: 'My Homepage',
   },
   openGraph: {
     type: 'website',
-    locale: 'zh_CN',
-    title: '个人导航中心',
-    description: '个人书签管理和导航工具',
-    siteName: '个人导航中心',
+    siteName: 'My Homepage',
+    title: 'My Homepage - Personal Start Page & Bookmark Manager',
+    description: 'Create your perfect personal homepage and start page. Manage bookmarks intelligently and organize your favorite websites.',
+    url: 'https://myhomepage.one',
+    locale: 'en_US',
+    images: [
+      {
+        url: 'https://myhomepage.one/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'My Homepage - Personal Start Page & Bookmark Manager',
+      }
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: '个人导航中心',
-    description: '个人书签管理和导航工具',
+    site: '@myhomepageone',
+    title: 'My Homepage - Personal Start Page & Bookmark Manager',
+    description: 'Create your perfect personal homepage and start page. Manage bookmarks intelligently and organize your favorite websites.',
+    images: ['https://myhomepage.one/twitter-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'your-google-verification-code',
+    yandex: 'your-yandex-verification-code',
+    yahoo: 'your-yahoo-verification-code',
   },
 }
 
@@ -57,8 +93,6 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/icon-192x192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="个人导航中心" />
@@ -97,18 +131,45 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* 简化的全局错误处理 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // 全局未处理的Promise rejection处理器
+              window.addEventListener('unhandledrejection', function(event) {
+                const error = event.reason;
+                const errorMessage = error instanceof Error ? error.message : String(error);
+
+                // 静默处理所有未捕获的Promise rejection
+                console.warn('未处理的Promise rejection:', errorMessage);
+                event.preventDefault();
+              });
+
+              // 全局错误处理器
+              window.addEventListener('error', function(event) {
+                const errorMessage = event.message || '';
+
+                // 静默处理所有全局错误
+                console.warn('全局错误:', errorMessage);
+                event.preventDefault();
+              });
+            `,
+          }}
+        />
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster />
-          <SonnerToaster position="top-right" />
-        </ThemeProvider>
+        <ErrorBoundary>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster />
+            <SonnerToaster position="top-right" />
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

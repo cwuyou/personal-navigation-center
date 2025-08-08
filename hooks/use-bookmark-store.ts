@@ -33,6 +33,7 @@ interface BookmarkStore {
   categories: Category[]
   bookmarks: Bookmark[]
   enhancementProgress: EnhancementProgress | null
+  isEnhancing: boolean
 
   // Category actions
   addCategory: (name: string) => void
@@ -68,6 +69,7 @@ interface BookmarkStore {
   // Initialize with default data
   initializeStore: () => void
   resetStore: () => void
+  clearAllData: () => void
 }
 
 const defaultCategories: Category[] = [
@@ -101,6 +103,7 @@ const defaultCategories: Category[] = [
 ]
 
 const defaultBookmarks: Bookmark[] = [
+  // 开发工具 - 代码编辑器
   {
     id: "vscode",
     title: "Visual Studio Code",
@@ -110,6 +113,16 @@ const defaultBookmarks: Bookmark[] = [
     createdAt: new Date(),
   },
   {
+    id: "webstorm",
+    title: "WebStorm",
+    url: "https://www.jetbrains.com/webstorm/",
+    description: "JetBrains出品的专业Web开发IDE",
+    subCategoryId: "code-editors",
+    createdAt: new Date(),
+  },
+
+  // 开发工具 - 版本控制
+  {
     id: "github",
     title: "GitHub",
     url: "https://github.com/",
@@ -117,6 +130,16 @@ const defaultBookmarks: Bookmark[] = [
     subCategoryId: "version-control",
     createdAt: new Date(),
   },
+  {
+    id: "gitlab",
+    title: "GitLab",
+    url: "https://gitlab.com/",
+    description: "完整的DevOps平台",
+    subCategoryId: "version-control",
+    createdAt: new Date(),
+  },
+
+  // 开发工具 - API工具
   {
     id: "postman",
     title: "Postman",
@@ -126,6 +149,16 @@ const defaultBookmarks: Bookmark[] = [
     createdAt: new Date(),
   },
   {
+    id: "insomnia",
+    title: "Insomnia",
+    url: "https://insomnia.rest/",
+    description: "简洁的API客户端工具",
+    subCategoryId: "api-tools",
+    createdAt: new Date(),
+  },
+
+  // 学习资源 - 技术文档
+  {
     id: "mdn",
     title: "MDN Web Docs",
     url: "https://developer.mozilla.org/",
@@ -133,6 +166,34 @@ const defaultBookmarks: Bookmark[] = [
     subCategoryId: "documentation",
     createdAt: new Date(),
   },
+  {
+    id: "react-docs",
+    title: "React 官方文档",
+    url: "https://react.dev/",
+    description: "React框架官方文档",
+    subCategoryId: "documentation",
+    createdAt: new Date(),
+  },
+
+  // 学习资源 - 教程网站
+  {
+    id: "freecodecamp",
+    title: "freeCodeCamp",
+    url: "https://www.freecodecamp.org/",
+    description: "免费编程学习平台",
+    subCategoryId: "tutorials",
+    createdAt: new Date(),
+  },
+  {
+    id: "codecademy",
+    title: "Codecademy",
+    url: "https://www.codecademy.com/",
+    description: "交互式编程学习平台",
+    subCategoryId: "tutorials",
+    createdAt: new Date(),
+  },
+
+  // 学习资源 - 技术社区
   {
     id: "stackoverflow",
     title: "Stack Overflow",
@@ -142,11 +203,65 @@ const defaultBookmarks: Bookmark[] = [
     createdAt: new Date(),
   },
   {
+    id: "dev-to",
+    title: "DEV Community",
+    url: "https://dev.to/",
+    description: "开发者技术分享社区",
+    subCategoryId: "communities",
+    createdAt: new Date(),
+  },
+
+  // 效率工具 - 设计工具
+  {
     id: "figma",
     title: "Figma",
     url: "https://www.figma.com/",
     description: "在线协作设计工具",
     subCategoryId: "design",
+    createdAt: new Date(),
+  },
+  {
+    id: "canva",
+    title: "Canva",
+    url: "https://www.canva.com/",
+    description: "简单易用的在线设计平台",
+    subCategoryId: "design",
+    createdAt: new Date(),
+  },
+
+  // 效率工具 - 项目管理
+  {
+    id: "notion",
+    title: "Notion",
+    url: "https://www.notion.so/",
+    description: "全能的工作空间和笔记工具",
+    subCategoryId: "project-management",
+    createdAt: new Date(),
+  },
+  {
+    id: "trello",
+    title: "Trello",
+    url: "https://trello.com/",
+    description: "简单直观的项目管理工具",
+    subCategoryId: "project-management",
+    createdAt: new Date(),
+  },
+
+  // 效率工具 - 实用工具
+  {
+    id: "regex101",
+    title: "Regex101",
+    url: "https://regex101.com/",
+    description: "在线正则表达式测试工具",
+    subCategoryId: "utilities",
+    createdAt: new Date(),
+  },
+  {
+    id: "jsonformatter",
+    title: "JSON Formatter",
+    url: "https://jsonformatter.curiousconcept.com/",
+    description: "JSON格式化和验证工具",
+    subCategoryId: "utilities",
     createdAt: new Date(),
   },
 ]
@@ -157,12 +272,17 @@ export const useBookmarkStore = create<BookmarkStore>()(
       categories: [],
       bookmarks: [],
       enhancementProgress: null,
+      isEnhancing: false,
 
       addCategory: (name: string) => {
         const newCategory: Category = {
           id: `cat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           name,
           subCategories: [],
+        }
+        // 用户开始添加数据，清除清空标志
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('data-cleared')
         }
         set((state) => ({
           categories: [...state.categories, newCategory],
@@ -222,16 +342,54 @@ export const useBookmarkStore = create<BookmarkStore>()(
         }))
       },
 
-      addBookmark: (bookmark) => {
+      addBookmark: async (bookmark) => {
         const newBookmark: Bookmark = {
           ...bookmark,
           id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           createdAt: new Date(),
         }
 
+        // 用户开始添加数据，清除清空标志
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('data-cleared')
+        }
+        // 先添加书签到状态
         set((state) => ({
           bookmarks: [...state.bookmarks, newBookmark],
         }))
+
+        // 🔧 新增：单个书签添加时调用API增强
+        try {
+          console.log('🔄 单个书签添加，开始增强...')
+          const { BackgroundMetadataEnhancer } = await import('../lib/background-metadata-enhancer')
+          const backgroundEnhancer = new BackgroundMetadataEnhancer()
+          const metadata = await backgroundEnhancer.enhanceSingleBookmark({
+            id: newBookmark.id,
+            url: newBookmark.url,
+            title: newBookmark.title,
+            description: newBookmark.description
+          })
+
+          if (metadata) {
+            console.log('✅ 单个书签增强成功:', metadata.description?.substring(0, 50))
+            // 更新书签的元数据
+            set((state) => ({
+              bookmarks: state.bookmarks.map(bm =>
+                bm.id === newBookmark.id
+                  ? {
+                      ...bm,
+                      description: metadata.description || bm.description,
+                      favicon: metadata.favicon || bm.favicon,
+                      coverImage: metadata.coverImage || bm.coverImage
+                    }
+                  : bm
+              )
+            }))
+          }
+        } catch (error) {
+          console.warn('单个书签增强失败，使用基本信息:', error)
+          // 增强失败不影响书签添加
+        }
       },
 
       updateBookmark: (id: string, updates) => {
@@ -413,6 +571,12 @@ export const useBookmarkStore = create<BookmarkStore>()(
       initializeStore: () => {
         const { categories, bookmarks } = get()
 
+        // 检查用户是否主动清空了数据
+        const isDataCleared = typeof window !== 'undefined' && localStorage.getItem('data-cleared') === 'true'
+        if (isDataCleared) {
+          return
+        }
+
         // 验证数据格式
         const isValidData = categories.every(cat =>
           typeof cat.id === 'string' &&
@@ -435,9 +599,24 @@ export const useBookmarkStore = create<BookmarkStore>()(
       },
 
       resetStore: () => {
+        // 清除清空标志，因为我们要重置为默认数据
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('data-cleared')
+        }
         set({
           categories: defaultCategories,
           bookmarks: defaultBookmarks,
+        })
+      },
+
+      clearAllData: () => {
+        // 设置清空标志
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('data-cleared', 'true')
+        }
+        set({
+          categories: [],
+          bookmarks: [],
         })
       },
 
@@ -465,6 +644,12 @@ export const useBookmarkStore = create<BookmarkStore>()(
         const actionType = isAutomatic ? '自动' : '批量'
         console.log(`🚀 开始${actionType}增强 ${targetBookmarks.length} 个书签...`)
 
+        // 标记增强开始，防止触发同步
+        if (isAutomatic) {
+          console.log('🔄 标记自动增强开始，暂停同步检测')
+          set({ isEnhancing: true })
+        }
+
         try {
           let enhancedCount = 0
           await backgroundEnhancer.enhanceBookmarks(targetBookmarks, {
@@ -472,7 +657,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
               set({ enhancementProgress: progress })
             },
             onUpdate: (bookmarkId, metadata) => {
-              // 实时更新书签信息
+              // 实时更新书签信息，确保增强状态保持
               set((state) => {
                 const updatedBookmarks = state.bookmarks.map(bookmark =>
                   bookmark.id === bookmarkId
@@ -495,12 +680,15 @@ export const useBookmarkStore = create<BookmarkStore>()(
                   console.log(`   新描述: ${updatedBookmark.description?.substring(0, 50)}...`)
                 }
 
-                return { bookmarks: updatedBookmarks }
+                // 确保增强状态保持不变，防止触发同步
+                return {
+                  bookmarks: updatedBookmarks,
+                  isEnhancing: state.isEnhancing  // 明确保持增强状态
+                }
               })
               enhancedCount++
-            },
-            batchSize: 8,
-            delay: 150
+            }
+            // 配置将自动根据书签数量优化
           })
 
           console.log(`✅ ${actionType}增强完成！成功增强了 ${enhancedCount} 个书签`)
@@ -519,16 +707,23 @@ export const useBookmarkStore = create<BookmarkStore>()(
         } catch (error) {
           console.error(`❌ ${actionType}增强失败:`, error)
         } finally {
-          // 清除进度状态
+          // 清除进度状态和增强状态
           setTimeout(() => {
-            set({ enhancementProgress: null })
+            set({ enhancementProgress: null, isEnhancing: false })
+            console.log('🔄 增强完成')
+
+            // 🔧 移除同步相关代码，改为纯本地存储
+            if (isAutomatic) {
+              console.log('🔄 自动增强完成，数据已保存到本地存储')
+            }
           }, 2000)
         }
       },
 
       stopBackgroundEnhancement: () => {
         backgroundEnhancer.stop()
-        set({ enhancementProgress: null })
+        set({ enhancementProgress: null, isEnhancing: false })
+        console.log('🔄 增强停止')
       },
 
       getEnhancementStats: () => {

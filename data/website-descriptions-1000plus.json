@@ -4011,5 +4011,1760 @@
     "category": "宠物服务",
     "tags": ["动物保护", "宠物福利", "动物救助", "慈善组织"],
     "coverImage": "https://aspca.org/favicon.ico"
+  },
+
+  "v0.dev": {
+    "title": "v0",
+    "description": "Vercel推出的AI界面生成工具，通过自然语言描述快速生成React组件和界面",
+    "category": "AI工具",
+    "tags": ["AI界面生成", "React组件", "Vercel", "前端开发"],
+    "coverImage": "https://v0.dev/favicon.ico"
+  },
+  "bolt.new": {
+    "title": "Bolt",
+    "description": "StackBlitz推出的AI全栈开发环境，通过AI快速构建和部署Web应用",
+    "category": "AI工具",
+    "tags": ["AI开发", "全栈开发", "Web应用", "StackBlitz"],
+    "coverImage": "https://bolt.new/favicon.ico"
+  },
+  "lovable.dev": {
+    "title": "Lovable",
+    "description": "AI驱动的全栈应用开发平台，从想法到部署的完整AI开发体验",
+    "category": "AI工具",
+    "tags": ["AI开发平台", "全栈应用", "快速开发", "自动部署"],
+    "coverImage": "https://lovable.dev/favicon.ico"
+  },
+  "claude.ai": {
+    "title": "Claude",
+    "description": "Anthropic开发的AI助手，擅长代码分析、写作、数学和复杂推理任务",
+    "category": "AI工具",
+    "tags": ["AI助手", "代码分析", "文本处理", "推理能力"],
+    "coverImage": "https://claude.ai/favicon.ico"
+  },
+  "poe.com": {
+    "title": "Poe",
+    "description": "Quora推出的AI聊天平台，集成多个AI模型包括GPT、Claude等",
+    "category": "AI工具",
+    "tags": ["AI聊天", "多模型", "Quora", "AI集成"],
+    "coverImage": "https://poe.com/favicon.ico"
+  },
+  "you.com": {
+    "title": "You.com",
+    "description": "AI搜索引擎，结合传统搜索和AI对话，提供个性化搜索体验",
+    "category": "AI工具",
+    "tags": ["AI搜索", "个性化", "搜索引擎", "AI对话"],
+    "coverImage": "https://you.com/favicon.ico"
+  },
+  "phind.com": {
+    "title": "Phind",
+    "description": "面向开发者的AI搜索引擎，专门优化编程问题的搜索和解答",
+    "category": "AI工具",
+    "tags": ["开发者搜索", "编程问题", "AI搜索", "技术问答"],
+    "coverImage": "https://phind.com/favicon.ico"
+  },
+  "sourcegraph.com": {
+    "title": "Sourcegraph",
+    "description": "代码搜索和智能分析平台，为大型代码库提供AI驱动的代码理解",
+    "category": "开发工具",
+    "tags": ["代码搜索", "代码分析", "大型代码库", "AI代码理解"],
+    "coverImage": "https://sourcegraph.com/favicon.ico"
+  },
+  "cody.dev": {
+    "title": "Cody",
+    "description": "Sourcegraph的AI编程助手，提供上下文感知的代码补全和解释",
+    "category": "AI工具",
+    "tags": ["AI编程助手", "代码补全", "上下文感知", "代码解释"],
+    "coverImage": "https://cody.dev/favicon.ico"
+  },
+  "continue.dev": {
+    "title": "Continue",
+    "description": "开源AI代码助手，支持VS Code和JetBrains，可自定义AI模型",
+    "category": "AI工具",
+    "tags": ["开源AI", "代码助手", "VS Code", "自定义模型"],
+    "coverImage": "https://continue.dev/favicon.ico"
+  },
+  "aider.chat": {
+    "title": "Aider",
+    "description": "命令行AI编程助手，直接在终端中与AI协作编写和修改代码",
+    "category": "AI工具",
+    "tags": ["命令行AI", "终端编程", "代码协作", "AI编程"],
+    "coverImage": "https://aider.chat/favicon.ico"
+  },
+  "windsurf.ai": {
+    "title": "Windsurf",
+    "description": "Codeium推出的AI IDE，集成强大的AI编程能力的完整开发环境",
+    "category": "AI工具",
+    "tags": ["AI IDE", "集成开发环境", "Codeium", "AI编程"],
+    "coverImage": "https://windsurf.ai/favicon.ico"
+  },
+  "supermaven.com": {
+    "title": "Supermaven",
+    "description": "超快速AI代码补全工具，提供毫秒级响应的智能代码建议",
+    "category": "AI工具",
+    "tags": ["快速补全", "代码建议", "毫秒响应", "AI编程"],
+    "coverImage": "https://supermaven.com/favicon.ico"
+  },
+  "blackbox.ai": {
+    "title": "Blackbox AI",
+    "description": "AI代码搜索和生成工具，帮助开发者快速找到和生成代码片段",
+    "category": "AI工具",
+    "tags": ["代码搜索", "代码生成", "代码片段", "开发助手"],
+    "coverImage": "https://blackbox.ai/favicon.ico"
+  },
+  "pieces.app": {
+    "title": "Pieces",
+    "description": "AI驱动的代码片段管理工具，智能组织和搜索代码片段",
+    "category": "开发工具",
+    "tags": ["代码片段", "AI管理", "代码组织", "智能搜索"],
+    "coverImage": "https://pieces.app/favicon.ico"
+  },
+  "raycast.com": {
+    "title": "Raycast",
+    "description": "Mac上的生产力工具，集成AI功能的快速启动器和工作流自动化",
+    "category": "生产力工具",
+    "tags": ["Mac工具", "快速启动", "工作流", "AI集成"],
+    "coverImage": "https://raycast.com/favicon.ico"
+  },
+  "pika.art": {
+    "title": "Pika",
+    "description": "AI视频生成平台，从文本和图像创建高质量的短视频内容",
+    "category": "AI工具",
+    "tags": ["AI视频", "视频生成", "文本转视频", "短视频"],
+    "coverImage": "https://pika.art/favicon.ico"
+  },
+  "synthesia.io": {
+    "title": "Synthesia",
+    "description": "AI虚拟人视频生成平台，创建专业的AI主播视频内容",
+    "category": "AI工具",
+    "tags": ["AI虚拟人", "视频生成", "AI主播", "专业视频"],
+    "coverImage": "https://synthesia.io/favicon.ico"
+  },
+  "heygen.com": {
+    "title": "HeyGen",
+    "description": "AI视频生成平台，快速创建个性化的AI虚拟人视频",
+    "category": "AI工具",
+    "tags": ["AI视频", "虚拟人", "个性化", "快速生成"],
+    "coverImage": "https://heygen.com/favicon.ico"
+  },
+  "elevenlabs.io": {
+    "title": "ElevenLabs",
+    "description": "AI语音合成平台，生成逼真的人工智能语音和音频内容",
+    "category": "AI工具",
+    "tags": ["AI语音", "语音合成", "音频生成", "逼真语音"],
+    "coverImage": "https://elevenlabs.io/favicon.ico"
+  },
+  "murf.ai": {
+    "title": "Murf",
+    "description": "AI语音生成器，为视频、播客和演示创建专业的AI配音",
+    "category": "AI工具",
+    "tags": ["AI配音", "语音生成", "专业配音", "多媒体"],
+    "coverImage": "https://murf.ai/favicon.ico"
+  },
+  "speechify.com": {
+    "title": "Speechify",
+    "description": "AI文本转语音工具，将文档、文章和书籍转换为自然语音",
+    "category": "AI工具",
+    "tags": ["文本转语音", "AI朗读", "自然语音", "阅读辅助"],
+    "coverImage": "https://speechify.com/favicon.ico"
+  },
+  "otter.ai": {
+    "title": "Otter.ai",
+    "description": "AI会议转录和笔记工具，实时转录会议并生成智能摘要",
+    "category": "AI工具",
+    "tags": ["会议转录", "AI笔记", "实时转录", "智能摘要"],
+    "coverImage": "https://otter.ai/favicon.ico"
+  },
+  "fireflies.ai": {
+    "title": "Fireflies.ai",
+    "description": "AI会议助手，自动记录、转录和分析会议内容",
+    "category": "AI工具",
+    "tags": ["会议助手", "自动记录", "会议分析", "AI转录"],
+    "coverImage": "https://fireflies.ai/favicon.ico"
+  },
+  "grain.co": {
+    "title": "Grain",
+    "description": "AI会议洞察平台，从会议中提取关键信息和行动项",
+    "category": "AI工具",
+    "tags": ["会议洞察", "关键信息", "行动项", "AI分析"],
+    "coverImage": "https://grain.co/favicon.ico"
+  },
+  "jasper.ai": {
+    "title": "Jasper",
+    "description": "AI内容创作平台，为营销团队和创作者提供AI写作助手",
+    "category": "AI工具",
+    "tags": ["AI写作", "内容创作", "营销", "写作助手"],
+    "coverImage": "https://jasper.ai/favicon.ico"
+  },
+  "copy.ai": {
+    "title": "Copy.ai",
+    "description": "AI文案生成工具，帮助创作者快速生成营销文案和创意内容",
+    "category": "AI工具",
+    "tags": ["AI文案", "营销文案", "创意内容", "文案生成"],
+    "coverImage": "https://copy.ai/favicon.ico"
+  },
+  "writesonic.com": {
+    "title": "Writesonic",
+    "description": "AI写作平台，提供文章、广告、产品描述等多种内容的AI生成",
+    "category": "AI工具",
+    "tags": ["AI写作", "文章生成", "广告文案", "产品描述"],
+    "coverImage": "https://writesonic.com/favicon.ico"
+  },
+  "rytr.me": {
+    "title": "Rytr",
+    "description": "AI写作助手，为博客、邮件、广告等提供快速的内容生成",
+    "category": "AI工具",
+    "tags": ["AI写作助手", "博客写作", "邮件", "广告"],
+    "coverImage": "https://rytr.me/favicon.ico"
+  },
+  "sentry.io": {
+    "title": "Sentry",
+    "description": "应用监控和错误跟踪平台，帮助开发者快速发现和修复应用问题",
+    "category": "独立开发者",
+    "tags": ["错误监控", "应用监控", "错误跟踪", "性能监控"],
+    "coverImage": "https://sentry.io/favicon.ico"
+  },
+  "logsnag.com": {
+    "title": "LogSnag",
+    "description": "简单的事件跟踪和通知工具，为独立开发者提供产品洞察",
+    "category": "独立开发者",
+    "tags": ["事件跟踪", "产品洞察", "通知工具", "简单易用"],
+    "coverImage": "https://logsnag.com/favicon.ico"
+  },
+  "posthog.com": {
+    "title": "PostHog",
+    "description": "开源产品分析平台，提供用户行为分析、功能标志和A/B测试",
+    "category": "独立开发者",
+    "tags": ["产品分析", "用户行为", "A/B测试", "开源"],
+    "coverImage": "https://posthog.com/favicon.ico"
+  },
+  "mixpanel.com": {
+    "title": "Mixpanel",
+    "description": "高级产品分析平台，深入了解用户如何与产品互动",
+    "category": "独立开发者",
+    "tags": ["产品分析", "用户互动", "高级分析", "数据洞察"],
+    "coverImage": "https://mixpanel.com/favicon.ico"
+  },
+  "amplitude.com": {
+    "title": "Amplitude",
+    "description": "数字优化平台，通过用户行为分析推动产品增长",
+    "category": "独立开发者",
+    "tags": ["数字优化", "用户行为", "产品增长", "行为分析"],
+    "coverImage": "https://amplitude.com/favicon.ico"
+  },
+  "hotjar.com": {
+    "title": "Hotjar",
+    "description": "用户体验分析工具，通过热图、录屏和反馈了解用户行为",
+    "category": "独立开发者",
+    "tags": ["用户体验", "热图", "录屏", "用户反馈"],
+    "coverImage": "https://hotjar.com/favicon.ico"
+  },
+  "fullstory.com": {
+    "title": "FullStory",
+    "description": "数字体验智能平台，捕获和分析每个用户交互",
+    "category": "独立开发者",
+    "tags": ["数字体验", "用户交互", "智能分析", "体验优化"],
+    "coverImage": "https://fullstory.com/favicon.ico"
+  },
+  "crisp.chat": {
+    "title": "Crisp",
+    "description": "客户消息平台，为网站提供实时聊天、邮件和知识库功能",
+    "category": "独立开发者",
+    "tags": ["客户消息", "实时聊天", "客户支持", "知识库"],
+    "coverImage": "https://crisp.chat/favicon.ico"
+  },
+  "intercom.com": {
+    "title": "Intercom",
+    "description": "客户消息平台，提供聊天、支持、营销和销售的一体化解决方案",
+    "category": "独立开发者",
+    "tags": ["客户消息", "客户支持", "营销", "销售"],
+    "coverImage": "https://intercom.com/favicon.ico"
+  },
+  "chatwoot.com": {
+    "title": "Chatwoot",
+    "description": "开源客户支持平台，提供多渠道客户沟通解决方案",
+    "category": "独立开发者",
+    "tags": ["开源", "客户支持", "多渠道", "客户沟通"],
+    "coverImage": "https://chatwoot.com/favicon.ico"
+  },
+
+  "similarweb.com": {
+    "title": "SimilarWeb",
+    "description": "网站流量分析平台，提供竞品网站流量、用户行为和市场洞察",
+    "category": "流量分析",
+    "tags": ["流量分析", "竞品分析", "用户行为", "市场洞察"],
+    "coverImage": "https://similarweb.com/favicon.ico"
+  },
+  "sitechecker.pro": {
+    "title": "Sitechecker",
+    "description": "网站SEO审计工具，提供技术SEO分析、排名跟踪和网站监控",
+    "category": "SEO工具",
+    "tags": ["SEO审计", "技术SEO", "排名跟踪", "网站监控"],
+    "coverImage": "https://sitechecker.pro/favicon.ico"
+  },
+  "screaming-frog.co.uk": {
+    "title": "Screaming Frog",
+    "description": "SEO爬虫工具，分析网站结构、发现SEO问题和优化机会",
+    "category": "SEO工具",
+    "tags": ["SEO爬虫", "网站结构", "SEO问题", "优化分析"],
+    "coverImage": "https://screaming-frog.co.uk/favicon.ico"
+  },
+  "gtmetrix.com": {
+    "title": "GTmetrix",
+    "description": "网站性能分析工具，测试页面加载速度和性能优化建议",
+    "category": "性能优化",
+    "tags": ["性能分析", "加载速度", "性能优化", "网站测试"],
+    "coverImage": "https://gtmetrix.com/favicon.ico"
+  },
+  "pagespeed.web.dev": {
+    "title": "PageSpeed Insights",
+    "description": "Google的网站速度测试工具，提供性能评分和优化建议",
+    "category": "性能优化",
+    "tags": ["Google工具", "速度测试", "性能评分", "优化建议"],
+    "coverImage": "https://pagespeed.web.dev/favicon.ico"
+  },
+  "webpagetest.org": {
+    "title": "WebPageTest",
+    "description": "深度网站性能测试工具，提供详细的加载瀑布图和优化建议",
+    "category": "性能优化",
+    "tags": ["性能测试", "瀑布图", "深度分析", "优化建议"],
+    "coverImage": "https://webpagetest.org/favicon.ico"
+  },
+  "pingdom.com": {
+    "title": "Pingdom",
+    "description": "网站监控和性能测试服务，实时监控网站可用性和速度",
+    "category": "网站监控",
+    "tags": ["网站监控", "性能测试", "可用性", "实时监控"],
+    "coverImage": "https://pingdom.com/favicon.ico"
+  },
+  "uptime.com": {
+    "title": "Uptime.com",
+    "description": "网站正常运行时间监控服务，提供全球监控和故障报警",
+    "category": "网站监控",
+    "tags": ["正常运行时间", "全球监控", "故障报警", "网站监控"],
+    "coverImage": "https://uptime.com/favicon.ico"
+  },
+  "statuspage.io": {
+    "title": "StatusPage",
+    "description": "状态页面服务，为用户提供服务状态和故障通知的透明页面",
+    "category": "网站监控",
+    "tags": ["状态页面", "服务状态", "故障通知", "透明度"],
+    "coverImage": "https://statuspage.io/favicon.ico"
+  },
+  "betterstack.com": {
+    "title": "Better Stack",
+    "description": "现代化监控和事件管理平台，提供日志、监控和状态页面服务",
+    "category": "网站监控",
+    "tags": ["现代化监控", "事件管理", "日志", "状态页面"],
+    "coverImage": "https://betterstack.com/favicon.ico"
+  },
+  "exploding-topics.com": {
+    "title": "Exploding Topics",
+    "description": "趋势发现平台，识别快速增长的话题和市场机会",
+    "category": "市场研究",
+    "tags": ["趋势发现", "市场机会", "话题分析", "增长趋势"],
+    "coverImage": "https://exploding-topics.com/favicon.ico"
+  },
+  "trends.google.com": {
+    "title": "Google Trends",
+    "description": "Google搜索趋势分析工具，了解关键词搜索热度和趋势变化",
+    "category": "市场研究",
+    "tags": ["搜索趋势", "关键词热度", "趋势分析", "Google"],
+    "coverImage": "https://trends.google.com/favicon.ico"
+  },
+  "buzzsumo.com": {
+    "title": "BuzzSumo",
+    "description": "内容营销研究工具，分析热门内容、影响者和竞品内容策略",
+    "category": "内容营销",
+    "tags": ["内容研究", "热门内容", "影响者", "内容策略"],
+    "coverImage": "https://buzzsumo.com/favicon.ico"
+  },
+  "reddit.com/r/entrepreneur": {
+    "title": "Reddit Entrepreneur",
+    "description": "创业者社区，讨论商业想法、市场需求和创业经验",
+    "category": "需求挖掘",
+    "tags": ["创业社区", "商业想法", "市场需求", "创业经验"],
+    "coverImage": "https://reddit.com/favicon.ico"
+  },
+  "reddit.com/r/SaaS": {
+    "title": "Reddit SaaS",
+    "description": "SaaS产品讨论社区，分享SaaS创业、产品开发和营销经验",
+    "category": "需求挖掘",
+    "tags": ["SaaS社区", "产品开发", "SaaS营销", "创业经验"],
+    "coverImage": "https://reddit.com/favicon.ico"
+  },
+  "reddit.com/r/startups": {
+    "title": "Reddit Startups",
+    "description": "创业公司讨论社区，分享创业资源、融资经验和商业建议",
+    "category": "需求挖掘",
+    "tags": ["创业公司", "创业资源", "融资", "商业建议"],
+    "coverImage": "https://reddit.com/favicon.ico"
+  },
+  "ycombinator.com/companies": {
+    "title": "Y Combinator Companies",
+    "description": "YC孵化的公司目录，了解成功创业公司的产品和市场定位",
+    "category": "市场研究",
+    "tags": ["YC公司", "创业公司", "产品研究", "市场定位"],
+    "coverImage": "https://ycombinator.com/favicon.ico"
+  },
+  "crunchbase.com": {
+    "title": "Crunchbase",
+    "description": "创业公司和投资数据库，研究公司信息、融资历史和市场趋势",
+    "category": "市场研究",
+    "tags": ["创业数据", "投资信息", "融资历史", "市场趋势"],
+    "coverImage": "https://crunchbase.com/favicon.ico"
+  },
+  "pitchbook.com": {
+    "title": "PitchBook",
+    "description": "私募股权和风险投资数据平台，提供投资市场深度分析",
+    "category": "市场研究",
+    "tags": ["私募股权", "风险投资", "投资数据", "市场分析"],
+    "coverImage": "https://pitchbook.com/favicon.ico"
+  },
+  "cbinsights.com": {
+    "title": "CB Insights",
+    "description": "市场情报平台，提供新兴技术、独角兽公司和投资趋势分析",
+    "category": "市场研究",
+    "tags": ["市场情报", "新兴技术", "独角兽", "投资趋势"],
+    "coverImage": "https://cbinsights.com/favicon.ico"
+  },
+  "optimizely.com": {
+    "title": "Optimizely",
+    "description": "A/B测试和实验平台，优化网站和应用的用户体验和转化率",
+    "category": "A/B测试",
+    "tags": ["A/B测试", "实验平台", "转化优化", "用户体验"],
+    "coverImage": "https://optimizely.com/favicon.ico"
+  },
+  "vwo.com": {
+    "title": "VWO",
+    "description": "转化率优化平台，提供A/B测试、热图和用户行为分析",
+    "category": "A/B测试",
+    "tags": ["转化优化", "A/B测试", "热图", "用户行为"],
+    "coverImage": "https://vwo.com/favicon.ico"
+  },
+  "unbounce.com": {
+    "title": "Unbounce",
+    "description": "着陆页构建器，创建高转化率的营销着陆页和弹窗",
+    "category": "着陆页",
+    "tags": ["着陆页", "高转化", "营销页面", "弹窗"],
+    "coverImage": "https://unbounce.com/favicon.ico"
+  },
+  "leadpages.com": {
+    "title": "Leadpages",
+    "description": "着陆页和潜在客户生成工具，快速创建转化优化的页面",
+    "category": "着陆页",
+    "tags": ["潜在客户", "着陆页", "转化优化", "快速创建"],
+    "coverImage": "https://leadpages.com/favicon.ico"
+  },
+  "instapage.com": {
+    "title": "Instapage",
+    "description": "企业级着陆页平台，提供个性化和A/B测试功能",
+    "category": "着陆页",
+    "tags": ["企业级", "个性化", "A/B测试", "着陆页"],
+    "coverImage": "https://instapage.com/favicon.ico"
+  },
+  "clickfunnels.com": {
+    "title": "ClickFunnels",
+    "description": "销售漏斗构建器，创建完整的销售和营销漏斗",
+    "category": "销售漏斗",
+    "tags": ["销售漏斗", "营销漏斗", "转化", "在线销售"],
+    "coverImage": "https://clickfunnels.com/favicon.ico"
+  },
+  "kartra.com": {
+    "title": "Kartra",
+    "description": "一体化营销平台，包含漏斗、邮件营销、会员网站等功能",
+    "category": "营销平台",
+    "tags": ["一体化营销", "销售漏斗", "邮件营销", "会员网站"],
+    "coverImage": "https://kartra.com/favicon.ico"
+  },
+  "systeme.io": {
+    "title": "Systeme.io",
+    "description": "一体化在线业务平台，提供漏斗、邮件营销和课程创建功能",
+    "category": "营销平台",
+    "tags": ["在线业务", "销售漏斗", "邮件营销", "在线课程"],
+    "coverImage": "https://systeme.io/favicon.ico"
+  },
+  "getresponse.com": {
+    "title": "GetResponse",
+    "description": "邮件营销和营销自动化平台，包含着陆页和网络研讨会功能",
+    "category": "邮件营销",
+    "tags": ["邮件营销", "营销自动化", "着陆页", "网络研讨会"],
+    "coverImage": "https://getresponse.com/favicon.ico"
+  },
+  "activecampaign.com": {
+    "title": "ActiveCampaign",
+    "description": "客户体验自动化平台，结合邮件营销、CRM和销售自动化",
+    "category": "营销自动化",
+    "tags": ["客户体验", "营销自动化", "CRM", "销售自动化"],
+    "coverImage": "https://activecampaign.com/favicon.ico"
+  },
+  "phantombuster.com": {
+    "title": "PhantomBuster",
+    "description": "自动化数据提取工具，从社交媒体和网站自动收集潜在客户信息",
+    "category": "数据提取",
+    "tags": ["数据提取", "潜在客户", "社交媒体", "自动化"],
+    "coverImage": "https://phantombuster.com/favicon.ico"
+  },
+  "apollo.io": {
+    "title": "Apollo",
+    "description": "销售情报和外联平台，提供潜在客户数据库和邮件自动化",
+    "category": "销售工具",
+    "tags": ["销售情报", "潜在客户", "邮件外联", "销售自动化"],
+    "coverImage": "https://apollo.io/favicon.ico"
+  },
+  "hunter.io": {
+    "title": "Hunter",
+    "description": "邮箱查找工具，帮助找到任何网站或公司的邮箱地址",
+    "category": "销售工具",
+    "tags": ["邮箱查找", "联系信息", "外联", "销售工具"],
+    "coverImage": "https://hunter.io/favicon.ico"
+  },
+  "lemlist.com": {
+    "title": "Lemlist",
+    "description": "个性化冷邮件外联平台，提供邮件自动化和跟进功能",
+    "category": "邮件外联",
+    "tags": ["冷邮件", "个性化", "邮件自动化", "外联"],
+    "coverImage": "https://lemlist.com/favicon.ico"
+  },
+  "outreach.io": {
+    "title": "Outreach",
+    "description": "销售执行平台，自动化销售流程和客户沟通",
+    "category": "销售工具",
+    "tags": ["销售执行", "销售自动化", "客户沟通", "销售流程"],
+    "coverImage": "https://outreach.io/favicon.ico"
+  },
+  "salesloft.com": {
+    "title": "SalesLoft",
+    "description": "销售参与平台，提供邮件、电话和社交外联的统一工作流",
+    "category": "销售工具",
+    "tags": ["销售参与", "多渠道外联", "销售工作流", "客户互动"],
+    "coverImage": "https://salesloft.com/favicon.ico"
+  },
+  "pipedrive.com": {
+    "title": "Pipedrive",
+    "description": "销售CRM和管道管理工具，专为销售团队设计的简单易用系统",
+    "category": "CRM",
+    "tags": ["销售CRM", "管道管理", "销售团队", "简单易用"],
+    "coverImage": "https://pipedrive.com/favicon.ico"
+  },
+  "hubspot.com": {
+    "title": "HubSpot",
+    "description": "入站营销和销售平台，提供CRM、营销自动化和客户服务工具",
+    "category": "营销平台",
+    "tags": ["入站营销", "CRM", "营销自动化", "客户服务"],
+    "coverImage": "https://hubspot.com/favicon.ico"
+  },
+  "freshworks.com": {
+    "title": "Freshworks",
+    "description": "客户体验软件套件，包含CRM、客服、营销和IT服务管理",
+    "category": "客户体验",
+    "tags": ["客户体验", "CRM", "客服", "IT服务"],
+    "coverImage": "https://freshworks.com/favicon.ico"
+  },
+  "zendesk.com": {
+    "title": "Zendesk",
+    "description": "客户服务和支持平台，提供票务系统、知识库和客户沟通工具",
+    "category": "客户服务",
+    "tags": ["客户服务", "票务系统", "知识库", "客户沟通"],
+    "coverImage": "https://zendesk.com/favicon.ico"
+  },
+  "drift.com": {
+    "title": "Drift",
+    "description": "对话式营销和销售平台，通过聊天机器人和实时对话获取潜在客户",
+    "category": "对话营销",
+    "tags": ["对话营销", "聊天机器人", "实时对话", "潜在客户"],
+    "coverImage": "https://drift.com/favicon.ico"
+  },
+  "calendly.com": {
+    "title": "Calendly",
+    "description": "在线预约调度工具，简化会议安排和时间管理",
+    "category": "调度工具",
+    "tags": ["在线预约", "会议调度", "时间管理", "自动化"],
+    "coverImage": "https://calendly.com/favicon.ico"
+  },
+  "acuityscheduling.com": {
+    "title": "Acuity Scheduling",
+    "description": "高级预约调度软件，提供自定义预约流程和支付集成",
+    "category": "调度工具",
+    "tags": ["高级调度", "自定义流程", "支付集成", "预约管理"],
+    "coverImage": "https://acuityscheduling.com/favicon.ico"
+  },
+  "savvycal.com": {
+    "title": "SavvyCal",
+    "description": "现代化的日程安排工具，提供个性化预约链接和时区智能",
+    "category": "调度工具",
+    "tags": ["现代化调度", "个性化链接", "时区智能", "日程管理"],
+    "coverImage": "https://savvycal.com/favicon.ico"
+  },
+  "gorgias.com": {
+    "title": "Gorgias",
+    "description": "电商客户服务平台，专为Shopify等电商平台优化的客服工具",
+    "category": "电商客服",
+    "tags": ["电商客服", "Shopify", "客户服务", "电商优化"],
+    "coverImage": "https://gorgias.com/favicon.ico"
+  },
+  "tidio.com": {
+    "title": "Tidio",
+    "description": "实时聊天和聊天机器人平台，提供客户支持和销售自动化",
+    "category": "客户沟通",
+    "tags": ["实时聊天", "聊天机器人", "客户支持", "销售自动化"],
+    "coverImage": "https://tidio.com/favicon.ico"
+  },
+  "tawk.to": {
+    "title": "Tawk.to",
+    "description": "免费的实时聊天软件，为网站提供客户支持和访客监控",
+    "category": "客户沟通",
+    "tags": ["免费聊天", "客户支持", "访客监控", "实时沟通"],
+    "coverImage": "https://tawk.to/favicon.ico"
+  },
+  "freshchat.com": {
+    "title": "Freshchat",
+    "description": "现代化消息软件，提供网站聊天、应用内消息和团队协作",
+    "category": "客户沟通",
+    "tags": ["现代化消息", "应用内消息", "团队协作", "客户沟通"],
+    "coverImage": "https://freshchat.com/favicon.ico"
+  },
+  "landbot.io": {
+    "title": "Landbot",
+    "description": "对话式着陆页构建器，创建交互式聊天机器人体验",
+    "category": "聊天机器人",
+    "tags": ["对话式着陆页", "交互式体验", "聊天机器人", "转化优化"],
+    "coverImage": "https://landbot.io/favicon.ico"
+  },
+  "manychat.com": {
+    "title": "ManyChat",
+    "description": "Facebook Messenger营销平台，创建聊天机器人和自动化消息",
+    "category": "聊天机器人",
+    "tags": ["Messenger营销", "聊天机器人", "自动化消息", "社交营销"],
+    "coverImage": "https://manychat.com/favicon.ico"
+  },
+  "chatfuel.com": {
+    "title": "Chatfuel",
+    "description": "无代码聊天机器人平台，为Facebook和Instagram创建AI聊天机器人",
+    "category": "聊天机器人",
+    "tags": ["无代码机器人", "Facebook", "Instagram", "AI聊天"],
+    "coverImage": "https://chatfuel.com/favicon.ico"
+  },
+  "botpress.com": {
+    "title": "Botpress",
+    "description": "开源对话AI平台，构建、部署和管理聊天机器人",
+    "category": "聊天机器人",
+    "tags": ["开源AI", "对话AI", "机器人开发", "企业级"],
+    "coverImage": "https://botpress.com/favicon.ico"
+  },
+  "rasa.com": {
+    "title": "Rasa",
+    "description": "开源机器学习框架，构建上下文AI助手和聊天机器人",
+    "category": "AI开发",
+    "tags": ["开源ML", "上下文AI", "AI助手", "机器学习"],
+    "coverImage": "https://rasa.com/favicon.ico"
+  },
+  "dialogflow.cloud.google.com": {
+    "title": "Dialogflow",
+    "description": "Google的对话AI平台，构建语音和文本对话界面",
+    "category": "AI开发",
+    "tags": ["Google AI", "对话界面", "语音AI", "文本AI"],
+    "coverImage": "https://cloud.google.com/favicon.ico"
+  },
+  "wit.ai": {
+    "title": "Wit.ai",
+    "description": "Facebook的自然语言处理平台，为应用添加语音和文本理解",
+    "category": "AI开发",
+    "tags": ["NLP", "语音理解", "文本理解", "Facebook"],
+    "coverImage": "https://wit.ai/favicon.ico"
+  },
+  "luis.ai": {
+    "title": "LUIS",
+    "description": "微软的语言理解智能服务，构建自然语言理解应用",
+    "category": "AI开发",
+    "tags": ["微软AI", "语言理解", "NLU", "智能服务"],
+    "coverImage": "https://luis.ai/favicon.ico"
+  },
+  "aws.amazon.com/lex": {
+    "title": "Amazon Lex",
+    "description": "AWS的对话AI服务，使用语音和文本构建聊天机器人",
+    "category": "AI开发",
+    "tags": ["AWS", "对话AI", "语音机器人", "文本机器人"],
+    "coverImage": "https://aws.amazon.com/favicon.ico"
+  },
+  "ibm.com/watson": {
+    "title": "IBM Watson",
+    "description": "IBM的AI和机器学习平台，提供企业级AI解决方案",
+    "category": "AI开发",
+    "tags": ["IBM AI", "机器学习", "企业AI", "AI解决方案"],
+    "coverImage": "https://ibm.com/favicon.ico"
+  },
+
+  "dagster.io": {
+    "title": "Dagster",
+    "description": "数据编排平台，用于开发、生产和观察数据资产",
+    "category": "数据编排",
+    "tags": ["数据编排", "数据管道", "数据资产", "可观察性"],
+    "coverImage": "https://dagster.io/favicon.ico"
+  },
+  "prefect.io": {
+    "title": "Prefect",
+    "description": "现代化的工作流编排工具，简化数据工程和MLOps",
+    "category": "工作流编排",
+    "tags": ["工作流编排", "数据工程", "MLOps", "现代化"],
+    "coverImage": "https://prefect.io/favicon.ico"
+  },
+  "kedro.org": {
+    "title": "Kedro",
+    "description": "开源Python框架，用于创建可重现、可维护和模块化的数据科学代码",
+    "category": "数据科学",
+    "tags": ["数据科学", "Python", "可重现", "模块化"],
+    "coverImage": "https://kedro.org/favicon.ico"
+  },
+  "dbt.com": {
+    "title": "dbt",
+    "description": "数据构建工具，使分析工程师能够转换仓库中的数据",
+    "category": "数据转换",
+    "tags": ["数据转换", "分析工程", "SQL", "数据仓库"],
+    "coverImage": "https://dbt.com/favicon.ico"
+  },
+  "great-expectations.readthedocs.io": {
+    "title": "Great Expectations",
+    "description": "数据质量和验证框架，帮助团队消除数据管道中的错误",
+    "category": "数据质量",
+    "tags": ["数据质量", "数据验证", "数据管道", "测试"],
+    "coverImage": "https://great-expectations.readthedocs.io/favicon.ico"
+  },
+  "mlflow.org": {
+    "title": "MLflow",
+    "description": "开源机器学习生命周期管理平台",
+    "category": "机器学习",
+    "tags": ["机器学习", "MLOps", "模型管理", "实验跟踪"],
+    "coverImage": "https://mlflow.org/favicon.ico"
+  },
+  "kubeflow.org": {
+    "title": "Kubeflow",
+    "description": "Kubernetes上的机器学习工作流，简化ML部署",
+    "category": "机器学习",
+    "tags": ["Kubernetes", "机器学习", "ML工作流", "云原生"],
+    "coverImage": "https://kubeflow.org/favicon.ico"
+  },
+  "feast.dev": {
+    "title": "Feast",
+    "description": "开源特征存储，用于机器学习的特征管理",
+    "category": "特征存储",
+    "tags": ["特征存储", "机器学习", "特征管理", "开源"],
+    "coverImage": "https://feast.dev/favicon.ico"
+  },
+  "tecton.ai": {
+    "title": "Tecton",
+    "description": "企业级特征平台，为机器学习提供实时特征服务",
+    "category": "特征平台",
+    "tags": ["特征平台", "实时特征", "机器学习", "企业级"],
+    "coverImage": "https://tecton.ai/favicon.ico"
+  },
+  "wandb.ai": {
+    "title": "Weights & Biases",
+    "description": "机器学习实验跟踪、模型管理和协作平台",
+    "category": "机器学习",
+    "tags": ["实验跟踪", "模型管理", "ML协作", "可视化"],
+    "coverImage": "https://wandb.ai/favicon.ico"
+  },
+  "cockroachdb.com": {
+    "title": "CockroachDB",
+    "description": "分布式SQL数据库，提供强一致性和高可用性",
+    "category": "分布式数据库",
+    "tags": ["分布式SQL", "强一致性", "高可用", "云原生"],
+    "coverImage": "https://cockroachdb.com/favicon.ico"
+  },
+  "yugabyte.com": {
+    "title": "YugabyteDB",
+    "description": "高性能分布式SQL数据库，兼容PostgreSQL",
+    "category": "分布式数据库",
+    "tags": ["分布式SQL", "PostgreSQL兼容", "高性能", "多云"],
+    "coverImage": "https://yugabyte.com/favicon.ico"
+  },
+  "tikv.org": {
+    "title": "TiKV",
+    "description": "分布式事务键值数据库，TiDB的存储引擎",
+    "category": "键值数据库",
+    "tags": ["分布式KV", "事务", "Raft", "存储引擎"],
+    "coverImage": "https://tikv.org/favicon.ico"
+  },
+  "pingcap.com": {
+    "title": "TiDB",
+    "description": "开源分布式HTAP数据库，兼容MySQL协议",
+    "category": "分布式数据库",
+    "tags": ["HTAP", "MySQL兼容", "分布式", "开源"],
+    "coverImage": "https://pingcap.com/favicon.ico"
+  },
+  "vitess.io": {
+    "title": "Vitess",
+    "description": "MySQL的分布式数据库系统，用于水平扩展MySQL",
+    "category": "数据库中间件",
+    "tags": ["MySQL扩展", "分布式", "分片", "Kubernetes"],
+    "coverImage": "https://vitess.io/favicon.ico"
+  },
+  "scylladb.com": {
+    "title": "ScyllaDB",
+    "description": "高性能NoSQL数据库，Cassandra的C++重写版本",
+    "category": "NoSQL数据库",
+    "tags": ["高性能", "NoSQL", "Cassandra兼容", "C++"],
+    "coverImage": "https://scylladb.com/favicon.ico"
+  },
+  "foundationdb.org": {
+    "title": "FoundationDB",
+    "description": "分布式数据库，提供ACID事务和多模型支持",
+    "category": "分布式数据库",
+    "tags": ["ACID事务", "多模型", "分布式", "Apple"],
+    "coverImage": "https://foundationdb.org/favicon.ico"
+  },
+  "surrealdb.com": {
+    "title": "SurrealDB",
+    "description": "现代多模型数据库，支持文档、图和关系型数据",
+    "category": "多模型数据库",
+    "tags": ["多模型", "现代数据库", "文档", "图数据库"],
+    "coverImage": "https://surrealdb.com/favicon.ico"
+  },
+  "edgedb.com": {
+    "title": "EdgeDB",
+    "description": "下一代关系数据库，结合关系型和对象数据库的优势",
+    "category": "关系数据库",
+    "tags": ["下一代数据库", "对象关系", "类型安全", "GraphQL"],
+    "coverImage": "https://edgedb.com/favicon.ico"
+  },
+  "fauna.com": {
+    "title": "Fauna",
+    "description": "无服务器云数据库，提供ACID事务和全球分布",
+    "category": "云数据库",
+    "tags": ["无服务器", "ACID事务", "全球分布", "云原生"],
+    "coverImage": "https://fauna.com/favicon.ico"
+  },
+  "ui.shadcn.com": {
+    "title": "shadcn/ui",
+    "description": "现代React组件库，基于Radix UI和Tailwind CSS构建",
+    "category": "UI组件库",
+    "tags": ["React组件", "Tailwind CSS", "Radix UI", "现代设计"],
+    "coverImage": "https://ui.shadcn.com/favicon.ico"
+  },
+  "mantine.dev": {
+    "title": "Mantine",
+    "description": "功能丰富的React组件库，包含100+可定制组件",
+    "category": "UI组件库",
+    "tags": ["React组件", "可定制", "功能丰富", "TypeScript"],
+    "coverImage": "https://mantine.dev/favicon.ico"
+  },
+  "chakra-ui.com": {
+    "title": "Chakra UI",
+    "description": "简单、模块化、可访问的React组件库",
+    "category": "UI组件库",
+    "tags": ["React组件", "可访问性", "模块化", "简单"],
+    "coverImage": "https://chakra-ui.com/favicon.ico"
+  },
+  "headlessui.com": {
+    "title": "Headless UI",
+    "description": "无样式、完全可访问的UI组件，支持React和Vue",
+    "category": "UI组件库",
+    "tags": ["无样式组件", "可访问性", "React", "Vue"],
+    "coverImage": "https://headlessui.com/favicon.ico"
+  },
+  "radix-ui.com": {
+    "title": "Radix UI",
+    "description": "低级UI原语，用于构建高质量、可访问的设计系统",
+    "category": "UI组件库",
+    "tags": ["UI原语", "可访问性", "设计系统", "低级组件"],
+    "coverImage": "https://radix-ui.com/favicon.ico"
+  },
+  "arco.design": {
+    "title": "Arco Design",
+    "description": "字节跳动的企业级设计语言和React组件库",
+    "category": "UI组件库",
+    "tags": ["企业级", "设计语言", "React", "字节跳动"],
+    "coverImage": "https://arco.design/favicon.ico"
+  },
+  "semi.design": {
+    "title": "Semi Design",
+    "description": "抖音前端团队的现代化设计系统和React组件库",
+    "category": "UI组件库",
+    "tags": ["现代化设计", "React", "抖音", "设计系统"],
+    "coverImage": "https://semi.design/favicon.ico"
+  },
+  "tdesign.tencent.com": {
+    "title": "TDesign",
+    "description": "腾讯的企业级设计体系，支持多框架组件库",
+    "category": "UI组件库",
+    "tags": ["企业级设计", "多框架", "腾讯", "设计体系"],
+    "coverImage": "https://tdesign.tencent.com/favicon.ico"
+  },
+  "primereact.org": {
+    "title": "PrimeReact",
+    "description": "丰富的React UI组件库，包含80+组件",
+    "category": "UI组件库",
+    "tags": ["React组件", "丰富组件", "企业级", "主题"],
+    "coverImage": "https://primereact.org/favicon.ico"
+  },
+  "react-spectrum.adobe.com": {
+    "title": "React Spectrum",
+    "description": "Adobe的React UI库，基于设计系统构建",
+    "category": "UI组件库",
+    "tags": ["Adobe", "设计系统", "React", "可访问性"],
+    "coverImage": "https://react-spectrum.adobe.com/favicon.ico"
+  },
+  "vitest.dev": {
+    "title": "Vitest",
+    "description": "由Vite驱动的极快单元测试框架",
+    "category": "测试框架",
+    "tags": ["单元测试", "Vite", "极快", "现代测试"],
+    "coverImage": "https://vitest.dev/favicon.ico"
+  },
+  "playwright.dev": {
+    "title": "Playwright",
+    "description": "微软的端到端测试框架，支持多浏览器自动化",
+    "category": "测试框架",
+    "tags": ["端到端测试", "多浏览器", "自动化", "微软"],
+    "coverImage": "https://playwright.dev/favicon.ico"
+  },
+  "cypress.io": {
+    "title": "Cypress",
+    "description": "现代Web应用的端到端测试框架",
+    "category": "测试框架",
+    "tags": ["端到端测试", "Web应用", "现代测试", "调试"],
+    "coverImage": "https://cypress.io/favicon.ico"
+  },
+  "testing-library.com": {
+    "title": "Testing Library",
+    "description": "简单而完整的测试工具，鼓励良好的测试实践",
+    "category": "测试工具",
+    "tags": ["测试工具", "良好实践", "用户中心", "简单"],
+    "coverImage": "https://testing-library.com/favicon.ico"
+  },
+  "storybook.js.org": {
+    "title": "Storybook",
+    "description": "UI组件开发环境，用于构建、测试和文档化组件",
+    "category": "开发工具",
+    "tags": ["UI组件", "开发环境", "文档化", "测试"],
+    "coverImage": "https://storybook.js.org/favicon.ico"
+  },
+  "chromatic.com": {
+    "title": "Chromatic",
+    "description": "Storybook的可视化测试和审查平台",
+    "category": "可视化测试",
+    "tags": ["可视化测试", "Storybook", "UI审查", "回归测试"],
+    "coverImage": "https://chromatic.com/favicon.ico"
+  },
+  "percy.io": {
+    "title": "Percy",
+    "description": "可视化测试和审查平台，自动检测UI变化",
+    "category": "可视化测试",
+    "tags": ["可视化测试", "UI变化", "自动检测", "审查"],
+    "coverImage": "https://percy.io/favicon.ico"
+  },
+  "applitools.com": {
+    "title": "Applitools",
+    "description": "AI驱动的可视化测试平台，确保UI的完美呈现",
+    "category": "可视化测试",
+    "tags": ["AI测试", "可视化测试", "UI测试", "完美呈现"],
+    "coverImage": "https://applitools.com/favicon.ico"
+  },
+  "eslint.org": {
+    "title": "ESLint",
+    "description": "可配置的JavaScript代码检查工具，发现和修复代码问题",
+    "category": "代码质量",
+    "tags": ["代码检查", "JavaScript", "可配置", "代码质量"],
+    "coverImage": "https://eslint.org/favicon.ico"
+  },
+  "prettier.io": {
+    "title": "Prettier",
+    "description": "代码格式化工具，支持多种语言的一致性格式化",
+    "category": "代码格式化",
+    "tags": ["代码格式化", "一致性", "多语言", "自动化"],
+    "coverImage": "https://prettier.io/favicon.ico"
+  },
+
+  "chatgpt.com": {
+    "title": "ChatGPT",
+    "description": "OpenAI开发的AI聊天机器人，基于GPT模型的智能对话助手",
+    "category": "AI工具",
+    "tags": ["AI聊天", "GPT", "OpenAI", "智能对话"],
+    "coverImage": "https://chatgpt.com/favicon.ico"
+  },
+  "gemini.google.com": {
+    "title": "Google Gemini",
+    "description": "Google的多模态AI助手，支持文本、图像和代码的智能交互",
+    "category": "AI工具",
+    "tags": ["Google AI", "多模态", "AI助手", "智能交互"],
+    "coverImage": "https://gemini.google.com/favicon.ico"
+  },
+  "grok.com": {
+    "title": "Grok",
+    "description": "xAI开发的AI聊天机器人，具有实时信息获取和幽默对话能力",
+    "category": "AI工具",
+    "tags": ["xAI", "AI聊天", "实时信息", "幽默对话"],
+    "coverImage": "https://grok.com/favicon.ico"
+  },
+  "monica.im": {
+    "title": "Monica",
+    "description": "AI助手浏览器扩展，集成多个AI模型提供智能辅助功能",
+    "category": "AI工具",
+    "tags": ["AI助手", "浏览器扩展", "多模型", "智能辅助"],
+    "coverImage": "https://monica.im/favicon.ico"
+  },
+  "platform.openai.com": {
+    "title": "OpenAI Platform",
+    "description": "OpenAI开发者平台，提供GPT API和AI模型服务",
+    "category": "AI开发",
+    "tags": ["OpenAI", "API平台", "GPT API", "AI模型"],
+    "coverImage": "https://platform.openai.com/favicon.ico"
+  },
+  "youtube.com": {
+    "title": "YouTube",
+    "description": "全球最大的视频分享平台，用户可以上传、观看和分享视频内容",
+    "category": "视频平台",
+    "tags": ["视频分享", "在线视频", "内容创作", "娱乐"],
+    "coverImage": "https://youtube.com/favicon.ico"
+  },
+  "google.com": {
+    "title": "Google",
+    "description": "全球最大的搜索引擎，提供网页搜索、图片搜索等多种搜索服务",
+    "category": "搜索引擎",
+    "tags": ["搜索引擎", "网页搜索", "Google", "信息检索"],
+    "coverImage": "https://google.com/favicon.ico"
+  },
+  "weibo.com": {
+    "title": "新浪微博",
+    "description": "中国最大的社交媒体平台，用户可以发布微博、关注好友和获取实时信息",
+    "category": "社交媒体",
+    "tags": ["社交媒体", "微博", "实时信息", "中文社交"],
+    "coverImage": "https://weibo.com/favicon.ico"
+  },
+  "mail.google.com": {
+    "title": "Gmail",
+    "description": "Google的免费电子邮件服务，提供大容量存储和强大的搜索功能",
+    "category": "邮件服务",
+    "tags": ["电子邮件", "Gmail", "Google", "邮件服务"],
+    "coverImage": "https://mail.google.com/favicon.ico"
+  },
+  "outlook.live.com": {
+    "title": "Outlook",
+    "description": "微软的免费电子邮件服务，集成日历、联系人和任务管理功能",
+    "category": "邮件服务",
+    "tags": ["电子邮件", "Outlook", "微软", "日历"],
+    "coverImage": "https://outlook.live.com/favicon.ico"
+  },
+  "blog.csdn.net": {
+    "title": "CSDN博客",
+    "description": "中国最大的IT技术社区，程序员分享技术文章和经验的平台",
+    "category": "技术社区",
+    "tags": ["技术博客", "程序员", "IT社区", "技术分享"],
+    "coverImage": "https://blog.csdn.net/favicon.ico"
+  },
+  "cnblogs.com": {
+    "title": "博客园",
+    "description": "面向开发者的知识分享社区，专注于.NET和软件开发技术",
+    "category": "技术社区",
+    "tags": ["开发者社区", ".NET", "软件开发", "知识分享"],
+    "coverImage": "https://cnblogs.com/favicon.ico"
+  },
+  "jianshu.com": {
+    "title": "简书",
+    "description": "优质创作社区，用户可以在这里创作和分享高质量的文章",
+    "category": "内容创作",
+    "tags": ["创作社区", "文章分享", "优质内容", "写作平台"],
+    "coverImage": "https://jianshu.com/favicon.ico"
+  },
+  "zhuanlan.zhihu.com": {
+    "title": "知乎专栏",
+    "description": "知乎的专栏写作平台，用户可以发布深度文章和专业内容",
+    "category": "内容创作",
+    "tags": ["知乎", "专栏写作", "深度文章", "专业内容"],
+    "coverImage": "https://zhuanlan.zhihu.com/favicon.ico"
+  },
+  "doris.apache.org": {
+    "title": "Apache Doris",
+    "description": "现代化的MPP分析型数据库，支持实时数据分析和高并发查询",
+    "category": "分析数据库",
+    "tags": ["MPP数据库", "实时分析", "高并发", "Apache"],
+    "coverImage": "https://doris.apache.org/favicon.ico"
+  },
+  "analytics.google.com": {
+    "title": "Google Analytics",
+    "description": "Google的网站分析工具，提供详细的网站流量和用户行为数据",
+    "category": "网站分析",
+    "tags": ["网站分析", "流量统计", "用户行为", "Google"],
+    "coverImage": "https://analytics.google.com/favicon.ico"
+  },
+  "search.google.com": {
+    "title": "Google Search Console",
+    "description": "Google的网站管理工具，帮助网站所有者监控和优化搜索表现",
+    "category": "SEO工具",
+    "tags": ["搜索优化", "网站管理", "SEO", "Google"],
+    "coverImage": "https://search.google.com/favicon.ico"
+  },
+  "dash.cloudflare.com": {
+    "title": "Cloudflare Dashboard",
+    "description": "Cloudflare的管理控制台，提供CDN、安全和性能优化服务",
+    "category": "云服务",
+    "tags": ["CDN", "网站安全", "性能优化", "Cloudflare"],
+    "coverImage": "https://dash.cloudflare.com/favicon.ico"
+  },
+  "theresanaiforthat.com": {
+    "title": "There's An AI For That",
+    "description": "AI工具发现平台，收录和推荐各种AI应用和工具",
+    "category": "AI工具",
+    "tags": ["AI工具发现", "AI应用", "工具推荐", "AI目录"],
+    "coverImage": "https://theresanaiforthat.com/favicon.ico"
+  },
+  "toolify.ai": {
+    "title": "Toolify",
+    "description": "AI工具聚合平台，发现和比较最新的AI工具和应用",
+    "category": "AI工具",
+    "tags": ["AI工具聚合", "工具比较", "AI应用", "工具发现"],
+    "coverImage": "https://toolify.ai/favicon.ico"
+  },
+  "pollo.ai": {
+    "title": "Pollo AI",
+    "description": "AI视频生成工具，通过文本描述创建高质量的视频内容",
+    "category": "AI工具",
+    "tags": ["AI视频", "视频生成", "文本转视频", "内容创作"],
+    "coverImage": "https://pollo.ai/favicon.ico"
+  },
+  "vmake.ai": {
+    "title": "VMake",
+    "description": "AI驱动的视频和图像编辑工具，提供智能美化和特效功能",
+    "category": "AI工具",
+    "tags": ["AI编辑", "视频编辑", "图像处理", "智能美化"],
+    "coverImage": "https://vmake.ai/favicon.ico"
+  },
+  "astria.ai": {
+    "title": "Astria",
+    "description": "AI图像生成平台，专注于个性化和定制化的AI艺术创作",
+    "category": "AI工具",
+    "tags": ["AI图像", "个性化", "艺术创作", "定制化"],
+    "coverImage": "https://astria.ai/favicon.ico"
+  },
+  "scratch.mit.edu": {
+    "title": "Scratch",
+    "description": "MIT开发的可视化编程语言，帮助儿童和初学者学习编程",
+    "category": "编程教育",
+    "tags": ["可视化编程", "编程教育", "MIT", "儿童编程"],
+    "coverImage": "https://scratch.mit.edu/favicon.ico"
+  },
+  "crazygames.com": {
+    "title": "CrazyGames",
+    "description": "免费在线游戏平台，提供各种类型的HTML5和WebGL游戏",
+    "category": "游戏平台",
+    "tags": ["在线游戏", "免费游戏", "HTML5游戏", "WebGL"],
+    "coverImage": "https://crazygames.com/favicon.ico"
+  },
+  "freezenova.com": {
+    "title": "FreezeNova",
+    "description": "在线游戏网站，提供各种免费的休闲和动作游戏",
+    "category": "游戏平台",
+    "tags": ["在线游戏", "免费游戏", "休闲游戏", "动作游戏"],
+    "coverImage": "https://freezenova.com/favicon.ico"
+  },
+  "onlinegames.io": {
+    "title": "OnlineGames.io",
+    "description": "多人在线游戏平台，提供各种.io游戏和多人竞技游戏",
+    "category": "游戏平台",
+    "tags": ["多人游戏", ".io游戏", "在线竞技", "多人竞技"],
+    "coverImage": "https://onlinegames.io/favicon.ico"
+  },
+  "hudi.apache.org": {
+    "title": "Apache Hudi",
+    "description": "流式数据湖平台，支持增量数据处理和实时分析",
+    "category": "数据湖",
+    "tags": ["数据湖", "增量处理", "实时分析", "Apache"],
+    "coverImage": "https://hudi.apache.org/favicon.ico"
+  },
+  "iceberg.apache.org": {
+    "title": "Apache Iceberg",
+    "description": "大型分析数据集的开放表格式，支持ACID事务和模式演进",
+    "category": "数据湖",
+    "tags": ["表格式", "ACID事务", "模式演进", "大数据"],
+    "coverImage": "https://iceberg.apache.org/favicon.ico"
+  },
+  "delta.io": {
+    "title": "Delta Lake",
+    "description": "开源存储框架，为数据湖带来ACID事务和可靠性",
+    "category": "数据湖",
+    "tags": ["数据湖", "ACID事务", "可靠性", "存储框架"],
+    "coverImage": "https://delta.io/favicon.ico"
+  },
+  "trino.io": {
+    "title": "Trino",
+    "description": "分布式SQL查询引擎，用于大数据分析和联邦查询",
+    "category": "查询引擎",
+    "tags": ["分布式SQL", "查询引擎", "大数据分析", "联邦查询"],
+    "coverImage": "https://trino.io/favicon.ico"
+  },
+  "prestodb.io": {
+    "title": "PrestoDB",
+    "description": "分布式SQL查询引擎，专为交互式分析查询设计",
+    "category": "查询引擎",
+    "tags": ["分布式SQL", "交互式分析", "查询引擎", "Facebook"],
+    "coverImage": "https://prestodb.io/favicon.ico"
+  },
+  "starrocks.io": {
+    "title": "StarRocks",
+    "description": "极速全场景MPP数据库，支持实时分析和高并发查询",
+    "category": "分析数据库",
+    "tags": ["MPP数据库", "实时分析", "高并发", "极速查询"],
+    "coverImage": "https://starrocks.io/favicon.ico"
+  },
+  "kylin.apache.org": {
+    "title": "Apache Kylin",
+    "description": "分布式分析数据仓库，提供超大数据集上的亚秒级查询",
+    "category": "数据仓库",
+    "tags": ["数据仓库", "亚秒级查询", "超大数据", "OLAP"],
+    "coverImage": "https://kylin.apache.org/favicon.ico"
+  },
+  "pinot.apache.org": {
+    "title": "Apache Pinot",
+    "description": "实时分布式OLAP数据存储，专为低延迟分析查询设计",
+    "category": "OLAP数据库",
+    "tags": ["实时OLAP", "低延迟", "分布式", "分析查询"],
+    "coverImage": "https://pinot.apache.org/favicon.ico"
+  },
+  "dolphinscheduler.apache.org": {
+    "title": "Apache DolphinScheduler",
+    "description": "分布式易扩展的可视化DAG工作流任务调度平台",
+    "category": "工作流调度",
+    "tags": ["工作流调度", "可视化DAG", "分布式", "任务调度"],
+    "coverImage": "https://dolphinscheduler.apache.org/favicon.ico"
+  },
+  "console.cloud.google.com": {
+    "title": "Google Cloud Console",
+    "description": "Google Cloud Platform的管理控制台，提供云服务管理和监控",
+    "category": "云服务",
+    "tags": ["Google Cloud", "云管理", "控制台", "云服务"],
+    "coverImage": "https://console.cloud.google.com/favicon.ico"
+  },
+  "portal.azure.com": {
+    "title": "Microsoft Azure Portal",
+    "description": "微软Azure云平台的管理门户，提供云资源管理和监控",
+    "category": "云服务",
+    "tags": ["Azure", "微软云", "云管理", "管理门户"],
+    "coverImage": "https://portal.azure.com/favicon.ico"
+  },
+  "console.aliyun.com": {
+    "title": "阿里云控制台",
+    "description": "阿里云的管理控制台，提供云产品管理和运维监控功能",
+    "category": "云服务",
+    "tags": ["阿里云", "云管理", "控制台", "运维监控"],
+    "coverImage": "https://console.aliyun.com/favicon.ico"
+  },
+  "cloud.tencent.com": {
+    "title": "腾讯云",
+    "description": "腾讯的云计算服务平台，提供云服务器、数据库等云产品",
+    "category": "云服务",
+    "tags": ["腾讯云", "云计算", "云服务器", "云数据库"],
+    "coverImage": "https://cloud.tencent.com/favicon.ico"
+  },
+  "console.huaweicloud.com": {
+    "title": "华为云控制台",
+    "description": "华为云的管理控制台，提供云资源管理和服务配置功能",
+    "category": "云服务",
+    "tags": ["华为云", "云管理", "控制台", "云资源"],
+    "coverImage": "https://console.huaweicloud.com/favicon.ico"
+  },
+  "fanyi.baidu.com": {
+    "title": "百度翻译",
+    "description": "百度的在线翻译服务，支持多种语言翻译和语音翻译",
+    "category": "翻译工具",
+    "tags": ["在线翻译", "语音翻译", "百度", "多语言"],
+    "coverImage": "https://fanyi.baidu.com/favicon.ico"
+  },
+  "fanyi.youdao.com": {
+    "title": "有道翻译",
+    "description": "网易有道的在线翻译服务，提供精准的中英文翻译",
+    "category": "翻译工具",
+    "tags": ["在线翻译", "中英翻译", "有道", "精准翻译"],
+    "coverImage": "https://fanyi.youdao.com/favicon.ico"
+  },
+
+  "xueqiu.com": {
+    "title": "雪球",
+    "description": "智能投资平台，提供股票、基金等投资信息和社区交流",
+    "category": "金融投资",
+    "tags": ["股票投资", "基金", "投资社区", "财经资讯"],
+    "coverImage": "https://xueqiu.com/favicon.ico"
+  },
+  "iwencai.com": {
+    "title": "同花顺i问财",
+    "description": "智能投资问答平台，通过自然语言查询股票和财经信息",
+    "category": "金融投资",
+    "tags": ["智能投资", "股票查询", "财经问答", "同花顺"],
+    "coverImage": "https://iwencai.com/favicon.ico"
+  },
+  "q.10jqka.com.cn": {
+    "title": "同花顺股票",
+    "description": "专业的股票交易和分析平台，提供实时行情和技术分析",
+    "category": "金融投资",
+    "tags": ["股票交易", "实时行情", "技术分析", "同花顺"],
+    "coverImage": "https://q.10jqka.com.cn/favicon.ico"
+  },
+  "cls.cn": {
+    "title": "财联社",
+    "description": "专业财经资讯平台，提供7x24小时财经新闻和市场分析",
+    "category": "财经资讯",
+    "tags": ["财经新闻", "市场分析", "实时资讯", "专业财经"],
+    "coverImage": "https://cls.cn/favicon.ico"
+  },
+  "cninfo.com.cn": {
+    "title": "巨潮资讯网",
+    "description": "中国证监会指定的上市公司信息披露网站",
+    "category": "金融投资",
+    "tags": ["上市公司", "信息披露", "证监会", "公告查询"],
+    "coverImage": "https://cninfo.com.cn/favicon.ico"
+  },
+  "pro.gw.com.cn": {
+    "title": "国信证券",
+    "description": "国信证券专业版交易平台，提供股票、基金等金融产品交易",
+    "category": "金融投资",
+    "tags": ["证券交易", "股票", "基金", "国信证券"],
+    "coverImage": "https://pro.gw.com.cn/favicon.ico"
+  },
+  "chanluns.com": {
+    "title": "缠论说",
+    "description": "缠中说禅理论学习和交流平台，专注技术分析和投资理论",
+    "category": "金融投资",
+    "tags": ["缠论", "技术分析", "投资理论", "股票分析"],
+    "coverImage": "https://chanluns.com/favicon.ico"
+  },
+  "wenda.tdx.com.cn": {
+    "title": "通达信问答",
+    "description": "通达信软件官方问答平台，提供股票软件使用帮助和技术支持",
+    "category": "金融投资",
+    "tags": ["通达信", "股票软件", "技术支持", "使用帮助"],
+    "coverImage": "https://wenda.tdx.com.cn/favicon.ico"
+  },
+  "shimo.im": {
+    "title": "石墨文档",
+    "description": "在线协作文档平台，支持多人实时编辑和团队协作",
+    "category": "协作工具",
+    "tags": ["在线文档", "多人协作", "实时编辑", "团队协作"],
+    "coverImage": "https://shimo.im/favicon.ico"
+  },
+  "yuque.com": {
+    "title": "语雀",
+    "description": "阿里巴巴的知识管理平台，专业的文档与知识库工具",
+    "category": "知识管理",
+    "tags": ["知识管理", "文档", "知识库", "阿里巴巴"],
+    "coverImage": "https://yuque.com/favicon.ico"
+  },
+  "feishu.cn": {
+    "title": "飞书",
+    "description": "字节跳动的企业协作平台，集成即时通讯、文档、日历等功能",
+    "category": "协作工具",
+    "tags": ["企业协作", "即时通讯", "文档协作", "字节跳动"],
+    "coverImage": "https://feishu.cn/favicon.ico"
+  },
+  "tool.lu": {
+    "title": "在线工具",
+    "description": "程序员在线工具箱，提供JSON格式化、加密解密等开发工具",
+    "category": "开发工具",
+    "tags": ["在线工具", "JSON格式化", "加密解密", "程序员工具"],
+    "coverImage": "https://tool.lu/favicon.ico"
+  },
+  "sojson.com": {
+    "title": "SO JSON",
+    "description": "在线JSON解析工具，提供JSON格式化、压缩、验证等功能",
+    "category": "开发工具",
+    "tags": ["JSON工具", "格式化", "在线解析", "开发辅助"],
+    "coverImage": "https://sojson.com/favicon.ico"
+  },
+  "bookstack.cn": {
+    "title": "书栈网",
+    "description": "IT技术文档和电子书分享平台，程序员的知识库",
+    "category": "技术文档",
+    "tags": ["技术文档", "电子书", "IT知识", "程序员"],
+    "coverImage": "https://bookstack.cn/favicon.ico"
+  },
+  "modb.pro": {
+    "title": "墨天轮",
+    "description": "数据库技术社区，专注于数据库技术分享和交流",
+    "category": "技术社区",
+    "tags": ["数据库", "技术社区", "技术分享", "数据库技术"],
+    "coverImage": "https://modb.pro/favicon.ico"
+  },
+  "help.aliyun.com": {
+    "title": "阿里云帮助中心",
+    "description": "阿里云产品文档和技术支持中心，提供详细的使用指南",
+    "category": "技术文档",
+    "tags": ["阿里云", "产品文档", "技术支持", "使用指南"],
+    "coverImage": "https://help.aliyun.com/favicon.ico"
+  },
+  "download.csdn.net": {
+    "title": "CSDN下载",
+    "description": "CSDN的资源下载平台，提供技术资料、源码、工具下载",
+    "category": "资源下载",
+    "tags": ["技术资料", "源码下载", "开发工具", "CSDN"],
+    "coverImage": "https://download.csdn.net/favicon.ico"
+  },
+  "html5games.com": {
+    "title": "HTML5 Games",
+    "description": "HTML5游戏平台，提供各种基于HTML5技术的在线游戏",
+    "category": "游戏平台",
+    "tags": ["HTML5游戏", "在线游戏", "Web游戏", "休闲游戏"],
+    "coverImage": "https://html5games.com/favicon.ico"
+  },
+  "instantdomainsearch.com": {
+    "title": "Instant Domain Search",
+    "description": "即时域名搜索工具，快速查询域名可用性",
+    "category": "域名工具",
+    "tags": ["域名搜索", "域名查询", "域名注册", "即时搜索"],
+    "coverImage": "https://instantdomainsearch.com/favicon.ico"
+  },
+  "leandomainsearch.com": {
+    "title": "Lean Domain Search",
+    "description": "域名搜索和建议工具，帮助找到完美的域名",
+    "category": "域名工具",
+    "tags": ["域名搜索", "域名建议", "创意域名", "域名生成"],
+    "coverImage": "https://leandomainsearch.com/favicon.ico"
+  },
+  "query.domains": {
+    "title": "Query Domains",
+    "description": "域名查询和分析工具，提供域名历史和价值评估",
+    "category": "域名工具",
+    "tags": ["域名查询", "域名分析", "域名历史", "价值评估"],
+    "coverImage": "https://query.domains/favicon.ico"
+  },
+  "spaceship.com": {
+    "title": "Spaceship",
+    "description": "现代化的域名注册商，提供简洁的域名管理体验",
+    "category": "域名服务",
+    "tags": ["域名注册", "域名管理", "现代化", "简洁体验"],
+    "coverImage": "https://spaceship.com/favicon.ico"
+  },
+  "seoptimer.com": {
+    "title": "SEO Timer",
+    "description": "免费的SEO审计工具，分析网站SEO表现和优化建议",
+    "category": "SEO工具",
+    "tags": ["SEO审计", "网站分析", "SEO优化", "免费工具"],
+    "coverImage": "https://seoptimer.com/favicon.ico"
+  },
+  "searchsuggest.tips": {
+    "title": "Search Suggest",
+    "description": "搜索建议工具，获取Google、YouTube等平台的搜索建议",
+    "category": "SEO工具",
+    "tags": ["搜索建议", "关键词", "Google建议", "SEO研究"],
+    "coverImage": "https://searchsuggest.tips/favicon.ico"
+  },
+  "pro.similarweb.com": {
+    "title": "SimilarWeb Pro",
+    "description": "SimilarWeb专业版，提供深度的网站流量分析和竞品研究",
+    "category": "流量分析",
+    "tags": ["流量分析", "竞品研究", "网站分析", "专业版"],
+    "coverImage": "https://pro.similarweb.com/favicon.ico"
+  },
+  "ai-kit.cn": {
+    "title": "AI工具箱",
+    "description": "中文AI工具集合平台，收录各种实用的AI应用和工具",
+    "category": "AI工具",
+    "tags": ["AI工具集", "中文AI", "AI应用", "工具集合"],
+    "coverImage": "https://ai-kit.cn/favicon.ico"
+  },
+  "aitdk.com": {
+    "title": "AI TDK",
+    "description": "AI工具导航网站，发现和分享最新的AI工具和应用",
+    "category": "AI工具",
+    "tags": ["AI导航", "AI工具", "工具发现", "AI应用"],
+    "coverImage": "https://aitdk.com/favicon.ico"
+  },
+  "giz.ai": {
+    "title": "Giz AI",
+    "description": "AI工具平台，提供多种AI应用和智能解决方案",
+    "category": "AI工具",
+    "tags": ["AI平台", "智能解决方案", "AI应用", "人工智能"],
+    "coverImage": "https://giz.ai/favicon.ico"
+  },
+  "regex101.com": {
+    "title": "Regex101",
+    "description": "在线正则表达式测试工具，支持多种编程语言的正则表达式",
+    "category": "开发工具",
+    "tags": ["正则表达式", "在线测试", "多语言", "开发辅助"],
+    "coverImage": "https://regex101.com/favicon.ico"
+  },
+  "regexr.com": {
+    "title": "RegExr",
+    "description": "正则表达式学习和测试工具，提供实时匹配和解释",
+    "category": "开发工具",
+    "tags": ["正则表达式", "学习工具", "实时匹配", "正则教学"],
+    "coverImage": "https://regexr.com/favicon.ico"
+  },
+  "crontab.guru": {
+    "title": "Crontab Guru",
+    "description": "Cron表达式编辑器和解释器，帮助理解和创建定时任务",
+    "category": "开发工具",
+    "tags": ["Cron表达式", "定时任务", "Linux", "任务调度"],
+    "coverImage": "https://crontab.guru/favicon.ico"
+  },
+  "jsonformatter.org": {
+    "title": "JSON Formatter",
+    "description": "在线JSON格式化和验证工具，支持JSON美化和压缩",
+    "category": "开发工具",
+    "tags": ["JSON格式化", "JSON验证", "在线工具", "数据格式"],
+    "coverImage": "https://jsonformatter.org/favicon.ico"
+  },
+  "base64decode.org": {
+    "title": "Base64 Decode",
+    "description": "在线Base64编码解码工具，支持文本和文件的编码转换",
+    "category": "开发工具",
+    "tags": ["Base64", "编码解码", "在线工具", "数据转换"],
+    "coverImage": "https://base64decode.org/favicon.ico"
+  },
+  "urlencoder.org": {
+    "title": "URL Encoder",
+    "description": "URL编码解码工具，处理URL中的特殊字符编码",
+    "category": "开发工具",
+    "tags": ["URL编码", "URL解码", "特殊字符", "Web开发"],
+    "coverImage": "https://urlencoder.org/favicon.ico"
+  },
+  "jwt.io": {
+    "title": "JWT.io",
+    "description": "JSON Web Token调试工具，解码、验证和生成JWT令牌",
+    "category": "开发工具",
+    "tags": ["JWT", "令牌", "身份验证", "API安全"],
+    "coverImage": "https://jwt.io/favicon.ico"
+  },
+  "httpbin.org": {
+    "title": "HTTPBin",
+    "description": "HTTP请求和响应测试服务，用于API开发和调试",
+    "category": "开发工具",
+    "tags": ["HTTP测试", "API调试", "请求响应", "Web开发"],
+    "coverImage": "https://httpbin.org/favicon.ico"
+  },
+  "requestbin.com": {
+    "title": "RequestBin",
+    "description": "HTTP请求收集和检查工具，用于调试Webhook和API",
+    "category": "开发工具",
+    "tags": ["HTTP请求", "Webhook", "API调试", "请求收集"],
+    "coverImage": "https://requestbin.com/favicon.ico"
+  },
+  "webhook.site": {
+    "title": "Webhook.site",
+    "description": "免费的Webhook测试工具，实时查看HTTP请求和响应",
+    "category": "开发工具",
+    "tags": ["Webhook测试", "HTTP请求", "实时监控", "API测试"],
+    "coverImage": "https://webhook.site/favicon.ico"
+  },
+  "speedtest.net": {
+    "title": "Speedtest",
+    "description": "Ookla的网络速度测试工具，测试网络下载和上传速度",
+    "category": "网络工具",
+    "tags": ["网速测试", "带宽测试", "网络诊断", "速度检测"],
+    "coverImage": "https://speedtest.net/favicon.ico"
+  },
+  "fast.com": {
+    "title": "Fast.com",
+    "description": "Netflix提供的简单网速测试工具，专注于下载速度测试",
+    "category": "网络工具",
+    "tags": ["网速测试", "Netflix", "简单测试", "下载速度"],
+    "coverImage": "https://fast.com/favicon.ico"
+  },
+  "ping.pe": {
+    "title": "Ping.pe",
+    "description": "全球网络连通性测试工具，从多个地点测试网站可达性",
+    "category": "网络工具",
+    "tags": ["网络测试", "全球ping", "连通性", "网站监控"],
+    "coverImage": "https://ping.pe/favicon.ico"
+  },
+  "downforeveryoneorjustme.com": {
+    "title": "Down For Everyone Or Just Me",
+    "description": "检查网站是否宕机的工具，确认网站状态",
+    "category": "网络工具",
+    "tags": ["网站状态", "宕机检测", "网站监控", "可用性"],
+    "coverImage": "https://downforeveryoneorjustme.com/favicon.ico"
+  },
+  "isitdownrightnow.com": {
+    "title": "Is It Down Right Now",
+    "description": "实时网站状态检查工具，监控网站可用性",
+    "category": "网络工具",
+    "tags": ["网站状态", "实时监控", "可用性检查", "网站监控"],
+    "coverImage": "https://isitdownrightnow.com/favicon.ico"
+  },
+  "whatismyipaddress.com": {
+    "title": "What Is My IP Address",
+    "description": "查看你的公网IP地址和网络信息的工具",
+    "category": "网络工具",
+    "tags": ["IP地址", "网络信息", "公网IP", "网络查询"],
+    "coverImage": "https://whatismyipaddress.com/favicon.ico"
+  },
+  "ipinfo.io": {
+    "title": "IPinfo",
+    "description": "IP地址信息查询服务，提供地理位置和网络信息",
+    "category": "网络工具",
+    "tags": ["IP查询", "地理位置", "网络信息", "IP数据"],
+    "coverImage": "https://ipinfo.io/favicon.ico"
+  },
+  "whois.net": {
+    "title": "Whois.net",
+    "description": "域名Whois信息查询工具，查看域名注册信息",
+    "category": "域名工具",
+    "tags": ["Whois查询", "域名信息", "注册信息", "域名查询"],
+    "coverImage": "https://whois.net/favicon.ico"
+  },
+  "who.is": {
+    "title": "Who.is",
+    "description": "域名和IP地址信息查询平台，提供详细的网络信息",
+    "category": "域名工具",
+    "tags": ["域名查询", "IP查询", "网络信息", "Whois"],
+    "coverImage": "https://who.is/favicon.ico"
+  },
+  "temp-mail.org": {
+    "title": "Temp Mail",
+    "description": "临时邮箱服务，提供一次性邮件地址保护隐私",
+    "category": "隐私工具",
+    "tags": ["临时邮箱", "一次性邮件", "隐私保护", "匿名邮件"],
+    "coverImage": "https://temp-mail.org/favicon.ico"
+  },
+  "10minutemail.com": {
+    "title": "10 Minute Mail",
+    "description": "10分钟临时邮箱服务，自动销毁的临时邮件地址",
+    "category": "隐私工具",
+    "tags": ["临时邮箱", "10分钟", "自动销毁", "隐私保护"],
+    "coverImage": "https://10minutemail.com/favicon.ico"
+  },
+  "guerrillamail.com": {
+    "title": "Guerrilla Mail",
+    "description": "免费临时邮箱服务，无需注册的一次性邮件地址",
+    "category": "隐私工具",
+    "tags": ["临时邮箱", "免费", "无需注册", "一次性"],
+    "coverImage": "https://guerrillamail.com/favicon.ico"
+  },
+  "haveibeenpwned.com": {
+    "title": "Have I Been Pwned",
+    "description": "数据泄露检查服务，查看你的邮箱是否在数据泄露中",
+    "category": "安全工具",
+    "tags": ["数据泄露", "安全检查", "邮箱安全", "隐私保护"],
+    "coverImage": "https://haveibeenpwned.com/favicon.ico"
+  },
+  "virustotal.com": {
+    "title": "VirusTotal",
+    "description": "Google的恶意软件检测服务，使用多个引擎扫描文件和URL",
+    "category": "安全工具",
+    "tags": ["恶意软件", "病毒扫描", "安全检测", "Google"],
+    "coverImage": "https://virustotal.com/favicon.ico"
+  },
+  "urlvoid.com": {
+    "title": "URLVoid",
+    "description": "网站安全检查工具，检测恶意网站和钓鱼网站",
+    "category": "安全工具",
+    "tags": ["网站安全", "恶意网站", "钓鱼检测", "安全扫描"],
+    "coverImage": "https://urlvoid.com/favicon.ico"
+  },
+  "shodan.io": {
+    "title": "Shodan",
+    "description": "互联网设备搜索引擎，发现连接到互联网的设备",
+    "category": "网络安全",
+    "tags": ["设备搜索", "网络安全", "IoT设备", "安全研究"],
+    "coverImage": "https://shodan.io/favicon.ico"
+  },
+  "censys.io": {
+    "title": "Censys",
+    "description": "互联网扫描和搜索平台，提供网络设备和服务的可见性",
+    "category": "网络安全",
+    "tags": ["网络扫描", "设备搜索", "安全研究", "网络可见性"],
+    "coverImage": "https://censys.io/favicon.ico"
+  },
+  "builtwith.com": {
+    "title": "BuiltWith",
+    "description": "网站技术栈分析工具，识别网站使用的技术和工具",
+    "category": "网站分析",
+    "tags": ["技术栈", "网站分析", "技术识别", "竞品分析"],
+    "coverImage": "https://builtwith.com/favicon.ico"
+  },
+  "wappalyzer.com": {
+    "title": "Wappalyzer",
+    "description": "网站技术分析工具，识别网站使用的技术栈和框架",
+    "category": "网站分析",
+    "tags": ["技术分析", "技术栈", "框架识别", "Web技术"],
+    "coverImage": "https://wappalyzer.com/favicon.ico"
+  },
+  "whatruns.com": {
+    "title": "WhatRuns",
+    "description": "浏览器扩展，发现网站使用的技术、插件和工具",
+    "category": "网站分析",
+    "tags": ["技术发现", "浏览器扩展", "插件识别", "技术栈"],
+    "coverImage": "https://whatruns.com/favicon.ico"
+  },
+  "stackshare.io": {
+    "title": "StackShare",
+    "description": "技术栈分享平台，发现公司和开发者使用的技术工具",
+    "category": "技术社区",
+    "tags": ["技术栈", "工具分享", "开发者", "技术选型"],
+    "coverImage": "https://stackshare.io/favicon.ico"
+  },
+  "alternativeto.net": {
+    "title": "AlternativeTo",
+    "description": "软件替代品推荐平台，找到任何软件的替代方案",
+    "category": "软件推荐",
+    "tags": ["软件替代", "替代方案", "软件推荐", "工具发现"],
+    "coverImage": "https://alternativeto.net/favicon.ico"
+  },
+  "slant.co": {
+    "title": "Slant",
+    "description": "产品比较和推荐平台，基于社区投票的产品排名",
+    "category": "产品比较",
+    "tags": ["产品比较", "社区投票", "产品排名", "推荐系统"],
+    "coverImage": "https://slant.co/favicon.ico"
+  },
+  "capterra.com": {
+    "title": "Capterra",
+    "description": "商业软件发现平台，帮助企业找到合适的软件解决方案",
+    "category": "企业软件",
+    "tags": ["商业软件", "企业软件", "软件发现", "解决方案"],
+    "coverImage": "https://capterra.com/favicon.ico"
+  },
+  "g2.com": {
+    "title": "G2",
+    "description": "企业软件评价平台，提供真实用户的软件评价和比较",
+    "category": "软件评价",
+    "tags": ["软件评价", "用户评价", "企业软件", "软件比较"],
+    "coverImage": "https://g2.com/favicon.ico"
+  },
+  "trustpilot.com": {
+    "title": "Trustpilot",
+    "description": "消费者评价平台，提供企业和服务的真实用户评价",
+    "category": "用户评价",
+    "tags": ["用户评价", "消费者评价", "企业评价", "信任评级"],
+    "coverImage": "https://trustpilot.com/favicon.ico"
+  },
+  "glassdoor.com": {
+    "title": "Glassdoor",
+    "description": "职场透明度平台，提供公司评价、薪资信息和面试经验",
+    "category": "职场信息",
+    "tags": ["公司评价", "薪资信息", "面试经验", "职场透明"],
+    "coverImage": "https://glassdoor.com/favicon.ico"
+  },
+  "levels.fyi": {
+    "title": "Levels.fyi",
+    "description": "科技公司薪资数据平台，提供透明的薪资和级别信息",
+    "category": "薪资信息",
+    "tags": ["薪资数据", "科技公司", "级别信息", "薪资透明"],
+    "coverImage": "https://levels.fyi/favicon.ico"
+  },
+  "blind.com": {
+    "title": "Blind",
+    "description": "匿名职场社区，科技从业者分享职场信息和经验",
+    "category": "职场社区",
+    "tags": ["匿名社区", "职场信息", "科技从业者", "职场经验"],
+    "coverImage": "https://blind.com/favicon.ico"
+  },
+  "teamblind.com": {
+    "title": "Team Blind",
+    "description": "Blind的团队版本，企业内部匿名交流平台",
+    "category": "职场社区",
+    "tags": ["团队交流", "匿名平台", "企业内部", "职场沟通"],
+    "coverImage": "https://teamblind.com/favicon.ico"
+  },
+  "fishbowlapp.com": {
+    "title": "Fishbowl",
+    "description": "专业人士匿名社区，按行业和公司分类的职场讨论",
+    "category": "职场社区",
+    "tags": ["专业社区", "匿名讨论", "行业交流", "职场网络"],
+    "coverImage": "https://fishbowlapp.com/favicon.ico"
+  },
+  "wellfound.com": {
+    "title": "Wellfound",
+    "description": "创业公司招聘平台，连接人才与初创企业的求职网站",
+    "category": "求职招聘",
+    "tags": ["创业招聘", "初创企业", "人才匹配", "求职平台"],
+    "coverImage": "https://wellfound.com/favicon.ico"
   }
 }

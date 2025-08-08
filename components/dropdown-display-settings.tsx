@@ -24,8 +24,24 @@ import { cn } from "@/lib/utils"
 export function DropdownDisplaySettings() {
   const { settings, updateSettings, resetSettings } = useDisplaySettings()
   const [screenInfo, setScreenInfo] = useState({ width: 0, breakpoint: '' })
+  const [isClient, setIsClient] = useState(false)
+
+  // 检查当前的布局模式
+  const getCurrentLayoutMode = () => {
+    if (typeof window === 'undefined') return 'grid'
+    const root = document.documentElement
+    if (root.classList.contains('layout-masonry')) return 'masonry'
+    if (root.classList.contains('layout-list')) return 'list'
+    return 'grid'
+  }
 
   useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isClient) return
+
     const updateScreenInfo = () => {
       const width = window.innerWidth
       let breakpoint = ''
@@ -46,7 +62,7 @@ export function DropdownDisplaySettings() {
     updateScreenInfo()
     window.addEventListener('resize', updateScreenInfo)
     return () => window.removeEventListener('resize', updateScreenInfo)
-  }, [])
+  }, [isClient])
 
 
 
@@ -70,6 +86,7 @@ export function DropdownDisplaySettings() {
   }
 
   const getCurrentBreakpoint = () => {
+    if (!isClient || screenInfo.width === 0) return null
     const width = screenInfo.width
     if (width < 640) return 'mobile'
     if (width < 1024) return 'tablet'
@@ -78,7 +95,8 @@ export function DropdownDisplaySettings() {
   }
 
   const isActiveBreakpoint = (breakpoint: string) => {
-    return getCurrentBreakpoint() === breakpoint
+    const current = getCurrentBreakpoint()
+    return current !== null && current === breakpoint
   }
 
   return (
@@ -183,7 +201,7 @@ export function DropdownDisplaySettings() {
             <h4 className="text-sm font-medium text-foreground">卡片样式</h4>
             <div className="space-y-2">
               <div className="space-y-1">
-                <Label className="text-xs font-normal">卡片圆角</Label>
+                <Label className="text-xs font-normal">圆角样式</Label>
                 <Select value={settings.cardRadius} onValueChange={handleCardRadiusChange}>
                   <SelectTrigger className="h-8">
                     <SelectValue />
@@ -208,91 +226,93 @@ export function DropdownDisplaySettings() {
 
           <Separator className="bg-border/50" />
 
-          {/* 网格列数 */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-medium text-foreground">网格列数</h4>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <Label className={cn("text-xs font-normal", isActiveBreakpoint('mobile') && "text-primary font-medium")}>
-                  手机 {isActiveBreakpoint('mobile') && '(当前)'}
-                </Label>
-                <Select 
-                  value={settings.gridColumns.mobile.toString()} 
-                  onValueChange={(value) => handleGridColumnsChange('mobile', parseInt(value) as GridColumns)}
-                >
-                  <SelectTrigger className="h-8">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">1列</SelectItem>
-                    <SelectItem value="2">2列</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+          {/* 网格列数 - 仅在网格布局下显示 */}
+          {getCurrentLayoutMode() === 'grid' && (
+            <div className="space-y-3">
+              <h4 className="text-sm font-medium text-foreground">网格列数</h4>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1">
+                  <Label className={cn("text-xs font-normal", isActiveBreakpoint('mobile') && "text-primary font-medium")}>
+                    手机 (≤640px) {isActiveBreakpoint('mobile') && '(当前)'}
+                  </Label>
+                  <Select
+                    value={settings.gridColumns.mobile.toString()}
+                    onValueChange={(value) => handleGridColumnsChange('mobile', parseInt(value) as GridColumns)}
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1列</SelectItem>
+                      <SelectItem value="2">2列</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <div className="space-y-1">
-                <Label className={cn("text-xs font-normal", isActiveBreakpoint('tablet') && "text-primary font-medium")}>
-                  平板 {isActiveBreakpoint('tablet') && '(当前)'}
-                </Label>
-                <Select 
-                  value={settings.gridColumns.tablet.toString()} 
-                  onValueChange={(value) => handleGridColumnsChange('tablet', parseInt(value) as GridColumns)}
-                >
-                  <SelectTrigger className="h-8">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">1列</SelectItem>
-                    <SelectItem value="2">2列</SelectItem>
-                    <SelectItem value="3">3列</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+                <div className="space-y-1">
+                  <Label className={cn("text-xs font-normal", isActiveBreakpoint('tablet') && "text-primary font-medium")}>
+                    平板 (640-1024px) {isActiveBreakpoint('tablet') && '(当前)'}
+                  </Label>
+                  <Select
+                    value={settings.gridColumns.tablet.toString()}
+                    onValueChange={(value) => handleGridColumnsChange('tablet', parseInt(value) as GridColumns)}
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1列</SelectItem>
+                      <SelectItem value="2">2列</SelectItem>
+                      <SelectItem value="3">3列</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <div className="space-y-1">
-                <Label className={cn("text-xs font-normal", isActiveBreakpoint('desktop') && "text-primary font-medium")}>
-                  桌面 {isActiveBreakpoint('desktop') && '(当前)'}
-                </Label>
-                <Select 
-                  value={settings.gridColumns.desktop.toString()} 
-                  onValueChange={(value) => handleGridColumnsChange('desktop', parseInt(value) as GridColumns)}
-                >
-                  <SelectTrigger className="h-8">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">1列</SelectItem>
-                    <SelectItem value="2">2列</SelectItem>
-                    <SelectItem value="3">3列</SelectItem>
-                    <SelectItem value="4">4列</SelectItem>
-                    <SelectItem value="5">5列</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+                <div className="space-y-1">
+                  <Label className={cn("text-xs font-normal", isActiveBreakpoint('desktop') && "text-primary font-medium")}>
+                    桌面 (1024-1536px) {isActiveBreakpoint('desktop') && '(当前)'}
+                  </Label>
+                  <Select
+                    value={settings.gridColumns.desktop.toString()}
+                    onValueChange={(value) => handleGridColumnsChange('desktop', parseInt(value) as GridColumns)}
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1列</SelectItem>
+                      <SelectItem value="2">2列</SelectItem>
+                      <SelectItem value="3">3列</SelectItem>
+                      <SelectItem value="4">4列</SelectItem>
+                      <SelectItem value="5">5列</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <div className="space-y-1">
-                <Label className={cn("text-xs font-normal", isActiveBreakpoint('large') && "text-primary font-medium")}>
-                  大屏 {isActiveBreakpoint('large') && '(当前)'}
-                </Label>
-                <Select 
-                  value={settings.gridColumns.large.toString()} 
-                  onValueChange={(value) => handleGridColumnsChange('large', parseInt(value) as GridColumns)}
-                >
-                  <SelectTrigger className="h-8">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">1列</SelectItem>
-                    <SelectItem value="2">2列</SelectItem>
-                    <SelectItem value="3">3列</SelectItem>
-                    <SelectItem value="4">4列</SelectItem>
-                    <SelectItem value="5">5列</SelectItem>
-                    <SelectItem value="6">6列</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="space-y-1">
+                  <Label className={cn("text-xs font-normal", isActiveBreakpoint('large') && "text-primary font-medium")}>
+                    大屏 (≥1536px) {isActiveBreakpoint('large') && '(当前)'}
+                  </Label>
+                  <Select
+                    value={settings.gridColumns.large.toString()}
+                    onValueChange={(value) => handleGridColumnsChange('large', parseInt(value) as GridColumns)}
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1列</SelectItem>
+                      <SelectItem value="2">2列</SelectItem>
+                      <SelectItem value="3">3列</SelectItem>
+                      <SelectItem value="4">4列</SelectItem>
+                      <SelectItem value="5">5列</SelectItem>
+                      <SelectItem value="6">6列</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
 
         </div>

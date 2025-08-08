@@ -9,8 +9,8 @@ import { AddBookmarkCard } from "@/components/add-bookmark-card"
 import { SearchResults } from "@/components/search-results"
 import { BookmarkPreview } from "@/components/bookmark-preview"
 import { BatchSelectionToolbar } from "@/components/batch-selection-toolbar"
-import { DropdownDisplaySettings } from "@/components/dropdown-display-settings"
 import { DynamicBookmarkGrid } from "@/components/dynamic-bookmark-grid"
+
 import { Button } from "@/components/ui/button"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 
@@ -46,7 +46,9 @@ export function EnhancedMainContent({
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [selectedBookmarkIds, setSelectedBookmarkIds] = useState<string[]>([])
   
-  const { categories, bookmarks, deleteBookmark } = useBookmarkStore()
+  const { categories, bookmarks, deleteBookmark, clearAllData } = useBookmarkStore()
+
+
 
   // 处理预览
   const handlePreview = useCallback((bookmark: Bookmark) => {
@@ -145,8 +147,8 @@ export function EnhancedMainContent({
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-3">
-                <div className="w-1.5 sm:w-2 h-6 sm:h-8 bg-gradient-to-b from-primary to-primary/60 rounded-full"></div>
-                <h1 className="text-xl sm:text-2xl font-semibold text-foreground">{currentCategory.name}</h1>
+                <div className="w-1.5 sm:w-2 h-5 sm:h-6 bg-gradient-to-b from-primary to-primary/60 rounded-full"></div>
+                <h1 className="text-lg sm:text-xl font-semibold text-foreground">{currentCategory.name}</h1>
               </div>
               
               {/* 批量操作按钮 */}
@@ -157,31 +159,34 @@ export function EnhancedMainContent({
                       variant="outline"
                       size="sm"
                       onClick={handleSelectAll}
-                      className="h-8"
+                      className="h-8 border-primary/30 hover:border-primary/50"
+                      title={selectedBookmarkIds.length === currentBookmarks.length ? '取消全选' : '全选'}
                     >
-                      <CheckSquare className="w-4 h-4 mr-1" />
-                      {selectedBookmarkIds.length === currentBookmarks.length ? '取消全选' : '全选'}
+                      <CheckSquare className="w-4 h-4 sm:mr-1" />
+                      <span className="hidden sm:inline">
+                        {selectedBookmarkIds.length === currentBookmarks.length ? '取消全选' : '全选'}
+                      </span>
                     </Button>
                   )}
                   <Button
                     variant={isSelectionMode ? "default" : "outline"}
                     size="sm"
                     onClick={toggleSelectionMode}
-                    className="h-8"
+                    className={`h-8 ${!isSelectionMode ? 'border-primary/30 hover:border-primary/50 hover:bg-primary/10 hover:text-primary' : ''}`}
+                    title={isSelectionMode ? "退出选择模式" : "进入选择模式"}
                   >
                     {isSelectionMode ? (
                       <>
-                        <X className="w-4 h-4 mr-1" />
-                        退出选择
+                        <X className="w-4 h-4 sm:mr-1" />
+                        <span className="hidden sm:inline">退出</span>
                       </>
                     ) : (
                       <>
-                        <CheckSquare className="w-4 h-4 mr-1" />
-                        批量选择
+                        <CheckSquare className="w-4 h-4 sm:mr-1" />
+                        <span className="hidden sm:inline">选择</span>
                       </>
                     )}
                   </Button>
-                  <DropdownDisplaySettings />
                 </div>
               )}
             </div>
@@ -196,15 +201,15 @@ export function EnhancedMainContent({
               <button
                 key={subCategory.id}
                 className={cn(
-                  "px-3 py-1.5 text-sm rounded-full transition-all duration-200",
+                  "px-3 py-1.5 text-xs sm:text-sm rounded-full transition-all duration-200 touch-manipulation active:scale-95",
                   selectedSubCategory === subCategory.id
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
+                    ? "bg-primary text-primary-foreground shadow-md hover:shadow-lg"
+                    : "bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary border border-transparent hover:border-primary/30"
                 )}
                 onClick={() => onSubCategorySelect(subCategory.id)}
               >
                 {subCategory.name}
-                <span className="ml-1.5 text-xs opacity-70">
+                <span className="ml-1.5 text-xs opacity-60">
                   {bookmarks.filter(b => b.subCategoryId === subCategory.id).length}
                 </span>
               </button>
@@ -269,34 +274,96 @@ export function EnhancedMainContent({
   }
 
   // 首页：显示所有一级分类
+  // 检查是否是演示数据且未隐藏提示
+  const isDemoData = bookmarks.some(bookmark =>
+    bookmark.id === "vscode" || bookmark.id === "github" || bookmark.id === "postman"
+  )
+  const hideDemoNotice = typeof window !== 'undefined' && localStorage.getItem('hideDemoNotice') === 'true'
+  const showDemoNotice = isDemoData && !hideDemoNotice
+
   return (
     <main className={cn("flex-1 transition-all duration-300 bg-gradient-to-br from-background to-muted/20", sidebarCollapsed ? "ml-0" : "ml-0")}>
-      {/* 页面头部 */}
-      <div className="bg-gradient-to-r from-primary/5 to-primary/10 border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-          <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-3 sm:mb-4">
-              个人导航中心
-            </h1>
-            <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
-              发现和管理您的书签收藏，让每一个链接都触手可及
-            </p>
-            <p className="text-xs text-muted-foreground/80 mt-2">
-              💡 点击分类标题进入分类页面，使用批量选择和移动功能
-            </p>
-            <div className="flex items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6 text-xs sm:text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-primary"></div>
-                <span>{categories.length} 个分类</span>
+      {/* 演示数据提示横幅 */}
+      {showDemoNotice && (
+        <div className="bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 border-b border-primary/20 dark:border-primary/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-primary dark:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-primary dark:text-primary">
+                    🎯 这些是演示书签，帮助您了解应用功能
+                  </div>
+                  <div className="text-xs text-primary/80 dark:text-primary/90">
+                    您可以直接使用这些分类，或者清除后创建自己的书签收藏
+                  </div>
+                </div>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                <span>{bookmarks.length} 个书签</span>
+                <button
+                  onClick={() => {
+                    if (confirm('确定要清除所有演示数据吗？此操作不可撤销。')) {
+                      // 清除演示数据的逻辑
+                      localStorage.removeItem('bookmark-store')
+                      // 使用clearAllData方法清空所有数据
+                      clearAllData()
+                      window.location.reload()
+                    }
+                  }}
+                  className="text-xs px-3 py-1.5 rounded-md bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors"
+                >
+                  清除演示数据
+                </button>
+                <button
+                  onClick={() => {
+                    localStorage.setItem('hideDemoNotice', 'true')
+                    window.location.reload()
+                  }}
+                  className="text-xs px-2 py-1.5 text-primary dark:text-primary hover:text-primary/80 dark:hover:text-primary/90"
+                >
+                  ✕
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* 筛选状态栏 - 仅在有搜索或筛选时显示 */}
+      {(searchQuery || selectedCategory || selectedSubCategory) && (
+        <div className="border-b border-border/30 bg-muted/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              {searchQuery && (
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <span>搜索: "{searchQuery}"</span>
+                </div>
+              )}
+              {selectedCategory && (
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                  <span>分类: {categories.find(c => c.id === selectedCategory)?.name}</span>
+                  {selectedSubCategory && (
+                    <>
+                      <span>→</span>
+                      <span>{categories.find(c => c.id === selectedCategory)?.subCategories.find(s => s.id === selectedSubCategory)?.name}</span>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 分类内容区域 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8 sm:space-y-12 lg:space-y-16">
@@ -317,8 +384,8 @@ export function EnhancedMainContent({
                   className="flex items-center space-x-3 cursor-pointer group"
                   onClick={() => onSubCategorySelect(category.id)}
                 >
-                  <div className="w-1 sm:w-1.5 h-5 sm:h-6 bg-gradient-to-b from-primary to-primary/60 rounded-full"></div>
-                  <h2 className="text-lg sm:text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                  <div className="w-1 sm:w-1.5 h-4 sm:h-5 bg-gradient-to-b from-primary to-primary/60 rounded-full"></div>
+                  <h2 className="text-base sm:text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                     {category.name}
                   </h2>
                   <span className="text-xs sm:text-sm text-muted-foreground">
@@ -335,10 +402,10 @@ export function EnhancedMainContent({
                       key={subCategory.id}
                       className={cn(
                         "px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200",
-                        "hover:scale-105 hover:shadow-md border touch-manipulation",
+                        "hover:scale-105 hover:shadow-lg border touch-manipulation active:scale-95",
                         firstSubCategory?.id === subCategory.id
-                          ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg border-primary/20"
-                          : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground border-border/50"
+                          ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg border-primary/20 hover:shadow-xl"
+                          : "bg-muted/60 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 border-border/50"
                       )}
                       onClick={() => onSubCategorySelect(subCategory.id)}
                     >

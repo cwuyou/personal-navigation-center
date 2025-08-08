@@ -1,0 +1,381 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
+import { ArrowRight, Home, Bookmark, Zap, Star, Users, Shield, Smartphone, Clock, Search, Upload, Lock, Download } from "lucide-react"
+import Link from "next/link"
+import { StructuredData, WebSiteStructuredData } from "@/components/seo-structured-data"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import { useTranslation } from "@/hooks/use-language"
+
+export default function LandingPage() {
+  const [isReturningUser, setIsReturningUser] = useState(false)
+  const t = useTranslation()
+
+  useEffect(() => {
+    // 检查用户是否之前访问过应用
+    const hasVisited = localStorage.getItem('hasVisitedDashboard')
+    setIsReturningUser(!!hasVisited)
+  }, [])
+
+  // 平滑滚动到指定区域
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+      {/* SEO 结构化数据 */}
+      <WebSiteStructuredData />
+      <StructuredData type="homepage" />
+
+      {/* 导航栏 */}
+      <nav className="border-b border-border/50 bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
+              <Home className="h-8 w-8 text-primary" />
+              <span className="text-xl font-bold text-foreground">My Homepage One</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <LanguageSwitcher />
+              {isReturningUser && (
+                <Link href="/dashboard">
+                  <Button variant="default" size="sm" className="bg-primary">
+                    <Clock className="h-4 w-4 mr-2" />
+                    {t.nav.dashboard}
+                  </Button>
+                </Link>
+              )}
+              <Link href="/dashboard">
+                <Button variant={isReturningUser ? "outline" : "ghost"} size="sm">
+                  {isReturningUser ? t.nav.bookmarks : t.nav.dashboard}
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* 英雄区域 */}
+      <section className="py-16 lg:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="space-y-10">
+            <div className="space-y-6">
+              <Badge variant="secondary" className="text-base px-4 py-2 font-medium">
+                🚀 {t.homepage.subtitle}
+              </Badge>
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-tight">
+                {t.homepage.heroTitle}
+              </h1>
+              <p className="text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed font-medium">
+                {t.homepage.description}
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-4">
+              <Link href="/dashboard">
+                <Button size="lg" className="text-xl px-12 py-4 h-14 font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
+                  {t.homepage.quickStart}
+                  <ArrowRight className="ml-3 h-6 w-6" />
+                </Button>
+              </Link>
+              <Button
+                variant="outline"
+                size="lg"
+                className="text-xl px-12 py-4 h-14 font-semibold border-2 hover:bg-muted/50 transition-all duration-200"
+                onClick={() => scrollToSection('features-section')}
+              >
+                {t.homepage.learnMore}
+              </Button>
+            </div>
+
+            <div className="flex flex-wrap justify-center items-center gap-12 text-base text-muted-foreground pt-8">
+              <div className="flex items-center gap-3">
+                <Star className="h-5 w-5 text-yellow-500" />
+                <span className="font-medium">{t.homepage.features.free}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Shield className="h-5 w-5 text-green-500" />
+                <span className="font-medium">{t.homepage.features.privacy}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Smartphone className="h-5 w-5 text-blue-500" />
+                <span className="font-medium">{t.homepage.features.responsive}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 产品介绍 */}
+      <section id="features-section" className="py-20 bg-muted/20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-6 mb-20">
+            <h2 className="text-2xl md:text-4xl font-bold text-foreground">
+              {t.homepage.whyChoose}
+            </h2>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto font-medium leading-relaxed">
+              {t.homepage.whyDescription}
+            </p>
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <CardContent className="p-10 text-center space-y-6">
+                <div className="w-20 h-20 mx-auto bg-blue-50 dark:bg-blue-950/20 rounded-full flex items-center justify-center">
+                  <Users className="h-10 w-10 text-blue-500" />
+                </div>
+                <h3 className="text-2xl font-bold text-foreground">面向所有用户</h3>
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  简单易用，人人都能快速上手。无论您是技术新手还是专业用户，
+                  都能轻松创建属于自己的<strong className="text-foreground">个人主页</strong>
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <CardContent className="p-10 text-center space-y-6">
+                <div className="w-20 h-20 mx-auto bg-green-50 dark:bg-green-950/20 rounded-full flex items-center justify-center">
+                  <Shield className="h-10 w-10 text-green-500" />
+                </div>
+                <h3 className="text-2xl font-bold text-foreground">隐私安全</h3>
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  本地存储，数据完全属于您。所有书签数据都安全存储在本地浏览器中，
+                  无需注册登录，不会上传到任何服务器
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <CardContent className="p-10 text-center space-y-6">
+                <div className="w-20 h-20 mx-auto bg-purple-50 dark:bg-purple-950/20 rounded-full flex items-center justify-center">
+                  <Zap className="h-10 w-10 text-purple-500" />
+                </div>
+                <h3 className="text-2xl font-bold text-foreground">高效便捷</h3>
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  快速搜索和即时导航，让您的<strong className="text-foreground">起始页</strong>
+                  成为最快的浏览方式，大幅提升工作效率
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* 主要特性 */}
+      <section className="py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-6 mb-20">
+            <h2 className="text-2xl md:text-4xl font-bold text-foreground">
+              强大的功能特性
+            </h2>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto font-medium">
+              为您的网络生活提供全方位的便利体验
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="flex items-start space-x-4 p-6 rounded-lg bg-card border hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Bookmark className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">智能分类管理</h3>
+                <p className="text-sm text-muted-foreground">让书签井然有序，自动识别网站类型并智能分类</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-4 p-6 rounded-lg bg-card border hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Search className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">快速搜索功能</h3>
+                <p className="text-sm text-muted-foreground">秒速找到目标网站，支持模糊搜索和标签筛选</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-4 p-6 rounded-lg bg-card border hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Upload className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">一键导入书签</h3>
+                <p className="text-sm text-muted-foreground">轻松迁移浏览器书签，支持Chrome、Firefox等主流浏览器</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-4 p-6 rounded-lg bg-card border hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Shield className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">本地存储数据</h3>
+                <p className="text-sm text-muted-foreground">隐私安全有保障，所有数据存储在本地浏览器中</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-4 p-6 rounded-lg bg-card border hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Smartphone className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">多设备适配</h3>
+                <p className="text-sm text-muted-foreground">手机电脑都能用，响应式设计适配各种屏幕尺寸</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-4 p-6 rounded-lg bg-card border hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Star className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">简洁美观界面</h3>
+                <p className="text-sm text-muted-foreground">使用体验更舒适，现代化设计风格，支持深色模式</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 数据安全 */}
+      <section className="py-20 bg-muted/20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-2xl md:text-4xl font-bold text-foreground mb-6">
+                  数据安全保障
+                </h2>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  您的所有书签数据都安全存储在本地浏览器中，无需注册登录，
+                  不会上传到任何服务器，完全保护您的隐私安全。
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Shield className="h-4 w-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">本地存储</h3>
+                    <p className="text-sm text-muted-foreground">所有数据存储在您的浏览器本地，不会上传到云端</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Lock className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">无需注册</h3>
+                    <p className="text-sm text-muted-foreground">无需创建账户，打开即用，保护个人信息</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Download className="h-4 w-4 text-purple-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">数据导出</h3>
+                    <p className="text-sm text-muted-foreground">支持随时导出备份，数据完全由您掌控</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <Card className="border-0 shadow-lg">
+                <CardContent className="p-8">
+                  <h3 className="text-xl font-bold text-foreground mb-6">快速上手指南</h3>
+                  <div className="space-y-6">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
+                      <div>
+                        <h4 className="font-semibold text-foreground mb-1">添加第一个书签</h4>
+                        <p className="text-sm text-muted-foreground">点击"添加书签"按钮，输入网站名称和链接，选择合适的分类</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
+                      <div>
+                        <h4 className="font-semibold text-foreground mb-1">导入现有书签</h4>
+                        <p className="text-sm text-muted-foreground">从浏览器导出书签文件，然后一键导入到个人导航中心</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
+                      <div>
+                        <h4 className="font-semibold text-foreground mb-1">设为浏览器首页</h4>
+                        <p className="text-sm text-muted-foreground">将此页面设为浏览器起始页，享受个性化的导航体验</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA 区域 */}
+      <section className="py-24 bg-gradient-to-br from-primary/5 to-primary/10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="space-y-10">
+            <h2 className="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+              准备好创建您的个人主页了吗？
+            </h2>
+            <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-3xl mx-auto">
+              立即开始，几分钟内就能拥有专属的导航中心
+            </p>
+            <div className="pt-4">
+              <Link href="/dashboard">
+                <Button size="lg" className="text-xl px-16 py-5 h-16 font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                  立即开始使用
+                  <ArrowRight className="ml-3 h-6 w-6" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 页脚 */}
+      <footer className="border-t border-border/50 py-16 bg-muted/20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-6">
+            <div className="flex items-center justify-center space-x-3">
+              <Home className="h-7 w-7 text-primary" />
+              <span className="text-2xl font-bold text-foreground">My Homepage One</span>
+            </div>
+            <p className="text-base text-muted-foreground font-medium">
+              © 2024 My Homepage One. 专业的个人主页和起始页解决方案.
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 text-base">
+              <Badge variant="outline" className="px-4 py-2 text-sm font-medium">Personal Homepage</Badge>
+              <Badge variant="outline" className="px-4 py-2 text-sm font-medium">Start Page</Badge>
+              <Badge variant="outline" className="px-4 py-2 text-sm font-medium">Bookmark Manager</Badge>
+              <Badge variant="outline" className="px-4 py-2 text-sm font-medium">个人主页</Badge>
+              <Badge variant="outline" className="px-4 py-2 text-sm font-medium">起始页</Badge>
+              <Badge variant="outline" className="px-4 py-2 text-sm font-medium">书签管理</Badge>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}

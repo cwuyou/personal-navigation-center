@@ -6,6 +6,7 @@
 import websiteDescriptions from '@/data/website-descriptions-1000plus.json'
 import { getFaviconUrl, extractSiteName } from './metadata-fetcher'
 
+
 export interface BookmarkMetadata {
   id: string
   title?: string
@@ -23,9 +24,8 @@ export interface EnhancementProgress {
   status: 'idle' | 'running' | 'completed' | 'error'
 }
 
-class BackgroundMetadataEnhancer {
+export class BackgroundMetadataEnhancer {
   private isRunning = false
-  private progressCallback?: (progress: EnhancementProgress) => void
   private abortController?: AbortController
 
   /**
@@ -84,8 +84,8 @@ class BackgroundMetadataEnhancer {
         }
       }
 
-      // 通用策略：尝试获取网站截图作为封面
-      return `https://api.microlink.io/screenshot?url=${encodeURIComponent(url)}&viewport.width=1200&viewport.height=630&type=png`
+      // 🔧 修复：移除 microlink.io 截图API，使用本地截图服务
+      return `/api/screenshot?url=${encodeURIComponent(url)}`
 
     } catch (error) {
       console.warn('Failed to generate cover image for:', url, error)
@@ -149,7 +149,7 @@ class BackgroundMetadataEnhancer {
   }
 
   /**
-   * 使用API获取详细元数据（备用方案）
+   * 使用API获取详细元数据（仅用于单个书签添加）
    */
   private async fetchDetailedMetadata(url: string): Promise<BookmarkMetadata | null> {
     try {
@@ -184,16 +184,28 @@ class BackgroundMetadataEnhancer {
       }
       console.warn(`Failed to fetch metadata for ${url}:`, error)
     }
-    
+
     return null
   }
 
+
   /**
-   * 增强单个书签的元数据
+   * 增强单个书签的元数据（公共接口，用于单个书签添加）
    */
-  private async enhanceBookmark(bookmark: { id: string, url: string, title: string, description?: string }): Promise<BookmarkMetadata | null> {
+  async enhanceSingleBookmark(bookmark: { id: string, url: string, title: string, description?: string }): Promise<BookmarkMetadata | null> {
+    return this.enhanceBookmark(bookmark, { isBatchImport: false })
+  }
+
+  /**
+   * 增强单个书签的元数据（内部方法）
+   */
+  private async enhanceBookmark(
+    bookmark: { id: string, url: string, title: string, description?: string },
+    options: { isBatchImport?: boolean } = {}
+  ): Promise<BookmarkMetadata | null> {
     console.log(`🔄 开始增强书签: ${bookmark.title} (${bookmark.url})`)
     console.log(`   当前描述长度: ${bookmark.description?.length || 0}`)
+    console.log(`   模式: ${options.isBatchImport ? '批量导入' : '单个添加'}`)
 
     // 如果已有描述且足够详细，跳过
     if (bookmark.description && bookmark.description.length >= 20) {
@@ -213,26 +225,34 @@ class BackgroundMetadataEnhancer {
 
     // 2. 生成智能描述
     const smartDescription = this.generateSmartDescription(bookmark.url)
-    
-    // 3. 对于重要网站，尝试API获取更详细信息
+
+    // 3. 尝试获取详细元数据（适度使用API）
     const domain = extractSiteName(bookmark.url).toLowerCase()
     const shouldFetchDetailed = !['github', 'google', 'youtube', 'twitter', 'facebook'].some(known => domain.includes(known))
-    
-    if (shouldFetchDetailed) {
+
+    if (shouldFetchDetailed && !options.isBatchImport) {
+      // 单个书签添加时，可以调用API获取更详细信息
+      console.log('🌐 单个书签添加，尝试获取详细元数据...')
       try {
         const detailedData = await this.fetchDetailedMetadata(bookmark.url)
         if (detailedData && detailedData.description && detailedData.description.length > smartDescription.length) {
+          console.log(`✅ API获取成功，使用详细描述: ${detailedData.description.substring(0, 50)}...`)
           return {
             ...detailedData,
-            id: bookmark.id
+            id: bookmark.id,
+            coverImage: this.generateCoverImage(bookmark.url)
           }
         }
       } catch (error) {
         if (error instanceof Error && error.name === 'AbortError') {
           throw error
         }
+        console.warn('API获取失败，使用本地生成:', error)
         // API失败，继续使用智能描述
       }
+    } else if (options.isBatchImport) {
+      // 批量导入时，跳过API调用以避免429错误，但仍然生成智能描述
+      console.log('ℹ️ 批量导入模式，使用智能生成描述以确保稳定性')
     }
 
     // 4. 返回智能生成的描述
@@ -253,29 +273,196 @@ class BackgroundMetadataEnhancer {
   }
 
   /**
-   * 批量增强书签元数据
+   * 将书签分类为预置和未知两类
+   */
+  private categorizeBookmarks(bookmarks: Array<{ id: string, url: string, title: string, description?: string }>) {
+    const presetBookmarks: typeof bookmarks = []
+    const unknownBookmarks: typeof bookmarks = []
+
+    for (const bookmark of bookmarks) {
+      try {
+        const domain = new URL(bookmark.url).hostname.replace(/^www\./, '')
+        const preset = (websiteDescriptions as any)[domain]
+
+        if (preset) {
+          presetBookmarks.push(bookmark)
+        } else {
+          unknownBookmarks.push(bookmark)
+        }
+      } catch (error) {
+        unknownBookmarks.push(bookmark)
+      }
+    }
+
+    return { presetBookmarks, unknownBookmarks }
+  }
+
+  /**
+   * 快速处理预置书签批次
+   */
+  private async processFastBatch(
+    bookmarks: Array<{ id: string, url: string, title: string, description?: string }>,
+    options: {
+      onProgress: (completed: number) => void
+      onUpdate?: (bookmarkId: string, metadata: BookmarkMetadata) => void
+      batchSize: number
+    }
+  ) {
+    const { onProgress, onUpdate, batchSize } = options
+    let completed = 0
+
+    // 预置书签可以同步处理，无需延迟
+    for (let i = 0; i < bookmarks.length; i += batchSize) {
+      if (this.abortController?.signal.aborted) break
+
+      const batch = bookmarks.slice(i, i + batchSize)
+
+      // 同步处理预置书签（无网络请求）
+      for (const bookmark of batch) {
+        try {
+          const metadata = this.getPresetDescription(bookmark.url)
+          if (metadata && onUpdate) {
+            onUpdate(bookmark.id, { ...metadata, id: bookmark.id })
+          }
+          completed++
+        } catch (error) {
+          console.warn(`Failed to process preset bookmark ${bookmark.id}:`, error)
+          completed++
+        }
+      }
+
+      onProgress(batch.length)
+    }
+  }
+
+  /**
+   * 处理需要API调用的书签批次
+   */
+  private async processSlowBatch(
+    bookmarks: Array<{ id: string, url: string, title: string, description?: string }>,
+    options: {
+      onProgress: (completed: number) => void
+      onUpdate?: (bookmarkId: string, metadata: BookmarkMetadata) => void
+      batchSize: number
+      delay: number
+    }
+  ) {
+    const { onProgress, onUpdate, batchSize, delay } = options
+
+    for (let i = 0; i < bookmarks.length; i += batchSize) {
+      if (this.abortController?.signal.aborted) break
+
+      const batch = bookmarks.slice(i, i + batchSize)
+
+      // 并发处理当前批次 - 允许API调用获取详细信息
+      const promises = batch.map(async (bookmark) => {
+        try {
+          const metadata = await this.enhanceBookmark(bookmark, { isBatchImport: false })
+          if (metadata && onUpdate) {
+            onUpdate(bookmark.id, metadata)
+          }
+        } catch (error) {
+          if (error instanceof Error && error.name === 'AbortError') {
+            throw error
+          }
+          console.warn(`Failed to enhance bookmark ${bookmark.id}:`, error)
+        }
+      })
+
+      await Promise.all(promises)
+      onProgress(batch.length)
+
+      // 只在API调用批次间添加延迟
+      if (i + batchSize < bookmarks.length && delay > 0) {
+        await new Promise(resolve => setTimeout(resolve, delay))
+      }
+    }
+  }
+
+  /**
+   * 传统批处理模式
+   */
+  private async processTraditionalBatch(
+    bookmarks: Array<{ id: string, url: string, title: string, description?: string }>,
+    options: {
+      onProgress: (completed: number) => void
+      onUpdate?: (bookmarkId: string, metadata: BookmarkMetadata) => void
+      batchSize: number
+      delay: number
+    }
+  ) {
+    const { onProgress, onUpdate, batchSize, delay } = options
+
+    for (let i = 0; i < bookmarks.length; i += batchSize) {
+      if (this.abortController?.signal.aborted) break
+
+      const batch = bookmarks.slice(i, i + batchSize)
+
+      const promises = batch.map(async (bookmark) => {
+        try {
+          const metadata = await this.enhanceBookmark(bookmark, { isBatchImport: true })
+          if (metadata && onUpdate) {
+            onUpdate(bookmark.id, metadata)
+          }
+        } catch (error) {
+          if (error instanceof Error && error.name === 'AbortError') {
+            throw error
+          }
+          console.warn(`Failed to enhance bookmark ${bookmark.id}:`, error)
+        }
+      })
+
+      await Promise.all(promises)
+      onProgress(batch.length)
+
+      if (i + batchSize < bookmarks.length && delay > 0) {
+        await new Promise(resolve => setTimeout(resolve, delay))
+      }
+    }
+  }
+
+  /**
+   * 批量增强书签元数据 - 简化版本
    */
   async enhanceBookmarks(
     bookmarks: Array<{ id: string, url: string, title: string, description?: string }>,
     options: {
       onProgress?: (progress: EnhancementProgress) => void
       onUpdate?: (bookmarkId: string, metadata: BookmarkMetadata) => void
-      batchSize?: number
-      delay?: number
     } = {}
   ): Promise<void> {
     if (this.isRunning) {
       throw new Error('Enhancement already in progress')
     }
 
-    const { onProgress, onUpdate, batchSize = 5, delay = 200 } = options
+    const { onProgress, onUpdate } = options
+
+    // 简化配置
+    const { presetBookmarks, unknownBookmarks } = this.categorizeBookmarks(bookmarks)
+    const config = {
+      batchSize: 15,
+      delay: 100,
+      fastMode: true,
+      presetBatchSize: 40,
+      unknownBatchSize: 8
+    }
+
     this.isRunning = true
-    this.progressCallback = onProgress
     this.abortController = new AbortController()
 
+    const total = bookmarks.length
+    let completed = 0
+
     try {
-      const total = bookmarks.length
-      let completed = 0
+
+      console.log(`🚀 开始批量增强 ${total} 个书签`)
+      console.log(`📊 配置信息:`, {
+        预置书签: presetBookmarks.length,
+        未知书签: unknownBookmarks.length,
+        批次大小: config.batchSize,
+        延迟: config.delay + 'ms',
+        快速模式: config.fastMode
+      })
 
       // 报告开始状态
       onProgress?.({
@@ -284,45 +471,62 @@ class BackgroundMetadataEnhancer {
         status: 'running'
       })
 
-      // 分批处理书签
-      for (let i = 0; i < bookmarks.length; i += batchSize) {
-        if (this.abortController.signal.aborted) {
-          break
+      // 快速模式：优先处理预置数据库中的书签
+      if (config.fastMode) {
+        console.log(`📊 分类结果: ${presetBookmarks.length} 个预置书签, ${unknownBookmarks.length} 个未知书签`)
+
+        // 第一阶段：快速处理预置书签（无延迟，大批次）
+        if (presetBookmarks.length > 0) {
+          console.log(`⚡ 快速处理 ${presetBookmarks.length} 个预置书签...`)
+          await this.processFastBatch(presetBookmarks, {
+            onProgress: (batchCompleted) => {
+              completed += batchCompleted
+              onProgress?.({
+                total,
+                completed,
+                current: `快速处理预置书签 (${completed}/${total})`,
+                status: 'running'
+              })
+            },
+            onUpdate,
+            batchSize: config.presetBatchSize
+          })
         }
 
-        const batch = bookmarks.slice(i, i + batchSize)
-        
-        // 并发处理当前批次
-        const promises = batch.map(async (bookmark) => {
-          try {
-            const metadata = await this.enhanceBookmark(bookmark)
-            if (metadata && onUpdate) {
-              onUpdate(bookmark.id, metadata)
-            }
-            completed++
-            
-            // 报告进度
+        // 第二阶段：处理未知书签（需要API调用）
+        if (unknownBookmarks.length > 0 && !this.abortController?.signal.aborted) {
+          console.log(`🌐 处理 ${unknownBookmarks.length} 个未知书签...`)
+          await this.processSlowBatch(unknownBookmarks, {
+            onProgress: (batchCompleted) => {
+              completed += batchCompleted
+              onProgress?.({
+                total,
+                completed,
+                current: `处理未知书签 (${completed}/${total})`,
+                status: 'running'
+              })
+            },
+            onUpdate,
+            batchSize: config.unknownBatchSize,
+            delay: config.delay
+          })
+        }
+      } else {
+        // 传统模式：统一处理
+        await this.processTraditionalBatch(bookmarks, {
+          onProgress: (batchCompleted) => {
+            completed += batchCompleted
             onProgress?.({
               total,
               completed,
-              current: bookmark.title,
+              current: `处理书签 (${completed}/${total})`,
               status: 'running'
             })
-          } catch (error) {
-            if (error instanceof Error && error.name === 'AbortError') {
-              throw error
-            }
-            console.warn(`Failed to enhance bookmark ${bookmark.id}:`, error)
-            completed++
-          }
+          },
+          onUpdate,
+          batchSize: config.batchSize,
+          delay: config.delay
         })
-
-        await Promise.all(promises)
-
-        // 批次间延迟
-        if (i + batchSize < bookmarks.length && delay > 0) {
-          await new Promise(resolve => setTimeout(resolve, delay))
-        }
       }
 
       // 报告完成状态
@@ -349,7 +553,6 @@ class BackgroundMetadataEnhancer {
       }
     } finally {
       this.isRunning = false
-      this.progressCallback = undefined
       this.abortController = undefined
     }
   }

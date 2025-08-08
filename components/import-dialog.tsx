@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Upload, FileText, HelpCircle, Globe } from "lucide-react"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useToast } from "@/hooks/use-toast"
+// import { useSmartAutoSync } from "@/hooks/use-smart-auto-sync" // 移除，避免多实例
 import { ImportHelpDialog } from "@/components/import-help-dialog"
 
 interface ImportDialogProps {
@@ -31,6 +32,7 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { importBookmarks } = useBookmarkStore()
   const { toast } = useToast()
+  // 移除同步相关代码，改为纯本地存储
 
   const processFile = async (file: File) => {
     console.log("开始导入文件:", file.name, file.type)
@@ -39,6 +41,8 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
     setLoadingMessage("正在读取文件...")
 
     try {
+      // 开始导入处理
+
       const text = await file.text()
       console.log("文件内容长度:", text.length)
       setLoadingMessage("正在解析书签数据...")
@@ -65,19 +69,17 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
       if (stats.newBookmarks > 0) descriptions.push(`新增 ${stats.newBookmarks} 个书签`)
       if (stats.skippedBookmarks > 0) descriptions.push(`跳过 ${stats.skippedBookmarks} 个重复书签`)
 
-      let description = descriptions.length > 0
+      const description = descriptions.length > 0
         ? descriptions.join('，')
         : '没有新增内容（所有数据已存在）'
-
-      // 如果启用了自动增强且有新书签，添加增强提示
-      if (enableBackgroundEnhancement && stats.newBookmarks > 0) {
-        description += '\n🔄 正在后台自动增强书签描述信息...'
-      }
 
       toast({
         title: "导入完成",
         description: description,
       })
+
+      // 导入完成，数据已保存到本地存储
+      console.log('✅ 导入完成，数据已保存到本地存储')
 
       // 不立即关闭对话框，让用户查看统计信息
       // onOpenChange(false)
@@ -89,7 +91,11 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
         variant: "destructive",
       })
       setImportStats(null)
+      // 出错时立即重置导入状态
+      markImportStatus(false)
     } finally {
+      // 只在没有新增内容或出错时才在这里重置状态
+      // 有新增内容时，状态重置由 markImportCompleted 处理
       setLoading(false)
       setLoadingMessage("")
       if (fileInputRef.current) {
@@ -147,16 +153,98 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
   }
 
   const importFromJSON = async (json: string) => {
-    const data = JSON.parse(json)
-    console.log("解析JSON得到的数据:", data)
+    const rawData = JSON.parse(json)
+    console.log("解析JSON得到的原始数据:", rawData)
+
+    // 检测并转换数据格式
+    const data = convertToStandardFormat(rawData)
+    console.log("转换后的标准格式数据:", data)
+
     const stats = await importBookmarks(data, { enableBackgroundEnhancement })
     setImportStats(stats)
     return stats
   }
 
+  // 转换不同格式的JSON数据为标准格式
+  const convertToStandardFormat = (rawData: any) => {
+    // 如果已经是标准格式，直接返回
+    if (rawData.bookmarks && rawData.categories) {
+      return rawData
+    }
+
+    // 如果是 navigation_data 格式，进行转换
+    if (rawData.navigations && rawData.categories) {
+      console.log("检测到 navigation_data 格式，开始转换...")
+
+      const convertedCategories: any[] = []
+      const convertedBookmarks: any[] = []
+      const categoryIdMap = new Map<string, string>()
+      const subCategoryIdMap = new Map<string, string>()
+
+      // 转换分类
+      rawData.categories.forEach((category: any, categoryIndex: number) => {
+        const categoryId = `cat_${Date.now()}_${categoryIndex}`
+        categoryIdMap.set(category.name, categoryId)
+
+        const convertedSubCategories: any[] = []
+
+        // 转换子分类
+        if (category.subcategories) {
+          category.subcategories.forEach((subcat: any, subIndex: number) => {
+            const subCategoryId = `sub_${Date.now()}_${categoryIndex}_${subIndex}`
+            subCategoryIdMap.set(`${category.name}|${subcat.name}`, subCategoryId)
+
+            convertedSubCategories.push({
+              id: subCategoryId,
+              name: subcat.name,
+              parentId: categoryId
+            })
+          })
+        }
+
+        convertedCategories.push({
+          id: categoryId,
+          name: category.name,
+          subCategories: convertedSubCategories
+        })
+      })
+
+      // 转换书签
+      rawData.navigations.forEach((nav: any, navIndex: number) => {
+        const subCategoryKey = `${nav.category}|${nav.subcategory}`
+        const subCategoryId = subCategoryIdMap.get(subCategoryKey)
+
+        if (subCategoryId) {
+          convertedBookmarks.push({
+            id: `bm_${Date.now()}_${navIndex}`,
+            title: nav.title,
+            url: nav.url,
+            description: nav.description || nav.url,
+            subCategoryId: subCategoryId,
+            createdAt: new Date().toISOString()
+          })
+        } else {
+          console.warn(`无法找到子分类: ${subCategoryKey}`)
+        }
+      })
+
+      console.log(`✅ 转换完成: ${convertedCategories.length} 个分类, ${convertedBookmarks.length} 个书签`)
+
+      return {
+        categories: convertedCategories,
+        bookmarks: convertedBookmarks
+      }
+    }
+
+    // 如果格式不识别，抛出错误
+    throw new Error("不支持的JSON格式。请确保文件包含 'categories' 和 'bookmarks' 字段，或者是 navigation_data 格式。")
+  }
+
   const parseBookmarkHTML = (doc: Document) => {
     const categories: any[] = []
     const bookmarks: any[] = []
+
+    console.log('🔍 开始解析Firefox书签HTML...')
 
     // 递归解析书签文件夹结构
     const parseFolder = (element: Element, parentCategoryId?: string, level: number = 0, isBookmarkBar: boolean = false): void => {
@@ -165,14 +253,16 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
 
       if (h3) {
         const folderName = h3.textContent?.trim() || "Unnamed Folder"
+        console.log(`📁 解析文件夹: ${folderName} (level: ${level}, 书签栏: ${isBookmarkBar})`)
 
         if (isBookmarkBar) {
           // 处理书签栏：其子文件夹成为一级分类，直接书签放入"未分类书签"
           if (dl) {
             const childDts = dl.querySelectorAll(":scope > dt")
             let hasDirectBookmarks = false
+            console.log(`   书签栏下找到 ${childDts.length} 个子元素`)
 
-            childDts.forEach((childDt) => {
+            childDts.forEach((childDt, index) => {
               const childH3 = childDt.querySelector(":scope > h3")
               const childA = childDt.querySelector(":scope > a")
 
@@ -185,12 +275,14 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
                   subCategories: [],
                 }
                 categories.push(category)
+                console.log(`   ✅ 创建分类: ${category.name} (ID: ${categoryId})`)
 
                 // 递归处理这个文件夹
                 parseFolder(childDt, categoryId, 1)
               } else if (childA) {
                 // 直接书签，需要放入"未分类书签"分类
                 hasDirectBookmarks = true
+                console.log(`   📌 发现直接书签: ${childA.textContent?.trim()}`)
               }
             })
 
@@ -221,11 +313,17 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
         } else if (level === 1 && parentCategoryId) {
           // 一级分类下的处理
           const parentCategory = categories.find(cat => cat.id === parentCategoryId)
-          if (!parentCategory) return
+          if (!parentCategory) {
+            console.log(`❌ 找不到父分类: ${parentCategoryId}`)
+            return
+          }
+
+          console.log(`🔄 处理一级分类: ${parentCategory.name}`)
 
           if (dl) {
             const childDts = dl.querySelectorAll(":scope > dt")
             let hasDirectBookmarks = false
+            console.log(`   找到 ${childDts.length} 个子元素`)
 
             // 先检查是否有直接书签
             childDts.forEach((childDt) => {
@@ -235,6 +333,8 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
               }
             })
 
+            console.log(`   是否有直接书签: ${hasDirectBookmarks}`)
+
             // 如果有直接书签，创建默认子分类
             if (hasDirectBookmarks) {
               const defaultSubId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
@@ -243,14 +343,18 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
                 name: "默认",
                 parentId: parentCategoryId,
               })
+              console.log(`   ✅ 创建默认子分类: ${defaultSubId}`)
 
               // 处理直接书签
+              let bookmarkCount = 0
               childDts.forEach((childDt) => {
                 const childA = childDt.querySelector(":scope > a")
                 if (childA) {
                   parseBookmark(childDt, defaultSubId)
+                  bookmarkCount++
                 }
               })
+              console.log(`   ✅ 添加了 ${bookmarkCount} 个书签`)
             }
 
             // 处理子文件夹
@@ -335,12 +439,17 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
     const parseBookmark = (element: Element, subCategoryId: string): void => {
       const a = element.querySelector(":scope > a")
       if (a) {
+        const title = a.textContent?.trim() || "Unnamed Bookmark"
+        const url = a.getAttribute("href") || ""
+        console.log(`   📌 添加书签: ${title} -> ${url}`)
         bookmarks.push({
           id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          title: a.textContent?.trim() || "Unnamed Bookmark",
-          url: a.getAttribute("href") || "",
+          title: title,
+          url: url,
           subCategoryId: subCategoryId,
         })
+      } else {
+        console.log(`   ⚠️ 元素中没有找到<a>标签`)
       }
     }
 
@@ -392,31 +501,56 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
 
     if (rootDl) {
       const topLevelDts = rootDl.querySelectorAll(":scope > dt")
+      console.log(`🔍 找到 ${topLevelDts.length} 个顶级文件夹`)
 
-      // 检查第一个DT是否是书签栏
+      // 查找书签栏并特殊处理
       if (topLevelDts.length > 0) {
-        const firstDt = topLevelDts[0]
-        const firstH3 = firstDt.querySelector(":scope > h3")
+        let bookmarkBarFound = false
 
-        if (firstH3 && (firstH3.textContent?.trim() === "书签栏" ||
-                       firstH3.textContent?.trim() === "Bookmarks bar" ||
-                       firstH3.textContent?.trim() === "Bookmarks Bar" ||
-                       firstH3.hasAttribute("PERSONAL_TOOLBAR_FOLDER"))) {
-          // 这是书签栏，特殊处理
-          parseFolder(firstDt, undefined, 0, true)
+        // 遍历所有顶级DT，查找书签栏
+        for (let i = 0; i < topLevelDts.length; i++) {
+          const dt = topLevelDts[i]
+          const h3 = dt.querySelector(":scope > h3")
 
-          // 处理其他顶级文件夹（如果有的话）
-          for (let i = 1; i < topLevelDts.length; i++) {
-            parseFolder(topLevelDts[i], undefined, 0, false)
+          if (h3) {
+            const folderName = h3.textContent?.trim()
+            const isBookmarkBar = h3.hasAttribute("PERSONAL_TOOLBAR_FOLDER") ||
+                                 folderName === "书签栏" ||
+                                 folderName === "书签工具栏" ||
+                                 folderName === "Bookmarks bar" ||
+                                 folderName === "Bookmarks Bar" ||
+                                 folderName === "Bookmarks Toolbar"
+
+            console.log(`📁 检查文件夹: ${folderName} (书签栏: ${isBookmarkBar})`)
+
+            if (isBookmarkBar) {
+              // 找到书签栏，特殊处理
+              parseFolder(dt, undefined, 0, true)
+              bookmarkBarFound = true
+            } else {
+              // 其他文件夹按普通方式处理
+              parseFolder(dt, undefined, 0, false)
+            }
+          } else {
+            console.log(`⚠️ 第 ${i + 1} 个DT元素没有H3标签`)
           }
-        } else {
-          // 不是标准的书签栏结构，按普通方式处理
-          topLevelDts.forEach((dt) => {
-            parseFolder(dt, undefined, 0, false)
-          })
+        }
+
+        if (!bookmarkBarFound) {
+          console.log('⚠️ 未找到标准书签栏，按普通文件夹处理所有内容')
         }
       }
+    } else {
+      console.log('❌ 未找到根DL元素')
     }
+
+    console.log(`🎯 Firefox书签解析完成: ${categories.length} 个分类, ${bookmarks.length} 个书签`)
+    categories.forEach((cat, index) => {
+      console.log(`   分类 ${index + 1}: ${cat.name} (${cat.subCategories.length} 个子分类)`)
+    })
+    bookmarks.forEach((bookmark, index) => {
+      console.log(`   书签 ${index + 1}: ${bookmark.title}`)
+    })
 
     return { categories, bookmarks }
   }
@@ -520,7 +654,7 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
               <Checkbox
                 id="background-enhancement"
                 checked={enableBackgroundEnhancement}
-                onCheckedChange={setEnableBackgroundEnhancement}
+                onCheckedChange={(checked) => setEnableBackgroundEnhancement(checked === true)}
                 disabled={loading}
               />
               <div className="space-y-1">

@@ -108,7 +108,7 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 w-7 p-0 hover:bg-blue-500/10 hover:text-blue-600 rounded-md"
+                className="h-7 w-7 p-0 hover:bg-primary/10 hover:text-primary rounded-md"
                 onClick={(e) => {
                   e.stopPropagation()
                   onPreview?.(bookmark)
@@ -120,7 +120,7 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 w-7 p-0 hover:bg-orange-500/10 hover:text-orange-600 rounded-md"
+                className="h-7 w-7 p-0 hover:bg-primary/10 hover:text-primary rounded-md"
                 onClick={(e) => {
                   e.stopPropagation()
                   setMoveDialogOpen(true)

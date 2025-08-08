@@ -6,24 +6,28 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { 
-  Settings, 
-  Palette, 
-  Download, 
-  ChevronRight, 
+import {
+  Settings,
+  Palette,
+  Download,
+  ChevronRight,
   ChevronLeft,
   Monitor,
   Sun,
   Moon,
   Smartphone,
   Tablet,
-  X
+  X,
+  Eye,
+  Grid3X3,
+  LayoutGrid
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
-import { useDisplaySettings, type CardLayout } from "@/hooks/use-display-settings"
+import { useDisplaySettings, useResponsiveLayout, type CardLayout } from "@/hooks/use-display-settings"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
 
 interface SettingsPanelProps {
   isOpen: boolean
@@ -51,8 +55,9 @@ const layoutOptions = [
 export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
   const { theme, setTheme } = useTheme()
   const { settings: displaySettings, updateSettings: updateDisplaySettings } = useDisplaySettings()
+  const { breakpoint, isBreakpointActive } = useResponsiveLayout()
   const [config, setConfig] = useState({
-    primaryColor: '221.2 83.2% 53.3%',
+    primaryColor: '142 76% 36%',
     borderRadius: 8,
     fontSize: 14,
     layout: 'grid',
@@ -65,6 +70,21 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
   useEffect(() => {
     setIsClient(true)
   }, [])
+
+  // 获取断点显示名称和当前生效状态
+  const getBreakpointInfo = (breakpointKey: string) => {
+    const breakpointNames = {
+      mobile: '手机 (≤640px)',
+      tablet: '平板 (640-1024px)',
+      desktop: '桌面 (1024-1536px)',
+      large: '大屏 (≥1536px)'
+    }
+
+    const isActive = isBreakpointActive(breakpointKey as any)
+    const name = breakpointNames[breakpointKey as keyof typeof breakpointNames]
+
+    return { name, isActive }
+  }
 
 
 
@@ -140,16 +160,15 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
       const computedStyle = getComputedStyle(root)
       const currentPrimary = computedStyle.getPropertyValue('--primary').trim()
 
-      // 检测当前主题色，默认使用科技蓝色
-      const isBlueTheme = currentPrimary === '221.2 83.2% 53.3%'
+      // 检测当前主题色，默认使用自然绿色
+      const isGreenTheme = currentPrimary === '142 76% 36%'
 
       const defaultConfig = {
-        primaryColor: '221.2 83.2% 53.3%', // 默认使用科技蓝色
+        primaryColor: '142 76% 36%', // 默认使用自然绿色
         borderRadius: 8,
         fontSize: 14,
         layout: 'grid',
         animations: true,
-        compactMode: false,
       }
 
       setConfig(defaultConfig)
@@ -169,54 +188,6 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
       localStorage.setItem('theme-config', JSON.stringify(newConfig))
     }
   }
-
-  // 监听主题模式变化，重新应用修复逻辑
-  useEffect(() => {
-    if (!isClient || !isLoaded) return
-
-    const handleThemeChange = () => {
-      // 延迟一点时间确保DOM已更新
-      setTimeout(() => {
-        applyTheme(config, false)
-      }, 100)
-    }
-
-    // 监听class变化（深色/浅色模式切换）
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          handleThemeChange()
-        }
-      })
-    })
-
-    const root = document.documentElement
-    observer.observe(root, {
-      attributes: true,
-      attributeFilter: ['class']
-    })
-
-    return () => observer.disconnect()
-  }, [isClient, isLoaded, config, applyTheme])
-
-  // 处理显示密度变化
-  const handleDisplayDensityChange = (layout: CardLayout) => {
-    updateDisplaySettings({ cardLayout: layout })
-
-    // 同时控制全局紧凑模式
-    if (typeof window !== 'undefined') {
-      const root = document.documentElement
-      root.classList.toggle('compact-mode', layout === 'compact')
-    }
-  }
-
-  // 初始化时应用显示密度设置
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const root = document.documentElement
-      root.classList.toggle('compact-mode', displaySettings.cardLayout === 'compact')
-    }
-  }, [displaySettings.cardLayout])
 
   return (
     <>
@@ -351,9 +322,271 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
                     onClick={() => updateConfig({ layout: layout.id })}
                   >
                     <layout.icon className="w-5 h-5" />
-                    <span className="font-medium">{layout.name}</span>
+                    <span className="text-sm font-medium">{layout.name}</span>
                   </button>
                 ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 显示设置 */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm flex items-center space-x-2">
+                <Eye className="w-4 h-4" />
+                <span>显示设置</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="space-y-4">
+                {/* 显示内容开关 */}
+                <div className="space-y-3">
+                  <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">显示内容</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
+                      <Label htmlFor="show-cover" className="text-xs font-normal cursor-pointer">
+                        封面图片
+                      </Label>
+                      <Switch
+                        id="show-cover"
+                        checked={displaySettings.showCover}
+                        onCheckedChange={(checked) => updateDisplaySettings({ showCover: checked })}
+                        className="scale-75"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
+                      <Label htmlFor="show-favicon" className="text-xs font-normal cursor-pointer">
+                        网站图标
+                      </Label>
+                      <Switch
+                        id="show-favicon"
+                        checked={displaySettings.showFavicon}
+                        onCheckedChange={(checked) => updateDisplaySettings({ showFavicon: checked })}
+                        className="scale-75"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
+                      <Label htmlFor="show-title" className="text-xs font-normal cursor-pointer">
+                        标题
+                      </Label>
+                      <Switch
+                        id="show-title"
+                        checked={displaySettings.showTitle}
+                        onCheckedChange={(checked) => updateDisplaySettings({ showTitle: checked })}
+                        className="scale-75"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
+                      <Label htmlFor="show-description" className="text-xs font-normal cursor-pointer">
+                        描述
+                      </Label>
+                      <Switch
+                        id="show-description"
+                        checked={displaySettings.showDescription}
+                        onCheckedChange={(checked) => updateDisplaySettings({ showDescription: checked })}
+                        className="scale-75"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
+                      <Label htmlFor="show-url" className="text-xs font-normal cursor-pointer">
+                        网址
+                      </Label>
+                      <Switch
+                        id="show-url"
+                        checked={displaySettings.showUrl}
+                        onCheckedChange={(checked) => updateDisplaySettings({ showUrl: checked })}
+                        className="scale-75"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
+                      <Label htmlFor="show-tags" className="text-xs font-normal cursor-pointer">
+                        标签
+                      </Label>
+                      <Switch
+                        id="show-tags"
+                        checked={displaySettings.showTags}
+                        onCheckedChange={(checked) => updateDisplaySettings({ showTags: checked })}
+                        className="scale-75"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+
+
+                {/* 圆角样式 */}
+                <div className="space-y-3">
+                  <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">圆角样式</h4>
+                  <Select
+                    value={displaySettings.cardRadius}
+                    onValueChange={(value: typeof displaySettings.cardRadius) =>
+                      updateDisplaySettings({ cardRadius: value })
+                    }
+                  >
+                    <SelectTrigger className="h-8 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">无圆角</SelectItem>
+                      <SelectItem value="sm">小圆角</SelectItem>
+                      <SelectItem value="md">中圆角</SelectItem>
+                      <SelectItem value="lg">大圆角</SelectItem>
+                      <SelectItem value="xl">超大圆角</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* 网格列数 - 仅在网格布局下显示 */}
+                {config.layout === 'grid' && (
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">网格列数</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {/* 手机 */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs font-normal">
+                            {getBreakpointInfo('mobile').name}
+                          </Label>
+                          {getBreakpointInfo('mobile').isActive && (
+                            <span className="text-[10px] px-1 py-0.5 bg-primary/10 text-primary rounded font-medium">
+                              当前生效
+                            </span>
+                          )}
+                        </div>
+                        <Select
+                          value={displaySettings.gridColumns.mobile.toString()}
+                          onValueChange={(value) => updateDisplaySettings({
+                            gridColumns: {
+                              ...displaySettings.gridColumns,
+                              mobile: parseInt(value) as any
+                            }
+                          })}
+                        >
+                          <SelectTrigger className={cn(
+                            "h-7 text-xs",
+                            getBreakpointInfo('mobile').isActive && "ring-1 ring-primary/20 border-primary/30"
+                          )}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1列</SelectItem>
+                            <SelectItem value="2">2列</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* 平板 */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs font-normal">
+                            {getBreakpointInfo('tablet').name}
+                          </Label>
+                          {getBreakpointInfo('tablet').isActive && (
+                            <span className="text-[10px] px-1 py-0.5 bg-primary/10 text-primary rounded font-medium">
+                              当前生效
+                            </span>
+                          )}
+                        </div>
+                        <Select
+                          value={displaySettings.gridColumns.tablet.toString()}
+                          onValueChange={(value) => updateDisplaySettings({
+                            gridColumns: {
+                              ...displaySettings.gridColumns,
+                              tablet: parseInt(value) as any
+                            }
+                          })}
+                        >
+                          <SelectTrigger className={cn(
+                            "h-7 text-xs",
+                            getBreakpointInfo('tablet').isActive && "ring-1 ring-primary/20 border-primary/30"
+                          )}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1列</SelectItem>
+                            <SelectItem value="2">2列</SelectItem>
+                            <SelectItem value="3">3列</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* 桌面 */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs font-normal">
+                            {getBreakpointInfo('desktop').name}
+                          </Label>
+                          {getBreakpointInfo('desktop').isActive && (
+                            <span className="text-[10px] px-1 py-0.5 bg-primary/10 text-primary rounded font-medium">
+                              当前生效
+                            </span>
+                          )}
+                        </div>
+                        <Select
+                          value={displaySettings.gridColumns.desktop.toString()}
+                          onValueChange={(value) => updateDisplaySettings({
+                            gridColumns: {
+                              ...displaySettings.gridColumns,
+                              desktop: parseInt(value) as any
+                            }
+                          })}
+                        >
+                          <SelectTrigger className={cn(
+                            "h-7 text-xs",
+                            getBreakpointInfo('desktop').isActive && "ring-1 ring-primary/20 border-primary/30"
+                          )}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1列</SelectItem>
+                            <SelectItem value="2">2列</SelectItem>
+                            <SelectItem value="3">3列</SelectItem>
+                            <SelectItem value="4">4列</SelectItem>
+                            <SelectItem value="5">5列</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* 大屏 */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs font-normal">
+                            {getBreakpointInfo('large').name}
+                          </Label>
+                          {getBreakpointInfo('large').isActive && (
+                            <span className="text-[10px] px-1 py-0.5 bg-primary/10 text-primary rounded font-medium">
+                              当前生效
+                            </span>
+                          )}
+                        </div>
+                        <Select
+                          value={displaySettings.gridColumns.large.toString()}
+                          onValueChange={(value) => updateDisplaySettings({
+                            gridColumns: {
+                              ...displaySettings.gridColumns,
+                              large: parseInt(value) as any
+                            }
+                          })}
+                        >
+                          <SelectTrigger className={cn(
+                            "h-7 text-xs",
+                            getBreakpointInfo('large').isActive && "ring-1 ring-primary/20 border-primary/30"
+                          )}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1列</SelectItem>
+                            <SelectItem value="2">2列</SelectItem>
+                            <SelectItem value="3">3列</SelectItem>
+                            <SelectItem value="4">4列</SelectItem>
+                            <SelectItem value="5">5列</SelectItem>
+                            <SelectItem value="6">6列</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -364,36 +597,51 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
               <CardTitle className="text-sm">界面调整</CardTitle>
             </CardHeader>
             <CardContent className="pt-0 space-y-4">
-              {/* 圆角大小 */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <Label className="text-sm">圆角大小</Label>
-                  <span className="text-xs text-muted-foreground">{config.borderRadius}px</span>
-                </div>
-                <Slider
-                  value={[config.borderRadius]}
-                  onValueChange={([value]) => updateConfig({ borderRadius: value })}
-                  min={0}
-                  max={20}
-                  step={2}
-                  className="w-full"
-                />
-              </div>
-
               {/* 字体大小 */}
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <Label className="text-sm">字体大小</Label>
-                  <span className="text-xs text-muted-foreground">{config.fontSize}px</span>
+                  <span className="text-xs text-muted-foreground">{
+                    config.fontSize === 12 ? '小' :
+                    config.fontSize === 14 ? '标准' :
+                    config.fontSize === 16 ? '大' :
+                    config.fontSize === 18 ? '超大' : `${config.fontSize}px`
+                  }</span>
                 </div>
-                <Slider
-                  value={[config.fontSize]}
-                  onValueChange={([value]) => updateConfig({ fontSize: value })}
-                  min={12}
-                  max={18}
-                  step={1}
-                  className="w-full"
-                />
+                <div className="grid grid-cols-4 gap-2">
+                  <Button
+                    variant={config.fontSize === 12 ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => updateConfig({ fontSize: 12 })}
+                    className="text-xs"
+                  >
+                    小
+                  </Button>
+                  <Button
+                    variant={config.fontSize === 14 ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => updateConfig({ fontSize: 14 })}
+                    className="text-xs"
+                  >
+                    标准
+                  </Button>
+                  <Button
+                    variant={config.fontSize === 16 ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => updateConfig({ fontSize: 16 })}
+                    className="text-xs"
+                  >
+                    大
+                  </Button>
+                  <Button
+                    variant={config.fontSize === 18 ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => updateConfig({ fontSize: 18 })}
+                    className="text-xs"
+                  >
+                    超大
+                  </Button>
+                </div>
               </div>
 
               {/* 开关选项 */}
@@ -409,22 +657,7 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="text-sm">显示密度</Label>
-                  <Select value={displaySettings.cardLayout} onValueChange={handleDisplayDensityChange}>
-                    <SelectTrigger className="h-8">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="compact">紧凑 - 显示更多内容</SelectItem>
-                      <SelectItem value="comfortable">舒适 - 平衡的间距</SelectItem>
-                      <SelectItem value="spacious">宽松 - 更大的间距</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <p className="text-xs text-muted-foreground">
-                    同时影响页面整体间距和卡片布局
-                  </p>
-                </div>
+
               </div>
             </CardContent>
           </Card>
@@ -462,7 +695,7 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
                 className="w-full justify-start"
                 onClick={() => {
                   const defaultConfig = {
-                    primaryColor: '221.2 83.2% 53.3%',
+                    primaryColor: '142 76% 36%',
                     borderRadius: 8,
                     fontSize: 14,
                     layout: 'grid',
@@ -499,6 +732,8 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
               </Button>
             </CardContent>
           </Card>
+
+
         </div>
       </div>
 

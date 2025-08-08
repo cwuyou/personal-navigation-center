@@ -132,14 +132,14 @@ export function SettingsDialog({ children }: SettingsDialogProps) {
 <DL><p>
 `
                             
-                            data.categories.forEach(category => {
+                            data.categories.forEach((category: any) => {
                               html += `    <DT><H3>${category.name}</H3>\n    <DL><p>\n`
-                              
-                              category.subCategories.forEach(subCategory => {
+
+                              category.subCategories.forEach((subCategory: any) => {
                                 html += `        <DT><H3>${subCategory.name}</H3>\n        <DL><p>\n`
-                                
-                                const categoryBookmarks = data.bookmarks.filter(b => b.subCategoryId === subCategory.id)
-                                categoryBookmarks.forEach(bookmark => {
+
+                                const categoryBookmarks = data.bookmarks.filter((b: any) => b.subCategoryId === subCategory.id)
+                                categoryBookmarks.forEach((bookmark: any) => {
                                   html += `            <DT><A HREF="${bookmark.url}">${bookmark.title}</A>\n`
                                 })
                                 

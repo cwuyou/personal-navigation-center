@@ -274,7 +274,7 @@ export function BookmarkPreview({ bookmark, isOpen, onClose }: BookmarkPreviewPr
                   <div className="flex items-center gap-2">
                     <span className="text-muted-foreground">📸 网站截图预览</span>
                     {isKnownBlockedSite(bookmark.url) && (
-                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
                         自动模式
                       </span>
                     )}

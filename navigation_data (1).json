@@ -1,0 +1,608 @@
+{
+  "categories": [
+    {
+      "icon": "fas fa-robot",
+      "name": "AI 对话助手",
+      "subcategories": [
+        {
+          "name": "所有助手"
+        },
+        {
+          "name": "AI工具"
+        }
+      ]
+    },
+    {
+      "icon": "fas fa-search",
+      "name": "需求与调研",
+      "subcategories": [
+        {
+          "name": "AI导航站的需求列表"
+        },
+        {
+          "name": "关键词难度"
+        },
+        {
+          "name": "谷歌下拉词"
+        },
+        {
+          "name": "toolify榜单"
+        },
+        {
+          "name": "GoogleTrends"
+        }
+      ]
+    },
+    {
+      "icon": "fas fa-tools",
+      "name": "站点必备",
+      "subcategories": [
+        {
+          "name": "域名查询"
+        },
+        {
+          "name": "域名注册"
+        },
+        {
+          "name": "代码&网站托管"
+        },
+        {
+          "name": "数据后台"
+        },
+        {
+          "name": "复刻网站"
+        },
+        {
+          "name": "SEO优化建议"
+        }
+      ]
+    },
+    {
+      "icon": "fas fa-chart-line",
+      "name": "竞品调研",
+      "subcategories": [
+        {
+          "name": "查看流量和网页关键词"
+        },
+        {
+          "name": "查看外链"
+        },
+        {
+          "name": "查看网站关键词"
+        },
+        {
+          "name": "查看关键词相关词"
+        }
+      ]
+    },
+    {
+      "icon": "fas fa-cogs",
+      "name": "功能实现",
+      "subcategories": [
+        {
+          "name": "支付工具"
+        },
+        {
+          "name": "数据存储"
+        },
+        {
+          "name": "模型API"
+        }
+      ]
+    },
+    {
+      "icon": "fas fa-gamepad",
+      "name": "Iframe游戏",
+      "subcategories": [
+        {
+          "name": "crazygames"
+        },
+        {
+          "name": "gamedistribution"
+        },
+        {
+          "name": "scratch"
+        },
+        {
+          "name": "miniplay"
+        },
+        {
+          "name": "freezenova"
+        }
+      ]
+    },
+    {
+      "icon": "fas fa-newspaper",
+      "name": "资讯",
+      "subcategories": [
+        {
+          "name": "谷歌搜索中心"
+        },
+        {
+          "name": "Reddit子社区"
+        },
+        {
+          "name": "Top Trending Websites"
+        },
+        {
+          "name": "AI VIDEO SAAS TOOL"
+        },
+        {
+          "name": "Starter Story Premium"
+        },
+        {
+          "name": "500/month Projects"
+        },
+        {
+          "name": "Ask HN Projects"
+        }
+      ]
+    },
+    {
+      "icon": "fas fa-code",
+      "name": "自建网站",
+      "subcategories": [
+        {
+          "name": "所有网站"
+        }
+      ]
+    }
+  ],
+  "navigations": [
+    {
+      "category": "AI 对话助手",
+      "subcategory": "所有助手",
+      "title": "Claude",
+      "url": "https://claude.ai/",
+      "description": "https://claude.ai/"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "所有助手",
+      "title": "ChatGPT",
+      "url": "https://chatgpt.com/",
+      "description": "https://chatgpt.com/"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "所有助手",
+      "title": "Gemini",
+      "url": "https://gemini.google.com/app",
+      "description": "https://gemini.google.com/app"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "所有助手",
+      "title": "Deepseek",
+      "url": "https://chat.deepseek.com/",
+      "description": "https://chat.deepseek.com/"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "AI工具",
+      "title": "Cursor",
+      "url": "https://www.cursor.so/",
+      "description": "AI驱动的代码编辑器"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "AI工具",
+      "title": "GitHub Copilot",
+      "url": "https://github.com/features/copilot",
+      "description": "AI编程助手"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "AI工具",
+      "title": "Midjourney",
+      "url": "https://www.midjourney.com/",
+      "description": "AI图像生成工具"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "AI工具",
+      "title": "DALL·E 3",
+      "url": "https://openai.com/dall-e-3",
+      "description": "OpenAI的图像生成模型"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "AI工具",
+      "title": "Stable Diffusion",
+      "url": "https://stability.ai/",
+      "description": "开源图像生成模型"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "AI工具",
+      "title": "Synthesia",
+      "url": "https://www.synthesia.io/",
+      "description": "AI视频生成平台"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "AI工具",
+      "title": "ElevenLabs",
+      "url": "https://elevenlabs.io/",
+      "description": "AI语音合成工具"
+    },
+    {
+      "category": "AI 对话助手",
+      "subcategory": "AI工具",
+      "title": "Notion AI",
+      "url": "https://www.notion.so/product/ai",
+      "description": "智能写作与内容生成助手"
+    },
+    {
+      "category": "需求与调研",
+      "subcategory": "AI导航站的需求列表",
+      "title": "AI导航站需求列表",
+      "url": "https://theresanaiforthat.com/requests",
+      "description": "https://theresanaiforthat.com/requests"
+    },
+    {
+      "category": "需求与调研",
+      "subcategory": "关键词难度",
+      "title": "Ahrefs关键词难度",
+      "url": "https://ahrefs.com/keyword-difficulty",
+      "description": "https://ahrefs.com/keyword-difficulty"
+    },
+    {
+      "category": "需求与调研",
+      "subcategory": "谷歌下拉词",
+      "title": "搜索建议工具",
+      "url": "https://searchsuggest.tips/?keyword=",
+      "description": "https://searchsuggest.tips/?keyword="
+    },
+    {
+      "category": "需求与调研",
+      "subcategory": "toolify榜单",
+      "title": "Toolify AI工具榜单",
+      "url": "https://www.toolify.ai/Best-AI-Tools-revenue",
+      "description": "https://www.toolify.ai/Best-AI-Tools-revenue"
+    },
+    {
+      "category": "需求与调研",
+      "subcategory": "GoogleTrends",
+      "title": "Google趋势",
+      "url": "https://trends.google.com/trends/explore?geo=US&hl=zh-CN",
+      "description": "https://trends.google.com/trends/explore?geo=US&hl=zh-CN"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "域名查询",
+      "title": "Lean Domain Search",
+      "url": "https://leandomainsearch.com/",
+      "description": "https://leandomainsearch.com/"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "域名查询",
+      "title": "Query Domains",
+      "url": "https://query.domains/",
+      "description": "https://query.domains/"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "域名查询",
+      "title": "Instant Domain Search",
+      "url": "https://instantdomainsearch.com/?q=",
+      "description": "https://instantdomainsearch.com/?q="
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "域名注册",
+      "title": "Spaceship",
+      "url": "https://spaceship.com",
+      "description": "spaceship.com"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "域名注册",
+      "title": "Porkbun",
+      "url": "https://porkbun.com",
+      "description": "porkbun.com"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "域名注册",
+      "title": "Namecheap",
+      "url": "https://namecheap.com",
+      "description": "namecheap.com"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "代码&网站托管",
+      "title": "GitHub",
+      "url": "https://github.com",
+      "description": "github.com"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "代码&网站托管",
+      "title": "Cloudflare",
+      "url": "https://cloudflare.com",
+      "description": "cloudflare.com"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "代码&网站托管",
+      "title": "Vercel",
+      "url": "https://vercel.com",
+      "description": "vercel.com"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "数据后台",
+      "title": "Google Search Console",
+      "url": "https://search.google.com/search-console/welcome",
+      "description": "https://search.google.com/search-console/welcome"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "数据后台",
+      "title": "Google Analytics",
+      "url": "https://analytics.google.com/analytics/web/provision/#/provision",
+      "description": "https://analytics.google.com/analytics/web/provision/#/provision"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "数据后台",
+      "title": "Bing Webmaster",
+      "url": "https://www.bing.com/webmasters/about",
+      "description": "https://www.bing.com/webmasters/about"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "复刻网站",
+      "title": "v0.dev",
+      "url": "https://v0.dev/",
+      "description": "https://v0.dev/"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "复刻网站",
+      "title": "same.new",
+      "url": "https://same.new/",
+      "description": "https://same.new/"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "复刻网站",
+      "title": "Webifier",
+      "url": "https://www.webifier.io/",
+      "description": "https://www.webifier.io/"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "复刻网站",
+      "title": "lovable",
+      "url": "https://lovable.dev/",
+      "description": "https://lovable.dev/"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "复刻网站",
+      "title": "base44",
+      "url": "https://base44.com/",
+      "description": "https://base44.com/"
+    },
+    {
+      "category": "站点必备",
+      "subcategory": "SEO优化建议",
+      "title": "SEOptimer",
+      "url": "https://www.seoptimer.com/gptshunter.com",
+      "description": "https://www.seoptimer.com/gptshunter.com"
+    },
+    {
+      "category": "竞品调研",
+      "subcategory": "查看流量和网页关键词",
+      "title": "AITDK",
+      "url": "https://aitdk.com/",
+      "description": "https://aitdk.com/"
+    },
+    {
+      "category": "竞品调研",
+      "subcategory": "查看流量和网页关键词",
+      "title": "Ahrefs Traffic Checker",
+      "url": "https://ahrefs.com/traffic-checker/",
+      "description": "https://ahrefs.com/traffic-checker/"
+    },
+    {
+      "category": "竞品调研",
+      "subcategory": "查看外链",
+      "title": "Ahrefs SEO Tools",
+      "url": "https://ahrefs.com/free-seo-tools",
+      "description": "https://ahrefs.com/free-seo-tools"
+    },
+    {
+      "category": "竞品调研",
+      "subcategory": "查看外链",
+      "title": "Ahrefs Backlink Checker",
+      "url": "https://ahrefs.com/backlink-checker",
+      "description": "https://ahrefs.com/backlink-checker"
+    },
+    {
+      "category": "竞品调研",
+      "subcategory": "查看网站关键词",
+      "title": "SEMrush",
+      "url": "https://semrush.com",
+      "description": "semrush.com"
+    },
+    {
+      "category": "竞品调研",
+      "subcategory": "查看关键词相关词",
+      "title": "Ahrefs Keyword Generator",
+      "url": "https://ahrefs.com/keyword-generator/",
+      "description": "https://ahrefs.com/keyword-generator/"
+    },
+    {
+      "category": "功能实现",
+      "subcategory": "支付工具",
+      "title": "Creem",
+      "url": "https://www.creem.io/",
+      "description": "https://www.creem.io/"
+    },
+    {
+      "category": "功能实现",
+      "subcategory": "数据存储",
+      "title": "Supabase",
+      "url": "https://supabase.com/",
+      "description": "https://supabase.com/"
+    },
+    {
+      "category": "功能实现",
+      "subcategory": "数据存储",
+      "title": "Firebase",
+      "url": "https://firebase.google.com/",
+      "description": "云数据库"
+    },
+    {
+      "category": "功能实现",
+      "subcategory": "数据存储",
+      "title": "Neon",
+      "url": "https://neon.com/",
+      "description": "云数据库postgres"
+    },
+    {
+      "category": "功能实现",
+      "subcategory": "模型API",
+      "title": "Replicate",
+      "url": "https://replicate.com",
+      "description": "https://replicate.com"
+    },
+    {
+      "category": "功能实现",
+      "subcategory": "模型API",
+      "title": "Astria AI",
+      "url": "https://www.astria.ai/",
+      "description": "https://www.astria.ai/"
+    },
+    {
+      "category": "功能实现",
+      "subcategory": "模型API",
+      "title": "Hugging Face",
+      "url": "https://api-inference.huggingface.co/models/",
+      "description": "https://api-inference.huggingface.co/models/"
+    },
+    {
+      "category": "Iframe游戏",
+      "subcategory": "crazygames",
+      "title": "Crazy Games",
+      "url": "https://www.crazygames.com/new",
+      "description": "https://www.crazygames.com/new"
+    },
+    {
+      "category": "Iframe游戏",
+      "subcategory": "gamedistribution",
+      "title": "Game Distribution",
+      "url": "https://gamedistribution.com/games/",
+      "description": "https://gamedistribution.com/games/"
+    },
+    {
+      "category": "Iframe游戏",
+      "subcategory": "scratch",
+      "title": "Scratch",
+      "url": "https://scratch.mit.edu/explore/projects/all/",
+      "description": "https://scratch.mit.edu/explore/projects/all/"
+    },
+    {
+      "category": "Iframe游戏",
+      "subcategory": "miniplay",
+      "title": "Miniplay",
+      "url": "https://www.miniplay.com/most-played",
+      "description": "https://www.miniplay.com/most-played"
+    },
+    {
+      "category": "Iframe游戏",
+      "subcategory": "freezenova",
+      "title": "Freezenova",
+      "url": "https://freezenova.com/",
+      "description": "https://freezenova.com/"
+    },
+    {
+      "category": "资讯",
+      "subcategory": "谷歌搜索中心",
+      "title": "Google Search Central",
+      "url": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content?hl=zh-cn",
+      "description": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content?hl=zh-cn"
+    },
+    {
+      "category": "资讯",
+      "subcategory": "Reddit子社区",
+      "title": "Reddit Communities",
+      "url": "https://liberating-doll-b8a.notion.site/Reddit-1a8e8aed91b18021839ecba8b74e530b",
+      "description": "https://liberating-doll-b8a.notion.site/Reddit-1a8e8aed91b18021839ecba8b74e530b"
+    },
+    {
+      "category": "资讯",
+      "subcategory": "Top Trending Websites",
+      "title": "Ahrefs Trending",
+      "url": "https://ahrefs.com/websites#trending",
+      "description": "https://ahrefs.com/websites#trending"
+    },
+    {
+      "category": "资讯",
+      "subcategory": "AI VIDEO SAAS TOOL",
+      "title": "AI Video Tools List",
+      "url": "https://docs.google.com/spreadsheets/d/1QOdqq9KbjQj1JZO43vc1pir2rnEEsMUXzTDATrOCn2k/edit?pli=1&gid=0#gid=0",
+      "description": "https://docs.google.com/spreadsheets/d/1QOdqq9KbjQj1JZO43vc1pir2rnEEsMUXzTDATrOCn2k/edit?pli=1&gid=0#gid=0"
+    },
+    {
+      "category": "资讯",
+      "subcategory": "Starter Story Premium",
+      "title": "Solopreneur Report 2.0",
+      "url": "https://docs.google.com/spreadsheets/d/1eUni44pIURML2VWFFXKzNmm-WKuuam9_ynr5Fo_Q74M/edit?gid=83151001#gid=83151001",
+      "description": "https://docs.google.com/spreadsheets/d/1eUni44pIURML2VWFFXKzNmm-WKuuam9_ynr5Fo_Q74M/edit?gid=83151001#gid=83151001"
+    },
+    {
+      "category": "资讯",
+      "subcategory": "500/month Projects",
+      "title": "500MRR",
+      "url": "https://www.500mrr.com/",
+      "description": "https://www.500mrr.com/"
+    },
+    {
+      "category": "资讯",
+      "subcategory": "Ask HN Projects",
+      "title": "HN: $500/month Projects",
+      "url": "https://news.ycombinator.com/item?id=42373343",
+      "description": "https://news.ycombinator.com/item?id=42373343"
+    },
+    {
+      "category": "自建网站",
+      "subcategory": "所有网站",
+      "title": "技术工具导航",
+      "url": "https://devnav.online/",
+      "description": "https://devnav.online/"
+    },
+    {
+      "category": "自建网站",
+      "subcategory": "所有网站",
+      "title": "Trump Tower Defense",
+      "url": "https://trumptowerdefense.monster/",
+      "description": "https://trumptowerdefense.monster/"
+    },
+    {
+      "category": "自建网站",
+      "subcategory": "所有网站",
+      "title": "Boxing 3D",
+      "url": "https://boxing3d.space/",
+      "description": "https://boxing3d.space/"
+    },
+    {
+      "category": "自建网站",
+      "subcategory": "所有网站",
+      "title": "Draw the Bird Path",
+      "url": "https://drawthebirdpath.com/",
+      "description": "https://drawthebirdpath.com/"
+    },
+    {
+      "category": "自建网站",
+      "subcategory": "所有网站",
+      "title": "IndieTools Hub",
+      "url": "https://persona-nav.vercel.app/",
+      "description": "独立开发者工具导航"
+    }
+  ]
+}

@@ -12,38 +12,8 @@ export async function GET(request: NextRequest) {
     // 验证 URL 格式
     const targetUrl = new URL(url)
     
-    // 使用免费的截图服务
-    const screenshotServices = [
-      // 服务1: htmlcsstoimage.com (免费额度)
-      `https://hcti.io/v1/image?url=${encodeURIComponent(url)}&viewport_width=1200&viewport_height=800`,
-      
-      // 服务2: screenshotapi.net (免费额度)
-      `https://shot.screenshotapi.net/screenshot?token=demo&url=${encodeURIComponent(url)}&width=1200&height=800&output=image&file_type=png&wait_for_event=load`,
-      
-      // 服务3: 备用方案 - 使用 Google PageSpeed Insights 的截图
-      `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&screenshot=true`,
-    ]
-
-    // 尝试第一个服务
-    try {
-      const response = await fetch(screenshotServices[1], {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
-      })
-
-      if (response.ok) {
-        const imageBuffer = await response.arrayBuffer()
-        return new NextResponse(imageBuffer, {
-          headers: {
-            'Content-Type': 'image/png',
-            'Cache-Control': 'public, max-age=3600', // 缓存1小时
-          },
-        })
-      }
-    } catch (error) {
-      console.log('Screenshot service 1 failed:', error)
-    }
+    // 🔧 修复：移除外部截图服务，直接返回SVG占位符
+    console.log('ℹ️ 生成SVG占位符替代外部截图服务:', url)
 
     // 如果截图服务失败，返回一个简单的预览卡片
     const fallbackSvg = `

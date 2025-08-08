@@ -49,7 +49,7 @@ const layoutOptions = [
 export function ThemeCustomizer() {
   const { theme, setTheme } = useTheme()
   const [config, setConfig] = useState<ThemeConfig>({
-    primaryColor: '221.2 83.2% 53.3%',
+    primaryColor: '142 76% 36%',
     borderRadius: 8,
     fontSize: 14,
     spacing: 16,
@@ -61,39 +61,6 @@ export function ThemeCustomizer() {
   const [isClient, setIsClient] = useState(false)
 
   // 确保只在客户端渲染
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
-  // 监听主题模式变化，重新应用修复逻辑
-  useEffect(() => {
-    if (!isClient || !isLoaded) return
-
-    const handleThemeChange = () => {
-      // 延迟一点时间确保DOM已更新
-      setTimeout(() => {
-        applyTheme(config, false)
-      }, 100)
-    }
-
-    // 监听class变化（深色/浅色模式切换）
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          handleThemeChange()
-        }
-      })
-    })
-
-    const root = document.documentElement
-    observer.observe(root, {
-      attributes: true,
-      attributeFilter: ['class']
-    })
-
-    return () => observer.disconnect()
-  }, [isClient, isLoaded, config, applyTheme])
-
   // 应用主题配置
   const applyTheme = useCallback((newConfig: ThemeConfig, showNotification = false) => {
     if (typeof window === 'undefined') return
@@ -161,6 +128,39 @@ export function ThemeCustomizer() {
     }
   }, [])
 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // 监听主题模式变化，重新应用修复逻辑
+  useEffect(() => {
+    if (!isClient || !isLoaded) return
+
+    const handleThemeChange = () => {
+      // 延迟一点时间确保DOM已更新
+      setTimeout(() => {
+        applyTheme(config, false)
+      }, 100)
+    }
+
+    // 监听class变化（深色/浅色模式切换）
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          handleThemeChange()
+        }
+      })
+    })
+
+    const root = document.documentElement
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+
+    return () => observer.disconnect()
+  }, [isClient, isLoaded, config, applyTheme])
+
   // 加载保存的配置
   useEffect(() => {
     if (typeof window === 'undefined' || isLoaded) return
@@ -190,7 +190,7 @@ export function ThemeCustomizer() {
       const isBluTheme = currentPrimary === '221.2 83.2% 53.3%'
 
       const defaultConfig = {
-        primaryColor: '221.2 83.2% 53.3%', // 默认使用科技蓝色
+        primaryColor: '142 76% 36%', // 默认使用自然绿色
         borderRadius: 8,
         fontSize: 14,
         spacing: 16,
@@ -222,7 +222,7 @@ export function ThemeCustomizer() {
   // 重置为默认主题
   const resetTheme = () => {
     const defaultConfig: ThemeConfig = {
-      primaryColor: '221.2 83.2% 53.3%',
+      primaryColor: '142 76% 36%',
       borderRadius: 8,
       fontSize: 14,
       spacing: 16,
@@ -476,16 +476,10 @@ export function ThemeCustomizer() {
               <CardTitle>字体设置</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
-                <Label>字体大小: {config.fontSize}px</Label>
-                <Slider
-                  value={[config.fontSize]}
-                  onValueChange={([value]) => updateConfig({ fontSize: value })}
-                  min={12}
-                  max={18}
-                  step={1}
-                  className="mt-2"
-                />
+              <div className="p-4 bg-muted/30 rounded-lg">
+                <p className="text-sm text-muted-foreground">
+                  💡 字体大小设置已移至右上角"设置面板"中，可统一控制全局字体大小。
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -497,16 +491,10 @@ export function ThemeCustomizer() {
               <CardTitle>视觉效果</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
-                <Label>圆角大小: {config.borderRadius}px</Label>
-                <Slider
-                  value={[config.borderRadius]}
-                  onValueChange={([value]) => updateConfig({ borderRadius: value })}
-                  min={0}
-                  max={20}
-                  step={2}
-                  className="mt-2"
-                />
+              <div className="p-4 bg-muted/30 rounded-lg mb-4">
+                <p className="text-sm text-muted-foreground">
+                  💡 圆角设置已移至"显示设置"中，可统一控制圆角样式。
+                </p>
               </div>
 
               <div>

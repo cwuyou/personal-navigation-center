@@ -69,12 +69,7 @@ export function DynamicBookmarkGrid({ children, className }: DynamicBookmarkGrid
 
   const finalClasses = cn("bookmark-grid", getGridClasses(), className)
 
-  // 调试信息 - 在开发环境中显示
-  if (process.env.NODE_ENV === 'development' && isClient) {
-    console.log('Grid settings:', settings.gridColumns)
-    console.log('Generated classes:', finalClasses)
-    console.log('Is client:', isClient)
-  }
+  // 调试信息已移除，避免控制台噪音
 
   return (
     <div className={finalClasses}>

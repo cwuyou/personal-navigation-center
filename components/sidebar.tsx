@@ -1,12 +1,14 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Trash } from "lucide-react"
+import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Trash, FolderPlus, Bookmark } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Input } from "@/components/ui/input"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
+import { AddSubCategoryDialog } from "@/components/add-subcategory-dialog"
+import { AddBookmarkDialog } from "@/components/add-bookmark-dialog"
 
 interface Category {
   id: string
@@ -43,6 +45,8 @@ export function Sidebar({
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [deletingCategory, setDeletingCategory] = useState<Category | SubCategory | null>(null)
+  const [addBookmarkDialogOpen, setAddBookmarkDialogOpen] = useState(false)
+  const [selectedSubCategoryForBookmark, setSelectedSubCategoryForBookmark] = useState<string>("")
 
   // 批量选择状态
   const [isBatchMode, setIsBatchMode] = useState(false)
@@ -53,6 +57,14 @@ export function Sidebar({
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingValue, setEditingValue] = useState("")
   const [editingType, setEditingType] = useState<'category' | 'subcategory'>('category')
+
+
+
+  // 添加子分类状态
+  const [addSubCategoryDialogOpen, setAddSubCategoryDialogOpen] = useState(false)
+  const [selectedCategoryForSubCategory, setSelectedCategoryForSubCategory] = useState<string | null>(null)
+
+
   const inputRef = useRef<HTMLInputElement>(null)
 
   const toggleCategory = (categoryId: string) => {
@@ -72,7 +84,7 @@ export function Sidebar({
     } else {
       toggleCategory(category.id)
       // 点击分类时，显示整个分类的概览，不自动选择子分类
-      onCategorySelect(category.id, null)
+      onCategorySelect(category.id, undefined)
     }
   }
 
@@ -144,6 +156,17 @@ export function Sidebar({
     cancelEditing()
   }
 
+  // 显示添加子分类对话框
+  const showAddSubCategoryDialog = (categoryId: string) => {
+    setSelectedCategoryForSubCategory(categoryId)
+    setAddSubCategoryDialogOpen(true)
+  }
+
+  const showAddBookmarkDialog = (subCategoryId: string) => {
+    setSelectedSubCategoryForBookmark(subCategoryId)
+    setAddBookmarkDialogOpen(true)
+  }
+
   // 处理键盘事件
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -185,27 +208,27 @@ export function Sidebar({
           <div className="flex items-center space-x-1">
             {!isBatchMode ? (
               <>
-                <Button variant="ghost" size="sm" onClick={() => setAddDialogOpen(true)} title="添加分类">
+                <Button variant="ghost" size="icon-sm" onClick={() => setAddDialogOpen(true)} title="添加分类" className="hover:bg-primary/10 hover:text-primary">
                   <Plus className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={toggleBatchMode} title="批量管理">
+                <Button variant="ghost" size="icon-sm" onClick={toggleBatchMode} title="批量管理" className="hover:bg-primary/10 hover:text-primary">
                   <CheckSquare className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={onToggleCollapse} title="收起侧边栏">
+                <Button variant="ghost" size="icon-sm" onClick={onToggleCollapse} title="收起侧边栏" className="hover:bg-primary/10 hover:text-primary">
                   <PanelLeftClose className="h-4 w-4" />
                 </Button>
               </>
             ) : (
               <>
-                <Button variant="ghost" size="sm" onClick={selectAllCategories} title="全选">
+                <Button variant="ghost" size="icon-sm" onClick={selectAllCategories} title="全选" className="hover:bg-primary/10 hover:text-primary">
                   <CheckSquare className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="icon-sm"
                   onClick={handleBatchDelete}
                   disabled={selectedCategoryIds.size === 0}
-                  className="text-destructive hover:text-destructive"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
                   title="删除选中"
                 >
                   <Trash className="h-4 w-4" />
@@ -318,23 +341,39 @@ export function Sidebar({
                           <MoreHorizontal className="h-3 w-3" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-32">
+                      <DropdownMenuContent align="end" className="w-40">
+                        {/* 管理操作组 */}
                         <DropdownMenuItem
                           onClick={(e) => {
                             e.stopPropagation()
                             startEditing(category.id, category.name, 'category')
                           }}
+                          className="text-xs"
                         >
                           <Edit2 className="h-3 w-3 mr-2" />
-                          编辑
+                          重命名
                         </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            showAddSubCategoryDialog(category.id)
+                          }}
+                          className="text-xs"
+                        >
+                          <FolderPlus className="h-3 w-3 mr-2" />
+                          添加
+                        </DropdownMenuItem>
+
+                        <DropdownMenuSeparator />
+
+                        {/* 危险操作组 */}
                         <DropdownMenuItem
                           onClick={(e) => {
                             e.stopPropagation()
                             setDeletingCategory(category)
                             setDeleteDialogOpen(true)
                           }}
-                          className="text-destructive focus:text-destructive"
+                          className="text-xs text-destructive focus:text-destructive"
                         >
                           <Trash2 className="h-3 w-3 mr-2" />
                           删除
@@ -408,23 +447,43 @@ export function Sidebar({
                               <MoreHorizontal className="h-3 w-3" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-32">
+                          <DropdownMenuContent align="end" className="w-40">
+                            {/* 添加操作组 */}
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                showAddBookmarkDialog(subCategory.id)
+                              }}
+                              className="text-xs"
+                            >
+                              <Bookmark className="h-3 w-3 mr-2" />
+                              添加书签
+                            </DropdownMenuItem>
+
+                            <DropdownMenuSeparator />
+
+                            {/* 管理操作组 */}
                             <DropdownMenuItem
                               onClick={(e) => {
                                 e.stopPropagation()
                                 startEditing(subCategory.id, subCategory.name, 'subcategory')
                               }}
+                              className="text-xs"
                             >
                               <Edit2 className="h-3 w-3 mr-2" />
-                              编辑
+                              重命名
                             </DropdownMenuItem>
+
+                            <DropdownMenuSeparator />
+
+                            {/* 危险操作组 */}
                             <DropdownMenuItem
                               onClick={(e) => {
                                 e.stopPropagation()
                                 setDeletingCategory(subCategory)
                                 setDeleteDialogOpen(true)
                               }}
-                              className="text-destructive focus:text-destructive"
+                              className="text-xs text-destructive focus:text-destructive"
                             >
                               <Trash2 className="h-3 w-3 mr-2" />
                               删除
@@ -475,6 +534,24 @@ export function Sidebar({
         onConfirm={confirmBatchDelete}
         onClose={() => setBatchDeleteDialogOpen(false)}
       />
+
+      {/* 添加子分类对话框 */}
+      {selectedCategoryForSubCategory && (
+        <AddSubCategoryDialog
+          open={addSubCategoryDialogOpen}
+          onOpenChange={setAddSubCategoryDialogOpen}
+          categoryId={selectedCategoryForSubCategory}
+        />
+      )}
+
+      {/* 添加书签对话框 */}
+      {selectedSubCategoryForBookmark && (
+        <AddBookmarkDialog
+          open={addBookmarkDialogOpen}
+          onOpenChange={setAddBookmarkDialogOpen}
+          subCategoryId={selectedSubCategoryForBookmark}
+        />
+      )}
     </div>
   )
 }

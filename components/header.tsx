@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Upload, Info, Menu, Settings, FileText, HelpCircle, Plus } from "lucide-react"
+import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -11,12 +11,15 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ImportDialog } from "@/components/import-dialog"
 import { AboutDialog } from "@/components/about-dialog"
-
+import { HelpCenter } from "@/components/help-center"
 import { ImportHelpDialog } from "@/components/import-help-dialog"
+
 import { EnhancedSearch } from "@/components/enhanced-search"
-import { AddBookmarkDialog } from "@/components/add-bookmark-dialog"
+import { AddBookmarkWithCategoryDialog } from "@/components/add-bookmark-with-category-dialog"
+import { QuickDisplaySettings } from "@/components/quick-display-settings"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useToast } from "@/hooks/use-toast"
+import Link from "next/link"
 
 interface HeaderProps {
   searchQuery: string
@@ -29,7 +32,9 @@ interface HeaderProps {
 export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsClick, selectedSubCategory }: HeaderProps) {
   const [importDialogOpen, setImportDialogOpen] = useState(false)
   const [aboutDialogOpen, setAboutDialogOpen] = useState(false)
+  const [helpCenterOpen, setHelpCenterOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
+
   const [addBookmarkOpen, setAddBookmarkOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [dragOver, setDragOver] = useState(false)
@@ -144,6 +149,8 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
     const categories: any[] = []
     const bookmarks: any[] = []
 
+    console.log('🔍 开始解析Firefox书签HTML...')
+
     // 递归解析书签文件夹结构
     const parseFolder = (element: Element, parentCategoryId?: string, level: number = 0, isBookmarkBar: boolean = false): void => {
       const h3 = element.querySelector(":scope > h3")
@@ -151,14 +158,16 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
 
       if (h3) {
         const folderName = h3.textContent?.trim() || "Unnamed Folder"
+        console.log(`📁 解析文件夹: ${folderName} (level: ${level}, 书签栏: ${isBookmarkBar})`)
 
         if (isBookmarkBar) {
           // 处理书签栏：其子文件夹成为一级分类，直接书签放入"未分类书签"
           if (dl) {
             const childDts = dl.querySelectorAll(":scope > dt")
             let hasDirectBookmarks = false
+            console.log(`   书签栏下找到 ${childDts.length} 个子元素`)
 
-            childDts.forEach((childDt) => {
+            childDts.forEach((childDt, index) => {
               const childH3 = childDt.querySelector(":scope > h3")
               const childA = childDt.querySelector(":scope > a")
 
@@ -171,12 +180,14 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
                   subCategories: [],
                 }
                 categories.push(category)
+                console.log(`   ✅ 创建分类: ${category.name} (ID: ${categoryId})`)
 
                 // 递归处理这个文件夹
                 parseFolder(childDt, categoryId, 1)
               } else if (childA) {
                 // 直接书签，需要放入"未分类书签"分类
                 hasDirectBookmarks = true
+                console.log(`   📌 发现直接书签: ${childA.textContent?.trim()}`)
               }
             })
 
@@ -207,11 +218,17 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
         } else if (level === 1 && parentCategoryId) {
           // 一级分类下的处理
           const parentCategory = categories.find(cat => cat.id === parentCategoryId)
-          if (!parentCategory) return
+          if (!parentCategory) {
+            console.log(`❌ 找不到父分类: ${parentCategoryId}`)
+            return
+          }
+
+          console.log(`🔄 处理一级分类: ${parentCategory.name}`)
 
           if (dl) {
             const childDts = dl.querySelectorAll(":scope > dt")
             let hasDirectBookmarks = false
+            console.log(`   找到 ${childDts.length} 个子元素`)
 
             // 先检查是否有直接书签
             childDts.forEach((childDt) => {
@@ -221,6 +238,8 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
               }
             })
 
+            console.log(`   是否有直接书签: ${hasDirectBookmarks}`)
+
             // 如果有直接书签，创建默认子分类
             if (hasDirectBookmarks) {
               const defaultSubId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
@@ -229,14 +248,18 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
                 name: "默认",
                 parentId: parentCategoryId,
               })
+              console.log(`   ✅ 创建默认子分类: ${defaultSubId}`)
 
               // 处理直接书签
+              let bookmarkCount = 0
               childDts.forEach((childDt) => {
                 const childA = childDt.querySelector(":scope > a")
                 if (childA) {
                   parseBookmark(childDt, defaultSubId)
+                  bookmarkCount++
                 }
               })
+              console.log(`   ✅ 添加了 ${bookmarkCount} 个书签`)
             }
 
             // 处理子文件夹
@@ -321,12 +344,17 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
     const parseBookmark = (element: Element, subCategoryId: string): void => {
       const a = element.querySelector(":scope > a")
       if (a) {
+        const title = a.textContent?.trim() || "Unnamed Bookmark"
+        const url = a.getAttribute("href") || ""
+        console.log(`   📌 添加书签: ${title} -> ${url}`)
         bookmarks.push({
           id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          title: a.textContent?.trim() || "Unnamed Bookmark",
-          url: a.getAttribute("href") || "",
+          title: title,
+          url: url,
           subCategoryId: subCategoryId,
         })
+      } else {
+        console.log(`   ⚠️ 元素中没有找到<a>标签`)
       }
     }
 
@@ -378,31 +406,56 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
 
     if (rootDl) {
       const topLevelDts = rootDl.querySelectorAll(":scope > dt")
+      console.log(`🔍 找到 ${topLevelDts.length} 个顶级文件夹`)
 
-      // 检查第一个DT是否是书签栏
+      // 查找书签栏并特殊处理
       if (topLevelDts.length > 0) {
-        const firstDt = topLevelDts[0]
-        const firstH3 = firstDt.querySelector(":scope > h3")
+        let bookmarkBarFound = false
 
-        if (firstH3 && (firstH3.textContent?.trim() === "书签栏" ||
-                       firstH3.textContent?.trim() === "Bookmarks bar" ||
-                       firstH3.textContent?.trim() === "Bookmarks Bar" ||
-                       firstH3.hasAttribute("PERSONAL_TOOLBAR_FOLDER"))) {
-          // 这是书签栏，特殊处理
-          parseFolder(firstDt, undefined, 0, true)
+        // 遍历所有顶级DT，查找书签栏
+        for (let i = 0; i < topLevelDts.length; i++) {
+          const dt = topLevelDts[i]
+          const h3 = dt.querySelector(":scope > h3")
 
-          // 处理其他顶级文件夹（如果有的话）
-          for (let i = 1; i < topLevelDts.length; i++) {
-            parseFolder(topLevelDts[i], undefined, 0, false)
+          if (h3) {
+            const folderName = h3.textContent?.trim()
+            const isBookmarkBar = h3.hasAttribute("PERSONAL_TOOLBAR_FOLDER") ||
+                                 folderName === "书签栏" ||
+                                 folderName === "书签工具栏" ||
+                                 folderName === "Bookmarks bar" ||
+                                 folderName === "Bookmarks Bar" ||
+                                 folderName === "Bookmarks Toolbar"
+
+            console.log(`📁 检查文件夹: ${folderName} (书签栏: ${isBookmarkBar})`)
+
+            if (isBookmarkBar) {
+              // 找到书签栏，特殊处理
+              parseFolder(dt, undefined, 0, true)
+              bookmarkBarFound = true
+            } else {
+              // 其他文件夹按普通方式处理
+              parseFolder(dt, undefined, 0, false)
+            }
+          } else {
+            console.log(`⚠️ 第 ${i + 1} 个DT元素没有H3标签`)
           }
-        } else {
-          // 不是标准的书签栏结构，按普通方式处理
-          topLevelDts.forEach((dt) => {
-            parseFolder(dt, undefined, 0, false)
-          })
+        }
+
+        if (!bookmarkBarFound) {
+          console.log('⚠️ 未找到标准书签栏，按普通文件夹处理所有内容')
         }
       }
+    } else {
+      console.log('❌ 未找到根DL元素')
     }
+
+    console.log(`🎯 Firefox书签解析完成: ${categories.length} 个分类, ${bookmarks.length} 个书签`)
+    categories.forEach((cat, index) => {
+      console.log(`   分类 ${index + 1}: ${cat.name} (${cat.subCategories.length} 个子分类)`)
+    })
+    bookmarks.forEach((bookmark, index) => {
+      console.log(`   书签 ${index + 1}: ${bookmark.title}`)
+    })
 
     return { categories, bookmarks }
   }
@@ -414,9 +467,14 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
           <div
             className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={onLogoClick}
+            role="banner"
           >
-            <Menu className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-bold">个人导航中心</h1>
+            <Home className="h-6 w-6 text-primary" aria-hidden="true" />
+            <h1 className="text-xl sm:text-2xl font-bold">
+              <span className="sr-only">My Homepage - </span>
+              My Homepage
+              <span className="sr-only"> - Personal Start Page & Bookmark Manager</span>
+            </h1>
           </div>
         </div>
 
@@ -426,24 +484,38 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
         />
 
         <div className="flex items-center space-x-2">
+          {/* 返回首页按钮 */}
+          <Link href="/">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hover:bg-primary/10"
+              title="返回首页"
+            >
+              <Home className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">首页</span>
+            </Button>
+          </Link>
+
           {/* 添加书签按钮 */}
           <Button
             variant="default"
             size="sm"
             onClick={() => setAddBookmarkOpen(true)}
-            disabled={!getDefaultSubCategoryId()}
-            className="bg-primary hover:bg-primary/90"
+            disabled={categories.length === 0 || categories.every(cat => cat.subCategories.length === 0)}
+            className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 font-semibold"
+            title="添加书签"
           >
-            <Plus className="h-4 w-4 mr-2" />
-            添加书签
+            <Plus className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">书签</span>
           </Button>
 
           {/* 导入按钮 - 卡片式 */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm">
-                <Upload className="h-4 w-4 mr-2" />
-                导入
+              <Button variant="ghost" size="sm" className="hover:bg-primary/10" title="导入书签">
+                <Upload className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">导入</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -529,29 +601,37 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="ghost" size="sm" onClick={onSettingsClick}>
-            <Settings className="h-4 w-4 mr-2" />
-            设置
+          <QuickDisplaySettings />
+
+          <Button variant="ghost" size="sm" onClick={() => setHelpCenterOpen(true)} className="hover:bg-primary/10" title="帮助中心">
+            <HelpCircle className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">帮助</span>
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => setAboutDialogOpen(true)}>
-            <Info className="h-4 w-4 mr-2" />
-            关于
+          <Button variant="ghost" size="sm" onClick={onSettingsClick} className="hover:bg-primary/10" title="设置">
+            <Settings className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">设置</span>
           </Button>
+          <Button variant="ghost" size="sm" onClick={() => setAboutDialogOpen(true)} className="hover:bg-primary/10" title="关于">
+            <Info className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">关于</span>
+          </Button>
+
+
         </div>
       </div>
 
       <ImportDialog open={importDialogOpen} onOpenChange={setImportDialogOpen} />
       <AboutDialog open={aboutDialogOpen} onOpenChange={setAboutDialogOpen} />
+      <HelpCenter open={helpCenterOpen} onOpenChange={setHelpCenterOpen} />
       <ImportHelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
 
+
       {/* 全局添加书签对话框 */}
-      {getDefaultSubCategoryId() && (
-        <AddBookmarkDialog
-          open={addBookmarkOpen}
-          onOpenChange={setAddBookmarkOpen}
-          subCategoryId={getDefaultSubCategoryId()!}
-        />
-      )}
+      <AddBookmarkWithCategoryDialog
+        open={addBookmarkOpen}
+        onOpenChange={setAddBookmarkOpen}
+        defaultSubCategoryId={getDefaultSubCategoryId() || undefined}
+      />
     </header>
   )
 }
