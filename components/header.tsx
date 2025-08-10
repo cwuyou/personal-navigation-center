@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ImportDialog } from "@/components/import-dialog"
 import { AboutDialog } from "@/components/about-dialog"
-import { HelpCenter } from "@/components/help-center"
+// import { HelpCenter } from "@/components/help-center"
 import { ImportHelpDialog } from "@/components/import-help-dialog"
 
 import { EnhancedSearch } from "@/components/enhanced-search"
@@ -32,7 +32,6 @@ interface HeaderProps {
 export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsClick, selectedSubCategory }: HeaderProps) {
   const [importDialogOpen, setImportDialogOpen] = useState(false)
   const [aboutDialogOpen, setAboutDialogOpen] = useState(false)
-  const [helpCenterOpen, setHelpCenterOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
 
   const [addBookmarkOpen, setAddBookmarkOpen] = useState(false)
@@ -603,10 +602,12 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
 
           <QuickDisplaySettings />
 
-          <Button variant="ghost" size="sm" onClick={() => setHelpCenterOpen(true)} className="hover:bg-primary/10" title="帮助中心">
-            <HelpCircle className="h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline">帮助</span>
-          </Button>
+          <Link href="/help" title="帮助与文档">
+            <Button variant="ghost" size="sm" className="hover:bg-primary/10">
+              <HelpCircle className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">帮助</span>
+            </Button>
+          </Link>
           <Button variant="ghost" size="sm" onClick={onSettingsClick} className="hover:bg-primary/10" title="设置">
             <Settings className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline">设置</span>
@@ -622,7 +623,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
 
       <ImportDialog open={importDialogOpen} onOpenChange={setImportDialogOpen} />
       <AboutDialog open={aboutDialogOpen} onOpenChange={setAboutDialogOpen} />
-      <HelpCenter open={helpCenterOpen} onOpenChange={setHelpCenterOpen} />
+
       <ImportHelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
 
 
