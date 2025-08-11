@@ -14,30 +14,47 @@ export function SearchResults({ searchQuery, onPreview }: SearchResultsProps) {
   const { categories, bookmarks } = useBookmarkStore()
 
   const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return { categories: [], bookmarks: [] }
+    const raw = searchQuery.trim()
+    if (!raw) return { categories: [], bookmarks: [], effectiveQuery: '' as string, tagOnly: false as boolean } as any
 
-    const query = searchQuery.toLowerCase()
+    let tagOnly = false
+    let normalized = raw
+    if (raw.toLowerCase().startsWith('tag:')) {
+      tagOnly = true
+      normalized = raw.slice(4)
+    } else if (raw.startsWith('#')) {
+      tagOnly = true
+      normalized = raw.slice(1)
+    }
 
-    // 优化分类搜索 - 减少嵌套循环
-    const matchedCategories = categories.filter((category) => {
+    const query = normalized.toLowerCase()
+
+    // 分类搜索（标签模式下不返回分类）
+    const matchedCategories = tagOnly ? [] : categories.filter((category) => {
       if (category.name.toLowerCase().includes(query)) return true
       return category.subCategories.some((sub: any) =>
         sub.name.toLowerCase().includes(query)
       )
     })
 
-    // 优化书签搜索 - 提前计算小写字符串
+    // 书签搜索
     const matchedBookmarks = bookmarks.filter((bookmark) => {
-      const titleLower = bookmark.title.toLowerCase()
-      const descLower = bookmark.description?.toLowerCase() || ''
-      const urlLower = bookmark.url.toLowerCase()
+      const titleLower = (bookmark.title || '').toLowerCase()
+      const descLower = (bookmark.description || '').toLowerCase()
+      const urlLower = (bookmark.url || '').toLowerCase()
+      const tagsMatch = Array.isArray(bookmark.tags)
+        ? bookmark.tags.some(tag => (tag || '').toLowerCase().includes(query))
+        : false
+
+      if (tagOnly) return tagsMatch
 
       return titleLower.includes(query) ||
              descLower.includes(query) ||
-             urlLower.includes(query)
+             urlLower.includes(query) ||
+             tagsMatch
     })
 
-    return { categories: matchedCategories, bookmarks: matchedBookmarks }
+    return { categories: matchedCategories, bookmarks: matchedBookmarks, effectiveQuery: normalized, tagOnly }
   }, [searchQuery, categories, bookmarks])
 
   // 使用 useMemo 缓存分类路径映射
@@ -54,6 +71,36 @@ export function SearchResults({ searchQuery, onPreview }: SearchResultsProps) {
   const getCategoryPath = useCallback((subCategoryId: string) => {
     return categoryPathMap.get(subCategoryId) || ""
   }, [categoryPathMap])
+
+  // 更稳健的高亮：基于匹配位置切分，支持多关键词
+  const buildHighlightRegex = (tokens: string[]) => {
+    const escaped = tokens
+      .filter(Boolean)
+      .map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    if (escaped.length === 0) return null
+    return new RegExp(escaped.join('|'), 'ig')
+  }
+  const renderWithHighlight = (text: string, tokens: string[]) => {
+    if (!text) return null
+    const re = buildHighlightRegex(tokens)
+    if (!re) return <>{text}</>
+    const nodes: any[] = []
+    let last = 0
+    for (let m = re.exec(text); m; m = re.exec(text)) {
+      const start = m.index
+      const end = start + m[0].length
+      if (start > last) nodes.push(<span key={nodes.length}>{text.slice(last, start)}</span>)
+      nodes.push(
+        <mark key={nodes.length} className="bg-yellow-200/60 text-foreground px-0.5 rounded">
+          {text.slice(start, end)}
+        </mark>
+      )
+      last = end
+      if (re.lastIndex === m.index) re.lastIndex++ // 防止零长度匹配死循环
+    }
+    if (last < text.length) nodes.push(<span key={nodes.length}>{text.slice(last)}</span>)
+    return <>{nodes}</>
+  }
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -83,12 +130,46 @@ export function SearchResults({ searchQuery, onPreview }: SearchResultsProps) {
         <div>
           <h2 className="text-xl font-semibold mb-4">匹配的书签</h2>
           <div className="bookmark-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {searchResults.bookmarks.map((bookmark) => (
-              <div key={bookmark.id} className="space-y-2">
-                <EnhancedBookmarkCard bookmark={bookmark} onPreview={onPreview} />
-                <div className="text-xs text-muted-foreground px-2">{getCategoryPath(bookmark.subCategoryId)}</div>
-              </div>
-            ))}
+            {searchResults.bookmarks.map((bookmark) => {
+              const q = (searchResults as any).effectiveQuery?.toLowerCase?.() || searchQuery.toLowerCase()
+              const titleLower = (bookmark.title || '').toLowerCase()
+              const descLower = (bookmark.description || '').toLowerCase()
+              const urlLower = (bookmark.url || '').toLowerCase()
+              const tagMatch = Array.isArray(bookmark.tags) ? bookmark.tags.some(t => (t || '').toLowerCase().includes(q)) : false
+              const sources: Array<'标题' | '描述' | 'URL' | '标签'> = []
+              if (titleLower.includes(q)) sources.push('标题')
+              if (descLower.includes(q)) sources.push('描述')
+              if (urlLower.includes(q)) sources.push('URL')
+              if (tagMatch) sources.push('标签')
+              return (
+                <div key={bookmark.id} className="space-y-2">
+                  {/* 高亮显示标题/描述/URL 的匹配片段 */}
+                  <div className="px-2">
+                    <div className="text-sm font-medium truncate">
+                      {renderWithHighlight(bookmark.title || '', q.split(/\s+/).filter(Boolean))}
+                    </div>
+                    {bookmark.description && (
+                      <div className="text-xs text-muted-foreground line-clamp-2">
+                        {renderWithHighlight(bookmark.description || '', q.split(/\s+/).filter(Boolean))}
+                      </div>
+                    )}
+                    <div className="text-[11px] text-muted-foreground/70">
+                      {renderWithHighlight(bookmark.url || '', q.split(/\s+/).filter(Boolean))}
+                    </div>
+                  </div>
+
+                  <div className="text-xs text-muted-foreground px-2">{getCategoryPath(bookmark.subCategoryId)}</div>
+                  {sources.length > 0 && (
+                    <div className="flex flex-wrap gap-1 px-2">
+                      {sources.includes('标题') && <Badge className="bg-blue-500 text-white">标题</Badge>}
+                      {sources.includes('描述') && <Badge className="bg-green-500 text-white">描述</Badge>}
+                      {sources.includes('URL') && <Badge className="bg-amber-500 text-white">URL</Badge>}
+                      {sources.includes('标签') && <Badge className="bg-purple-500 text-white">标签</Badge>}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
       )}

@@ -57,6 +57,10 @@ interface EnhancedBookmarkCardProps {
 }
 
 export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCardProps) {
+  // 可选：用于高亮展示的命中词（由搜索结果传入）
+  // 当前卡片内部未使用高亮，保持现有样式，如需在卡片内部高亮可在标题/描述处接入
+  // const highlight = (text: string, q: string) => text
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [imageError, setImageError] = useState(false)

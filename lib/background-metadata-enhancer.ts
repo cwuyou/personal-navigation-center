@@ -33,31 +33,58 @@ export class BackgroundMetadataEnhancer {
    */
   private getPresetDescription(url: string): BookmarkMetadata | null {
     try {
-      const domain = new URL(url).hostname.replace(/^www\./, '')
+      const u = new URL(url)
+      const domain = u.hostname.replace(/^www\./, '')
+      const path = u.pathname.toLowerCase()
+
+      // 对文章类页面不要使用域名级别的通用描述，交给详细提取逻辑处理
+      if (this.isArticleUrl(u)) {
+        return null
+      }
+
       const preset = (websiteDescriptions as any)[domain]
 
-      console.log(`🔍 查找预置描述: ${domain}`)
-
       if (preset) {
-        console.log(`✅ 找到预置描述: ${preset.title}`)
-        console.log(`   封面图片: ${preset.coverImage ? '有' : '无'}`)
         return {
           id: '',
           title: preset.title,
           description: preset.description,
           favicon: getFaviconUrl(url),
-          coverImage: preset.coverImage,  // 添加封面图片
+          coverImage: preset.coverImage,
           enhanced: true,
           lastUpdated: new Date()
         }
-      } else {
-        console.log(`❌ 未找到预置描述: ${domain}`)
       }
     } catch (error) {
       console.warn('Failed to parse URL:', url, error)
     }
 
     return null
+  }
+
+  private isArticleUrl(u: URL): boolean {
+    const host = u.hostname.replace(/^www\./, '')
+    const path = u.pathname.toLowerCase()
+    if (host.includes('csdn.net') && /\/article\/details\//.test(path)) return true
+    if (host === 'zhuanlan.zhihu.com' && /^\/p\/[0-9a-zA-Z_-]+/.test(path)) return true
+    if (host.includes('juejin.cn') && /^\/post\//.test(path)) return true
+    if (host.includes('cnblogs.com') && /\/p\//.test(path)) return true
+    if (host.includes('jianshu.com') && /\/p\//.test(path)) return true
+    if (host.includes('medium.com') && /\/p\//.test(path)) return true
+    if (host.includes('ahrefs.com') && /\/blog\//.test(path)) return true
+    if (host.includes('moz.com') && /\/blog\//.test(path)) return true
+    if (host.includes('searchengineland.com') && /\/\d{4}\/\d{2}\//.test(path)) return true
+    if (host.includes('backlinko.com') && /\/\d{4}\/\d{2}\//.test(path)) return true
+    if (host.includes('neilpatel.com') && /\/blog\//.test(path)) return true
+    if (host.includes('hubspot.com') && /\/blog\//.test(path)) return true
+    if (host.includes('semrush.com') && /\/blog\//.test(path)) return true
+    if (host.includes('searchenginejournal.com') && /\/\d{4}\/\d{2}\//.test(path)) return true
+    if (host.includes('yoast.com') && /\/seo-blog\//.test(path)) return true
+    if (host.includes('contentmarketinginstitute.com') && /\/blog\//.test(path)) return true
+
+    if (/\/article(\.|\/)/.test(path)) return true
+    if (/\/blog\//.test(path)) return true
+    return false
   }
 
   /**
@@ -109,7 +136,7 @@ export class BackgroundMetadataEnhancer {
       const urlObj = new URL(url)
       const domain = urlObj.hostname.replace(/^www\./, '')
       const path = urlObj.pathname.toLowerCase()
-      
+
       // 基于路径特征生成描述
       if (path.includes('/docs') || path.includes('/documentation')) {
         return `${extractSiteName(url)} - 技术文档和开发指南`
@@ -129,7 +156,7 @@ export class BackgroundMetadataEnhancer {
       if (path.includes('/download')) {
         return `${extractSiteName(url)} - 软件下载和资源获取`
       }
-      
+
       // 基于域名特征生成描述
       if (domain.includes('github.io') || domain.includes('gitlab.io')) {
         return '项目主页和技术文档'
@@ -140,7 +167,7 @@ export class BackgroundMetadataEnhancer {
       if (domain.includes('stackoverflow') || domain.includes('stackexchange')) {
         return '编程问答和技术讨论'
       }
-      
+
       // 默认描述
       return `${extractSiteName(url)} - 网站链接`
     } catch (error) {
@@ -230,12 +257,34 @@ export class BackgroundMetadataEnhancer {
     const shouldFetchDetailed = !['github', 'google', 'youtube', 'twitter', 'facebook'].some(known => domain.includes(known))
 
     if (shouldFetchDetailed && !options.isBatchImport) {
-      // 单个书签添加时，可以调用API获取更详细信息
-      console.log('🌐 单个书签添加，尝试获取详细元数据...')
+      // 单个书签添加时：优先调用本地 fetch-meta API 获取文章标题与摘要
+      try {
+        const res = await fetch(`/api/fetch-meta?url=${encodeURIComponent(bookmark.url)}`, {
+          signal: this.abortController?.signal,
+          cache: 'no-store',
+        })
+        if (res.ok) {
+          const data = await res.json()
+          if (data?.title || data?.description) {
+            return {
+              id: bookmark.id,
+              title: data.title || bookmark.title,
+              description: data.description || smartDescription,
+              favicon: getFaviconUrl(bookmark.url),
+              enhanced: true,
+              lastUpdated: new Date()
+            }
+          }
+        }
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') throw err
+        console.log('fetch-meta fallback to remote API...', err)
+      }
+      // 退回远程API（兼容性保留，可以继续注释掉）
+      console.log('🌐 单个书签添加，尝试外部API...')
       try {
         const detailedData = await this.fetchDetailedMetadata(bookmark.url)
         if (detailedData && detailedData.description && detailedData.description.length > smartDescription.length) {
-          console.log(`✅ API获取成功，使用详细描述: ${detailedData.description.substring(0, 50)}...`)
           return {
             ...detailedData,
             id: bookmark.id,
@@ -280,10 +329,12 @@ export class BackgroundMetadataEnhancer {
 
     for (const bookmark of bookmarks) {
       try {
-        const domain = new URL(bookmark.url).hostname.replace(/^www\./, '')
+        const u = new URL(bookmark.url)
+        const domain = u.hostname.replace(/^www\./, '')
         const preset = (websiteDescriptions as any)[domain]
 
-        if (preset) {
+        // 文章类页面（如 CSDN /article/details/ 等）视为未知，需走详细提取流程
+        if (preset && !this.isArticleUrl(u)) {
           presetBookmarks.push(bookmark)
         } else {
           unknownBookmarks.push(bookmark)
@@ -578,7 +629,7 @@ export class BackgroundMetadataEnhancer {
   getPresetStats(): { totalSites: number, categories: string[] } {
     const sites = Object.values(websiteDescriptions as any)
     const categories = [...new Set(sites.map((site: any) => site.category))]
-    
+
     return {
       totalSites: sites.length,
       categories

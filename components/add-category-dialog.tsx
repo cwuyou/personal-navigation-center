@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,6 +21,16 @@ export function AddCategoryDialog({ open, onOpenChange }: AddCategoryDialogProps
   const [parentCategoryId, setParentCategoryId] = useState("")
 
   const { categories, addCategory, addSubCategory } = useBookmarkStore()
+
+  // 如果当前没有任何一级分类，则强制类型为一级分类，隐藏类型选择器的“二级分类”项
+  const noPrimaryCategories = categories.length === 0
+
+  useEffect(() => {
+    if (noPrimaryCategories) {
+      setType("primary")
+      setParentCategoryId("")
+    }
+  }, [noPrimaryCategories])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,7 +66,9 @@ export function AddCategoryDialog({ open, onOpenChange }: AddCategoryDialogProps
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="primary">一级分类</SelectItem>
-                <SelectItem value="secondary">二级分类</SelectItem>
+                {!noPrimaryCategories && (
+                  <SelectItem value="secondary">二级分类</SelectItem>
+                )}
               </SelectContent>
             </Select>
           </div>

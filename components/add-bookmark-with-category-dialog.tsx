@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import websiteDescriptions from '@/data/website-descriptions-1000plus.json'
+import { TagInput } from "@/components/tag-input"
 
 interface AddBookmarkWithCategoryDialogProps {
   open: boolean
@@ -18,28 +19,47 @@ interface AddBookmarkWithCategoryDialogProps {
   defaultSubCategoryId?: string // 可选的默认分类
 }
 
-export function AddBookmarkWithCategoryDialog({ 
-  open, 
-  onOpenChange, 
-  defaultSubCategoryId 
+export function AddBookmarkWithCategoryDialog({
+  open,
+  onOpenChange,
+  defaultSubCategoryId
 }: AddBookmarkWithCategoryDialogProps) {
   const [title, setTitle] = useState("")
   const [url, setUrl] = useState("")
   const [description, setDescription] = useState("")
   const [coverImage, setCoverImage] = useState("")
-  const [tags, setTags] = useState("")
+  const [tags, setTags] = useState<string[]>([])
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState("")
   const [loading, setLoading] = useState(false)
+  // 首次添加书签（已有一级但无二级）引导字段
+  const { addBookmark, categories, bookmarks, ensureUncategorizedExists, ensureSubCategory } = useBookmarkStore()
+  const allTagSuggestions = Array.from(new Set(bookmarks.flatMap(b => b.tags || [])))
+  const totalSubCount = categories.reduce((sum, c) => sum + c.subCategories.length, 0)
+  const firstSubcase = categories.length > 0 && totalSubCount === 0
+  const [firstParentId, setFirstParentId] = useState<string>("")
+  const [firstSubName, setFirstSubName] = useState<string>("未分组")
 
-  const { addBookmark, categories } = useBookmarkStore()
+  useEffect(() => {
+    if (firstSubcase) {
+      const firstCat = categories[0]
+      setFirstParentId(firstCat?.id || "")
+    }
+  }, [firstSubcase, categories])
 
   // 获取所有可用的子分类
-  const allSubCategories = categories.flatMap(category => 
-    category.subCategories.map(subCategory => ({
-      ...subCategory,
-      categoryName: category.name
-    }))
-  )
+  // 仅当完全没有任何一级分类时，才提供“未分类”占位
+  const allSubCategories = (() => {
+    const list = categories.flatMap(category =>
+      category.subCategories.map(subCategory => ({
+        ...subCategory,
+        categoryName: category.name
+      }))
+    )
+    if (categories.length === 0 && list.length === 0) {
+      return [{ id: 'uncategorized', name: '未分类', parentId: 'system', categoryName: '系统' } as any]
+    }
+    return list
+  })()
 
   // 设置默认选中的分类
   useEffect(() => {
@@ -162,19 +182,30 @@ export function AddBookmarkWithCategoryDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!title.trim() || !url.trim() || !selectedSubCategoryId) return
+    if (!title.trim() || !url.trim()) return
 
-    const tagsArray = tags.trim()
-      ? tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
-      : undefined
+    const tagsArray = tags.map(t => t.trim()).filter(t => t.length > 0)
+
+    // 首次添加：先确保创建一个子分类
+    let targetSubCategoryId = selectedSubCategoryId
+    if (firstSubcase) {
+      if (!firstParentId) return
+      const name = firstSubName?.trim() || '未分组'
+      targetSubCategoryId = ensureSubCategory(firstParentId, name)
+    } else {
+      if (!selectedSubCategoryId) return
+      if (selectedSubCategoryId === 'uncategorized') {
+        targetSubCategoryId = ensureUncategorizedExists()
+      }
+    }
 
     addBookmark({
       title: title.trim(),
       url: url.trim(),
       description: description.trim() || undefined,
       coverImage: coverImage.trim() || undefined,
-      tags: tagsArray,
-      subCategoryId: selectedSubCategoryId,
+      tags: tagsArray.length ? tagsArray : undefined,
+      subCategoryId: targetSubCategoryId!,
     })
 
     // 重置表单
@@ -182,7 +213,7 @@ export function AddBookmarkWithCategoryDialog({
     setUrl("")
     setDescription("")
     setCoverImage("")
-    setTags("")
+    setTags([])
     setSelectedSubCategoryId("")
     onOpenChange(false)
   }
@@ -192,7 +223,7 @@ export function AddBookmarkWithCategoryDialog({
     setUrl("")
     setDescription("")
     setCoverImage("")
-    setTags("")
+    setTags([])
     setSelectedSubCategoryId("")
     onOpenChange(false)
   }
@@ -206,18 +237,48 @@ export function AddBookmarkWithCategoryDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="category">选择分类 *</Label>
-            <Select value={selectedSubCategoryId} onValueChange={setSelectedSubCategoryId}>
-              <SelectTrigger>
-                <SelectValue placeholder="请选择分类" />
-              </SelectTrigger>
-              <SelectContent>
-                {allSubCategories.map((subCategory) => (
-                  <SelectItem key={subCategory.id} value={subCategory.id}>
-                    {subCategory.categoryName} / {subCategory.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+
+	          {firstSubcase && (
+	            <div className="space-y-2">
+	              <Label>首次添加引导</Label>
+	              <div className="grid grid-cols-1 gap-2">
+	                <div>
+	                  <Label>父级分类</Label>
+	                  <Select value={firstParentId} onValueChange={setFirstParentId}>
+	                    <SelectTrigger>
+	                      <SelectValue placeholder="选择父级分类" />
+	                    </SelectTrigger>
+	                    <SelectContent>
+	                      {categories.map(cat => (
+	                        <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+	                      ))}
+	                    </SelectContent>
+	                  </Select>
+	                </div>
+	                <div>
+	                  <Label>子分类名称</Label>
+	                  <Input value={firstSubName} onChange={(e) => setFirstSubName(e.target.value)} placeholder="未分组" />
+	                </div>
+	              </div>
+	            </div>
+	          )}
+
+	            {!firstSubcase && (
+	              <Select value={selectedSubCategoryId} onValueChange={setSelectedSubCategoryId}>
+	                <SelectTrigger>
+	                  <SelectValue placeholder="请选择分类" />
+	                </SelectTrigger>
+	                <SelectContent>
+	                  {allSubCategories.map((subCategory) => (
+	                    <SelectItem key={subCategory.id} value={subCategory.id}>
+	                      {subCategory.categoryName} / {subCategory.name}
+	                    </SelectItem>
+	                  ))}
+	                </SelectContent>
+	              </Select>
+	            )}
+
+
           </div>
 
           <div>
@@ -284,22 +345,21 @@ export function AddBookmarkWithCategoryDialog({
 
           <div>
             <Label htmlFor="tags">标签</Label>
-            <Input
-              id="tags"
+            <TagInput
               value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              placeholder="标签1, 标签2, 标签3"
+              onChange={setTags}
+              placeholder="输入后回车添加标签，或粘贴逗号/换行分隔的标签"
+              suggestions={allTagSuggestions}
             />
-            <p className="text-xs text-muted-foreground mt-1">用逗号分隔多个标签</p>
           </div>
 
           <div className="flex justify-end space-x-2">
             <Button type="button" variant="outline" onClick={handleClose}>
               取消
             </Button>
-            <Button 
-              type="submit" 
-              disabled={loading || !selectedSubCategoryId}
+            <Button
+              type="submit"
+              disabled={loading || !(firstSubcase ? Boolean(firstParentId && firstSubName.trim()) : Boolean(selectedSubCategoryId))}
             >
               添加
             </Button>

@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
+import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -9,6 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import { ImportDialog } from "@/components/import-dialog"
 import { AboutDialog } from "@/components/about-dialog"
 // import { HelpCenter } from "@/components/help-center"
@@ -31,6 +32,13 @@ interface HeaderProps {
 
 export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsClick, selectedSubCategory }: HeaderProps) {
   const [importDialogOpen, setImportDialogOpen] = useState(false)
+
+  // 监听从页面发出的“打开导入对话框”事件（用于空态/Onboarding）
+  useEffect(() => {
+    const handler = () => setImportDialogOpen(true)
+    window.addEventListener('open-import-dialog' as any, handler)
+    return () => window.removeEventListener('open-import-dialog' as any, handler)
+  }, [])
   const [aboutDialogOpen, setAboutDialogOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
 
@@ -39,6 +47,65 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
   const [dragOver, setDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { importBookmarks, categories } = useBookmarkStore()
+  const { exportBookmarks } = useBookmarkStore()
+
+  const handleExport = (type: 'json' | 'html' = 'json') => {
+    const data = exportBookmarks()
+    if (type === 'json') {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `bookmarks-export-${new Date().toISOString().slice(0,10)}.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } else {
+      // 简单 HTML Netscape 格式（可选）
+      const html = generateNetscapeHTML(data)
+      const blob = new Blob([html], { type: 'text/html' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `bookmarks-export-${new Date().toISOString().slice(0,10)}.html`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    }
+  }
+
+  const generateNetscapeHTML = (data: ReturnType<typeof exportBookmarks>) => {
+    const { categories, bookmarks } = data
+    const lines: string[] = []
+    lines.push('<!DOCTYPE NETSCAPE-Bookmark-file-1>')
+    lines.push('<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">')
+    lines.push('<TITLE>Bookmarks</TITLE>')
+    lines.push('<H1>Bookmarks</H1>')
+    lines.push('<DL><p>')
+
+    // 将分类和子分类映射，输出为两层文件夹
+    for (const cat of categories) {
+      lines.push(`    <DT><H3>${cat.name}</H3>`) // 一级分类
+      lines.push('    <DL><p>')
+      const subs = cat.subCategories || []
+      for (const sub of subs) {
+        lines.push(`        <DT><H3>${sub.name}</H3>`) // 二级分类
+        lines.push('        <DL><p>')
+        for (const bm of bookmarks.filter(b => b.subCategoryId === sub.id)) {
+          const title = bm.title?.replace(/\n/g, ' ') || bm.url
+          lines.push(`            <DT><A HREF="${bm.url}">${title}</A>`)
+        }
+        lines.push('        </DL><p>')
+      }
+      lines.push('    </DL><p>')
+    }
+
+    lines.push('</DL><p>')
+    return lines.join('\n')
+  }
+
   const { toast } = useToast()
 
   // 获取默认的子分类ID（用于全局添加书签）
@@ -148,7 +215,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
     const categories: any[] = []
     const bookmarks: any[] = []
 
-    console.log('🔍 开始解析Firefox书签HTML...')
+    console.log('开始解析Firefox书签HTML...')
 
     // 递归解析书签文件夹结构
     const parseFolder = (element: Element, parentCategoryId?: string, level: number = 0, isBookmarkBar: boolean = false): void => {
@@ -157,7 +224,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
 
       if (h3) {
         const folderName = h3.textContent?.trim() || "Unnamed Folder"
-        console.log(`📁 解析文件夹: ${folderName} (level: ${level}, 书签栏: ${isBookmarkBar})`)
+        console.log(`解析文件夹: ${folderName} (level: ${level}, 书签栏: ${isBookmarkBar})`)
 
         if (isBookmarkBar) {
           // 处理书签栏：其子文件夹成为一级分类，直接书签放入"未分类书签"
@@ -179,14 +246,14 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
                   subCategories: [],
                 }
                 categories.push(category)
-                console.log(`   ✅ 创建分类: ${category.name} (ID: ${categoryId})`)
+                console.log(`   创建分类: ${category.name} (ID: ${categoryId})`)
 
                 // 递归处理这个文件夹
                 parseFolder(childDt, categoryId, 1)
               } else if (childA) {
                 // 直接书签，需要放入"未分类书签"分类
                 hasDirectBookmarks = true
-                console.log(`   📌 发现直接书签: ${childA.textContent?.trim()}`)
+                console.log(`   发现直接书签: ${childA.textContent?.trim()}`)
               }
             })
 
@@ -222,7 +289,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
             return
           }
 
-          console.log(`🔄 处理一级分类: ${parentCategory.name}`)
+          console.log(`处理一级分类: ${parentCategory.name}`)
 
           if (dl) {
             const childDts = dl.querySelectorAll(":scope > dt")
@@ -247,7 +314,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
                 name: "默认",
                 parentId: parentCategoryId,
               })
-              console.log(`   ✅ 创建默认子分类: ${defaultSubId}`)
+              console.log(`   创建默认子分类: ${defaultSubId}`)
 
               // 处理直接书签
               let bookmarkCount = 0
@@ -258,7 +325,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
                   bookmarkCount++
                 }
               })
-              console.log(`   ✅ 添加了 ${bookmarkCount} 个书签`)
+              console.log(`   添加了 ${bookmarkCount} 个书签`)
             }
 
             // 处理子文件夹
@@ -345,7 +412,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
       if (a) {
         const title = a.textContent?.trim() || "Unnamed Bookmark"
         const url = a.getAttribute("href") || ""
-        console.log(`   📌 添加书签: ${title} -> ${url}`)
+        console.log(`   添加书签: ${title} -> ${url}`)
         bookmarks.push({
           id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           title: title,
@@ -353,7 +420,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
           subCategoryId: subCategoryId,
         })
       } else {
-        console.log(`   ⚠️ 元素中没有找到<a>标签`)
+        console.log(`   元素中没有找到<a>标签`)
       }
     }
 
@@ -405,7 +472,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
 
     if (rootDl) {
       const topLevelDts = rootDl.querySelectorAll(":scope > dt")
-      console.log(`🔍 找到 ${topLevelDts.length} 个顶级文件夹`)
+      console.log(`找到 ${topLevelDts.length} 个顶级文件夹`)
 
       // 查找书签栏并特殊处理
       if (topLevelDts.length > 0) {
@@ -425,7 +492,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
                                  folderName === "Bookmarks Bar" ||
                                  folderName === "Bookmarks Toolbar"
 
-            console.log(`📁 检查文件夹: ${folderName} (书签栏: ${isBookmarkBar})`)
+            console.log(`检查文件夹: ${folderName} (书签栏: ${isBookmarkBar})`)
 
             if (isBookmarkBar) {
               // 找到书签栏，特殊处理
@@ -436,12 +503,12 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
               parseFolder(dt, undefined, 0, false)
             }
           } else {
-            console.log(`⚠️ 第 ${i + 1} 个DT元素没有H3标签`)
+            console.log(`第 ${i + 1} 个DT元素没有H3标签`)
           }
         }
 
         if (!bookmarkBarFound) {
-          console.log('⚠️ 未找到标准书签栏，按普通文件夹处理所有内容')
+          console.log('未找到标准书签栏，按普通文件夹处理所有内容')
         }
       }
     } else {
@@ -496,18 +563,36 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
             </Button>
           </Link>
 
-          {/* 添加书签按钮 */}
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => setAddBookmarkOpen(true)}
-            disabled={categories.length === 0 || categories.every(cat => cat.subCategories.length === 0)}
-            className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 font-semibold"
-            title="添加书签"
-          >
-            <Plus className="h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline">书签</span>
-          </Button>
+          {/* 添加书签按钮（无分类时展示提示） */}
+          {(() => {
+            const isAddDisabled = categories.length === 0 || categories.every(cat => cat.subCategories.length === 0)
+            return (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="inline-flex">
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => setAddBookmarkOpen(true)}
+                        disabled={isAddDisabled}
+                        className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 font-semibold"
+                        title="添加书签"
+                      >
+                        <Plus className="h-4 w-4 sm:mr-2" />
+                        <span className="hidden sm:inline">书签</span>
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  {isAddDisabled && (
+                    <TooltipContent>
+                      需要先创建一个分类/子分类，或点击右侧“导入”导入书签
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
+            )
+          })()}
 
           {/* 导入按钮 - 卡片式 */}
           <DropdownMenu>
@@ -539,6 +624,13 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
                         <HelpCircle className="w-3 h-3 mr-1" />
                         格式说明
                       </Button>
+
+              {/* 导出按钮 */}
+              <Button variant="ghost" size="sm" className="hover:bg-primary/10" title="导出书签" onClick={() => handleExport('json')}>
+                <Download className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">导出</span>
+              </Button>
+
                     </div>
 
                     <div className="bg-muted/30 rounded-lg p-3">

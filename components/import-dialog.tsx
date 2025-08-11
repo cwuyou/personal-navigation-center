@@ -11,6 +11,8 @@ import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useToast } from "@/hooks/use-toast"
 // import { useSmartAutoSync } from "@/hooks/use-smart-auto-sync" // 移除，避免多实例
 import { ImportHelpDialog } from "@/components/import-help-dialog"
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+
 
 interface ImportDialogProps {
   open: boolean
@@ -558,18 +560,10 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <DialogHeader>
+        <DialogHeader className="pr-10">
           <div className="flex items-center justify-between">
             <DialogTitle>导入书签</DialogTitle>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setHelpOpen(true)}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <HelpCircle className="w-4 h-4 mr-1" />
-              格式说明
-            </Button>
+
           </div>
         </DialogHeader>
 
@@ -623,15 +617,24 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
           <div className="bg-muted/30 rounded-lg p-4">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-medium">支持的文件格式</h3>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setHelpOpen(true)}
-                className="text-xs"
-              >
-                <HelpCircle className="w-3 h-3 mr-1" />
-                详细说明
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setHelpOpen(true)}
+                      className="text-xs"
+                    >
+                      <HelpCircle className="w-3 h-3 mr-1" />
+                      导入说明
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    查看支持的文件格式与示例
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
             <div className="text-sm text-muted-foreground space-y-2">
               <div className="flex items-center space-x-2">

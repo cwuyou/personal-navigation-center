@@ -34,6 +34,8 @@ interface BookmarkStore {
   bookmarks: Bookmark[]
   enhancementProgress: EnhancementProgress | null
   isEnhancing: boolean
+  hasHydrated: boolean
+  setHasHydrated: (v: boolean) => void
 
   // Category actions
   addCategory: (name: string) => void
@@ -42,6 +44,7 @@ interface BookmarkStore {
 
   // SubCategory actions
   addSubCategory: (parentId: string, name: string) => void
+  ensureSubCategory: (parentId: string, name: string) => string // 若存在返回其ID，否则创建后返回
   updateSubCategory: (id: string, name: string) => void
   deleteSubCategory: (id: string) => void
 
@@ -70,6 +73,9 @@ interface BookmarkStore {
   initializeStore: () => void
   resetStore: () => void
   clearAllData: () => void
+
+  // System helpers
+  ensureUncategorizedExists: () => string // 返回真实的“未分类”子分类ID
 }
 
 const defaultCategories: Category[] = [
@@ -273,6 +279,8 @@ export const useBookmarkStore = create<BookmarkStore>()(
       bookmarks: [],
       enhancementProgress: null,
       isEnhancing: false,
+      hasHydrated: false,
+      setHasHydrated: (v: boolean) => set({ hasHydrated: v }),
 
       addCategory: (name: string) => {
         const newCategory: Category = {
@@ -342,6 +350,23 @@ export const useBookmarkStore = create<BookmarkStore>()(
         }))
       },
 
+      ensureSubCategory: (parentId: string, name: string) => {
+        const { categories } = get()
+        const parent = categories.find(c => c.id === parentId)
+        if (!parent) return ''
+        const exists = parent.subCategories.find(s => s.name === name)
+        if (exists) return exists.id
+        const id = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        set((state) => ({
+          categories: state.categories.map(cat =>
+            cat.id === parentId
+              ? { ...cat, subCategories: [...cat.subCategories, { id, name, parentId }] }
+              : cat
+          )
+        }))
+        return id
+      },
+
       addBookmark: async (bookmark) => {
         const newBookmark: Bookmark = {
           ...bookmark,
@@ -349,9 +374,11 @@ export const useBookmarkStore = create<BookmarkStore>()(
           createdAt: new Date(),
         }
 
-        // 用户开始添加数据，清除清空标志
+        // 用户开始添加数据，清除清空标志，并标记已有用户数据
         if (typeof window !== 'undefined') {
           localStorage.removeItem('data-cleared')
+          localStorage.setItem('hasUserData', 'true')
+          localStorage.setItem('hideDemoNotice', 'true')
         }
         // 先添加书签到状态
         set((state) => ({
@@ -363,6 +390,25 @@ export const useBookmarkStore = create<BookmarkStore>()(
           console.log('🔄 单个书签添加，开始增强...')
           const { BackgroundMetadataEnhancer } = await import('../lib/background-metadata-enhancer')
           const backgroundEnhancer = new BackgroundMetadataEnhancer()
+          // 优先尝试本地文章元数据抓取，获取更准确的标题与摘要
+          try {
+            const res = await fetch(`/api/fetch-meta?url=${encodeURIComponent(newBookmark.url)}`, { cache: 'no-store' })
+            if (res.ok) {
+              const data = await res.json()
+              if (data?.title || data?.description) {
+                set((state) => ({
+                  bookmarks: state.bookmarks.map(b => b.id === newBookmark.id ? {
+                    ...b,
+                    title: data.title || b.title,
+                    description: data.description || b.description,
+                  } : b)
+                }))
+              }
+            }
+          } catch (e) {
+            console.log('fetch-meta not available, will continue with enhancer.', e)
+          }
+
           const metadata = await backgroundEnhancer.enhanceSingleBookmark({
             id: newBookmark.id,
             url: newBookmark.url,
@@ -545,6 +591,12 @@ export const useBookmarkStore = create<BookmarkStore>()(
         const duration = ((endTime - startTime) / 1000).toFixed(1)
         console.log(`✅ 快速导入完成！耗时 ${duration}s，导入了 ${newBookmarks} 个书签`)
 
+        // 标记用户已经有真实数据，隐藏演示提示
+        if (typeof window !== 'undefined' && newBookmarks > 0) {
+          localStorage.setItem('hasUserData', 'true')
+          localStorage.setItem('hideDemoNotice', 'true')
+        }
+
         // 如果启用后台增强，异步开始增强过程
         if (enableBackgroundEnhancement && importedBookmarkIds.length > 0) {
           console.log(`🔄 自动启动后台增强服务，将为 ${importedBookmarkIds.length} 个书签获取详细信息...`)
@@ -599,9 +651,11 @@ export const useBookmarkStore = create<BookmarkStore>()(
       },
 
       resetStore: () => {
-        // 清除清空标志，因为我们要重置为默认数据
+        // 清除清空标志，并移除用户数据标记（回到默认演示数据状态）
         if (typeof window !== 'undefined') {
           localStorage.removeItem('data-cleared')
+          localStorage.removeItem('hasUserData')
+          localStorage.removeItem('hideDemoNotice')
         }
         set({
           categories: defaultCategories,
@@ -610,9 +664,12 @@ export const useBookmarkStore = create<BookmarkStore>()(
       },
 
       clearAllData: () => {
-        // 设置清空标志
+        // 设置清空标志，并移除所有用户数据标记，同时触发一次性 Onboarding
         if (typeof window !== 'undefined') {
           localStorage.setItem('data-cleared', 'true')
+          localStorage.removeItem('hasUserData')
+          localStorage.removeItem('hideDemoNotice')
+          localStorage.setItem('showOnboarding', 'true')
         }
         set({
           categories: [],
@@ -724,6 +781,28 @@ export const useBookmarkStore = create<BookmarkStore>()(
         backgroundEnhancer.stop()
         set({ enhancementProgress: null, isEnhancing: false })
         console.log('🔄 增强停止')
+      },
+
+      // 确保系统“未分类”存在，返回其子分类ID
+      ensureUncategorizedExists: () => {
+        const { categories } = get()
+        // 查找是否已存在系统分类
+        let systemCategory = categories.find(cat => cat.id === 'system')
+        if (!systemCategory) {
+          systemCategory = { id: 'system', name: '系统', subCategories: [] }
+          set((state) => ({ categories: [...state.categories, systemCategory!] }))
+        }
+        // 查找未分类子分类
+        let uncategorized = systemCategory.subCategories.find(sub => sub.id === 'uncategorized')
+        if (!uncategorized) {
+          uncategorized = { id: 'uncategorized', name: '未分类', parentId: 'system' }
+          set((state) => ({
+            categories: state.categories.map(cat =>
+              cat.id === 'system' ? { ...cat, subCategories: [...cat.subCategories, uncategorized!] } : cat
+            )
+          }))
+        }
+        return 'uncategorized'
       },
 
       getEnhancementStats: () => {

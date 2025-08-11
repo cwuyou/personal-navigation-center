@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useMemo, useCallback, memo } from "react"
-import { Search, Clock, Filter, X, Bookmark, Folder } from "lucide-react"
+import { Search, Clock, Filter, X, Bookmark, Folder, Tag } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -99,47 +99,63 @@ export function EnhancedSearch({ searchQuery, onSearchChange, className }: Enhan
     localStorage.setItem('search-history', JSON.stringify(newHistory))
   }
 
-  // 使用 useMemo 缓存搜索建议 - 优化版本
-  const suggestions = useMemo(() => {
+  // 使用 useMemo 缓存搜索建议 - 增加标签建议
+  interface SuggestionItem { text: string; type: 'category' | 'subcategory' | 'title' | 'tag' }
+  const suggestions = useMemo<SuggestionItem[]>(() => {
     if (!debouncedQuery.trim() || debouncedQuery.length < 2) return []
 
-    const suggestionSet = new Set<string>()
+    const seen = new Set<string>()
+    const list: SuggestionItem[] = []
     const lowerQuery = debouncedQuery.toLowerCase()
-    let count = 0
     const maxSuggestions = 5
 
-    // 优先从分类名称中提取建议（通常数量较少）
+    // 分类与子分类
     for (const category of categories) {
-      if (count >= maxSuggestions) break
-      if (category.name.toLowerCase().includes(lowerQuery)) {
-        suggestionSet.add(category.name)
-        count++
+      if (list.length >= maxSuggestions) break
+      if (category.name.toLowerCase().includes(lowerQuery) && !seen.has(category.name)) {
+        list.push({ text: category.name, type: 'category' })
+        seen.add(category.name)
       }
       for (const sub of category.subCategories) {
-        if (count >= maxSuggestions) break
-        if (sub.name.toLowerCase().includes(lowerQuery)) {
-          suggestionSet.add(sub.name)
-          count++
+        if (list.length >= maxSuggestions) break
+        if (sub.name.toLowerCase().includes(lowerQuery) && !seen.has(sub.name)) {
+          list.push({ text: sub.name, type: 'subcategory' })
+          seen.add(sub.name)
         }
       }
     }
 
-    // 如果还需要更多建议，从书签标题中提取
-    if (count < maxSuggestions) {
+    // 标签建议
+    if (list.length < maxSuggestions) {
       for (const bookmark of bookmarks) {
-        if (count >= maxSuggestions) break
-        const title = bookmark.title.toLowerCase()
-        if (title.includes(lowerQuery)) {
-          // 只添加完整标题，避免复杂的单词分割
-          if (title !== lowerQuery && bookmark.title.length <= 50) {
-            suggestionSet.add(bookmark.title)
-            count++
+        if (list.length >= maxSuggestions) break
+        const tags: string[] = Array.isArray(bookmark.tags) ? bookmark.tags : []
+        for (const tag of tags) {
+          if (list.length >= maxSuggestions) break
+          const tagStr = (tag || '').toLowerCase()
+          if (tagStr.includes(lowerQuery) && !seen.has(tag)) {
+            list.push({ text: tag, type: 'tag' })
+            seen.add(tag)
           }
         }
       }
     }
 
-    return Array.from(suggestionSet).slice(0, maxSuggestions)
+    // 标题建议
+    if (list.length < maxSuggestions) {
+      for (const bookmark of bookmarks) {
+        if (list.length >= maxSuggestions) break
+        const title = (bookmark.title || '').toLowerCase()
+        if (title.includes(lowerQuery) && !seen.has(bookmark.title)) {
+          if (title !== lowerQuery && (bookmark.title || '').length <= 50) {
+            list.push({ text: bookmark.title, type: 'title' })
+            seen.add(bookmark.title)
+          }
+        }
+      }
+    }
+
+    return list.slice(0, maxSuggestions)
   }, [debouncedQuery, bookmarks, categories])
 
   // 当防抖查询变化时，更新建议显示状态
@@ -296,18 +312,25 @@ export function EnhancedSearch({ searchQuery, onSearchChange, className }: Enhan
           {showSuggestions && suggestions.length > 0 && (
             <div className="p-2">
               <div className="text-xs font-medium text-muted-foreground mb-2 px-2">建议</div>
-              {suggestions.map((suggestion, index) => (
+              {suggestions.map((s, index) => (
                 <button
                   key={index}
                   className="w-full text-left px-3 py-2 text-sm hover:bg-accent rounded-md transition-colors"
                   onClick={() => {
-                    setLocalQuery(suggestion)
-                    onSearchChange(suggestion)
+                    const fill = s.type === 'tag' ? `#${s.text}` : s.text
+                    setLocalQuery(fill)
+                    onSearchChange(fill)
                     handleSearchSubmit()
                   }}
                 >
-                  <Search className="inline w-3 h-3 mr-2 text-muted-foreground" />
-                  {suggestion}
+                  {s.type === 'tag' ? (
+                    <Tag className="inline w-3 h-3 mr-2 text-purple-500" />
+                  ) : s.type === 'title' ? (
+                    <Bookmark className="inline w-3 h-3 mr-2 text-blue-500" />
+                  ) : (
+                    <Folder className="inline w-3 h-3 mr-2 text-muted-foreground" />
+                  )}
+                  {s.type === 'tag' ? `#${s.text}` : s.text}
                 </button>
               ))}
             </div>

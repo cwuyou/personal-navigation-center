@@ -279,7 +279,8 @@ export function EnhancedMainContent({
     bookmark.id === "vscode" || bookmark.id === "github" || bookmark.id === "postman"
   )
   const hideDemoNotice = typeof window !== 'undefined' && localStorage.getItem('hideDemoNotice') === 'true'
-  const showDemoNotice = isDemoData && !hideDemoNotice
+  const hasUserDataFlag = typeof window !== 'undefined' && localStorage.getItem('hasUserData') === 'true'
+  const showDemoNotice = isDemoData && !hideDemoNotice && !hasUserDataFlag
 
   return (
     <main className={cn("flex-1 transition-all duration-300 bg-gradient-to-br from-background to-muted/20", sidebarCollapsed ? "ml-0" : "ml-0")}>

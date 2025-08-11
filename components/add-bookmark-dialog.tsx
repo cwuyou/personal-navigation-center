@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import websiteDescriptions from '@/data/website-descriptions-1000plus.json'
+import { TagInput } from "@/components/tag-input"
 
 interface AddBookmarkDialogProps {
   open: boolean
@@ -22,10 +23,11 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
   const [url, setUrl] = useState("")
   const [description, setDescription] = useState("")
   const [coverImage, setCoverImage] = useState("")
-  const [tags, setTags] = useState("")
+  const [tags, setTags] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
 
-  const { addBookmark } = useBookmarkStore()
+  const { addBookmark, bookmarks } = useBookmarkStore()
+  const allTagSuggestions = Array.from(new Set(bookmarks.flatMap(b => b.tags || [])))
 
   const getPresetData = (url: string) => {
     try {
@@ -98,16 +100,14 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
 
     if (!title.trim() || !url.trim()) return
 
-    const tagsArray = tags.trim()
-      ? tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
-      : undefined
+    const tagsArray = tags.map(t => t.trim()).filter(t => t.length > 0)
 
     addBookmark({
       title: title.trim(),
       url: url.trim(),
       description: description.trim() || undefined,
       coverImage: coverImage.trim() || undefined,
-      tags: tagsArray,
+      tags: tagsArray.length ? tagsArray : undefined,
       subCategoryId,
     })
 
@@ -115,7 +115,7 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
     setUrl("")
     setDescription("")
     setCoverImage("")
-    setTags("")
+    setTags([])
     onOpenChange(false)
   }
 
@@ -176,13 +176,12 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
 
           <div>
             <Label htmlFor="tags">标签</Label>
-            <Input
-              id="tags"
+            <TagInput
               value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              placeholder="标签1, 标签2, 标签3"
+              onChange={setTags}
+              placeholder="输入后回车添加标签，或粘贴逗号/换行分隔的标签"
+              suggestions={allTagSuggestions}
             />
-            <p className="text-xs text-muted-foreground mt-1">用逗号分隔多个标签</p>
           </div>
 
           <div className="flex justify-end space-x-2">
