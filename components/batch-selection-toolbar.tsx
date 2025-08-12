@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { FolderOpen, X, CheckSquare } from "lucide-react"
+import { FolderOpen, X, CheckSquare, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { MoveBookmarkDialog } from "@/components/move-bookmark-dialog"
 import { cn } from "@/lib/utils"
@@ -11,6 +11,7 @@ interface BatchSelectionToolbarProps {
   onClearSelection: () => void
   onDeleteSelected: () => void
   onMoveComplete?: () => void
+  onExportSelected?: (ids: string[]) => void
   className?: string
 }
 
@@ -20,6 +21,7 @@ export function BatchSelectionToolbar({
   onDeleteSelected,
   onMoveComplete,
   className,
+  onExportSelected,
 }: BatchSelectionToolbarProps) {
   const [moveDialogOpen, setMoveDialogOpen] = useState(false)
 
@@ -54,6 +56,16 @@ export function BatchSelectionToolbar({
           >
             <FolderOpen className="w-4 h-4 mr-1" />
             移动
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onExportSelected && onExportSelected(selectedBookmarkIds)}
+            className="h-8 px-3 hover:bg-primary/10 hover:text-primary"
+          >
+            <Download className="w-4 h-4 mr-1" />
+            导出
           </Button>
 
           <Button

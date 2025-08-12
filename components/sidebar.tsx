@@ -1,12 +1,13 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Trash, FolderPlus, Bookmark } from "lucide-react"
+import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Trash, FolderPlus, Bookmark, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
+import { saveAs } from "file-saver"
 import { AddSubCategoryDialog } from "@/components/add-subcategory-dialog"
 import { AddBookmarkDialog } from "@/components/add-bookmark-dialog"
 
@@ -40,7 +41,7 @@ export function Sidebar({
   selectedSubCategory,
   onCategorySelect,
 }: SidebarProps) {
-  const { categories, updateCategory, updateSubCategory, deleteCategory, deleteSubCategory } = useBookmarkStore()
+  const { categories, updateCategory, updateSubCategory, deleteCategory, deleteSubCategory, exportBookmarks } = useBookmarkStore()
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -363,6 +364,33 @@ export function Sidebar({
                           <FolderPlus className="h-3 w-3 mr-2" />
                           添加
                         </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            // 导出该分类下所有书签（裁剪到相关子分类）
+                            const cat = categories.find(c => c.id === category.id)
+                            const subIds = new Set((cat?.subCategories || []).map(s => s.id))
+                            const data = exportBookmarks()
+                            const trimmedCategories = data.categories.map(c => ({
+                              ...c,
+                              subCategories: (c.subCategories || []).filter(s => subIds.has(s.id))
+                            })).filter(c => c.subCategories.length > 0)
+                            const scoped = { categories: trimmedCategories, bookmarks: data.bookmarks.filter(b => subIds.has(b.subCategoryId)) }
+                            const blob = new Blob([JSON.stringify(scoped, null, 2)], { type: 'application/json' })
+                            const url = URL.createObjectURL(blob)
+                            const a = document.createElement('a')
+                            a.href = url
+                            a.download = `bookmarks-${category.name}-${new Date().toISOString().slice(0,10)}.json`
+                            document.body.appendChild(a)
+                            a.click()
+                            document.body.removeChild(a)
+                            URL.revokeObjectURL(url)
+                          }}
+                          className="text-xs"
+                        >
+                          <Download className="h-3 w-3 mr-2" />
+                          导出此分类
+                        </DropdownMenuItem>
 
                         <DropdownMenuSeparator />
 
@@ -390,8 +418,9 @@ export function Sidebar({
                     <div
                       key={subCategory.id}
                       className={cn(
-                        "group flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-accent text-sm",
-                        selectedSubCategory === subCategory.id && "bg-accent",
+                        "group flex items-center justify-between p-2 cursor-pointer text-sm transition-colors border border-transparent",
+                        "hover:bg-primary/10 hover:text-primary hover:border-primary/30",
+                        selectedSubCategory === subCategory.id && "bg-primary text-primary-foreground shadow-sm",
                       )}
                       onClick={() => editingId !== subCategory.id && handleSubCategoryClick(category.id, subCategory.id)}
                     >
@@ -447,7 +476,7 @@ export function Sidebar({
                               <MoreHorizontal className="h-3 w-3" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-40">
+                          <DropdownMenuContent align="end" className="w-44">
                             {/* 添加操作组 */}
                             <DropdownMenuItem
                               onClick={(e) => {
@@ -472,6 +501,31 @@ export function Sidebar({
                             >
                               <Edit2 className="h-3 w-3 mr-2" />
                               重命名
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                // 导出该子分类下所有书签（裁剪到当前子分类）
+                                const data = exportBookmarks()
+                                const trimmedCategories = data.categories.map(c => ({
+                                  ...c,
+                                  subCategories: (c.subCategories || []).filter(s => s.id === subCategory.id)
+                                })).filter(c => c.subCategories.length > 0)
+                                const scoped = { categories: trimmedCategories, bookmarks: data.bookmarks.filter(b => b.subCategoryId === subCategory.id) }
+                                const blob = new Blob([JSON.stringify(scoped, null, 2)], { type: 'application/json' })
+                                const url = URL.createObjectURL(blob)
+                                const a = document.createElement('a')
+                                a.href = url
+                                a.download = `bookmarks-${subCategory.name}-${new Date().toISOString().slice(0,10)}.json`
+                                document.body.appendChild(a)
+                                a.click()
+                                document.body.removeChild(a)
+                                URL.revokeObjectURL(url)
+                              }}
+                              className="text-xs"
+                            >
+                              <Download className="h-3 w-3 mr-2" />
+                              导出此子分类
                             </DropdownMenuItem>
 
                             <DropdownMenuSeparator />

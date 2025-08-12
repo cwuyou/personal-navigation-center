@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home, Download } from "lucide-react"
+import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home, Download, Database } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -12,6 +12,7 @@ import {
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import { ImportDialog } from "@/components/import-dialog"
 import { AboutDialog } from "@/components/about-dialog"
+import { DataManagementDialog } from "@/components/data-management-dialog"
 // import { HelpCenter } from "@/components/help-center"
 import { ImportHelpDialog } from "@/components/import-help-dialog"
 
@@ -41,6 +42,8 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
   }, [])
   const [aboutDialogOpen, setAboutDialogOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
+  const [dataDialogOpen, setDataDialogOpen] = useState(false)
+
 
   const [addBookmarkOpen, setAddBookmarkOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -49,30 +52,59 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
   const { importBookmarks, categories } = useBookmarkStore()
   const { exportBookmarks } = useBookmarkStore()
 
-  const handleExport = (type: 'json' | 'html' = 'json') => {
+  const handleExport = (type: 'json' | 'html' | 'csv' | 'txt' = 'json') => {
     const data = exportBookmarks()
+
+    const download = (blob: Blob, ext: string) => {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `bookmarks-export-${new Date().toISOString().slice(0,10)}.${ext}`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    }
+
     if (type === 'json') {
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `bookmarks-export-${new Date().toISOString().slice(0,10)}.json`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
-    } else {
-      // 简单 HTML Netscape 格式（可选）
+      download(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }), 'json')
+      return
+    }
+
+    if (type === 'html') {
       const html = generateNetscapeHTML(data)
-      const blob = new Blob([html], { type: 'text/html' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `bookmarks-export-${new Date().toISOString().slice(0,10)}.html`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
+      download(new Blob([html], { type: 'text/html' }), 'html')
+      return
+    }
+
+    if (type === 'csv') {
+      const { categories, bookmarks } = data
+      const subMap = new Map<string, { category: string; sub: string }>()
+      categories.forEach(cat => (cat.subCategories || []).forEach(sub => {
+        subMap.set(sub.id, { category: cat.name, sub: sub.name })
+      }))
+      const esc = (s: any) => '"' + String(s ?? '').replace(/"/g, '""') + '"'
+      const header = ['Title','URL','Description','Category','SubCategory']
+      const lines = [header.join(',')]
+      bookmarks.forEach(bm => {
+        const names = subMap.get(bm.subCategoryId) || { category: '', sub: '' }
+        lines.push([
+          esc(bm.title || bm.url),
+          esc(bm.url || ''),
+          esc(bm.description || ''),
+          esc(names.category),
+          esc(names.sub),
+        ].join(','))
+      })
+      download(new Blob([lines.join('\r\n')], { type: 'text/csv' }), 'csv')
+      return
+    }
+
+    if (type === 'txt') {
+      const { bookmarks } = data
+      const content = bookmarks.map(b => `${b.title || b.url} - ${b.url}`).join('\n')
+      download(new Blob([content], { type: 'text/plain' }), 'txt')
+      return
     }
   }
 
@@ -594,7 +626,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
             )
           })()}
 
-          {/* 导入按钮 - 卡片式 */}
+          {/* 导入按钮 - 卡片式（紧邻添加书签） */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="hover:bg-primary/10" title="导入书签">
@@ -624,27 +656,6 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
                         <HelpCircle className="w-3 h-3 mr-1" />
                         格式说明
                       </Button>
-
-              {/* 导出按钮 */}
-              <Button variant="ghost" size="sm" className="hover:bg-primary/10" title="导出书签" onClick={() => handleExport('json')}>
-                <Download className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">导出</span>
-              </Button>
-
-                    </div>
-
-                    <div className="bg-muted/30 rounded-lg p-3">
-                      <h4 className="text-xs font-medium mb-2">支持的文件格式</h4>
-                      <div className="text-xs text-muted-foreground space-y-1">
-                        <div className="flex items-center space-x-2">
-                          <FileText className="w-3 h-3 text-blue-500" />
-                          <span>HTML 文件（浏览器书签导出）</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <FileText className="w-3 h-3 text-green-500" />
-                          <span>JSON 文件（自定义格式）</span>
-                        </div>
-                      </div>
                     </div>
 
                     {/* 隐藏的文件输入框 */}
@@ -692,7 +703,49 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
             </DropdownMenuContent>
           </DropdownMenu>
 
+          {/* 顶部导出按钮 - 卡片式（在显示按钮左侧） */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="hover:bg-primary/10" title="导出书签">
+                <Download className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">导出</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-64 p-0 shadow-xl border border-border/20 bg-background/95 backdrop-blur-sm rounded-lg animate-in slide-in-from-top-2 duration-200"
+              align="end"
+              sideOffset={8}
+            >
+              <Card className="border-0 shadow-none">
+                <CardContent className="p-2">
+                  <div className="space-y-1">
+                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => handleExport('html')}>
+                      <FileText className="w-4 h-4 text-blue-500" />
+                      <span className="text-sm">HTML</span>
+                    </button>
+                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => handleExport('json')}>
+                      <FileText className="w-4 h-4 text-green-500" />
+                      <span className="text-sm">JSON</span>
+                    </button>
+                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => handleExport('csv')}>
+                      <FileText className="w-4 h-4 text-amber-500" />
+                      <span className="text-sm">CSV</span>
+                    </button>
+                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => handleExport('txt')}>
+                      <FileText className="w-4 h-4 text-purple-500" />
+                      <span className="text-sm">TXT</span>
+                    </button>
+                  </div>
+                </CardContent>
+              </Card>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* 显示设置按钮 */}
           <QuickDisplaySettings />
+
+
+
 
           <Link href="/help" title="帮助与文档">
             <Button variant="ghost" size="sm" className="hover:bg-primary/10">
@@ -704,6 +757,11 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
             <Settings className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline">设置</span>
           </Button>
+      <DataManagementDialog
+        open={dataDialogOpen}
+        onOpenChange={setDataDialogOpen}
+      />
+
           <Button variant="ghost" size="sm" onClick={() => setAboutDialogOpen(true)} className="hover:bg-primary/10" title="关于">
             <Info className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline">关于</span>

@@ -13,6 +13,7 @@ import { DynamicBookmarkGrid } from "@/components/dynamic-bookmark-grid"
 
 import { Button } from "@/components/ui/button"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
+import { useMemo } from "react"
 
 interface Bookmark {
   id: string
@@ -45,8 +46,8 @@ export function EnhancedMainContent({
   const [previewBookmark, setPreviewBookmark] = useState<Bookmark | null>(null)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [selectedBookmarkIds, setSelectedBookmarkIds] = useState<string[]>([])
-  
-  const { categories, bookmarks, deleteBookmark, clearAllData } = useBookmarkStore()
+
+  const { categories, bookmarks, deleteBookmark, clearAllData, exportBookmarks } = useBookmarkStore()
 
 
 
@@ -63,8 +64,8 @@ export function EnhancedMainContent({
 
   // 处理书签选择
   const handleBookmarkSelection = (bookmarkId: string, selected: boolean) => {
-    setSelectedBookmarkIds(prev => 
-      selected 
+    setSelectedBookmarkIds(prev =>
+      selected
         ? [...prev, bookmarkId]
         : prev.filter(id => id !== bookmarkId)
     )
@@ -106,8 +107,32 @@ export function EnhancedMainContent({
     setIsSelectionMode(false)
   }
 
+  // 批量导出选中（仅导出关联分类/子分类）
+  const handleExportSelected = (ids: string[]) => {
+    const idSet = new Set(ids)
+    const subset = bookmarks.filter(b => idSet.has(b.id))
+    const subIdSet = new Set(subset.map(b => b.subCategoryId))
+    const trimmedCategories = categories
+      .map(cat => {
+        const subs = (cat.subCategories || []).filter(s => subIdSet.has(s.id))
+        return subs.length > 0 ? { ...cat, subCategories: subs } : null
+      })
+      .filter(Boolean) as typeof categories
+    const data = { categories: trimmedCategories, bookmarks: subset }
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `bookmarks-selected-${new Date().toISOString().slice(0,10)}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   // 获取当前分类
-  const currentCategory = selectedCategory 
+  const currentCategory = selectedCategory
     ? categories.find(cat => cat.id === selectedCategory)
     : null
 
@@ -150,7 +175,7 @@ export function EnhancedMainContent({
                 <div className="w-1.5 sm:w-2 h-5 sm:h-6 bg-gradient-to-b from-primary to-primary/60 rounded-full"></div>
                 <h1 className="text-lg sm:text-xl font-semibold text-foreground">{currentCategory.name}</h1>
               </div>
-              
+
               {/* 批量操作按钮 */}
               {currentBookmarks.length > 0 && (
                 <div className="flex items-center space-x-2">
@@ -260,6 +285,7 @@ export function EnhancedMainContent({
           onClearSelection={clearSelection}
           onDeleteSelected={handleBatchDelete}
           onMoveComplete={handleMoveComplete}
+          onExportSelected={handleExportSelected}
         />
 
         {previewBookmark && (
@@ -369,11 +395,11 @@ export function EnhancedMainContent({
       {/* 分类内容区域 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8 sm:space-y-12 lg:space-y-16">
         {categories.map((category, index) => {
-          const categoryBookmarks = bookmarks.filter(bookmark => 
+          const categoryBookmarks = bookmarks.filter(bookmark =>
             category.subCategories.some(sub => sub.id === bookmark.subCategoryId)
           )
           const firstSubCategory = category.subCategories[0]
-          const firstSubCategoryBookmarks = firstSubCategory 
+          const firstSubCategoryBookmarks = firstSubCategory
             ? bookmarks.filter(b => b.subCategoryId === firstSubCategory.id)
             : []
 

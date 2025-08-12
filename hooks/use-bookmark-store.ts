@@ -400,7 +400,9 @@ export const useBookmarkStore = create<BookmarkStore>()(
                   bookmarks: state.bookmarks.map(b => b.id === newBookmark.id ? {
                     ...b,
                     title: data.title || b.title,
-                    description: data.description || b.description,
+                    description: (b.description && b.description.trim().length > 0)
+                      ? b.description
+                      : (data.description || b.description),
                   } : b)
                 }))
               }
@@ -424,7 +426,9 @@ export const useBookmarkStore = create<BookmarkStore>()(
                 bm.id === newBookmark.id
                   ? {
                       ...bm,
-                      description: metadata.description || bm.description,
+                      description: (bm.description && bm.description.trim().length > 0)
+                        ? bm.description
+                        : (metadata.description || bm.description),
                       favicon: metadata.favicon || bm.favicon,
                       coverImage: metadata.coverImage || bm.coverImage
                     }

@@ -4,6 +4,8 @@ import { useMemo, useCallback } from "react"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { EnhancedBookmarkCard } from "@/components/enhanced-bookmark-card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Download } from "lucide-react"
 
 interface SearchResultsProps {
   searchQuery: string
@@ -102,13 +104,43 @@ export function SearchResults({ searchQuery, onPreview }: SearchResultsProps) {
     return <>{nodes}</>
   }
 
+  const handleExportSearch = () => {
+    const q = (searchResults as any).effectiveQuery || searchQuery
+    const subIdSet = new Set(searchResults.bookmarks.map((b: any) => b.subCategoryId))
+    const trimmedCategories = categories
+      .map(cat => {
+        const subs = (cat.subCategories || []).filter((s: any) => subIdSet.has(s.id))
+        return subs.length > 0 ? { ...cat, subCategories: subs } : null
+      })
+      .filter(Boolean) as any
+    const data = { categories: trimmedCategories, bookmarks: searchResults.bookmarks }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `bookmarks-search-${new Date().toISOString().slice(0,10)}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">搜索结果</h1>
-        <p className="text-muted-foreground">
-          找到 {searchResults.categories.length} 个分类和 {searchResults.bookmarks.length} 个书签
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold mb-1">搜索结果</h1>
+            <p className="text-muted-foreground">
+              找到 {searchResults.categories.length} 个分类和 {searchResults.bookmarks.length} 个书签
+            </p>
+          </div>
+          {searchResults.bookmarks.length > 0 && (
+            <Button variant="outline" onClick={handleExportSearch} title="导出搜索结果">
+              <Download className="w-4 h-4 mr-2" /> 导出搜索结果
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Category Results */}
