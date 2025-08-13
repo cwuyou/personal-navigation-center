@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,9 +46,9 @@ export function AddBookmarkWithCategoryDialog({
     }
   }, [firstSubcase, categories])
 
-  // 获取所有可用的子分类
+  // 获取所有可用的子分类（使用 useMemo 避免每次渲染都创建新数组导致副作用反复触发）
   // 仅当完全没有任何一级分类时，才提供“未分类”占位
-  const allSubCategories = (() => {
+  const allSubCategories = useMemo(() => {
     const list = categories.flatMap(category =>
       category.subCategories.map(subCategory => ({
         ...subCategory,
@@ -59,18 +59,21 @@ export function AddBookmarkWithCategoryDialog({
       return [{ id: 'uncategorized', name: '未分类', parentId: 'system', categoryName: '系统' } as any]
     }
     return list
-  })()
+  }, [categories])
 
-  // 设置默认选中的分类
+  // 设置默认选中的分类（仅当未选择或选择的项不再存在时才设定，避免覆盖用户操作）
   useEffect(() => {
-    if (open) {
-      if (defaultSubCategoryId && allSubCategories.find(sub => sub.id === defaultSubCategoryId)) {
-        setSelectedSubCategoryId(defaultSubCategoryId)
-      } else if (allSubCategories.length > 0) {
-        setSelectedSubCategoryId(allSubCategories[0].id)
-      }
+    if (!open) return
+    const exists = selectedSubCategoryId && allSubCategories.some(sub => sub.id === selectedSubCategoryId)
+    if (defaultSubCategoryId && allSubCategories.some(sub => sub.id === defaultSubCategoryId)) {
+      // 如果传入了默认二级分类且存在，优先使用
+      setSelectedSubCategoryId(prev => (prev ? prev : defaultSubCategoryId))
+      return
     }
-  }, [open, defaultSubCategoryId, allSubCategories])
+    if (!exists && allSubCategories.length > 0) {
+      setSelectedSubCategoryId(allSubCategories[0].id)
+    }
+  }, [open, defaultSubCategoryId, allSubCategories, selectedSubCategoryId])
 
   // 获取预置数据的函数
   const getPresetData = (url: string) => {

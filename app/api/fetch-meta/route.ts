@@ -21,6 +21,23 @@ function stripHtml(html: string) {
     .trim()
 }
 
+// Extract <meta ...> content regardless of attribute order
+function extractMetaContent(html: string, attr: 'name' | 'property', value: string): string | null {
+  try {
+    // attr first, then content
+    const re1 = new RegExp(`<meta[^>]*${attr}=["']${value}["'][^>]*content=["']([^"']*)["'][^>]*>`, 'i')
+    const m1 = html.match(re1)
+    if (m1?.[1]) return m1[1].trim()
+    // content first, then attr
+    const re2 = new RegExp(`<meta[^>]*content=["']([^"']*)["'][^>]*${attr}=["']${value}["'][^>]*>`, 'i')
+    const m2 = html.match(re2)
+    if (m2?.[1]) return m2[1].trim()
+    return null
+  } catch {
+    return null
+  }
+}
+
 function extractJsonLd(html: string) {
   try {
     const matches = html.match(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/i)
@@ -92,7 +109,9 @@ function extractArticleText(html: string, host: string): { text?: string; titleF
     'searchenginejournal.com': ['article', '.article__content', '.single-post .content'],
     'yoast.com': ['article', '.article__content', '.entry-content'],
     'contentmarketinginstitute.com': ['article', '.entry-content', '.article__content'],
-    'reddit.com': ['article']
+    'reddit.com': ['article'],
+    // Aliyun Help Center: pages often render content inside containers
+    'help.aliyun.com': ['article', '#content', '.content', '.article-content', '.doc-content', '#doc-content', '.markdown-body', '.docs-content']
   }
 
   const selectors = selectorsByHost[lowerHost] || ['article', 'main article', '[itemprop="articleBody"]', '.article-content', '.post-content', '.entry-content']
@@ -148,6 +167,8 @@ export async function GET(request: NextRequest) {
       headers: {
         'User-Agent': ua,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        'Referer': 'https://help.aliyun.com/',
       },
       // Reasonable timeout
       signal: AbortSignal.timeout(7000),
@@ -160,27 +181,23 @@ export async function GET(request: NextRequest) {
     if (resp.ok) {
       const html = await resp.text()
 
-      // Title: <title> or og:title
+      // Title: <title> or meta fallbacks
       const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i)
       if (titleMatch?.[1]) title = titleMatch[1].trim()
+      if (!title) title = extractMetaContent(html, 'property', 'og:title') || title || ''
+      if (!title) title = extractMetaContent(html, 'name', 'twitter:title') || extractMetaContent(html, 'property', 'twitter:title') || ''
       if (!title) {
-        const ogTitleMatch = html.match(
-          /<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']*)["'][^>]*>/i
-        )
-        if (ogTitleMatch?.[1]) title = ogTitleMatch[1].trim()
+        const h1Match = html.match(/<h1[^>]*>([^<]{4,120})<\/h1>/i)
+        if (h1Match?.[1]) title = h1Match[1].trim()
       }
 
-      // Description: meta description or og:description
-      const metaDescMatch = html.match(
-        /<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["'][^>]*>/i
-      )
-      if (metaDescMatch?.[1]) description = metaDescMatch[1].trim()
-      if (!description) {
-        const ogDescMatch = html.match(
-          /<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']*)["'][^>]*>/i
-        )
-        if (ogDescMatch?.[1]) description = ogDescMatch[1].trim()
-      }
+      // Description: meta description variants
+      description =
+        extractMetaContent(html, 'name', 'description') ||
+        extractMetaContent(html, 'property', 'og:description') ||
+        extractMetaContent(html, 'name', 'twitter:description') ||
+        extractMetaContent(html, 'property', 'twitter:description') ||
+        ''
 
       // Special handling for common article structures
       const host = target.hostname.replace(/^www\./, '')
