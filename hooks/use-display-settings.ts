@@ -79,8 +79,8 @@ export const useDisplaySettings = create<DisplaySettingsStore>()(
     }),
     {
       name: 'display-settings-storage',
-      // 添加 SSR 支持
-      skipHydration: true,
+      // 启用自动水合，以便刷新后保持显示开关状态
+      // 注：所有使用该设置的组件均为客户端组件，安全
     }
   )
 )
