@@ -45,12 +45,14 @@ export class BackgroundMetadataEnhancer {
       const preset = (websiteDescriptions as any)[domain]
 
       if (preset) {
+        const cover: string | undefined = preset.coverImage
+        const isFavicon = !!cover && (/\.ico(\?|$)/i.test(cover) || cover.toLowerCase().includes('favicon') || /icon-\d+x\d+/i.test(cover) || cover.toLowerCase().includes('apple-touch-icon'))
         return {
           id: '',
           title: preset.title,
           description: preset.description,
           favicon: getFaviconUrl(url),
-          coverImage: preset.coverImage,
+          coverImage: isFavicon ? undefined : cover,
           enhanced: true,
           lastUpdated: new Date()
         }
@@ -218,8 +220,11 @@ export class BackgroundMetadataEnhancer {
   /**
    * 增强单个书签的元数据（公共接口，用于单个书签添加）
    */
-  async enhanceSingleBookmark(bookmark: { id: string, url: string, title: string, description?: string }): Promise<BookmarkMetadata | null> {
-    return this.enhanceBookmark(bookmark, { isBatchImport: false })
+  async enhanceSingleBookmark(
+    bookmark: { id: string, url: string, title: string, description?: string },
+    options: { seed?: Partial<BookmarkMetadata> } = {}
+  ): Promise<BookmarkMetadata | null> {
+    return this.enhanceBookmark(bookmark, { isBatchImport: false, seed: options.seed })
   }
 
   /**
@@ -227,7 +232,7 @@ export class BackgroundMetadataEnhancer {
    */
   private async enhanceBookmark(
     bookmark: { id: string, url: string, title: string, description?: string },
-    options: { isBatchImport?: boolean } = {}
+    options: { isBatchImport?: boolean; seed?: Partial<BookmarkMetadata> } = {}
   ): Promise<BookmarkMetadata | null> {
     console.log(`🔄 开始增强书签: ${bookmark.title} (${bookmark.url})`)
     console.log(`   当前描述长度: ${bookmark.description?.length || 0}`)
@@ -239,12 +244,16 @@ export class BackgroundMetadataEnhancer {
       return null
     }
 
-    // 1. 首先尝试预置数据库
+    // 1. 如果前端提供了种子元数据（seed），优先合并使用，避免重复请求
+    const seed = options.seed || {}
+
+    // 1.1 预置数据库（仅用于补充缺失字段）
     const presetData = this.getPresetDescription(bookmark.url)
     if (presetData) {
       console.log(`✅ 使用预置描述增强书签: ${bookmark.title}`)
       return {
         ...presetData,
+        ...seed,
         id: bookmark.id
       }
     }
@@ -257,7 +266,20 @@ export class BackgroundMetadataEnhancer {
     const shouldFetchDetailed = !['github', 'google', 'youtube', 'twitter', 'facebook'].some(known => domain.includes(known))
 
     if (shouldFetchDetailed && !options.isBatchImport) {
-      // 单个书签添加时：优先调用本地 fetch-meta API 获取文章标题与摘要
+      // 单个书签添加：优先使用种子数据，避免重复网络请求
+      if (seed.title || seed.description || seed.coverImage) {
+        return {
+          id: bookmark.id,
+          title: seed.title || bookmark.title,
+          description: seed.description || smartDescription,
+          favicon: getFaviconUrl(bookmark.url),
+          coverImage: seed.coverImage || this.generateCoverImage(bookmark.url),
+          enhanced: true,
+          lastUpdated: new Date()
+        }
+      }
+
+      // 若没有种子数据，再调用本地 fetch-meta API
       try {
         const res = await fetch(`/api/fetch-meta?url=${encodeURIComponent(bookmark.url)}`, {
           signal: this.abortController?.signal,
@@ -265,12 +287,13 @@ export class BackgroundMetadataEnhancer {
         })
         if (res.ok) {
           const data = await res.json()
-          if (data?.title || data?.description) {
+          if (data?.title || data?.description || data?.coverImage) {
             return {
               id: bookmark.id,
               title: data.title || bookmark.title,
               description: data.description || smartDescription,
               favicon: getFaviconUrl(bookmark.url),
+              coverImage: data.coverImage || this.generateCoverImage(bookmark.url),
               enhanced: true,
               lastUpdated: new Date()
             }

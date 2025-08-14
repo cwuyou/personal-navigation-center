@@ -146,6 +146,11 @@ function extractArticleText(html: string, host: string): { text?: string; titleF
   return {}
 }
 
+
+// 简单内存缓存（同一URL在短时间内多次请求时复用结果，减少对目标站点的压力）
+const inMemoryCache = new Map<string, { data: { title: string; description: string; coverImage: string; url: string }, expires: number }>()
+const CACHE_TTL_MS = 20_000 // 20秒
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const url = searchParams.get('url')
@@ -158,6 +163,13 @@ export async function GET(request: NextRequest) {
     const target = new URL(url)
     if (!['http:', 'https:'].includes(target.protocol)) {
       return NextResponse.json({ error: 'Invalid URL protocol' }, { status: 400 })
+    }
+
+    // 短缓存命中：直接返回缓存值
+    const cached = inMemoryCache.get(target.href)
+    const now = Date.now()
+    if (cached && cached.expires > now) {
+      return NextResponse.json(cached.data)
     }
 
     const ua =
@@ -177,6 +189,7 @@ export async function GET(request: NextRequest) {
 
     let title = ''
     let description = ''
+    let coverImage = ''
 
     if (resp.ok) {
       const html = await resp.text()
@@ -199,6 +212,22 @@ export async function GET(request: NextRequest) {
         extractMetaContent(html, 'property', 'twitter:description') ||
         ''
 
+      // Cover image: prefer og:image / twitter:image
+      coverImage =
+        extractMetaContent(html, 'property', 'og:image') ||
+        extractMetaContent(html, 'name', 'twitter:image') ||
+        extractMetaContent(html, 'property', 'twitter:image') ||
+        ''
+
+      // Normalize relative image URLs to absolute
+      if (coverImage && !/^https?:\/\//i.test(coverImage)) {
+        try {
+          coverImage = new URL(coverImage, target.origin).toString()
+        } catch {
+          // ignore
+        }
+      }
+
       // Special handling for common article structures
       const host = target.hostname.replace(/^www\./, '')
       const path = target.pathname.toLowerCase()
@@ -220,7 +249,12 @@ export async function GET(request: NextRequest) {
       if (description.length > 200) description = description.slice(0, 200) + '...'
     }
 
-    return NextResponse.json({ title, description, url })
+    const result = { title, description, coverImage, url }
+
+    // 写入短缓存
+    inMemoryCache.set(target.href, { data: result, expires: Date.now() + CACHE_TTL_MS })
+
+    return NextResponse.json(result)
   } catch (error) {
     console.error('fetch-meta API error:', error)
     return NextResponse.json({ error: 'Failed to fetch metadata' }, { status: 500 })

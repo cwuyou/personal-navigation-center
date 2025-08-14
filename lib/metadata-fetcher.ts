@@ -18,7 +18,8 @@ export interface WebsiteMetadata {
 export function getFaviconUrl(url: string): string | undefined {
   try {
     const domain = new URL(url).hostname
-    return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`
+    // 使用更高分辨率以避免在卡片中放大导致模糊；64px 兼顾清晰与流量
+    return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
   } catch {
     return undefined
   }
