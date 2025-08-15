@@ -1,9 +1,3 @@
 {
-  "regions": ["hkg1", "sin1", "icn1"],
-  "functions": {
-    "api/**": { "regions": ["hkg1", "sin1", "icn1"] },
-    "app/**/route.js": { "regions": ["hkg1", "sin1", "icn1"] },
-    "app/**/route.ts": { "regions": ["hkg1", "sin1", "icn1"] }
-  }
+  "regions": ["hkg1", "sin1", "icn1"]
 }
-
