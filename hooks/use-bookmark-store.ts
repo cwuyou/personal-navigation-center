@@ -127,6 +127,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "Visual Studio Code",
     url: "https://code.visualstudio.com/",
     description: "微软开发的免费代码编辑器",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dcode.visualstudio.com%26sz%3D256",
     subCategoryId: "code-editors",
     createdAt: new Date(),
   },
@@ -135,6 +136,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "WebStorm",
     url: "https://www.jetbrains.com/webstorm/",
     description: "JetBrains出品的专业Web开发IDE",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dwww.jetbrains.com%26sz%3D256",
     subCategoryId: "code-editors",
     createdAt: new Date(),
   },
@@ -145,6 +147,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "GitHub",
     url: "https://github.com/",
     description: "全球最大的代码托管平台",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fgithub.githubassets.com%2Fimages%2Fmodules%2Fsite%2Fsocial-cards%2Fgithub-social.png",
     subCategoryId: "version-control",
     createdAt: new Date(),
   },
@@ -153,6 +156,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "GitLab",
     url: "https://gitlab.com/",
     description: "完整的DevOps平台",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dgitlab.com%26sz%3D256",
     subCategoryId: "version-control",
     createdAt: new Date(),
   },
@@ -163,6 +167,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "Postman",
     url: "https://www.postman.com/",
     description: "API开发和测试工具",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dwww.postman.com%26sz%3D256",
     subCategoryId: "api-tools",
     createdAt: new Date(),
   },
@@ -171,6 +176,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "Insomnia",
     url: "https://insomnia.rest/",
     description: "简洁的API客户端工具",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dinsomnia.rest%26sz%3D256",
     subCategoryId: "api-tools",
     createdAt: new Date(),
   },
@@ -181,6 +187,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "MDN Web Docs",
     url: "https://developer.mozilla.org/",
     description: "Web开发权威文档",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Ddeveloper.mozilla.org%26sz%3D256",
     subCategoryId: "documentation",
     createdAt: new Date(),
   },
@@ -189,6 +196,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "React 官方文档",
     url: "https://react.dev/",
     description: "React框架官方文档",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Freact.dev%2Ffavicon-32x32.png",
     subCategoryId: "documentation",
     createdAt: new Date(),
   },
@@ -199,6 +207,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "freeCodeCamp",
     url: "https://www.freecodecamp.org/",
     description: "免费编程学习平台",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dwww.freecodecamp.org%26sz%3D256",
     subCategoryId: "tutorials",
     createdAt: new Date(),
   },
@@ -207,6 +216,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "Codecademy",
     url: "https://www.codecademy.com/",
     description: "交互式编程学习平台",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dwww.codecademy.com%26sz%3D256",
     subCategoryId: "tutorials",
     createdAt: new Date(),
   },
@@ -217,6 +227,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "Stack Overflow",
     url: "https://stackoverflow.com/",
     description: "程序员问答社区",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fstackoverflow.design%2Fassets%2Fimg%2Flogos%2Fso%2Flogo-stackoverflow.png",
     subCategoryId: "communities",
     createdAt: new Date(),
   },
@@ -225,6 +236,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "DEV Community",
     url: "https://dev.to/",
     description: "开发者技术分享社区",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fpracticaldev-herokuapp-com.freetls.fastly.net%2Fassets%2Fdevlogo-pwa-512.png",
     subCategoryId: "communities",
     createdAt: new Date(),
   },
@@ -235,6 +247,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "Figma",
     url: "https://www.figma.com/",
     description: "在线协作设计工具",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fstatic.figma.com%2Fapp%2Ficon%2F1%2Fdesktop-launcher%2F512.png",
     subCategoryId: "design",
     createdAt: new Date(),
   },
@@ -243,6 +256,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "Canva",
     url: "https://www.canva.com/",
     description: "简单易用的在线设计平台",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fstatic.canva.com%2Fstatic%2Fimages%2Ftouch-icon-192.png",
     subCategoryId: "design",
     createdAt: new Date(),
   },
@@ -253,6 +267,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "Notion",
     url: "https://www.notion.so/",
     description: "全能的工作空间和笔记工具",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.notion.so%2Fimages%2Fnotion-logo.png",
     subCategoryId: "project-management",
     createdAt: new Date(),
   },
@@ -261,6 +276,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "Trello",
     url: "https://trello.com/",
     description: "简单直观的项目管理工具",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fa.trellocdn.com%2Fprgb%2Fimages%2Ffavicons%2Ffavicon-256.png",
     subCategoryId: "project-management",
     createdAt: new Date(),
   },
@@ -271,6 +287,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "Regex101",
     url: "https://regex101.com/",
     description: "在线正则表达式测试工具",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fregex101.com%2Fstatic%2Fimg%2Fregex101-logo.png",
     subCategoryId: "utilities",
     createdAt: new Date(),
   },
@@ -279,6 +296,7 @@ const defaultBookmarks: Bookmark[] = [
     title: "JSON Formatter",
     url: "https://jsonformatter.curiousconcept.com/",
     description: "JSON格式化和验证工具",
+    coverImage: "/api/proxy-image?url=https%3A%2F%2Fjsonformatter.curiousconcept.com%2Fassets%2Ffavicon-196x196.png",
     subCategoryId: "utilities",
     createdAt: new Date(),
   },
@@ -380,8 +398,37 @@ export const useBookmarkStore = create<BookmarkStore>()(
       },
 
       addBookmark: async (bookmark) => {
+        // 进阶规范化 URL（大小写/末尾斜杠/hash/常见追踪参数）
+        const normalizeUrl = (u: string) => {
+          try {
+            const x = new URL(u)
+            x.hash = ''
+            const removeKeys = [
+              'utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id',
+              'gclid','fbclid','msclkid','yclid','_hsenc','_hsmi','ref','ref_src','spm'
+            ]
+            removeKeys.forEach(k => x.searchParams.delete(k))
+            const origin = `${x.protocol}//${x.hostname.toLowerCase()}${x.port ? ':' + x.port : ''}`
+            const pathname = x.pathname !== '/' ? x.pathname.replace(/\/$/, '') : '/'
+            const search = x.searchParams.toString()
+            return `${origin}${pathname}${search ? '?' + search : ''}`
+          } catch {
+            return u.trim().replace(/\/$/, '')
+          }
+        }
+
+        const targetSubCategoryId = bookmark.subCategoryId
+        const normalizedNew = normalizeUrl(bookmark.url)
+        const { bookmarks: current } = get()
+        const duplicate = current.find(b => b.subCategoryId === targetSubCategoryId && normalizeUrl(b.url) === normalizedNew)
+        if (duplicate) {
+          console.warn('🛑 阻止重复书签（同一子分类内）：', normalizedNew)
+          throw Object.assign(new Error('DUPLICATE_BOOKMARK'), { code: 'DUPLICATE_BOOKMARK', existingId: duplicate.id })
+        }
+
         const newBookmark: Bookmark = {
           ...bookmark,
+          url: normalizedNew,
           id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           createdAt: new Date(),
         }
@@ -600,6 +647,8 @@ export const useBookmarkStore = create<BookmarkStore>()(
                 id: newBookmarkId,
                 subCategoryId: targetSubCategoryId,
                 favicon: newBookmark.favicon || getFaviconUrl(newBookmark.url), // 添加基本favicon
+                // 为导入书签提供即时封面兜底（SVG截图占位），后续增强可用 og:image 覆盖
+                coverImage: newBookmark.coverImage || `/api/screenshot?url=${encodeURIComponent(newBookmark.url)}`,
                 createdAt: new Date()
               })
 

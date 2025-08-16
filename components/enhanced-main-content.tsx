@@ -197,7 +197,7 @@ export function EnhancedMainContent({
                     variant={isSelectionMode ? "default" : "outline"}
                     size="sm"
                     onClick={toggleSelectionMode}
-                    className={`h-8 ${!isSelectionMode ? 'border-primary/30 hover:border-primary/50 hover:bg-primary/10 hover:text-primary' : ''}`}
+                    className={`h-8 ${!isSelectionMode ? 'border-transparent hover:border-primary/40 hover:bg-primary/10 hover:text-primary' : ''}`}
                     title={isSelectionMode ? "退出选择模式" : "进入选择模式"}
                   >
                     {isSelectionMode ? (

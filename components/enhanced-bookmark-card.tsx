@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/alert-dialog"
 import { MoreHorizontal, ExternalLink, Edit, Trash2, Globe, Eye, Copy, Move, MoreVertical } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { getFaviconUrl as getFaviconUrlTool } from "@/lib/metadata-fetcher"
+
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useDisplaySettings } from "@/hooks/use-display-settings"
 import { EditBookmarkDialog } from "@/components/edit-bookmark-dialog"
@@ -128,14 +130,7 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
     }
   }
 
-  const getFaviconUrl = (url: string) => {
-    try {
-      const domain = new URL(url).hostname
-      return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`
-    } catch {
-      return null
-    }
-  }
+  const getFaviconUrl = (url: string) => getFaviconUrlTool(url)
 
   const getCardPadding = () => {
     switch (settings.cardLayout) {
@@ -160,6 +155,8 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
   return (
     <>
       <Card
+        data-bm-id={bookmark.id}
+        id={`bm-${bookmark.id}`}
         className={cn(
           "bookmark-card bookmark-group cursor-pointer transition-all duration-300 bg-card/80 backdrop-blur-sm group",
           "hover:shadow-lg border-border/20 shadow-sm overflow-hidden",
@@ -177,9 +174,22 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
                 {bookmark.coverImage && !imageError ? (
                   <img
                     src={bookmark.coverImage}
+                    data-original={bookmark.coverImage}
                     alt={bookmark.title}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    onError={() => setImageError(true)}
+                    onError={(e) => {
+                      const img = e.currentTarget as HTMLImageElement
+                      const alreadyTried = img.dataset.proxyTried === '1'
+                      const original = img.dataset.original || ''
+                      const isHttp = /^https?:\/\//i.test(original)
+                      const isProxied = img.src.includes('/api/proxy-image')
+                      if (!alreadyTried && isHttp && !isProxied) {
+                        img.dataset.proxyTried = '1'
+                        img.src = `/api/proxy-image?url=${encodeURIComponent(original)}`
+                        return
+                      }
+                      setImageError(true)
+                    }}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted/50 to-muted/20 border border-border/20"> {/* 没有封面图时的增强样式 */}
@@ -203,9 +213,17 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
                             alt=""
                             className="w-6 h-6 rounded-sm shadow-sm"
                             onError={(e) => {
-                              const target = e.target as HTMLImageElement
-                              target.style.display = "none"
-                              target.nextElementSibling?.classList.remove("hidden")
+                              const img = e.target as HTMLImageElement
+                              try {
+                                  const domain = new URL(bookmark.url).hostname
+                                  if (!img.dataset.fallbackTried) {
+                                    img.dataset.fallbackTried = '1'
+                                    img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+                                    return
+                                  }
+                                } catch {}
+                                img.style.display = "none"
+                              img.nextElementSibling?.classList.remove("hidden")
                             }}
                           />
                         ) : null}
@@ -321,9 +339,22 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
                 {bookmark.coverImage && !imageError ? (
                   <img
                     src={bookmark.coverImage}
+                    data-original={bookmark.coverImage}
                     alt={bookmark.title}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    onError={() => setImageError(true)}
+                    onError={(e) => {
+                      const img = e.currentTarget as HTMLImageElement
+                      const alreadyTried = img.dataset.proxyTried === '1'
+                      const original = img.dataset.original || ''
+                      const isHttp = /^https?:\/\//i.test(original)
+                      const isProxied = img.src.includes('/api/proxy-image')
+                      if (!alreadyTried && isHttp && !isProxied) {
+                        img.dataset.proxyTried = '1'
+                        img.src = `/api/proxy-image?url=${encodeURIComponent(original)}`
+                        return
+                      }
+                      setImageError(true)
+                    }}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted/50 to-muted/20"> {/* 没有封面图时的增强样式 */}
@@ -396,9 +427,17 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
                         alt=""
                         className="w-8 h-8 rounded-md shadow-sm"
                         onError={(e) => {
-                          const target = e.target as HTMLImageElement
-                          target.style.display = "none"
-                          target.nextElementSibling?.classList.remove("hidden")
+                          const img = e.target as HTMLImageElement
+                          try {
+                            const domain = new URL(bookmark.url).hostname
+                            if (!img.dataset.fallbackTried) {
+                              img.dataset.fallbackTried = '1'
+                              img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+                              return
+                            }
+                          } catch {}
+                          img.style.display = "none"
+                          img.nextElementSibling?.classList.remove("hidden")
                         }}
                       />
                     ) : null}

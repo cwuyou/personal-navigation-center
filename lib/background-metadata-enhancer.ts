@@ -35,7 +35,6 @@ export class BackgroundMetadataEnhancer {
     try {
       const u = new URL(url)
       const domain = u.hostname.replace(/^www\./, '')
-      const path = u.pathname.toLowerCase()
 
       // 对文章类页面不要使用域名级别的通用描述，交给详细提取逻辑处理
       if (this.isArticleUrl(u)) {
@@ -52,7 +51,8 @@ export class BackgroundMetadataEnhancer {
           title: preset.title,
           description: preset.description,
           favicon: getFaviconUrl(url),
-          coverImage: isFavicon ? undefined : cover,
+          // 预置没有封面或疑似favicon时，兜底生成封面（本地截图占位）
+          coverImage: (!cover || isFavicon) ? this.generateCoverImage(url) : cover,
           enhanced: true,
           lastUpdated: new Date()
         }
@@ -103,7 +103,10 @@ export class BackgroundMetadataEnhancer {
         'github.com': 'https://github.githubassets.com/images/modules/site/social-cards/github-social.png',
         'twitter.com': 'https://abs.twimg.com/responsive-web/client-web/icon-ios.b1fc7275.png',
         'linkedin.com': 'https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca',
-        'medium.com': 'https://miro.medium.com/max/1200/1*jfdwtvU6V6g99q3G7gq7dQ.png'
+        'medium.com': 'https://miro.medium.com/max/1200/1*jfdwtvU6V6g99q3G7gq7dQ.png',
+        // Popular AI assistants: use large touch icons as decent covers when og:image is unavailable
+        'chatgpt.com': 'https://chatgpt.com/apple-touch-icon.png',
+        'claude.ai': 'https://claude.ai/apple-touch-icon.png'
       }
 
       // 检查是否有特定策略
@@ -180,6 +183,7 @@ export class BackgroundMetadataEnhancer {
   /**
    * 使用API获取详细元数据（仅用于单个书签添加）
    */
+  // 注意：外部 API 调用已禁用，保留方法仅为向后兼容；如需启用可按域白名单判断
   private async fetchDetailedMetadata(url: string): Promise<BookmarkMetadata | null> {
     try {
       // 使用快速的元数据API
@@ -250,11 +254,18 @@ export class BackgroundMetadataEnhancer {
     // 1.1 预置数据库（仅用于补充缺失字段）
     const presetData = this.getPresetDescription(bookmark.url)
     if (presetData) {
-      console.log(`✅ 使用预置描述增强书签: ${bookmark.title}`)
-      return {
-        ...presetData,
-        ...seed,
-        id: bookmark.id
+      const isFallbackCover = !presetData.coverImage || presetData.coverImage.startsWith('/api/screenshot')
+      // 如果是批量导入的慢速阶段（isBatchImport=false），且预置封面只是占位图，则继续尝试抓取 og:image
+      if (!options.isBatchImport && isFallbackCover) {
+        console.log(`✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: ${bookmark.title}`)
+        // 不立即返回，向下走 fetch-meta 逻辑；把预置当作种子
+      } else {
+        console.log(`✅ 使用预置描述增强书签: ${bookmark.title}`)
+        return {
+          ...presetData,
+          ...seed,
+          id: bookmark.id
+        }
       }
     }
 
@@ -301,26 +312,9 @@ export class BackgroundMetadataEnhancer {
         }
       } catch (err) {
         if (err instanceof Error && err.name === 'AbortError') throw err
-        console.log('fetch-meta fallback to remote API...', err)
+        console.log('fetch-meta unavailable or failed; skip external API and fallback to local generation.', err)
       }
-      // 退回远程API（兼容性保留，可以继续注释掉）
-      console.log('🌐 单个书签添加，尝试外部API...')
-      try {
-        const detailedData = await this.fetchDetailedMetadata(bookmark.url)
-        if (detailedData && detailedData.description && detailedData.description.length > smartDescription.length) {
-          return {
-            ...detailedData,
-            id: bookmark.id,
-            coverImage: this.generateCoverImage(bookmark.url)
-          }
-        }
-      } catch (error) {
-        if (error instanceof Error && error.name === 'AbortError') {
-          throw error
-        }
-        console.warn('API获取失败，使用本地生成:', error)
-        // API失败，继续使用智能描述
-      }
+      // 不再退回外部API，保持本地生成，避免 400/429 噪音与外部依赖
     } else if (options.isBatchImport) {
       // 批量导入时，跳过API调用以避免429错误，但仍然生成智能描述
       console.log('ℹ️ 批量导入模式，使用智能生成描述以确保稳定性')
@@ -566,23 +560,42 @@ export class BackgroundMetadataEnhancer {
           })
         }
 
-        // 第二阶段：处理未知书签（需要API调用）
-        if (unknownBookmarks.length > 0 && !this.abortController?.signal.aborted) {
-          console.log(`🌐 处理 ${unknownBookmarks.length} 个未知书签...`)
-          await this.processSlowBatch(unknownBookmarks, {
-            onProgress: (batchCompleted) => {
-              completed += batchCompleted
-              onProgress?.({
-                total,
-                completed,
-                current: `处理未知书签 (${completed}/${total})`,
-                status: 'running'
-              })
-            },
-            onUpdate,
-            batchSize: config.unknownBatchSize,
-            delay: config.delay
+        // 第二阶段：处理未知书签（需要API调用） + 预置但缺少封面的书签
+        if (!this.abortController?.signal.aborted) {
+          // 找出预置但缺少封面的书签，加入慢速批次以尝试抓取 og:image
+          const presetNeedingCover = presetBookmarks.filter((b) => {
+            try {
+              const u = new URL(b.url)
+              const domain = u.hostname.replace(/^www\./, '')
+              const preset = (websiteDescriptions as any)[domain]
+              const cover: string | undefined = preset?.coverImage
+              const isFavicon = !!cover && (/\.ico(\?|$)/i.test(cover) || cover.toLowerCase().includes('favicon') || /icon-\d+x\d+/i.test(cover) || cover.toLowerCase().includes('apple-touch-icon'))
+              return !cover || isFavicon
+            } catch {
+              return true
+            }
           })
+
+          const slowList = [...unknownBookmarks, ...presetNeedingCover]
+            .filter((b, idx, arr) => arr.findIndex(x => x.id === b.id) === idx)
+
+          if (slowList.length > 0) {
+            console.log(`🌐 处理 ${slowList.length} 个需要抓取的书签（未知 + 预置缺封面）...`)
+            await this.processSlowBatch(slowList, {
+              onProgress: (batchCompleted) => {
+                completed += batchCompleted
+                onProgress?.({
+                  total,
+                  completed,
+                  current: `处理未知/缺封面书签 (${completed}/${total})`,
+                  status: 'running'
+                })
+              },
+              onUpdate,
+              batchSize: config.unknownBatchSize,
+              delay: config.delay
+            })
+          }
         }
       } else {
         // 传统模式：统一处理

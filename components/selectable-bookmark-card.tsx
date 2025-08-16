@@ -1,6 +1,8 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { getFaviconUrl } from "@/lib/metadata-fetcher"
+
 import { useState } from "react"
 import { ExternalLink, Edit2, Trash2, Globe, Eye, FolderOpen, Check } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
@@ -26,8 +28,8 @@ interface SelectableBookmarkCardProps {
   onSelectionChange?: (bookmarkId: string, selected: boolean) => void
 }
 
-export function SelectableBookmarkCard({ 
-  bookmark, 
+export function SelectableBookmarkCard({
+  bookmark,
   onPreview,
   isSelectionMode = false,
   isSelected = false,
@@ -51,22 +53,15 @@ export function SelectableBookmarkCard({
     setDeleteDialogOpen(false)
   }
 
-  const getFaviconUrl = (url: string) => {
-    try {
-      const domain = new URL(url).hostname
-      return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`
-    } catch {
-      return null
-    }
-  }
+  const getFaviconUrlLocal = (url: string) => getFaviconUrl(url)
 
   return (
     <>
-      <Card 
+      <Card
         className={cn(
           "bookmark-card bookmark-group cursor-pointer transition-all duration-300 border-border/50 bg-card/80 backdrop-blur-sm",
-          isSelectionMode 
-            ? "hover:shadow-md" 
+          isSelectionMode
+            ? "hover:shadow-md"
             : "hover:shadow-lg hover:scale-[1.02]",
           isSelected && "ring-2 ring-primary bg-primary/5"
         )}
@@ -92,22 +87,30 @@ export function SelectableBookmarkCard({
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-start space-x-3 flex-1 min-w-0">
               <div className="flex-shrink-0 mt-0.5">
-                {bookmark.favicon || getFaviconUrl(bookmark.url) ? (
+                {bookmark.favicon || getFaviconUrlLocal(bookmark.url) ? (
                   <img
-                    src={bookmark.favicon || getFaviconUrl(bookmark.url)!}
+                    src={bookmark.favicon || getFaviconUrlLocal(bookmark.url)!}
                     alt=""
                     className="w-10 h-10 rounded-lg shadow-sm"
                     onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.style.display = "none"
-                      target.nextElementSibling?.classList.remove("hidden")
+                      const img = e.target as HTMLImageElement
+                      try {
+                        const domain = new URL(bookmark.url).hostname
+                        if (!img.dataset.fallbackTried) {
+                          img.dataset.fallbackTried = '1'
+                          img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+                          return
+                        }
+                      } catch {}
+                      img.style.display = "none"
+                      img.nextElementSibling?.classList.remove("hidden")
                     }}
                   />
                 ) : null}
                 <div
                   className={cn(
                     "w-10 h-10 rounded-lg bg-gradient-to-br from-muted to-muted/60 flex items-center justify-center shadow-sm",
-                    bookmark.favicon || getFaviconUrl(bookmark.url) ? "hidden" : "",
+                    bookmark.favicon || getFaviconUrlLocal(bookmark.url) ? "hidden" : "",
                   )}
                 >
                   <Globe className="w-5 h-5 text-muted-foreground" />

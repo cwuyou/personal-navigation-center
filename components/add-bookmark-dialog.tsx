@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import websiteDescriptions from '@/data/website-descriptions-1000plus.json'
 import { TagInput } from "@/components/tag-input"
+import { toast } from "sonner"
 
 interface AddBookmarkDialogProps {
   open: boolean
@@ -95,21 +96,41 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!title.trim() || !url.trim()) return
 
     const tagsArray = tags.map(t => t.trim()).filter(t => t.length > 0)
 
-    addBookmark({
-      title: title.trim(),
-      url: url.trim(),
-      description: description.trim() || undefined,
-      coverImage: coverImage.trim() || undefined,
-      tags: tagsArray.length ? tagsArray : undefined,
-      subCategoryId,
-    })
+    try {
+      await addBookmark({
+        title: title.trim(),
+        url: url.trim(),
+        description: description.trim() || undefined,
+        coverImage: coverImage.trim() || undefined,
+        tags: tagsArray.length ? tagsArray : undefined,
+        subCategoryId,
+      })
+    } catch (err: any) {
+      if (err && err.code === 'DUPLICATE_BOOKMARK') {
+        // 重复提示：toast + 滚动高亮已有卡片
+        toast.warning('该子分类下已存在相同网址的书签')
+        const id = err.existingId as string | undefined
+        if (id) {
+          const el = document.querySelector(`[data-bm-id="${id}"]`) as HTMLElement | null
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            el.classList.add('ring-2','ring-primary')
+            setTimeout(() => el.classList.remove('ring-2','ring-primary'), 1500)
+          }
+        }
+        return
+      }
+      console.error(err)
+      toast.error('添加失败，请重试')
+      return
+    }
 
     setTitle("")
     setUrl("")

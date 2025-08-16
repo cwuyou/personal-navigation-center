@@ -167,6 +167,23 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid URL protocol' }, { status: 400 })
     }
 
+    // 内网/本地/无点主机名的 URL 在 Edge 运行时通常不可达：直接返回智能兜底，避免 500
+    const host = target.hostname
+    const isPrivateOrLocal = (
+      host === 'localhost' ||
+      /^\d+\.\d+\.\d+\.\d+$/.test(host) || // IPv4
+      /^[^.]+$/.test(host) // 无点主机名（如内网 bd-hadoop5）
+    )
+    if (isPrivateOrLocal || target.protocol === 'http:') {
+      const domain = host.replace(/^www\./, '')
+      const title = domain.charAt(0).toUpperCase() + domain.slice(1)
+      const description = `${title} - 网站链接`
+      const coverImage = '' // 让前端使用本地截图占位 /api/screenshot
+      const result = { title, description, coverImage, url }
+      inMemoryCache.set(target.href, { data: result, expires: Date.now() + CACHE_TTL_MS })
+      return NextResponse.json(result)
+    }
+
     // 短缓存命中：直接返回缓存值
     const cached = inMemoryCache.get(target.href)
     const now = Date.now()
@@ -217,9 +234,31 @@ export async function GET(request: NextRequest) {
       // Cover image: prefer og:image / twitter:image
       coverImage =
         extractMetaContent(html, 'property', 'og:image') ||
+        extractMetaContent(html, 'property', 'og:image:secure_url') ||
         extractMetaContent(html, 'name', 'twitter:image') ||
         extractMetaContent(html, 'property', 'twitter:image') ||
         ''
+
+      // If still no cover image, try <link rel="apple-touch-icon"|"icon"> and pick the largest one
+      if (!coverImage) {
+        const linkIconRegex = /<link[^>]*rel=["']([^"']*)["'][^>]*href=["']([^"']+)["'][^>]*>/ig
+        let match
+        const candidates: Array<{ href: string; size: number; rel: string }> = []
+        while ((match = linkIconRegex.exec(html)) !== null) {
+          const rel = String(match[1] || '').toLowerCase()
+          const href = String(match[2] || '')
+          if (rel.includes('apple-touch-icon') || rel.includes('icon')) {
+            const tag = match[0]
+            const sizeMatch = tag.match(/sizes=["'](\d+)x(\d+)["']/i)
+            const size = sizeMatch ? Math.max(parseInt(sizeMatch[1] || '0'), parseInt(sizeMatch[2] || '0')) : 0
+            candidates.push({ href, size, rel })
+          }
+        }
+        if (candidates.length > 0) {
+          candidates.sort((a, b) => b.size - a.size)
+          coverImage = candidates[0].href
+        }
+      }
 
       // Normalize relative image URLs to absolute
       if (coverImage && !/^https?:\/\//i.test(coverImage)) {
