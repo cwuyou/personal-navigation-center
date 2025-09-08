@@ -11,6 +11,7 @@ import { GoogleAnalytics } from '@/components/google-analytics'
 import ErrorBoundary from '@/components/error-boundary'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://myhomepage.one'),
   title: {
     default: 'My Homepage - Personal Start Page & Bookmark Manager | 个人主页导航中心',
     template: '%s | My Homepage'
