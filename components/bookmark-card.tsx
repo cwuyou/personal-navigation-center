@@ -1,10 +1,9 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { getFaviconUrl } from "@/lib/metadata-fetcher"
+import { BookmarkFavicon } from "@/components/bookmark-favicon"
 
-
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { ExternalLink, Edit2, Trash2, Globe, Eye, FolderOpen, Copy } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -51,8 +50,7 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
     }
   }
 
-  // 使用公共工具函数 getFaviconUrl（components 内部定义移除），保留此占位避免大改动
-  const getFaviconUrlLocal = (url: string) => getFaviconUrl(url)
+  // 移除本地缓存逻辑，使用专门的组件处理
 
   return (
     <>
@@ -60,36 +58,11 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
         <CardContent className="card-content p-4 sm:p-5">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-start space-x-3 flex-1 min-w-0" onClick={handleClick}>
-              <div className="flex-shrink-0 mt-0.5">
-                {bookmark.favicon || getFaviconUrlLocal(bookmark.url) ? (
-                  <img
-                    src={bookmark.favicon || getFaviconUrlLocal(bookmark.url)!}
-                    alt=""
-                    className="w-10 h-10 rounded-lg shadow-sm"
-                    onError={(e) => {
-                      const img = e.target as HTMLImageElement
-                      try {
-                        const domain = new URL(bookmark.url).hostname
-                        if (!img.dataset.fallbackTried) {
-                          img.dataset.fallbackTried = '1'
-                          img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
-                          return
-                        }
-                      } catch {}
-                      img.style.display = "none"
-                      img.nextElementSibling?.classList.remove("hidden")
-                    }}
-                  />
-                ) : null}
-                <div
-                  className={cn(
-                    "w-10 h-10 rounded-lg bg-gradient-to-br from-muted to-muted/60 flex items-center justify-center shadow-sm",
-                    bookmark.favicon || getFaviconUrlLocal(bookmark.url) ? "hidden" : "",
-                  )}
-                >
-                  <Globe className="w-5 h-5 text-muted-foreground" />
-                </div>
-              </div>
+              <BookmarkFavicon
+                bookmark={bookmark}
+                size="lg"
+                className="flex-shrink-0 mt-0.5"
+              />
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-xs sm:text-sm text-foreground truncate mb-1.5 bookmark-group-hover:text-primary transition-colors" title={bookmark.title}>
                   {bookmark.title}

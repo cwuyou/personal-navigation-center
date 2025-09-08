@@ -161,6 +161,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'URL parameter is required' }, { status: 400 })
   }
 
+
+
   try {
     const target = new URL(url)
     if (!['http:', 'https:'].includes(target.protocol)) {
@@ -172,7 +174,12 @@ export async function GET(request: NextRequest) {
     const isPrivateOrLocal = (
       host === 'localhost' ||
       /^\d+\.\d+\.\d+\.\d+$/.test(host) || // IPv4
-      /^[^.]+$/.test(host) // 无点主机名（如内网 bd-hadoop5）
+      /^[^.]+$/.test(host) || // 无点主机名（如内网 bd-hadoop5）
+      host.includes('test-') || // 测试环境域名
+      host.includes('.local') || // 本地域名
+      host.includes('192.168.') || // 内网IP段
+      host.includes('10.') || // 内网IP段
+      host.includes('172.') // 内网IP段
     )
     if (isPrivateOrLocal || target.protocol === 'http:') {
       const domain = host.replace(/^www\./, '')
@@ -192,15 +199,24 @@ export async function GET(request: NextRequest) {
     }
 
     const ua =
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36'
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+
+    // 🔧 针对知乎专栏使用简化的请求头
+    const isZhihuZhuanlan = url.includes('zhuanlan.zhihu.com')
+    const headers: Record<string, string> = {}
+
+    if (isZhihuZhuanlan) {
+      // 尝试使用最简单的请求头
+      headers['User-Agent'] = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)'
+    } else {
+      headers['User-Agent'] = ua
+      headers['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+      headers['Accept-Language'] = 'zh-CN,zh;q=0.9,en;q=0.8'
+      headers['Referer'] = 'https://help.aliyun.com/'
+    }
 
     const resp = await fetch(url, {
-      headers: {
-        'User-Agent': ua,
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-        'Referer': 'https://help.aliyun.com/',
-      },
+      headers,
       // Reasonable timeout
       signal: AbortSignal.timeout(7000),
       cache: 'no-store',
@@ -210,8 +226,12 @@ export async function GET(request: NextRequest) {
     let description = ''
     let coverImage = ''
 
+
+
     if (resp.ok) {
       const html = await resp.text()
+
+
 
       // Title: <title> or meta fallbacks
       const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i)
@@ -270,11 +290,11 @@ export async function GET(request: NextRequest) {
       }
 
       // Special handling for common article structures
-      const host = target.hostname.replace(/^www\./, '')
+      const articleHost = target.hostname.replace(/^www\./, '')
       const path = target.pathname.toLowerCase()
 
       if (!description) {
-        const article = extractArticleText(html, host)
+        const article = extractArticleText(html, articleHost)
         if (article.text) description = article.text
         if (!title && article.titleFromJsonLd) title = article.titleFromJsonLd
       }
@@ -288,6 +308,18 @@ export async function GET(request: NextRequest) {
 
       if (description) description = decodeEntities(description).replace(/\s+/g, ' ').trim()
       if (description.length > 200) description = description.slice(0, 200) + '...'
+    } else {
+      // 🔧 处理知乎专栏的403错误，提供智能兜底
+      if (url.includes('zhuanlan.zhihu.com')) {
+        const match = url.match(/\/p\/(\d+)/)
+        if (match) {
+          title = `知乎专栏文章 ${match[1]}`
+          description = '知乎专栏文章 - 点击查看完整内容'
+        } else {
+          title = '知乎专栏文章'
+          description = '知乎专栏文章 - 点击查看完整内容'
+        }
+      }
     }
 
     const result = { title, description, coverImage, url }

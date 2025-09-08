@@ -682,7 +682,10 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
                       🚀 无感体验：后台处理，不影响正常使用
                     </p>
                     <p className="text-purple-600">
-                      📚 预置数据库：已覆盖150+知名网站
+                      📚 预置数据库：已覆盖780+知名网站，瞬间完成
+                    </p>
+                    <p className="text-gray-600">
+                      🔄 保留原创：优先使用您的自定义标题和描述
                     </p>
                   </div>
                 ) : (

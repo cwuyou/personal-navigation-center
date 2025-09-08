@@ -10,6 +10,10 @@ const REFERER_HOST_OVERRIDE: Record<string, string> = {
   'static.figma.com': 'https://figma.com/',
   'static.canva.com': 'https://canva.com/',
   'a.trellocdn.com': 'https://trello.com/',
+  'assets.monica.im': 'https://monica.im/',
+  'cdn.nlark.com': 'https://yuque.com/',
+  'upload-images.jianshu.io': 'https://jianshu.com/',
+  'oss-emcsprod-public.oss-cn-beijing.aliyuncs.com': 'https://modb.pro/',
 }
 
 // 用于 favicon 回退时将静态域映射回站点域
@@ -58,12 +62,46 @@ async function fetchWithReferer(u: URL) {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
       'Accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+      'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
       'Referer': referer,
+      'Sec-Fetch-Dest': 'image',
+      'Sec-Fetch-Mode': 'no-cors',
+      'Sec-Fetch-Site': 'cross-site',
     },
     redirect: 'follow',
     cache: 'no-store',
-    signal: AbortSignal.timeout(7000),
+    signal: AbortSignal.timeout(10000), // 增加到10秒
   })
+}
+
+// 尝试不同的User-Agent策略
+async function fetchWithDifferentUA(u: URL) {
+  const userAgents = [
+    // 标准浏览器
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
+    // 移动端浏览器
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+    // 简化的请求
+    'Mozilla/5.0 (compatible; ImageBot/1.0)',
+  ]
+
+  for (const ua of userAgents) {
+    try {
+      const response = await fetch(u.toString(), {
+        headers: {
+          'User-Agent': ua,
+          'Accept': 'image/*,*/*;q=0.8',
+        },
+        redirect: 'follow',
+        cache: 'no-store',
+        signal: AbortSignal.timeout(8000),
+      })
+      if (response.ok) return response
+    } catch (e) {
+      continue // 尝试下一个UA
+    }
+  }
+  throw new Error('All user agents failed')
 }
 
 export async function GET(request: NextRequest) {
@@ -89,10 +127,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Blocked host' }, { status: 403 })
   }
 
-  // 1) 主请求
+  // 1) 主请求 - 带Referer
   try {
     const resp = await fetchWithReferer(target)
-
     if (resp.ok) {
       const contentType = resp.headers.get('content-type') || 'application/octet-stream'
       return new NextResponse(resp.body, {
@@ -101,14 +138,34 @@ export async function GET(request: NextRequest) {
           'Content-Type': contentType,
           'Cache-Control': 'public, max-age=86400, immutable',
           'X-Proxy-From': target.hostname,
+          'X-Proxy-Method': 'referer',
         },
       })
     }
   } catch (_) {
-    // 忽略，走回退
+    // 继续尝试其他方法
   }
 
-  // 2) 回退到 Google S2 favicon（使用站点主域）
+  // 2) 尝试不同User-Agent
+  try {
+    const resp = await fetchWithDifferentUA(target)
+    if (resp.ok) {
+      const contentType = resp.headers.get('content-type') || 'application/octet-stream'
+      return new NextResponse(resp.body, {
+        status: 200,
+        headers: {
+          'Content-Type': contentType,
+          'Cache-Control': 'public, max-age=86400, immutable',
+          'X-Proxy-From': target.hostname,
+          'X-Proxy-Method': 'ua-fallback',
+        },
+      })
+    }
+  } catch (_) {
+    // 继续尝试其他方法
+  }
+
+  // 3) 回退到 Google S2 favicon（使用站点主域）
   try {
     const fallbackUrl = s2FaviconUrl(target.hostname)
     const resp2 = await fetch(fallbackUrl, {
@@ -129,12 +186,41 @@ export async function GET(request: NextRequest) {
           'Content-Type': contentType,
           'Cache-Control': 'public, max-age=86400, immutable',
           'X-Proxy-From': target.hostname,
-          'X-Proxy-Fallback': 's2',
+          'X-Proxy-Method': 's2-favicon',
         },
       })
     }
   } catch (_) {
-    // 失败则继续返回错误
+    // 继续尝试最后的回退
+  }
+
+  // 4) 最终回退：DuckDuckGo favicon
+  try {
+    const duckUrl = `https://icons.duckduckgo.com/ip3/${target.hostname}.ico`
+    const resp3 = await fetch(duckUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'image/*,*/*;q=0.8',
+      },
+      redirect: 'follow',
+      cache: 'no-store',
+      signal: AbortSignal.timeout(5000),
+    })
+
+    if (resp3.ok) {
+      const contentType = resp3.headers.get('content-type') || 'image/x-icon'
+      return new NextResponse(resp3.body, {
+        status: 200,
+        headers: {
+          'Content-Type': contentType,
+          'Cache-Control': 'public, max-age=86400, immutable',
+          'X-Proxy-From': target.hostname,
+          'X-Proxy-Method': 'duckduckgo-favicon',
+        },
+      })
+    }
+  } catch (_) {
+    // 所有方法都失败了
   }
 
   return NextResponse.json({ error: 'Upstream error with fallback failed' }, { status: 502 })

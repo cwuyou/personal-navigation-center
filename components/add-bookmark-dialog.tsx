@@ -12,6 +12,7 @@ import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import websiteDescriptions from '@/data/website-descriptions-1000plus.json'
 import { TagInput } from "@/components/tag-input"
 import { toast } from "sonner"
+import { processUserInput } from "@/lib/url-utils"
 
 interface AddBookmarkDialogProps {
   open: boolean
@@ -32,7 +33,7 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
 
   const getPresetData = (url: string) => {
     try {
-      const domain = new URL(url).hostname.replace(/^www\./, '')
+      const domain = new URL(url).hostname.replace(/^www\./, '').toLowerCase()
       const preset = (websiteDescriptions as any)[domain]
 
       if (preset) {
@@ -44,6 +45,20 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
         }
       } else {
         console.log(`❌ 未找到预置数据: ${domain}`)
+        // 尝试部分匹配（例如子域名匹配）
+        const partialMatch = Object.keys(websiteDescriptions).find(key =>
+          key.includes(domain) || domain.includes(key)
+        )
+
+        if (partialMatch) {
+          const data = websiteDescriptions[partialMatch as keyof typeof websiteDescriptions]
+          console.log('✅ 找到部分匹配:', partialMatch, '→', data.title)
+          return {
+            title: data.title,
+            description: data.description,
+            coverImage: data.coverImage
+          }
+        }
       }
     } catch (error) {
       console.warn('Failed to parse URL:', url, error)
@@ -51,67 +66,99 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
     return null
   }
 
-  const fetchPageTitle = async (url: string) => {
+  const fetchWebsiteMetadata = async (url: string) => {
     try {
-      // 首先尝试从预置数据库获取
-      const presetData = getPresetData(url)
-      if (presetData) {
-        return presetData.title
-      }
-
-      // 如果没有预置数据，提取域名作为备用
-      const domain = new URL(url).hostname
-      return domain.replace("www.", "")
-    } catch {
-      return ""
+      const { fetchMetadataDeduped } = await import('@/lib/request-deduplicator')
+      const data = await fetchMetadataDeduped(url)
+      return data
+    } catch (error) {
+      return null
     }
   }
 
-  const handleUrlChange = async (newUrl: string) => {
+  const handleUrlChange = (newUrl: string) => {
+    // 直接更新URL状态，保持用户输入的原始状态
     setUrl(newUrl)
-
-    if (newUrl && newUrl.startsWith("http")) {
-      setLoading(true)
-      try {
-        // 尝试从预置数据库获取完整信息
-        const presetData = getPresetData(newUrl)
-
-        if (presetData) {
-          // 如果找到预置数据，自动填充所有字段
-          if (!title) setTitle(presetData.title)
-          if (!description) setDescription(presetData.description)
-          if (!coverImage && presetData.coverImage) setCoverImage(presetData.coverImage)
-        } else {
-          // 如果没有预置数据，只获取标题
-          const pageTitle = await fetchPageTitle(newUrl)
-          if (pageTitle && !title) {
-            setTitle(pageTitle)
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch page data:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!title.trim() || !url.trim()) return
+    if (!url.trim()) {
+      toast.error('请输入网址')
+      return
+    }
 
-    const tagsArray = tags.map(t => t.trim()).filter(t => t.length > 0)
+    // 处理和规范化URL
+    const { normalizedUrl, isValid } = processUserInput(url.trim())
+
+    if (!isValid) {
+      toast.error('请输入有效的网址')
+      return
+    }
+
+    setLoading(true)
 
     try {
+      // 准备基础书签数据
+      let initialTitle = title.trim()
+      let initialDescription = description.trim()
+      let initialCoverImage = coverImage.trim()
+
+      // 如果没有标题，先尝试从预置数据库快速获取
+      if (!initialTitle) {
+        const presetData = getPresetData(normalizedUrl)
+        if (presetData) {
+          initialTitle = presetData.title
+          if (!initialDescription) initialDescription = presetData.description
+          if (!initialCoverImage && presetData.coverImage) initialCoverImage = presetData.coverImage
+        }
+      }
+
+      // 如果还是没有标题，使用域名作为临时标题
+      if (!initialTitle) {
+        try {
+          const domain = new URL(normalizedUrl).hostname.replace(/^www\./, '')
+          initialTitle = domain
+        } catch {
+          initialTitle = '新书签'
+        }
+      }
+
+      const tagsArray = tags.map(t => t.trim()).filter(t => t.length > 0)
+
+      // 立即添加书签（使用基础信息）
       await addBookmark({
-        title: title.trim(),
-        url: url.trim(),
-        description: description.trim() || undefined,
-        coverImage: coverImage.trim() || undefined,
+        title: initialTitle,
+        url: normalizedUrl,
+        description: initialDescription || undefined,
+        coverImage: initialCoverImage || undefined,
         tags: tagsArray.length ? tagsArray : undefined,
         subCategoryId,
       })
+
+      // 立即重置表单并关闭对话框
+      setTitle("")
+      setUrl("")
+      setDescription("")
+      setCoverImage("")
+      setTags([])
+      setLoading(false)
+      onOpenChange(false)
+      toast.success("书签添加成功")
+
+      // 如果没有从预置数据库获取到完整信息，在后台异步获取元数据
+      if (!getPresetData(normalizedUrl)) {
+        // 后台异步获取元数据（不阻塞用户界面）
+        fetchWebsiteMetadata(normalizedUrl).then(metadata => {
+          if (metadata && (metadata.title || metadata.description || metadata.coverImage)) {
+            // 实际的更新会通过 addBookmark 中的增强逻辑自动处理
+          }
+        }).catch(() => {
+          // 静默处理错误，不影响用户体验
+        })
+      }
+      return // 提前返回，避免执行 finally 块
     } catch (err: any) {
       if (err && err.code === 'DUPLICATE_BOOKMARK') {
         // 重复提示：toast + 滚动高亮已有卡片
@@ -130,6 +177,8 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
       console.error(err)
       toast.error('添加失败，请重试')
       return
+    } finally {
+      setLoading(false)
     }
 
     setTitle("")
@@ -152,25 +201,24 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
             <Label htmlFor="url">网址 *</Label>
             <Input
               id="url"
-              type="url"
+              type="text"
               value={url}
               onChange={(e) => handleUrlChange(e.target.value)}
-              placeholder="https://example.com"
+              placeholder="google.com 或 https://example.com"
               required
             />
           </div>
 
           <div>
-            <Label htmlFor="title">标题 *</Label>
+            <Label htmlFor="title">标题</Label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="网站标题"
-              required
+              placeholder="留空将自动获取网站标题"
               disabled={loading}
             />
-            {loading && <p className="text-xs text-muted-foreground mt-1">正在获取页面标题...</p>}
+            {loading && <p className="text-xs text-muted-foreground mt-1">正在获取网站信息...</p>}
           </div>
 
           <div>

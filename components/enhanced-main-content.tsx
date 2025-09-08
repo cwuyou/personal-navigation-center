@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useMemo } from "react"
 import { CheckSquare, X } from "lucide-react"
 import { BookmarkCard } from "@/components/bookmark-card"
 import { SelectableBookmarkCard } from "@/components/selectable-bookmark-card"
@@ -13,7 +13,7 @@ import { DynamicBookmarkGrid } from "@/components/dynamic-bookmark-grid"
 
 import { Button } from "@/components/ui/button"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
-import { useMemo } from "react"
+import { useBookmarkImagePreloader } from "@/hooks/use-image-preloader"
 
 interface Bookmark {
   id: string
@@ -48,6 +48,7 @@ export function EnhancedMainContent({
   const [selectedBookmarkIds, setSelectedBookmarkIds] = useState<string[]>([])
 
   const { categories, bookmarks, deleteBookmark, clearAllData, exportBookmarks } = useBookmarkStore()
+  const { preloadBookmarkImages } = useBookmarkImagePreloader()
 
 
 
@@ -136,14 +137,28 @@ export function EnhancedMainContent({
     ? categories.find(cat => cat.id === selectedCategory)
     : null
 
-  // 获取当前书签
-  const currentBookmarks = selectedSubCategory
-    ? bookmarks.filter(bookmark => bookmark.subCategoryId === selectedSubCategory)
-    : selectedCategory && currentCategory
-    ? bookmarks.filter(bookmark =>
+  // 🔧 使用useMemo缓存当前书签，避免不必要的重新计算
+  const currentBookmarks = useMemo(() => {
+    if (selectedSubCategory) {
+      return bookmarks.filter(bookmark => bookmark.subCategoryId === selectedSubCategory)
+    }
+    if (selectedCategory && currentCategory) {
+      return bookmarks.filter(bookmark =>
         currentCategory.subCategories.some(sub => sub.id === bookmark.subCategoryId)
       )
-    : []
+    }
+    return []
+  }, [selectedSubCategory, selectedCategory, currentCategory, bookmarks])
+
+  // 🚀 预加载当前书签的图片
+  useMemo(() => {
+    if (currentBookmarks.length > 0) {
+      // 延迟预加载，避免阻塞UI
+      setTimeout(() => {
+        preloadBookmarkImages(currentBookmarks)
+      }, 100)
+    }
+  }, [currentBookmarks, preloadBookmarkImages])
 
   // 如果有搜索查询，显示搜索结果
   if (searchQuery.trim()) {

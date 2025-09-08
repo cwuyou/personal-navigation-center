@@ -66,7 +66,7 @@ const defaultSettings: DisplaySettings = {
 
 export const useDisplaySettings = create<DisplaySettingsStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       settings: defaultSettings,
 
       updateSettings: (newSettings) =>

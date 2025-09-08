@@ -1,6 +1,5 @@
-"use client"
-
-import { useEffect } from 'react'
+// 🔧 改为服务端渲染，提升SEO效果
+import Script from 'next/script'
 
 interface StructuredDataProps {
   type?: 'homepage' | 'bookmarks' | 'startpage' | 'features'
@@ -9,21 +8,14 @@ interface StructuredDataProps {
   url?: string
 }
 
-export function StructuredData({ 
-  type = 'homepage', 
+export function StructuredData({
+  type = 'homepage',
   title,
   description,
-  url 
+  url
 }: StructuredDataProps) {
-  
-  useEffect(() => {
-    // 移除之前的结构化数据
-    const existingScript = document.querySelector('#structured-data')
-    if (existingScript) {
-      existingScript.remove()
-    }
 
-    let structuredData = {}
+  let structuredData = {}
 
     switch (type) {
       case 'homepage':
@@ -165,94 +157,134 @@ export function StructuredData({
         }
     }
 
-    // 创建并插入结构化数据脚本
-    const script = document.createElement('script')
-    script.id = 'structured-data'
-    script.type = 'application/ld+json'
-    script.textContent = JSON.stringify(structuredData)
-    document.head.appendChild(script)
-
-    // 清理函数
-    return () => {
-      const scriptToRemove = document.querySelector('#structured-data')
-      if (scriptToRemove) {
-        scriptToRemove.remove()
-      }
-    }
-  }, [type, title, description, url])
-
-  return null // 这个组件不渲染任何可见内容
+  // 🔧 使用Next.js Script组件，服务端渲染
+  return (
+    <Script
+      id={`structured-data-${type}`}
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(structuredData)
+      }}
+    />
+  )
 }
 
 // 网站级别的结构化数据
 export function WebSiteStructuredData() {
-  useEffect(() => {
-    const websiteData = {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "My Homepage One",
-      "alternateName": ["MyHomepage.one", "Personal Homepage Creator"],
-      "url": "https://myhomepage.one",
-      "description": "Create your perfect personal homepage and start page. Manage bookmarks intelligently and organize your favorite websites.",
-      "inLanguage": ["en", "zh-CN"],
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://myhomepage.one/search?q={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
+  const websiteData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "My Homepage One",
+    "alternateName": ["MyHomepage.one", "Personal Homepage Creator"],
+    "url": "https://myhomepage.one",
+    "description": "Create your perfect personal homepage and start page. Manage bookmarks intelligently and organize your favorite websites.",
+    "inLanguage": ["en", "zh-CN"],
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://myhomepage.one/search?q={search_term_string}"
       },
-      "sameAs": [
-        "https://github.com/myhomepage-one",
-        "https://twitter.com/myhomepageone"
-      ]
-    }
+      "query-input": "required name=search_term_string"
+    },
+    "sameAs": [
+      "https://github.com/myhomepage-one",
+      "https://twitter.com/myhomepageone"
+    ]
+  }
 
-    const script = document.createElement('script')
-    script.id = 'website-structured-data'
-    script.type = 'application/ld+json'
-    script.textContent = JSON.stringify(websiteData)
-    document.head.appendChild(script)
-
-    return () => {
-      const scriptToRemove = document.querySelector('#website-structured-data')
-      if (scriptToRemove) {
-        scriptToRemove.remove()
-      }
-    }
-  }, [])
-
-  return null
+  return (
+    <Script
+      id="website-structured-data"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(websiteData)
+      }}
+    />
+  )
 }
 
 // 面包屑导航结构化数据
 export function BreadcrumbStructuredData({ items }: { items: Array<{ name: string; url: string }> }) {
-  useEffect(() => {
-    const breadcrumbData = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": items.map((item, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "name": item.name,
-        "item": item.url
-      }))
-    }
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": item.url
+    }))
+  }
 
-    const script = document.createElement('script')
-    script.id = 'breadcrumb-structured-data'
-    script.type = 'application/ld+json'
-    script.textContent = JSON.stringify(breadcrumbData)
-    document.head.appendChild(script)
+  return (
+    <Script
+      id="breadcrumb-structured-data"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(breadcrumbData)
+      }}
+    />
+  )
+}
 
-    return () => {
-      const scriptToRemove = document.querySelector('#breadcrumb-structured-data')
-      if (scriptToRemove) {
-        scriptToRemove.remove()
+// 🔧 新增FAQ结构化数据
+export function FAQStructuredData({ faqs }: { faqs: Array<{ question: string; answer: string }> }) {
+  const faqData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
       }
-    }
-  }, [items])
+    }))
+  }
 
-  return null
+  return (
+    <Script
+      id="faq-structured-data"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(faqData)
+      }}
+    />
+  )
+}
+
+// 🔧 新增HowTo结构化数据
+export function HowToStructuredData({
+  name,
+  description,
+  steps
+}: {
+  name: string
+  description: string
+  steps: Array<{ name: string; text: string; image?: string }>
+}) {
+  const howToData = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": name,
+    "description": description,
+    "step": steps.map((step, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": step.name,
+      "text": step.text,
+      ...(step.image && { "image": step.image })
+    }))
+  }
+
+  return (
+    <Script
+      id="howto-structured-data"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(howToData)
+      }}
+    />
+  )
 }

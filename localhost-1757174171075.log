@@ -1,0 +1,480 @@
+content.903826e2.js:1 ✅ [Content Script] First injection, proceeding with initialization
+content.903826e2.js:84 🔄 [Content Script] Starting initialization {url: 'http://localhost:3000/dashboard', readyState: 'interactive', isMainFrame: true, timestamp: '2025-09-06T15:50:38.595Z'}
+content.903826e2.js:84 ✅ [Content Script] Page already loaded, initializing with 300ms delay
+scheduler.development.js:519 [Violation] 'message' handler took 157ms
+react-dom.development.js:8016 [Violation] 'setTimeout' handler took 53ms
+pwa-install.tsx:81 SW registered:  ServiceWorkerRegistration {installing: null, waiting: null, active: ServiceWorker, navigationPreload: NavigationPreloadManager, scope: 'http://localhost:3000/', …}
+pwa-install.tsx:81 SW registered:  ServiceWorkerRegistration {installing: null, waiting: null, active: ServiceWorker, navigationPreload: NavigationPreloadManager, scope: 'http://localhost:3000/', …}
+content.903826e2.js:84 🚀 [Content Script] Initialize FormDetector
+content.903826e2.js:1 ✅ [FormDetector] Initialization completed
+js?id=G-0F1G84Z3JP:700 [Violation] 'setTimeout' handler took 68ms
+content.903826e2.js:1 ⚙️ [FormDetector] Settings not found, using default values (auto detection disabled)
+hook.js:608 Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. Error Component Stack
+    at DescriptionWarning (index.mjs:457:11)
+    at eval (index.mjs:315:13)
+    at eval (index.mjs:237:58)
+    at Presence (index.mjs:26:13)
+    at eval (index.mjs:209:64)
+    at eval (index.mjs:34:11)
+    at eval (index.mjs:15:11)
+    at eval (index.mjs:36:13)
+    at eval (index.mjs:22:24)
+    at Presence (index.mjs:26:13)
+    at Provider (index.mjs:34:15)
+    at DialogPortal (index.mjs:130:13)
+    at _c1 (dialog.tsx:35:6)
+    at Provider (index.mjs:34:15)
+    at Dialog (index.mjs:61:13)
+    at AddBookmarkWithCategoryDialog (add-bookmark-with-category-dialog.tsx:25:3)
+    at header (<anonymous>)
+    at Header (header.tsx:34:26)
+    at div (<anonymous>)
+    at HomePage (page.tsx:21:59)
+    at ClientPageRoot (client-page.js:14:11)
+    at InnerLayoutRouter (layout-router.js:243:11)
+    at RedirectErrorBoundary (redirect-boundary.js:74:9)
+    at RedirectBoundary (redirect-boundary.js:82:11)
+    at NotFoundBoundary (not-found-boundary.js:84:11)
+    at LoadingBoundary (layout-router.js:349:11)
+    at ErrorBoundary (error-boundary.js:160:11)
+    at InnerScrollAndFocusHandler (layout-router.js:153:9)
+    at ScrollAndFocusHandler (layout-router.js:228:11)
+    at RenderFromTemplateContext (render-from-template-context.js:16:44)
+    at OuterLayoutRouter (layout-router.js:370:11)
+    at InnerLayoutRouter (layout-router.js:243:11)
+    at RedirectErrorBoundary (redirect-boundary.js:74:9)
+    at RedirectBoundary (redirect-boundary.js:82:11)
+    at NotFoundErrorBoundary (not-found-boundary.js:76:9)
+    at NotFoundBoundary (not-found-boundary.js:84:11)
+    at LoadingBoundary (layout-router.js:349:11)
+    at ErrorBoundary (error-boundary.js:160:11)
+    at InnerScrollAndFocusHandler (layout-router.js:153:9)
+    at ScrollAndFocusHandler (layout-router.js:228:11)
+    at RenderFromTemplateContext (render-from-template-context.js:16:44)
+    at OuterLayoutRouter (layout-router.js:370:11)
+    at V (index.mjs:54:24)
+    at J (index.mjs:47:47)
+    at ThemeProvider (theme-provider.tsx:9:33)
+    at ErrorBoundary (error-boundary.tsx:17:5)
+    at body (<anonymous>)
+    at html (<anonymous>)
+    at RootLayout [Server] (<anonymous>)
+    at RedirectErrorBoundary (redirect-boundary.js:74:9)
+    at RedirectBoundary (redirect-boundary.js:82:11)
+    at NotFoundErrorBoundary (not-found-boundary.js:76:9)
+    at NotFoundBoundary (not-found-boundary.js:84:11)
+    at DevRootNotFoundBoundary (dev-root-not-found-boundary.js:33:11)
+    at ReactDevOverlay (ReactDevOverlay.js:87:9)
+    at HotReload (hot-reloader-client.js:321:11)
+    at Router (app-router.js:207:11)
+    at ErrorBoundaryHandler (error-boundary.js:113:9)
+    at ErrorBoundary (error-boundary.js:160:11)
+    at AppRouter (app-router.js:585:13)
+    at ServerRoot (app-index.js:112:27)
+    at Root (app-index.js:117:11)
+overrideMethod @ hook.js:608
+eval @ index.mjs:466
+commitHookEffectListMount @ react-dom.development.js:21102
+commitHookPassiveMountEffects @ react-dom.development.js:23154
+commitPassiveMountOnFiber @ react-dom.development.js:23259
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23256
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23370
+recursivelyTraversePassiveMountEffects @ react-dom.development.js:23237
+commitPassiveMountOnFiber @ react-dom.development.js:23267
+commitPassiveMountEffects @ react-dom.development.js:23225
+flushPassiveEffectsImpl @ react-dom.development.js:26497
+flushPassiveEffects @ react-dom.development.js:26438
+commitRootImpl @ react-dom.development.js:26337
+commitRoot @ react-dom.development.js:26077
+performSyncWorkOnRoot @ react-dom.development.js:24925
+flushSyncWorkAcrossRoots_impl @ react-dom.development.js:7758
+flushSyncWorkOnAllRoots @ react-dom.development.js:7718
+processRootScheduleInMicrotask @ react-dom.development.js:7863
+eval @ react-dom.development.js:8034
+hook.js:608 Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+overrideMethod @ hook.js:608
+eval @ index.mjs:466
+commitHookEffectListMount @ react-dom.development.js:21102
+invokePassiveEffectMountInDEV @ react-dom.development.js:23980
+invokeEffectsInDev @ react-dom.development.js:26852
+legacyCommitDoubleInvokeEffectsInDEV @ react-dom.development.js:26835
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:26816
+flushPassiveEffectsImpl @ react-dom.development.js:26514
+flushPassiveEffects @ react-dom.development.js:26438
+commitRootImpl @ react-dom.development.js:26337
+commitRoot @ react-dom.development.js:26077
+performSyncWorkOnRoot @ react-dom.development.js:24925
+flushSyncWorkAcrossRoots_impl @ react-dom.development.js:7758
+flushSyncWorkOnAllRoots @ react-dom.development.js:7718
+processRootScheduleInMicrotask @ react-dom.development.js:7863
+eval @ react-dom.development.js:8034
+add-bookmark-with-category-dialog.tsx:85 🔍 查找预置数据，提取的域名: blog.csdn.net
+add-bookmark-with-category-dialog.tsx:91 ✅ 在预置数据库中找到匹配: blog.csdn.net → CSDN博客
+add-bookmark-with-category-dialog.tsx:85 🔍 查找预置数据，提取的域名: blog.csdn.net
+add-bookmark-with-category-dialog.tsx:91 ✅ 在预置数据库中找到匹配: blog.csdn.net → CSDN博客
+use-bookmark-store.ts:714 🚀 开始自动增强 1 个书签...
+use-bookmark-store.ts:718 🔄 标记自动增强开始，暂停同步检测
+background-metadata-enhancer.ts:520 🚀 开始批量增强 1 个书签
+background-metadata-enhancer.ts:521 📊 配置信息: {预置书签: 0, 未知书签: 1, 批次大小: 15, 延迟: '100ms', 快速模式: true}
+background-metadata-enhancer.ts:538 📊 分类结果: 0 个预置书签, 1 个未知书签
+background-metadata-enhancer.ts:578 🌐 处理 1 个需要抓取的书签（未知 + 预置缺封面）...
+background-metadata-enhancer.ts:241 🔄 开始增强书签: CSDN博客 (https://blog.csdn.net/weixin_43272605/article/details/105704305?utm_relevant_index=3)
+background-metadata-enhancer.ts:242    当前描述长度: 27
+background-metadata-enhancer.ts:243    模式: 单个添加
+background-metadata-enhancer.ts:247 ⏭️ 跳过书签 CSDN博客：描述已足够详细
+use-bookmark-store.ts:763 ✅ 自动增强完成！成功增强了 0 个书签
+use-bookmark-store.ts:770 📊 增强后统计：还有 17 个书签需要增强
+use-bookmark-store.ts:782 🔄 增强完成
+use-bookmark-store.ts:786 🔄 自动增强完成，数据已保存到本地存储
+react-dom.development.js:8016 [Violation] 'setTimeout' handler took 58ms
+sw.js:170 Service Worker: Network request failed: https://icons.duckduckgo.com/ip3/code.visualstudio.com.ico TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+sw.js:170 Service Worker: Network request failed: https://icons.duckduckgo.com/ip3/www.jetbrains.com.ico TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+icons.duckduckgo.com/ip3/code.visualstudio.com.ico:1  GET https://icons.duckduckgo.com/ip3/code.visualstudio.com.ico net::ERR_FAILED
+sw.js:170 Service Worker: Network request failed: https://icons.duckduckgo.com/ip3/developer.mozilla.org.ico TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+sw.js:170 Service Worker: Network request failed: https://icons.duckduckgo.com/ip3/react.dev.ico TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+icons.duckduckgo.com/ip3/www.jetbrains.com.ico:1  GET https://icons.duckduckgo.com/ip3/www.jetbrains.com.ico net::ERR_FAILED
+icons.duckduckgo.com/ip3/developer.mozilla.org.ico:1  GET https://icons.duckduckgo.com/ip3/developer.mozilla.org.ico net::ERR_FAILED
+sw.js:170 Service Worker: Network request failed: https://icons.duckduckgo.com/ip3/www.figma.com.ico TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+sw.js:170 Service Worker: Network request failed: https://icons.duckduckgo.com/ip3/www.canva.com.ico TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+sw.js:297 Service Worker: Unhandled promise rejection TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:297
+sw.js:297 Service Worker: Unhandled promise rejection TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:297
+sw.js:297 Service Worker: Unhandled promise rejection TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:297
+sw.js:297 Service Worker: Unhandled promise rejection TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:297
+sw.js:297 Service Worker: Unhandled promise rejection TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:297
+sw.js:297 Service Worker: Unhandled promise rejection TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:297
+icons.duckduckgo.com/ip3/react.dev.ico:1  GET https://icons.duckduckgo.com/ip3/react.dev.ico net::ERR_FAILED
+icons.duckduckgo.com/ip3/www.figma.com.ico:1  GET https://icons.duckduckgo.com/ip3/www.figma.com.ico net::ERR_FAILED
+icons.duckduckgo.com/ip3/www.canva.com.ico:1  GET https://icons.duckduckgo.com/ip3/www.canva.com.ico net::ERR_FAILED
+sw.js:170 Service Worker: Network request failed: https://www.google.com/s2/favicons?domain=code.visualstudio.com&sz=64 TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+www.google.com/s2/favicons?domain=code.visualstudio.com&sz=64:1  GET https://www.google.com/s2/favicons?domain=code.visualstudio.com&sz=64 404 (Favicon not found)
+Image
+onError @ enhanced-bookmark-card.tsx:439
+callCallback @ react-dom.development.js:20565
+invokeGuardedCallbackImpl @ react-dom.development.js:20614
+invokeGuardedCallback @ react-dom.development.js:20689
+invokeGuardedCallbackAndCatchFirstError @ react-dom.development.js:20703
+executeDispatch @ react-dom.development.js:32128
+processDispatchQueueItemsInOrder @ react-dom.development.js:32160
+processDispatchQueue @ react-dom.development.js:32173
+dispatchEventsForPlugins @ react-dom.development.js:32184
+eval @ react-dom.development.js:32374
+batchedUpdates$1 @ react-dom.development.js:24953
+batchedUpdates @ react-dom.development.js:28844
+dispatchEventForPluginEventSystem @ react-dom.development.js:32373
+dispatchEvent @ react-dom.development.js:30141
+sw.js:170 Service Worker: Network request failed: https://www.google.com/s2/favicons?domain=www.jetbrains.com&sz=64 TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+favicons:1  GET https://www.google.com/s2/favicons?domain=www.jetbrains.com&sz=64 404 (Favicon not found)
+Image
+onError @ enhanced-bookmark-card.tsx:439
+callCallback @ react-dom.development.js:20565
+invokeGuardedCallbackImpl @ react-dom.development.js:20614
+invokeGuardedCallback @ react-dom.development.js:20689
+invokeGuardedCallbackAndCatchFirstError @ react-dom.development.js:20703
+executeDispatch @ react-dom.development.js:32128
+processDispatchQueueItemsInOrder @ react-dom.development.js:32160
+processDispatchQueue @ react-dom.development.js:32173
+dispatchEventsForPlugins @ react-dom.development.js:32184
+eval @ react-dom.development.js:32374
+batchedUpdates$1 @ react-dom.development.js:24953
+batchedUpdates @ react-dom.development.js:28844
+dispatchEventForPluginEventSystem @ react-dom.development.js:32373
+dispatchEvent @ react-dom.development.js:30141
+sw.js:170 Service Worker: Network request failed: https://www.google.com/s2/favicons?domain=developer.mozilla.org&sz=64 TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+favicons:1  GET https://www.google.com/s2/favicons?domain=developer.mozilla.org&sz=64 404 (Favicon not found)
+Image
+onError @ enhanced-bookmark-card.tsx:439
+callCallback @ react-dom.development.js:20565
+invokeGuardedCallbackImpl @ react-dom.development.js:20614
+invokeGuardedCallback @ react-dom.development.js:20689
+invokeGuardedCallbackAndCatchFirstError @ react-dom.development.js:20703
+executeDispatch @ react-dom.development.js:32128
+processDispatchQueueItemsInOrder @ react-dom.development.js:32160
+processDispatchQueue @ react-dom.development.js:32173
+dispatchEventsForPlugins @ react-dom.development.js:32184
+eval @ react-dom.development.js:32374
+batchedUpdates$1 @ react-dom.development.js:24953
+batchedUpdates @ react-dom.development.js:28844
+dispatchEventForPluginEventSystem @ react-dom.development.js:32373
+dispatchEvent @ react-dom.development.js:30141
+sw.js:170 Service Worker: Network request failed: https://www.google.com/s2/favicons?domain=react.dev&sz=64 TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+favicons:1  GET https://www.google.com/s2/favicons?domain=react.dev&sz=64 404 (Favicon not found)
+Image
+onError @ enhanced-bookmark-card.tsx:439
+callCallback @ react-dom.development.js:20565
+invokeGuardedCallbackImpl @ react-dom.development.js:20614
+invokeGuardedCallback @ react-dom.development.js:20689
+invokeGuardedCallbackAndCatchFirstError @ react-dom.development.js:20703
+executeDispatch @ react-dom.development.js:32128
+processDispatchQueueItemsInOrder @ react-dom.development.js:32160
+processDispatchQueue @ react-dom.development.js:32173
+dispatchEventsForPlugins @ react-dom.development.js:32184
+eval @ react-dom.development.js:32374
+batchedUpdates$1 @ react-dom.development.js:24953
+batchedUpdates @ react-dom.development.js:28844
+dispatchEventForPluginEventSystem @ react-dom.development.js:32373
+dispatchEvent @ react-dom.development.js:30141
+sw.js:170 Service Worker: Network request failed: https://www.google.com/s2/favicons?domain=www.figma.com&sz=64 TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+favicons:1  GET https://www.google.com/s2/favicons?domain=www.figma.com&sz=64 404 (Favicon not found)
+Image
+onError @ enhanced-bookmark-card.tsx:439
+callCallback @ react-dom.development.js:20565
+invokeGuardedCallbackImpl @ react-dom.development.js:20614
+invokeGuardedCallback @ react-dom.development.js:20689
+invokeGuardedCallbackAndCatchFirstError @ react-dom.development.js:20703
+executeDispatch @ react-dom.development.js:32128
+processDispatchQueueItemsInOrder @ react-dom.development.js:32160
+processDispatchQueue @ react-dom.development.js:32173
+dispatchEventsForPlugins @ react-dom.development.js:32184
+eval @ react-dom.development.js:32374
+batchedUpdates$1 @ react-dom.development.js:24953
+batchedUpdates @ react-dom.development.js:28844
+dispatchEventForPluginEventSystem @ react-dom.development.js:32373
+dispatchEvent @ react-dom.development.js:30141
+sw.js:170 Service Worker: Network request failed: https://www.google.com/s2/favicons?domain=www.canva.com&sz=64 TypeError: Failed to fetch
+    at sw.js:169:5
+（匿名） @ sw.js:170
+Promise.catch
+（匿名） @ sw.js:169
+favicons:1  GET https://www.google.com/s2/favicons?domain=www.canva.com&sz=64 404 (Favicon not found)
+Image
+onError @ enhanced-bookmark-card.tsx:439
+callCallback @ react-dom.development.js:20565
+invokeGuardedCallbackImpl @ react-dom.development.js:20614
+invokeGuardedCallback @ react-dom.development.js:20689
+invokeGuardedCallbackAndCatchFirstError @ react-dom.development.js:20703
+executeDispatch @ react-dom.development.js:32128
+processDispatchQueueItemsInOrder @ react-dom.development.js:32160
+processDispatchQueue @ react-dom.development.js:32173
+dispatchEventsForPlugins @ react-dom.development.js:32184
+eval @ react-dom.development.js:32374
+batchedUpdates$1 @ react-dom.development.js:24953
+batchedUpdates @ react-dom.development.js:28844
+dispatchEventForPluginEventSystem @ react-dom.development.js:32373
+dispatchEvent @ react-dom.development.js:30141
+ [Fast Refresh] rebuilding

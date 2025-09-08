@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { logger } from '@/lib/logger'
 
 interface ErrorBoundaryState {
   hasError: boolean
@@ -41,13 +42,13 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 
     if (shouldSilent) {
       // 静默处理这些错误，不显示错误界面
-      console.warn('🔇 ErrorBoundary 静默处理错误:', errorMessage)
+      logger.warn('🔇 ErrorBoundary 静默处理错误:', errorMessage)
       return { hasError: false } // 不显示错误界面
     }
 
     // 在生产环境中也静默处理所有错误
     if (process.env.NODE_ENV !== 'development') {
-      console.warn('🔇 生产环境中的错误已被静默处理:', errorMessage)
+      logger.warn('🔇 生产环境中的错误已被静默处理:', errorMessage)
       return { hasError: false } // 不显示错误界面
     }
 
@@ -77,14 +78,14 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     )
 
     if (shouldSilent) {
-      console.warn('🔇 ErrorBoundary componentDidCatch 静默处理错误:', errorMessage)
+      logger.warn('🔇 ErrorBoundary componentDidCatch 静默处理错误:', errorMessage)
       // 重置错误状态，继续正常渲染
       this.setState({ hasError: false })
       return
     }
 
     if (process.env.NODE_ENV !== 'development') {
-      console.warn('🔇 生产环境中的错误已被静默处理:', errorMessage)
+      logger.warn('🔇 生产环境中的错误已被静默处理:', errorMessage)
       // 重置错误状态，继续正常渲染
       this.setState({ hasError: false })
       return

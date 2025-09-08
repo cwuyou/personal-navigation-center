@@ -4,17 +4,9 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import { getFaviconUrl } from "@/lib/metadata-fetcher"
 import { backgroundEnhancer, type EnhancementProgress } from "@/lib/background-metadata-enhancer"
+import { logger } from "@/lib/logger"
 
-// 低质量封面判定（favicon等小图），用于决定是否用 og:image 覆盖
-function isLikelyFavicon(url?: string): boolean {
-  if (!url) return false
-  try {
-    const u = url.toLowerCase()
-    return /\.ico(\?|$)/.test(u) || u.includes('favicon') || /icon-\d+x\d+/.test(u) || u.includes('apple-touch-icon')
-  } catch {
-    return false
-  }
-}
+
 
 
 interface Category {
@@ -77,9 +69,12 @@ interface BookmarkStore {
   exportBookmarks: () => { categories: Category[]; bookmarks: Bookmark[] }
 
   // Automatic enhancement (triggered after import)
-  startBackgroundEnhancement: (bookmarkIds?: string[]) => Promise<void>
+  startBackgroundEnhancement: (bookmarkIds?: string[], options?: { isImport?: boolean }) => Promise<void>
   stopBackgroundEnhancement: () => void
   getEnhancementStats: () => { totalSites: number, categories: string[] }
+
+  // Manual re-enhancement for cover images
+  refreshCoverImages: (bookmarkIds?: string[]) => Promise<void>
 
   // Initialize with default data
   initializeStore: () => void
@@ -422,7 +417,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
         const { bookmarks: current } = get()
         const duplicate = current.find(b => b.subCategoryId === targetSubCategoryId && normalizeUrl(b.url) === normalizedNew)
         if (duplicate) {
-          console.warn('🛑 阻止重复书签（同一子分类内）：', normalizedNew)
+          logger.warn('🛑 阻止重复书签（同一子分类内）：', normalizedNew)
           throw Object.assign(new Error('DUPLICATE_BOOKMARK'), { code: 'DUPLICATE_BOOKMARK', existingId: duplicate.id })
         }
 
@@ -431,6 +426,9 @@ export const useBookmarkStore = create<BookmarkStore>()(
           url: normalizedNew,
           id: `bm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           createdAt: new Date(),
+          // 🔧 与导入书签保持一致：添加基本favicon和SVG截图占位符
+          favicon: bookmark.favicon || getFaviconUrl(normalizedNew),
+          coverImage: bookmark.coverImage || `/api/screenshot?url=${encodeURIComponent(normalizedNew)}`,
         }
 
         // 用户开始添加数据，清除清空标志，并标记已有用户数据
@@ -439,81 +437,16 @@ export const useBookmarkStore = create<BookmarkStore>()(
           localStorage.setItem('hasUserData', 'true')
           localStorage.setItem('hideDemoNotice', 'true')
         }
+
         // 先添加书签到状态
         set((state) => ({
           bookmarks: [...state.bookmarks, newBookmark],
         }))
 
-        // 🔧 新增：单个书签添加时调用API增强
-        try {
-          console.log('🔄 单个书签添加，开始增强...')
-          const { BackgroundMetadataEnhancer } = await import('../lib/background-metadata-enhancer')
-          const backgroundEnhancer = new BackgroundMetadataEnhancer()
-          // 优先尝试本地文章元数据抓取，获取更准确的标题与摘要
-          let seed: { title?: string; description?: string; coverImage?: string } | undefined
-          try {
-            const res = await fetch(`/api/fetch-meta?url=${encodeURIComponent(newBookmark.url)}`, { cache: 'no-store' })
-            if (res.ok) {
-              const data = await res.json()
-              if (data?.title || data?.description || data?.coverImage) {
-                // 立即乐观更新UI
-                set((state) => ({
-                  bookmarks: state.bookmarks.map(b => b.id === newBookmark.id ? {
-                    ...b,
-                    title: data.title || b.title,
-                    description: (b.description && b.description.trim().length > 0)
-                      ? b.description
-                      : (data.description || b.description),
-                    // 如果后端获取到了社交分享图，则优先使用；否则保留现有封面，但若现有封面疑似是小图标则移除
-                    coverImage: (data.coverImage && data.coverImage.length > 0)
-                      ? data.coverImage
-                      : (isLikelyFavicon(b.coverImage) ? undefined : b.coverImage),
-                  } : b)
-                }))
-                // 作为增强器的种子，避免重复请求
-                seed = {
-                  title: data.title,
-                  description: data.description,
-                  coverImage: data.coverImage,
-                }
-              }
-            }
-          } catch (e) {
-            console.log('fetch-meta not available, will continue with enhancer.', e)
-          }
-
-          const metadata = await backgroundEnhancer.enhanceSingleBookmark({
-            id: newBookmark.id,
-            url: newBookmark.url,
-            title: newBookmark.title,
-            description: newBookmark.description
-          }, { seed })
-
-          if (metadata) {
-            console.log('✅ 单个书签增强成功:', metadata.description?.substring(0, 50))
-            // 更新书签的元数据
-            set((state) => ({
-              bookmarks: state.bookmarks.map(bm =>
-                bm.id === newBookmark.id
-                  ? {
-                      ...bm,
-                      description: (bm.description && bm.description.trim().length > 0)
-                        ? bm.description
-                        : (metadata.description || bm.description),
-                      favicon: metadata.favicon || bm.favicon,
-                      // 优先保留先前通过 og:image 获取到的封面；没有时再采用增强器生成的封面
-                      coverImage: (bm.coverImage && bm.coverImage.trim().length > 0)
-                        ? bm.coverImage
-                        : (metadata.coverImage || bm.coverImage)
-                    }
-                  : bm
-              )
-            }))
-          }
-        } catch (error) {
-          console.warn('单个书签增强失败，使用基本信息:', error)
-          // 增强失败不影响书签添加
-        }
+        // 🔧 与导入书签保持一致：使用后台增强服务
+        setTimeout(() => {
+          get().startBackgroundEnhancement([newBookmark.id])
+        }, 100) // 短暂延迟，让用户看到书签已添加
       },
 
       updateBookmark: (id: string, updates) => {
@@ -552,7 +485,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
         const { enableBackgroundEnhancement = true } = options
         const { categories: existingCategories, bookmarks: existingBookmarks } = get()
 
-        console.log(`🚀 开始快速导入 ${data.bookmarks.length} 个书签...`)
+        logger.debug(`🚀 开始快速导入 ${data.bookmarks.length} 个书签...`)
         const startTime = Date.now()
 
         // 统计信息
@@ -669,7 +602,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
 
         const endTime = Date.now()
         const duration = ((endTime - startTime) / 1000).toFixed(1)
-        console.log(`✅ 快速导入完成！耗时 ${duration}s，导入了 ${newBookmarks} 个书签`)
+        logger.debug(`✅ 快速导入完成！耗时 ${duration}s，导入了 ${newBookmarks} 个书签`)
 
         // 标记用户已经有真实数据，隐藏演示提示
         if (typeof window !== 'undefined' && newBookmarks > 0) {
@@ -679,11 +612,11 @@ export const useBookmarkStore = create<BookmarkStore>()(
 
         // 如果启用后台增强，异步开始增强过程
         if (enableBackgroundEnhancement && importedBookmarkIds.length > 0) {
-          console.log(`🔄 自动启动后台增强服务，将为 ${importedBookmarkIds.length} 个书签获取详细信息...`)
+          logger.debug(`🔄 自动启动后台增强服务，将为 ${importedBookmarkIds.length} 个书签获取详细信息...`)
 
           // 异步启动后台增强（不阻塞返回）
           setTimeout(() => {
-            get().startBackgroundEnhancement(importedBookmarkIds)
+            get().startBackgroundEnhancement(importedBookmarkIds, { isImport: true }) // 🔧 标记为导入书签
           }, 500) // 稍微延长一点时间，让用户看到导入完成的反馈
         }
 
@@ -758,32 +691,41 @@ export const useBookmarkStore = create<BookmarkStore>()(
       },
 
       // 自动增强相关方法（导入书签后自动触发）
-      startBackgroundEnhancement: async (bookmarkIds?: string[]) => {
+      startBackgroundEnhancement: async (bookmarkIds?: string[], options: { isImport?: boolean } = {}) => {
         const { bookmarks } = get()
 
         // 确定要增强的书签
         let targetBookmarks = bookmarkIds
           ? bookmarks.filter(bookmark => bookmarkIds.includes(bookmark.id))
-          : bookmarks.filter(bookmark => !bookmark.description || bookmark.description.length < 20)
+          : bookmarks.filter(bookmark =>
+              // 需要增强的条件：
+              // 1. 没有描述或描述太短
+              // 2. 或者没有封面图（给失败的封面图第二次机会）
+              (!bookmark.description || bookmark.description.length < 20) ||
+              (!bookmark.coverImage || bookmark.coverImage.includes('/api/screenshot'))
+            )
 
-        // 进一步过滤，确保只包含真正需要增强的书签
-        // 这样可以确保进度显示的总数与实际处理的数量一致
-        targetBookmarks = targetBookmarks.filter(bookmark =>
-          !bookmark.description || bookmark.description.length < 20
-        )
+        // 🔧 修复：如果明确指定了书签ID（如单个添加书签），跳过描述长度过滤，强制增强
+        // 这样可以确保单个添加的书签能获取到真实的标题和描述，与导入书签保持一致
+        if (!bookmarkIds) {
+          // 只有在批量增强（未指定ID）时才过滤描述长度
+          targetBookmarks = targetBookmarks.filter(bookmark =>
+            !bookmark.description || bookmark.description.length < 20
+          )
+        }
 
         if (targetBookmarks.length === 0) {
-          console.log('📝 没有需要增强的书签')
+          logger.debug('📝 没有需要增强的书签')
           return
         }
 
         const isAutomatic = !!bookmarkIds
         const actionType = isAutomatic ? '自动' : '批量'
-        console.log(`🚀 开始${actionType}增强 ${targetBookmarks.length} 个书签...`)
+        logger.debug(`🚀 开始${actionType}增强 ${targetBookmarks.length} 个书签...`)
 
         // 标记增强开始，防止触发同步
         if (isAutomatic) {
-          console.log('🔄 标记自动增强开始，暂停同步检测')
+          logger.debug('🔄 标记自动增强开始，暂停同步检测')
           set({ isEnhancing: true })
         }
 
@@ -793,6 +735,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
             onProgress: (progress) => {
               set({ enhancementProgress: progress })
             },
+            preserveOriginal: options.isImport, // 🔧 如果是导入书签，保留原始标题和描述
             onUpdate: (bookmarkId, metadata) => {
               // 实时更新书签信息，确保增强状态保持
               set((state) => {
@@ -811,10 +754,10 @@ export const useBookmarkStore = create<BookmarkStore>()(
                 // 调试日志：检查更新后的书签
                 const updatedBookmark = updatedBookmarks.find(b => b.id === bookmarkId)
                 if (updatedBookmark) {
-                  console.log(`📝 更新书签: ${updatedBookmark.title}`)
-                  console.log(`   描述长度: ${updatedBookmark.description?.length || 0}`)
-                  console.log(`   封面图片: ${updatedBookmark.coverImage ? '有' : '无'}`)
-                  console.log(`   新描述: ${updatedBookmark.description?.substring(0, 50)}...`)
+                  logger.debug(`📝 更新书签: ${updatedBookmark.title}`)
+                  logger.debug(`   描述长度: ${updatedBookmark.description?.length || 0}`)
+                  logger.debug(`   封面图片: ${updatedBookmark.coverImage ? '有' : '无'}`)
+                  logger.debug(`   新描述: ${updatedBookmark.description?.substring(0, 50)}...`)
                 }
 
                 // 确保增强状态保持不变，防止触发同步
@@ -828,30 +771,30 @@ export const useBookmarkStore = create<BookmarkStore>()(
             // 配置将自动根据书签数量优化
           })
 
-          console.log(`✅ ${actionType}增强完成！成功增强了 ${enhancedCount} 个书签`)
+          logger.debug(`✅ ${actionType}增强完成！成功增强了 ${enhancedCount} 个书签`)
 
           // 增强完成后，重新检查需要增强的书签数量
           const { bookmarks: updatedBookmarks } = get()
           const remainingBookmarks = updatedBookmarks.filter(
             bookmark => !bookmark.description || bookmark.description.length < 20
           )
-          console.log(`📊 增强后统计：还有 ${remainingBookmarks.length} 个书签需要增强`)
+          logger.debug(`📊 增强后统计：还有 ${remainingBookmarks.length} 个书签需要增强`)
 
           // 如果是自动增强，显示友好的完成提示
           if (isAutomatic && enhancedCount > 0) {
-            console.log(`🎉 您的 ${enhancedCount} 个书签现在拥有了详细的描述信息！`)
+            logger.debug(`🎉 您的 ${enhancedCount} 个书签现在拥有了详细的描述信息！`)
           }
         } catch (error) {
-          console.error(`❌ ${actionType}增强失败:`, error)
+          logger.error(`❌ ${actionType}增强失败:`, error)
         } finally {
           // 清除进度状态和增强状态
           setTimeout(() => {
             set({ enhancementProgress: null, isEnhancing: false })
-            console.log('🔄 增强完成')
+            logger.debug('🔄 增强完成')
 
             // 🔧 移除同步相关代码，改为纯本地存储
             if (isAutomatic) {
-              console.log('🔄 自动增强完成，数据已保存到本地存储')
+              logger.debug('🔄 自动增强完成，数据已保存到本地存储')
             }
           }, 2000)
         }
@@ -860,7 +803,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
       stopBackgroundEnhancement: () => {
         backgroundEnhancer.stop()
         set({ enhancementProgress: null, isEnhancing: false })
-        console.log('🔄 增强停止')
+        logger.debug('🔄 增强停止')
       },
 
       // 确保系统“未分类”存在，返回其子分类ID
@@ -887,6 +830,61 @@ export const useBookmarkStore = create<BookmarkStore>()(
 
       getEnhancementStats: () => {
         return backgroundEnhancer.getPresetStats()
+      },
+
+      // 手动刷新封面图
+      refreshCoverImages: async (bookmarkIds?: string[]) => {
+        const { bookmarks } = get()
+
+        // 确定要刷新封面图的书签
+        const targetBookmarks = bookmarkIds
+          ? bookmarks.filter(bookmark => bookmarkIds.includes(bookmark.id))
+          : bookmarks // 如果没有指定ID，刷新所有书签的封面图
+
+        if (targetBookmarks.length === 0) {
+          logger.debug('📝 没有需要刷新封面图的书签')
+          return
+        }
+
+        logger.debug(`🖼️ 开始刷新 ${targetBookmarks.length} 个书签的封面图...`)
+        set({ isEnhancing: true })
+
+        try {
+          let refreshedCount = 0
+
+          for (const bookmark of targetBookmarks) {
+            try {
+              // 使用新的公共方法刷新封面图
+              const newCoverImage = await backgroundEnhancer.refreshBookmarkCoverImage({
+                id: bookmark.id,
+                url: bookmark.url,
+                title: bookmark.title,
+                description: bookmark.description
+              })
+
+              if (newCoverImage) {
+                // 只更新封面图，保留其他信息
+                set((state) => ({
+                  bookmarks: state.bookmarks.map(b =>
+                    b.id === bookmark.id
+                      ? { ...b, coverImage: newCoverImage }
+                      : b
+                  ),
+                }))
+                refreshedCount++
+                logger.debug(`🖼️ 已刷新书签封面图: ${bookmark.title}`)
+              }
+            } catch (error) {
+              logger.warn(`❌ 刷新书签封面图失败: ${bookmark.title}`, error)
+            }
+          }
+
+          logger.debug(`✅ 封面图刷新完成！成功刷新了 ${refreshedCount} 个书签的封面图`)
+        } catch (error) {
+          logger.error('封面图刷新过程中出错:', error)
+        } finally {
+          set({ isEnhancing: false })
+        }
       },
     }),
     {

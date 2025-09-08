@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { TagInput } from "@/components/tag-input"
+import { processUserInput } from "@/lib/url-utils"
 
 interface EditBookmarkDialogProps {
   open: boolean
@@ -47,13 +48,21 @@ export function EditBookmarkDialog({ open, onOpenChange, bookmark }: EditBookmar
 
     if (!title.trim() || !url.trim()) return
 
+    // 处理和规范化URL
+    const { normalizedUrl, isValid } = processUserInput(url.trim())
+
+    if (!isValid) {
+      // 对于编辑，如果URL无效，我们可以提示但不阻止保存
+      console.warn('URL格式可能不正确:', url.trim())
+    }
+
     const tagsArray = tags
       .map(t => t.trim())
       .filter(t => t.length > 0)
 
     updateBookmark(bookmark.id, {
       title: title.trim(),
-      url: url.trim(),
+      url: isValid ? normalizedUrl : url.trim(), // 如果有效则使用规范化URL，否则保持原样
       description: description.trim() || undefined,
       tags: tagsArray.length ? tagsArray : undefined,
     })
@@ -73,10 +82,10 @@ export function EditBookmarkDialog({ open, onOpenChange, bookmark }: EditBookmar
             <Label htmlFor="url">网址 *</Label>
             <Input
               id="url"
-              type="url"
+              type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com"
+              placeholder="google.com 或 https://example.com"
               required
             />
           </div>

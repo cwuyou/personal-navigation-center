@@ -89,9 +89,10 @@ export function SelectableBookmarkCard({
               <div className="flex-shrink-0 mt-0.5">
                 {bookmark.favicon || getFaviconUrlLocal(bookmark.url) ? (
                   <img
-                    src={bookmark.favicon || getFaviconUrlLocal(bookmark.url)!}
+                    src={bookmark.favicon ? `/api/proxy-image?url=${encodeURIComponent(bookmark.favicon)}` : getFaviconUrlLocal(bookmark.url)!}
                     alt=""
                     className="w-10 h-10 rounded-lg shadow-sm"
+                    loading="lazy"
                     onError={(e) => {
                       const img = e.target as HTMLImageElement
                       try {

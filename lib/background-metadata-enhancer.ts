@@ -5,6 +5,7 @@
 
 import websiteDescriptions from '@/data/website-descriptions-1000plus.json'
 import { getFaviconUrl, extractSiteName } from './metadata-fetcher'
+import { logger } from './logger'
 
 
 export interface BookmarkMetadata {
@@ -58,7 +59,7 @@ export class BackgroundMetadataEnhancer {
         }
       }
     } catch (error) {
-      console.warn('Failed to parse URL:', url, error)
+      logger.warn('Failed to parse URL:', url, error)
     }
 
     return null
@@ -98,21 +99,51 @@ export class BackgroundMetadataEnhancer {
       const domain = urlObj.hostname.replace(/^www\./, '')
 
       // 对于一些知名网站，使用特定的封面图片策略
-      const coverImageStrategies: Record<string, string> = {
-        'youtube.com': `https://img.youtube.com/vi/${this.extractYouTubeVideoId(url)}/maxresdefault.jpg`,
-        'github.com': 'https://github.githubassets.com/images/modules/site/social-cards/github-social.png',
-        'twitter.com': 'https://abs.twimg.com/responsive-web/client-web/icon-ios.b1fc7275.png',
-        'linkedin.com': 'https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca',
-        'medium.com': 'https://miro.medium.com/max/1200/1*jfdwtvU6V6g99q3G7gq7dQ.png',
-        // Popular AI assistants: use large touch icons as decent covers when og:image is unavailable
-        'chatgpt.com': 'https://chatgpt.com/apple-touch-icon.png',
-        'claude.ai': 'https://claude.ai/apple-touch-icon.png'
+      const coverImageStrategies: Record<string, string[]> = {
+        'youtube.com': [
+          `https://img.youtube.com/vi/${this.extractYouTubeVideoId(url)}/maxresdefault.jpg`,
+          `https://img.youtube.com/vi/${this.extractYouTubeVideoId(url)}/hqdefault.jpg`,
+          'https://www.youtube.com/img/desktop/yt_1200.png'
+        ],
+        'github.com': [
+          'https://github.githubassets.com/images/modules/site/social-cards/github-social.png',
+          'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
+        ],
+        'twitter.com': [
+          'https://abs.twimg.com/responsive-web/client-web/icon-ios.b1fc7275.png',
+          'https://abs.twimg.com/icons/apple-touch-icon-192x192.png'
+        ],
+        'linkedin.com': [
+          'https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca',
+          'https://static.licdn.com/aero-v1/sc/h/8s162nmbcnfkg7a0k8nq9wwqo'
+        ],
+        'medium.com': [
+          'https://miro.medium.com/max/1200/1*jfdwtvU6V6g99q3G7gq7dQ.png',
+          'https://cdn-static-1.medium.com/sites/medium.com/apple-touch-icon-152x152-precomposed.png'
+        ],
+        'chatgpt.com': [
+          'https://chatgpt.com/apple-touch-icon.png',
+          'https://cdn.openai.com/API/logo-openai.png'
+        ],
+        'claude.ai': [
+          'https://claude.ai/apple-touch-icon.png',
+          'https://www.anthropic.com/images/icons/apple-touch-icon.png'
+        ],
+        'figma.com': [
+          'https://static.figma.com/app/icon/1/favicon-192.png',
+          'https://static.figma.com/app/icon/1/touch-icon-iphone-retina-120.png'
+        ],
+        'notion.so': [
+          'https://www.notion.so/images/logo-ios.png',
+          'https://www.notion.so/front-static/logo-ios.png'
+        ]
       }
 
-      // 检查是否有特定策略
-      for (const [siteDomain, imageUrl] of Object.entries(coverImageStrategies)) {
+      // 检查是否有特定策略（返回第一个可用的URL）
+      for (const [siteDomain, imageUrls] of Object.entries(coverImageStrategies)) {
         if (domain.includes(siteDomain)) {
-          return imageUrl
+          // 返回第一个URL，如果失败会通过代理服务尝试其他URL
+          return `/api/proxy-image?url=${encodeURIComponent(imageUrls[0])}`
         }
       }
 
@@ -120,7 +151,7 @@ export class BackgroundMetadataEnhancer {
       return `/api/screenshot?url=${encodeURIComponent(url)}`
 
     } catch (error) {
-      console.warn('Failed to generate cover image for:', url, error)
+      logger.warn('Failed to generate cover image for:', url, error)
       return undefined
     }
   }
@@ -139,6 +170,16 @@ export class BackgroundMetadataEnhancer {
   private generateSmartDescription(url: string): string {
     try {
       const urlObj = new URL(url)
+
+      // 处理file://协议
+      if (urlObj.protocol === 'file:') {
+        const fileName = urlObj.pathname.split('/').pop() || ''
+        if (fileName.includes('index.html')) {
+          return '本地网站项目 - 开发和测试环境'
+        }
+        return '本地文件 - 离线资源'
+      }
+
       const domain = urlObj.hostname.replace(/^www\./, '')
       const path = urlObj.pathname.toLowerCase()
 
@@ -146,31 +187,81 @@ export class BackgroundMetadataEnhancer {
       if (path.includes('/docs') || path.includes('/documentation')) {
         return `${extractSiteName(url)} - 技术文档和开发指南`
       }
-      if (path.includes('/blog')) {
+      if (path.includes('/blog') || path.includes('/article') || path.includes('/post')) {
         return `${extractSiteName(url)} - 博客文章和技术见解`
       }
       if (path.includes('/api')) {
         return `${extractSiteName(url)} - API文档和接口说明`
       }
-      if (path.includes('/tutorial') || path.includes('/guide')) {
+      if (path.includes('/tutorial') || path.includes('/guide') || path.includes('/learn')) {
         return `${extractSiteName(url)} - 教程和学习指南`
       }
-      if (path.includes('/tool')) {
+      if (path.includes('/tool') || path.includes('/generator') || path.includes('/converter')) {
         return `${extractSiteName(url)} - 在线工具和实用服务`
       }
-      if (path.includes('/download')) {
+      if (path.includes('/download') || path.includes('/release')) {
         return `${extractSiteName(url)} - 软件下载和资源获取`
+      }
+      if (path.includes('/dashboard') || path.includes('/console') || path.includes('/admin')) {
+        return `${extractSiteName(url)} - 管理控制台`
+      }
+      if (path.includes('/game') || path.includes('/play')) {
+        return `${extractSiteName(url)} - 在线游戏平台`
+      }
+      if (path.includes('/search') || path.includes('/explore')) {
+        return `${extractSiteName(url)} - 搜索和发现平台`
+      }
+      if (path.includes('/login') || path.includes('/register') || path.includes('/auth')) {
+        return `${extractSiteName(url)} - 用户登录注册`
       }
 
       // 基于域名特征生成描述
-      if (domain.includes('github.io') || domain.includes('gitlab.io')) {
+      if (domain.includes('github.io') || domain.includes('gitlab.io') || domain.includes('pages.dev')) {
         return '项目主页和技术文档'
       }
-      if (domain.includes('npm') || domain.includes('pypi') || domain.includes('maven')) {
+      if (domain.includes('npm') || domain.includes('pypi') || domain.includes('maven') || domain.includes('packagist')) {
         return '软件包和依赖库'
       }
       if (domain.includes('stackoverflow') || domain.includes('stackexchange')) {
         return '编程问答和技术讨论'
+      }
+      if (domain.includes('youtube') || domain.includes('youtu.be')) {
+        return '视频内容和教程'
+      }
+      if (domain.includes('medium') || domain.includes('substack') || domain.includes('hashnode')) {
+        return '技术博客和文章分享'
+      }
+      if (domain.includes('discord') || domain.includes('slack') || domain.includes('telegram')) {
+        return '社区交流和即时通讯'
+      }
+      if (domain.includes('figma') || domain.includes('sketch') || domain.includes('canva')) {
+        return '设计工具和创作平台'
+      }
+      if (domain.includes('notion') || domain.includes('obsidian') || domain.includes('roam')) {
+        return '笔记管理和知识组织'
+      }
+      if (domain.includes('vercel') || domain.includes('netlify') || domain.includes('heroku')) {
+        return '云服务和应用部署'
+      }
+      if (domain.includes('ai') || domain.includes('openai') || domain.includes('anthropic')) {
+        return 'AI工具和人工智能服务'
+      }
+
+      // 特定知名网站识别
+      if (domain.includes('google.com')) {
+        return 'Google - 全球领先的搜索引擎和互联网服务'
+      }
+      if (domain.includes('vercel.com') || domain.includes('v0.dev')) {
+        return '前端开发和部署平台'
+      }
+      if (domain.includes('cloudflare.com')) {
+        return '云服务和网络安全平台'
+      }
+      if (domain.includes('grok.com')) {
+        return 'AI对话和智能助手服务'
+      }
+      if (domain.includes('spaceship.com')) {
+        return '域名注册和网站建设服务'
       }
 
       // 默认描述
@@ -215,7 +306,7 @@ export class BackgroundMetadataEnhancer {
       if (error instanceof Error && error.name === 'AbortError') {
         throw error
       }
-      console.warn(`Failed to fetch metadata for ${url}:`, error)
+      logger.warn(`Failed to fetch metadata for ${url}:`, error)
     }
 
     return null
@@ -236,15 +327,30 @@ export class BackgroundMetadataEnhancer {
    */
   private async enhanceBookmark(
     bookmark: { id: string, url: string, title: string, description?: string },
-    options: { isBatchImport?: boolean; seed?: Partial<BookmarkMetadata> } = {}
+    options: { isBatchImport?: boolean; seed?: Partial<BookmarkMetadata>; preserveOriginal?: boolean } = {}
   ): Promise<BookmarkMetadata | null> {
-    console.log(`🔄 开始增强书签: ${bookmark.title} (${bookmark.url})`)
-    console.log(`   当前描述长度: ${bookmark.description?.length || 0}`)
-    console.log(`   模式: ${options.isBatchImport ? '批量导入' : '单个添加'}`)
+    logger.debug(`🔄 开始增强书签: ${bookmark.title} (${bookmark.url})`)
+    logger.debug(`   当前描述长度: ${bookmark.description?.length || 0}`)
+    logger.debug(`   模式: ${options.isBatchImport ? '批量导入' : '单个添加'}`)
+    logger.debug(`   保留原始内容: ${options.preserveOriginal ? '是' : '否'}`)
 
-    // 如果已有描述且足够详细，跳过
-    if (bookmark.description && bookmark.description.length >= 20) {
-      console.log(`⏭️ 跳过书签 ${bookmark.title}：描述已足够详细`)
+    // 🔧 如果是导入书签且已有标题和描述，优先保留原始内容
+    if (options.preserveOriginal && bookmark.title && bookmark.description && bookmark.description.length > 0) {
+      logger.debug(`✅ 保留导入书签的原始标题和描述: ${bookmark.title}`)
+      return {
+        id: bookmark.id,
+        title: bookmark.title,
+        description: bookmark.description,
+        favicon: getFaviconUrl(bookmark.url),
+        coverImage: `/api/screenshot?url=${encodeURIComponent(bookmark.url)}`,
+        enhanced: true,
+        lastUpdated: new Date()
+      }
+    }
+
+    // 🔧 修复：只有在批量导入时才检查描述长度，单个添加时强制增强以获取真实标题和描述
+    if (options.isBatchImport && bookmark.description && bookmark.description.length >= 20) {
+      logger.debug(`⏭️ 跳过书签 ${bookmark.title}：描述已足够详细（批量导入模式）`)
       return null
     }
 
@@ -257,14 +363,28 @@ export class BackgroundMetadataEnhancer {
       const isFallbackCover = !presetData.coverImage || presetData.coverImage.startsWith('/api/screenshot')
       // 如果是批量导入的慢速阶段（isBatchImport=false），且预置封面只是占位图，则继续尝试抓取 og:image
       if (!options.isBatchImport && isFallbackCover) {
-        console.log(`✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: ${bookmark.title}`)
+        logger.debug(`✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: ${bookmark.title}`)
         // 不立即返回，向下走 fetch-meta 逻辑；把预置当作种子
       } else {
-        console.log(`✅ 使用预置描述增强书签: ${bookmark.title}`)
-        return {
-          ...presetData,
-          ...seed,
-          id: bookmark.id
+        logger.debug(`✅ 使用预置描述增强书签: ${bookmark.title}`)
+
+        // 🔧 如果是导入书签且要求保留原始内容，只补充缺失的字段
+        if (options.preserveOriginal) {
+          return {
+            id: bookmark.id,
+            title: bookmark.title || presetData.title, // 优先使用原始标题
+            description: bookmark.description || presetData.description, // 优先使用原始描述
+            favicon: presetData.favicon || getFaviconUrl(bookmark.url),
+            coverImage: presetData.coverImage || `/api/screenshot?url=${encodeURIComponent(bookmark.url)}`,
+            enhanced: true,
+            lastUpdated: new Date()
+          }
+        } else {
+          return {
+            ...presetData,
+            ...seed,
+            id: bookmark.id
+          }
         }
       }
     }
@@ -290,15 +410,23 @@ export class BackgroundMetadataEnhancer {
         }
       }
 
-      // 若没有种子数据，再调用本地 fetch-meta API
+      // 若没有种子数据，再调用本地 fetch-meta API（使用去重）
       try {
-        const res = await fetch(`/api/fetch-meta?url=${encodeURIComponent(bookmark.url)}`, {
-          signal: this.abortController?.signal,
-          cache: 'no-store',
-        })
-        if (res.ok) {
-          const data = await res.json()
-          if (data?.title || data?.description || data?.coverImage) {
+        const { fetchMetadataDeduped } = await import('./request-deduplicator')
+        const data = await fetchMetadataDeduped(bookmark.url)
+        if (data?.title || data?.description || data?.coverImage) {
+          // 🔧 如果是导入书签且要求保留原始内容，优先使用原始标题和描述
+          if (options.preserveOriginal) {
+            return {
+              id: bookmark.id,
+              title: bookmark.title || data.title, // 优先使用原始标题
+              description: bookmark.description || data.description || smartDescription, // 优先使用原始描述
+              favicon: getFaviconUrl(bookmark.url),
+              coverImage: data.coverImage || this.generateCoverImage(bookmark.url),
+              enhanced: true,
+              lastUpdated: new Date()
+            }
+          } else {
             return {
               id: bookmark.id,
               title: data.title || bookmark.title,
@@ -312,17 +440,17 @@ export class BackgroundMetadataEnhancer {
         }
       } catch (err) {
         if (err instanceof Error && err.name === 'AbortError') throw err
-        console.log('fetch-meta unavailable or failed; skip external API and fallback to local generation.', err)
+        logger.debug('fetch-meta unavailable or failed; skip external API and fallback to local generation.', err)
       }
       // 不再退回外部API，保持本地生成，避免 400/429 噪音与外部依赖
     } else if (options.isBatchImport) {
       // 批量导入时，跳过API调用以避免429错误，但仍然生成智能描述
-      console.log('ℹ️ 批量导入模式，使用智能生成描述以确保稳定性')
+      logger.debug('ℹ️ 批量导入模式，使用智能生成描述以确保稳定性')
     }
 
     // 4. 返回智能生成的描述
-    console.log(`🧠 使用智能生成描述增强书签: ${bookmark.title}`)
-    console.log(`   生成的描述: ${smartDescription}`)
+    logger.debug(`🧠 使用智能生成描述增强书签: ${bookmark.title}`)
+    logger.debug(`   生成的描述: ${smartDescription}`)
 
     // 尝试生成通用封面图片
     const coverImage = this.generateCoverImage(bookmark.url)
@@ -373,9 +501,10 @@ export class BackgroundMetadataEnhancer {
       onProgress: (completed: number) => void
       onUpdate?: (bookmarkId: string, metadata: BookmarkMetadata) => void
       batchSize: number
+      preserveOriginal?: boolean // 🔧 新增：是否保留原始内容
     }
   ) {
-    const { onProgress, onUpdate, batchSize } = options
+    const { onProgress, onUpdate, batchSize, preserveOriginal } = options
     let completed = 0
 
     // 预置书签可以同步处理，无需延迟
@@ -389,11 +518,22 @@ export class BackgroundMetadataEnhancer {
         try {
           const metadata = this.getPresetDescription(bookmark.url)
           if (metadata && onUpdate) {
-            onUpdate(bookmark.id, { ...metadata, id: bookmark.id })
+            // 🔧 如果要求保留原始内容，优先使用原始标题和描述
+            if (preserveOriginal) {
+              const preservedMetadata = {
+                ...metadata,
+                id: bookmark.id,
+                title: bookmark.title || metadata.title, // 优先使用原始标题
+                description: bookmark.description || metadata.description // 优先使用原始描述
+              }
+              onUpdate(bookmark.id, preservedMetadata)
+            } else {
+              onUpdate(bookmark.id, { ...metadata, id: bookmark.id })
+            }
           }
           completed++
         } catch (error) {
-          console.warn(`Failed to process preset bookmark ${bookmark.id}:`, error)
+          logger.warn(`Failed to process preset bookmark ${bookmark.id}:`, error)
           completed++
         }
       }
@@ -412,9 +552,10 @@ export class BackgroundMetadataEnhancer {
       onUpdate?: (bookmarkId: string, metadata: BookmarkMetadata) => void
       batchSize: number
       delay: number
+      preserveOriginal?: boolean // 🔧 新增：是否保留原始内容
     }
   ) {
-    const { onProgress, onUpdate, batchSize, delay } = options
+    const { onProgress, onUpdate, batchSize, delay, preserveOriginal } = options
 
     for (let i = 0; i < bookmarks.length; i += batchSize) {
       if (this.abortController?.signal.aborted) break
@@ -424,7 +565,10 @@ export class BackgroundMetadataEnhancer {
       // 并发处理当前批次 - 允许API调用获取详细信息
       const promises = batch.map(async (bookmark) => {
         try {
-          const metadata = await this.enhanceBookmark(bookmark, { isBatchImport: false })
+          const metadata = await this.enhanceBookmark(bookmark, {
+            isBatchImport: false,
+            preserveOriginal // 🔧 传递保留原始内容的参数
+          })
           if (metadata && onUpdate) {
             onUpdate(bookmark.id, metadata)
           }
@@ -432,7 +576,7 @@ export class BackgroundMetadataEnhancer {
           if (error instanceof Error && error.name === 'AbortError') {
             throw error
           }
-          console.warn(`Failed to enhance bookmark ${bookmark.id}:`, error)
+          logger.warn(`Failed to enhance bookmark ${bookmark.id}:`, error)
         }
       })
 
@@ -475,7 +619,7 @@ export class BackgroundMetadataEnhancer {
           if (error instanceof Error && error.name === 'AbortError') {
             throw error
           }
-          console.warn(`Failed to enhance bookmark ${bookmark.id}:`, error)
+          logger.warn(`Failed to enhance bookmark ${bookmark.id}:`, error)
         }
       })
 
@@ -496,6 +640,7 @@ export class BackgroundMetadataEnhancer {
     options: {
       onProgress?: (progress: EnhancementProgress) => void
       onUpdate?: (bookmarkId: string, metadata: BookmarkMetadata) => void
+      preserveOriginal?: boolean // 🔧 新增：是否保留导入书签的原始标题和描述
     } = {}
   ): Promise<void> {
     if (this.isRunning) {
@@ -522,8 +667,8 @@ export class BackgroundMetadataEnhancer {
 
     try {
 
-      console.log(`🚀 开始批量增强 ${total} 个书签`)
-      console.log(`📊 配置信息:`, {
+      logger.debug(`🚀 开始批量增强 ${total} 个书签`)
+      logger.debug(`📊 配置信息:`, {
         预置书签: presetBookmarks.length,
         未知书签: unknownBookmarks.length,
         批次大小: config.batchSize,
@@ -540,11 +685,11 @@ export class BackgroundMetadataEnhancer {
 
       // 快速模式：优先处理预置数据库中的书签
       if (config.fastMode) {
-        console.log(`📊 分类结果: ${presetBookmarks.length} 个预置书签, ${unknownBookmarks.length} 个未知书签`)
+        logger.debug(`📊 分类结果: ${presetBookmarks.length} 个预置书签, ${unknownBookmarks.length} 个未知书签`)
 
         // 第一阶段：快速处理预置书签（无延迟，大批次）
         if (presetBookmarks.length > 0) {
-          console.log(`⚡ 快速处理 ${presetBookmarks.length} 个预置书签...`)
+          logger.debug(`⚡ 快速处理 ${presetBookmarks.length} 个预置书签...`)
           await this.processFastBatch(presetBookmarks, {
             onProgress: (batchCompleted) => {
               completed += batchCompleted
@@ -556,7 +701,8 @@ export class BackgroundMetadataEnhancer {
               })
             },
             onUpdate,
-            batchSize: config.presetBatchSize
+            batchSize: config.presetBatchSize,
+            preserveOriginal: options.preserveOriginal // 🔧 传递保留原始内容的参数
           })
         }
 
@@ -580,7 +726,7 @@ export class BackgroundMetadataEnhancer {
             .filter((b, idx, arr) => arr.findIndex(x => x.id === b.id) === idx)
 
           if (slowList.length > 0) {
-            console.log(`🌐 处理 ${slowList.length} 个需要抓取的书签（未知 + 预置缺封面）...`)
+            logger.debug(`🌐 处理 ${slowList.length} 个需要抓取的书签（未知 + 预置缺封面）...`)
             await this.processSlowBatch(slowList, {
               onProgress: (batchCompleted) => {
                 completed += batchCompleted
@@ -593,7 +739,8 @@ export class BackgroundMetadataEnhancer {
               },
               onUpdate,
               batchSize: config.unknownBatchSize,
-              delay: config.delay
+              delay: config.delay,
+              preserveOriginal: options.preserveOriginal // 🔧 传递保留原始内容的参数
             })
           }
         }
@@ -630,7 +777,7 @@ export class BackgroundMetadataEnhancer {
           status: 'idle'
         })
       } else {
-        console.error('Enhancement failed:', error)
+        logger.error('Enhancement failed:', error)
         onProgress?.({
           total: bookmarks.length,
           completed,
@@ -669,6 +816,28 @@ export class BackgroundMetadataEnhancer {
     return {
       totalSites: sites.length,
       categories
+    }
+  }
+
+  /**
+   * 刷新单个书签的封面图
+   */
+  async refreshBookmarkCoverImage(bookmark: { id: string, url: string, title: string, description?: string }): Promise<string | null> {
+    try {
+      logger.debug(`🖼️ 开始刷新书签封面图: ${bookmark.title}`)
+
+      // 强制重新生成封面图，不使用缓存
+      const newCoverImage = this.generateCoverImage(bookmark.url)
+
+      if (newCoverImage) {
+        logger.debug(`✅ 成功生成新的封面图: ${newCoverImage}`)
+        return newCoverImage
+      }
+
+      return null
+    } catch (error) {
+      logger.warn(`❌ 刷新封面图失败: ${bookmark.title}`, error)
+      return null
     }
   }
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Header } from "@/components/header"
 import { Sidebar } from "@/components/sidebar"
 import { EnhancedMainContent } from "@/components/enhanced-main-content"
@@ -15,7 +15,8 @@ import { AddBookmarkWithCategoryDialog } from "@/components/add-bookmark-with-ca
 
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useSmartRecommendations } from "@/hooks/use-smart-recommendations"
-import { useResponsiveLayout } from "@/hooks/use-display-settings"
+import { useResponsiveLayout, useDisplaySettings } from "@/hooks/use-display-settings"
+import { logger } from "@/lib/logger"
 
 export default function HomePage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -24,8 +25,9 @@ export default function HomePage() {
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null)
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false)
 
-  const { categories, bookmarks, initializeStore, hasHydrated, setHasHydrated } = useBookmarkStore()
+  const { categories, bookmarks, initializeStore, hasHydrated, setHasHydrated, refreshCoverImages } = useBookmarkStore()
   const { trackActivity } = useSmartRecommendations()
+  const displaySettings = useDisplaySettings()
 
   // 使用响应式布局 Hook
   const { breakpoint, windowSize } = useResponsiveLayout()
@@ -35,6 +37,48 @@ export default function HomePage() {
     // 标记用户已访问过dashboard
     localStorage.setItem('hasVisitedDashboard', 'true')
   }, [initializeStore])
+
+  // 🔧 使用ref跟踪上一次的封面图开关状态
+  const prevShowCover = useRef<boolean>(false)
+
+  // 🔧 独立的useEffect监听封面图开关变化
+  useEffect(() => {
+    // 避免初始化时触发
+    if (!hasHydrated) return
+
+    const currentShowCover = displaySettings.settings.showCover
+    const wasOff = !prevShowCover.current
+    const nowOn = currentShowCover
+
+    // 更新ref
+    prevShowCover.current = currentShowCover
+
+    // 只在从关闭变为打开时触发
+    if (wasOff && nowOn) {
+      logger.debug('🖼️ 检测到封面图开关从关闭变为打开，将在后台刷新缺失的封面图...')
+
+      // 🔧 完全异步处理，不阻塞UI
+      const processInBackground = async () => {
+        try {
+          const bookmarksNeedingCovers = bookmarks.filter(bookmark =>
+            !bookmark.coverImage || bookmark.coverImage.includes('/api/screenshot')
+          )
+
+          if (bookmarksNeedingCovers.length > 0) {
+            logger.debug(`🖼️ 找到 ${bookmarksNeedingCovers.length} 个需要刷新封面图的书签，开始后台处理...`)
+            await refreshCoverImages(bookmarksNeedingCovers.map(b => b.id))
+          } else {
+            logger.debug('✅ 所有书签都已有封面图，无需刷新')
+          }
+        } catch (error) {
+          logger.warn('后台刷新封面图时出错:', error)
+        }
+      }
+
+      // 延迟执行，确保UI完全更新
+      setTimeout(processInBackground, 300)
+    }
+  }, [displaySettings.settings.showCover, hasHydrated, bookmarks, refreshCoverImages])
 
   // 在客户端挂载后标记水合完成（避免在hook中再嵌套hook导致错误）
   useEffect(() => {

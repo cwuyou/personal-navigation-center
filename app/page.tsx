@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Home, Star, Settings, Shield, Smartphone, Clock, Search, Upload, Lock, Download, Layout, Sliders } from "lucide-react"
 import Link from "next/link"
-import { StructuredData, WebSiteStructuredData } from "@/components/seo-structured-data"
+import { StructuredData, WebSiteStructuredData, FAQStructuredData, HowToStructuredData } from "@/components/seo-structured-data"
+import { SEOOptimization } from "@/components/seo-optimization"
+import { PerformanceMonitor } from "@/components/web-vitals-monitor"
 
 export default function LandingPage() {
   const [isReturningUser, setIsReturningUser] = useState(false)
@@ -28,11 +30,60 @@ export default function LandingPage() {
     }
   }
 
+  // 🔧 FAQ数据
+  const faqData = [
+    {
+      question: "什么是My Homepage？",
+      answer: "My Homepage是一个个人主页和书签管理工具，帮助您创建自定义的浏览器起始页，智能管理书签，并提供快速导航功能。"
+    },
+    {
+      question: "如何导入现有的书签？",
+      answer: "您可以从Chrome、Firefox、Safari等浏览器导出书签文件，然后在My Homepage中一键导入，系统会自动整理和分类您的书签。"
+    },
+    {
+      question: "数据是否安全？",
+      answer: "您的数据主要存储在本地浏览器中，我们不会上传您的个人书签到服务器，确保数据隐私和安全。"
+    }
+  ]
+
+  // 🔧 使用指南数据
+  const howToSteps = [
+    {
+      name: "导入书签",
+      text: "从浏览器导出书签文件，然后在My Homepage中点击导入按钮上传文件。"
+    },
+    {
+      name: "整理分类",
+      text: "创建分类和子分类，将书签按照用途和主题进行整理。"
+    },
+    {
+      name: "自定义主页",
+      text: "调整显示设置、主题颜色和布局，打造个性化的起始页面。"
+    }
+  ]
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      {/* SEO 结构化数据 */}
+      {/* 🔧 SEO优化组件 */}
+      <SEOOptimization
+        title="My Homepage - 个人主页和书签管理工具"
+        description="创建完美的个人主页和浏览器起始页。智能管理书签，快速访问常用网站，打造专属的导航中心。"
+        keywords={['个人主页', '起始页', '书签管理', '导航中心', '自定义主页', 'startpage', 'homepage']}
+        canonicalUrl="https://myhomepage.one"
+      />
+
+      {/* 🔧 性能监控 */}
+      <PerformanceMonitor />
+
+      {/* 🔧 结构化数据 */}
       <WebSiteStructuredData />
       <StructuredData type="homepage" />
+      <FAQStructuredData faqs={faqData} />
+      <HowToStructuredData
+        name="如何使用My Homepage创建个人主页"
+        description="学习如何使用My Homepage创建和管理您的个人主页和书签"
+        steps={howToSteps}
+      />
 
       {/* 导航栏 */}
       <nav className="border-b border-border/50 bg-background/80 backdrop-blur-sm sticky top-0 z-50">

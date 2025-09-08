@@ -164,8 +164,32 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  // 其他请求直接通过网络
-  event.respondWith(fetch(request))
+  // 其他请求直接通过网络，添加错误处理
+  event.respondWith(
+    fetch(request).catch(error => {
+      // 只对非图标请求记录错误，减少噪音
+      if (!request.url.includes('favicon.ico') &&
+          !request.url.includes('/s2/favicons') &&
+          !request.url.includes('icons.duckduckgo.com') &&
+          !request.url.includes('.ico') &&
+          !request.url.includes('.png') &&
+          !request.url.includes('.jpg') &&
+          !request.url.includes('.svg')) {
+        console.warn('Service Worker: Network request failed:', request.url)
+      }
+
+      // 如果是图标请求失败，返回一个默认的响应
+      if (request.url.includes('favicon.ico') || request.url.includes('/s2/favicons')) {
+        return new Response('', {
+          status: 404,
+          statusText: 'Favicon not found'
+        })
+      }
+
+      // 对于其他请求，重新抛出错误
+      throw error
+    })
+  )
 })
 
 // 后台同步事件
@@ -279,5 +303,17 @@ self.addEventListener('error', (event) => {
 })
 
 self.addEventListener('unhandledrejection', (event) => {
-  console.error('Service Worker: Unhandled promise rejection', event.reason)
+  // 只记录非网络相关的错误，减少噪音
+  const reason = event.reason?.toString() || ''
+  if (!reason.includes('Failed to fetch') &&
+      !reason.includes('NetworkError') &&
+      !reason.includes('favicon') &&
+      !reason.includes('.ico') &&
+      !reason.includes('.png') &&
+      !reason.includes('.jpg') &&
+      !reason.includes('.svg')) {
+    console.warn('Service Worker: Unhandled promise rejection', event.reason)
+  }
+  // 阻止错误显示在控制台
+  event.preventDefault()
 })
