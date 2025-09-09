@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 
 interface ImagePreloaderOptions {
   enabled?: boolean
@@ -148,23 +148,37 @@ export function useImagePreloader(options: ImagePreloaderOptions = {}) {
 
 // 书签图片预加载Hook
 export function useBookmarkImagePreloader() {
-  const { preloadImages } = useImagePreloader({ 
-    enabled: true, 
-    maxConcurrent: 2, 
-    priority: 'low' 
+  const { preloadImages } = useImagePreloader({
+    enabled: true,
+    maxConcurrent: 2,
+    priority: 'low'
   })
 
-  const preloadBookmarkImages = (bookmarks: Array<{ favicon?: string; coverImage?: string; url: string }>) => {
+  // 添加防抖机制，避免频繁调用
+  const [lastPreloadTime, setLastPreloadTime] = useState(0)
+  const PRELOAD_DEBOUNCE_MS = 1000 // 1秒防抖
+
+  const preloadBookmarkImages = useCallback((bookmarks: Array<{ favicon?: string; coverImage?: string; url: string }>) => {
+    const now = Date.now()
+
+    // 更严格的防抖：如果距离上次预加载不足3秒，跳过
+    if (now - lastPreloadTime < 3000) {
+      return
+    }
+
+    setLastPreloadTime(now)
+
     const urls: string[] = []
 
-    bookmarks.forEach(bookmark => {
-      // 预加载favicon
-      if (bookmark.favicon) {
+    // 更严格的限制：只预加载前5个书签的图片
+    bookmarks.slice(0, 5).forEach(bookmark => {
+      // 预加载favicon - 进一步限制数量
+      if (bookmark.favicon && urls.length < 5) {
         urls.push(`/api/proxy-image?url=${encodeURIComponent(bookmark.favicon)}`)
       }
 
-      // 预加载封面图
-      if (bookmark.coverImage && !bookmark.coverImage.includes('/api/screenshot')) {
+      // 预加载封面图 - 进一步限制数量，避免过度预加载
+      if (bookmark.coverImage && !bookmark.coverImage.includes('/api/screenshot') && urls.length < 5) {
         urls.push(bookmark.coverImage)
       }
     })
@@ -172,7 +186,7 @@ export function useBookmarkImagePreloader() {
     if (urls.length > 0) {
       preloadImages(urls)
     }
-  }
+  }, [preloadImages, lastPreloadTime])
 
   return { preloadBookmarkImages }
 }

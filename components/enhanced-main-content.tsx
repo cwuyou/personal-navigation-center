@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useMemo } from "react"
+import { useState, useCallback, useMemo, useEffect } from "react"
 import { CheckSquare, X } from "lucide-react"
 import { BookmarkCard } from "@/components/bookmark-card"
 import { SelectableBookmarkCard } from "@/components/selectable-bookmark-card"
@@ -150,15 +150,15 @@ export function EnhancedMainContent({
     return []
   }, [selectedSubCategory, selectedCategory, currentCategory, bookmarks])
 
-  // 🚀 预加载当前书签的图片
-  useMemo(() => {
-    if (currentBookmarks.length > 0) {
-      // 延迟预加载，避免阻塞UI
-      setTimeout(() => {
-        preloadBookmarkImages(currentBookmarks)
-      }, 100)
-    }
-  }, [currentBookmarks, preloadBookmarkImages])
+  // 🚀 预加载功能已禁用，避免循环问题
+  // useEffect(() => {
+  //   if (currentBookmarks.length > 0) {
+  //     const timer = setTimeout(() => {
+  //       preloadBookmarkImages(currentBookmarks)
+  //     }, 500)
+  //     return () => clearTimeout(timer)
+  //   }
+  // }, [currentBookmarks.length])
 
   // 如果有搜索查询，显示搜索结果
   if (searchQuery.trim()) {

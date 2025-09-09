@@ -289,9 +289,32 @@ export async function GET(request: NextRequest) {
         }
       }
 
+      // 验证封面图URL是否可访问，如果不可访问则清空
+      if (coverImage) {
+        try {
+          // 简单的HEAD请求检查图片是否存在
+          const imageCheckResponse = await fetch(coverImage, {
+            method: 'HEAD',
+            headers: {
+              'User-Agent': ua,
+              'Accept': 'image/*,*/*;q=0.8',
+            },
+            signal: AbortSignal.timeout(3000),
+            cache: 'no-store',
+          })
+
+          // 如果图片不可访问，清空coverImage让前端使用截图
+          if (!imageCheckResponse.ok) {
+            coverImage = ''
+          }
+        } catch {
+          // 如果检查失败，也清空coverImage
+          coverImage = ''
+        }
+      }
+
       // Special handling for common article structures
       const articleHost = target.hostname.replace(/^www\./, '')
-      const path = target.pathname.toLowerCase()
 
       if (!description) {
         const article = extractArticleText(html, articleHost)

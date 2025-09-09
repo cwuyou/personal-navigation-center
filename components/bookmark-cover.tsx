@@ -16,10 +16,32 @@ interface BookmarkCoverProps {
 }
 
 export function BookmarkCover({ bookmark, className, aspectRatio = "video" }: BookmarkCoverProps) {
-  // 缓存封面图URL
-  const coverImageSrc = useMemo(() => {
-    return bookmark.coverImage
-  }, [bookmark.coverImage])
+  // 处理封面图URL，确保通过代理访问 - 添加稳定性检查
+  const { coverImageSrc, fallbackSrc } = useMemo(() => {
+    if (!bookmark.coverImage) {
+      return { coverImageSrc: null, fallbackSrc: null }
+    }
+
+    // 如果已经是代理URL或截图URL，直接使用
+    if (bookmark.coverImage.includes('/api/proxy-image') ||
+        bookmark.coverImage.includes('/api/screenshot')) {
+      return {
+        coverImageSrc: bookmark.coverImage,
+        fallbackSrc: `/api/screenshot?url=${encodeURIComponent(bookmark.url)}&width=400&height=300`
+      }
+    }
+
+    // 对于外部图片URL，通过代理访问
+    const proxiedUrl = `/api/proxy-image?url=${encodeURIComponent(bookmark.coverImage)}`
+    const screenshotUrl = `/api/screenshot?url=${encodeURIComponent(bookmark.url)}&width=400&height=300`
+
+    return {
+      coverImageSrc: proxiedUrl,
+      fallbackSrc: screenshotUrl
+    }
+  }, [bookmark.coverImage, bookmark.url]) // 保持依赖简单，避免循环
+
+  // 移除调试日志以避免循环问题
 
   // 根据宽高比设置样式
   const aspectClasses = {
@@ -55,13 +77,16 @@ export function BookmarkCover({ bookmark, className, aspectRatio = "video" }: Bo
     )}>
       <CachedImage
         src={coverImageSrc}
+        fallbackSrc={fallbackSrc}
         alt={bookmark.title}
         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         placeholder={placeholder}
         loading="lazy"
+        onLoad={() => {
+          // 移除日志，避免控制台噪音
+        }}
         onError={() => {
-          // 封面图加载失败时的处理
-          console.log(`封面图加载失败: ${bookmark.title}`)
+          // 移除日志，避免控制台噪音
         }}
       />
     </div>

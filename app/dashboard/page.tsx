@@ -41,7 +41,7 @@ export default function HomePage() {
   // 🔧 使用ref跟踪上一次的封面图开关状态
   const prevShowCover = useRef<boolean>(false)
 
-  // 🔧 独立的useEffect监听封面图开关变化
+  // 🔧 独立的useEffect监听封面图开关变化 - 移除循环依赖
   useEffect(() => {
     // 避免初始化时触发
     if (!hasHydrated) return
@@ -57,16 +57,18 @@ export default function HomePage() {
     if (wasOff && nowOn) {
       logger.debug('🖼️ 检测到封面图开关从关闭变为打开，将在后台刷新缺失的封面图...')
 
-      // 🔧 完全异步处理，不阻塞UI
+      // 🔧 完全异步处理，不阻塞UI - 使用当前状态快照避免循环
       const processInBackground = async () => {
         try {
-          const bookmarksNeedingCovers = bookmarks.filter(bookmark =>
+          // 获取当前状态快照，避免依赖bookmarks
+          const currentBookmarks = useBookmarkStore.getState().bookmarks
+          const bookmarksNeedingCovers = currentBookmarks.filter(bookmark =>
             !bookmark.coverImage || bookmark.coverImage.includes('/api/screenshot')
           )
 
           if (bookmarksNeedingCovers.length > 0) {
             logger.debug(`🖼️ 找到 ${bookmarksNeedingCovers.length} 个需要刷新封面图的书签，开始后台处理...`)
-            await refreshCoverImages(bookmarksNeedingCovers.map(b => b.id))
+            await useBookmarkStore.getState().refreshCoverImages(bookmarksNeedingCovers.map(b => b.id))
           } else {
             logger.debug('✅ 所有书签都已有封面图，无需刷新')
           }
@@ -78,7 +80,7 @@ export default function HomePage() {
       // 延迟执行，确保UI完全更新
       setTimeout(processInBackground, 300)
     }
-  }, [displaySettings.settings.showCover, hasHydrated, bookmarks, refreshCoverImages])
+  }, [displaySettings.settings.showCover, hasHydrated]) // 移除bookmarks和refreshCoverImages依赖
 
   // 在客户端挂载后标记水合完成（避免在hook中再嵌套hook导致错误）
   useEffect(() => {

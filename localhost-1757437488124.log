@@ -1,0 +1,1917 @@
+Refused to connect to '<URL>' because it violates the following Content Security Policy directive: "connect-src 'self' <URL> <URL>".
+
+Refused to connect to '<URL>' because it violates the following Content Security Policy directive: "connect-src 'self' <URL> <URL>".
+
+Refused to connect to '<URL>' because it violates the following Content Security Policy directive: "connect-src 'self' <URL> <URL>".
+
+Refused to connect to '<URL>' because it violates the following Content Security Policy directive: "connect-src 'self' <URL> <URL>".
+
+Refused to connect to '<URL>' because it violates the following Content Security Policy directive: "connect-src 'self' <URL> <URL>".
+
+Refused to connect to '<URL>' because it violates the following Content Security Policy directive: "connect-src 'self' <URL> <URL>".
+
+Refused to connect to '<URL>' because it violates the following Content Security Policy directive: "connect-src 'self' <URL> <URL>".
+
+Refused to connect to '<URL>' because it violates the following Content Security Policy directive: "connect-src 'self' <URL> <URL>".
+
+Refused to connect to '<URL>' because it violates the following Content Security Policy directive: "connect-src 'self' <URL> <URL>".
+
+sw.js:169 Fetch API cannot load https://www.googletagmanager.com/gtag/js?id=G-0F1G84Z3JP. Refused to connect because it violates the document's Content Security Policy.
+（匿名） @ sw.js:169
+sw.js:178 Service Worker: Network request failed: https://www.googletagmanager.com/gtag/js?id=G-0F1G84Z3JP
+（匿名） @ sw.js:178
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+The FetchEvent for "<URL>" resulted in a network error response: the promise was rejected.
+sw.js:169 Fetch API cannot load https://www.googletagmanager.com/gtag/js?id=G-0F1G84Z3JP. Refused to connect because it violates the document's Content Security Policy.
+（匿名） @ sw.js:169
+sw.js:178 Service Worker: Network request failed: https://www.googletagmanager.com/gtag/js?id=G-0F1G84Z3JP
+（匿名） @ sw.js:178
+sw.js:169 Fetch API cannot load https://icons.duckduckgo.com/ip3/code.visualstudio.com.ico. Refused to connect because it violates the document's Content Security Policy.
+（匿名） @ sw.js:169
+sw.js:169 Fetch API cannot load https://icons.duckduckgo.com/ip3/www.jetbrains.com.ico. Refused to connect because it violates the document's Content Security Policy.
+（匿名） @ sw.js:169
+sw.js:169 Fetch API cannot load https://icons.duckduckgo.com/ip3/developer.mozilla.org.ico. Refused to connect because it violates the document's Content Security Policy.
+（匿名） @ sw.js:169
+sw.js:169 Fetch API cannot load https://icons.duckduckgo.com/ip3/react.dev.ico. Refused to connect because it violates the document's Content Security Policy.
+（匿名） @ sw.js:169
+sw.js:169 Fetch API cannot load https://icons.duckduckgo.com/ip3/www.figma.com.ico. Refused to connect because it violates the document's Content Security Policy.
+（匿名） @ sw.js:169
+sw.js:169 Fetch API cannot load https://icons.duckduckgo.com/ip3/www.canva.com.ico. Refused to connect because it violates the document's Content Security Policy.
+（匿名） @ sw.js:169
+sw.js:169 Fetch API cannot load https://www.googletagmanager.com/gtag/js?id=G-0F1G84Z3JP. Refused to connect because it violates the document's Content Security Policy.
+（匿名） @ sw.js:169
+sw.js:178 Service Worker: Network request failed: https://www.googletagmanager.com/gtag/js?id=G-0F1G84Z3JP
+（匿名） @ sw.js:178
+js:1  Failed to load resource: net::ERR_FAILED
+geist-sans.woff2:1  Failed to load resource: the server responded with a status of 404 (Not Found)
+geist-mono.woff2:1  Failed to load resource: the server responded with a status of 404 (Not Found)
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: DMS - Data Management Service (https://dms.aliyun.com/?spm=5176.19907426.top-nav.41.54681450uyuKi0)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: JumpServer 开源堡垒机 (http://server.pxb7.internal/core/auth/profile/otp/enable/install-app/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Apache Flink Documentation | Apache Flink (https://nightlies.apache.org/flink/flink-docs-master/zh/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Apache Paimon | Apache Paimon (https://paimon.apache.org/docs/master/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 📝 更新书签: 开发环境2.0 plus-中间件信息 - 螃蟹主站运维文档 - 螃蟹知识库
+logger.ts:14    描述长度: 25
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Wiki.pxb7.internal - 网站链接...
+logger.ts:14 📝 更新书签: JumpServer 开源堡垒机
+logger.ts:14    描述长度: 27
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Server.pxb7.internal - 网站链接...
+logger.ts:14 📝 更新书签: Archery-SQL审核查询平台
+logger.ts:14    描述长度: 18
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 172.30.96.8 - 网站链接...
+logger.ts:14 📝 更新书签: DMS - Data Management Service
+logger.ts:14    描述长度: 101
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 欢迎登录阿里云，全球领先的云计算及人工智能科技公司，阿里云为200多个国家和地区的企业、开发者和政府...
+logger.ts:14 📝 更新书签: 阿里云控制台首页
+logger.ts:14    描述长度: 101
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 欢迎登录阿里云，全球领先的云计算及人工智能科技公司，阿里云为200多个国家和地区的企业、开发者和政府...
+logger.ts:14 📝 更新书签: Apache Paimon | Apache Paimon
+logger.ts:14    描述长度: 203
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Apache Paimon # Apache Paimon is a lake format tha...
+api/fetch-meta?url=https%3A%2F%2Fselectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com%3A8010%2Fquery%2Feditor:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+logger.ts:14 fetch-meta unavailable or failed; skip external API and fallback to local generation. Error: HTTP 500
+    at eval (request-deduplicator.ts:114:13)
+    at async BackgroundMetadataEnhancer.enhanceBookmark (background-metadata-enhancer.ts:416:22)
+    at async eval (background-metadata-enhancer.ts:568:28)
+    at async Promise.all (index 3)
+    at async BackgroundMetadataEnhancer.processSlowBatch (background-metadata-enhancer.ts:583:7)
+    at async BackgroundMetadataEnhancer.enhanceBookmarks (background-metadata-enhancer.ts:730:13)
+    at async Object.startBackgroundEnhancement (use-bookmark-store.ts:734:11)
+logger.ts:14 🧠 使用智能生成描述增强书签: SelectDB Studio
+logger.ts:14    生成的描述: selectdb-cn-ce74ba0r401-webui - 网站链接
+logger.ts:14 📝 更新书签: SelectDB Studio
+logger.ts:14    描述长度: 36
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: selectdb-cn-ce74ba0r401-webui - 网站链接...
+api/fetch-meta?url=https%3A%2F%2Fnightlies.apache.org%2Fflink%2Fflink-docs-master%2Fzh%2F:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+logger.ts:14 fetch-meta unavailable or failed; skip external API and fallback to local generation. Error: HTTP 500
+    at eval (request-deduplicator.ts:114:13)
+    at async BackgroundMetadataEnhancer.enhanceBookmark (background-metadata-enhancer.ts:416:22)
+    at async eval (background-metadata-enhancer.ts:568:28)
+    at async Promise.all (index 6)
+    at async BackgroundMetadataEnhancer.processSlowBatch (background-metadata-enhancer.ts:583:7)
+    at async BackgroundMetadataEnhancer.enhanceBookmarks (background-metadata-enhancer.ts:730:13)
+    at async Object.startBackgroundEnhancement (use-bookmark-store.ts:734:11)
+logger.ts:14 🧠 使用智能生成描述增强书签: Apache Flink Documentation | Apache Flink
+logger.ts:14    生成的描述: nightlies - 网站链接
+logger.ts:14 📝 更新书签: Apache Flink Documentation | Apache Flink
+logger.ts:14    描述长度: 16
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: nightlies - 网站链接...
+logger.ts:14 🔄 开始增强书签: 创建、查询与维护异步物化视图 - Apache Doris (https://doris.incubator.apache.org/zh-CN/docs/query-acceleration/materialized-view/async-materialized-view/functions-and-demands/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: ALTER-TABLE-COMMENT | SelectDB (https://docs.selectdb.com/docs/cloud/sql-manual/sql-statements/Data-Definition-Statements/Alter/ALTER-TABLE-COMMENT)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: StarRocks中文社区论坛 - StarRocks中文社区论坛 (https://forum.mirrorship.cn/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: StarRocks | StarRocks (https://docs.starrocks.io/zh/docs/introduction/StarRocks_intro/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Maven Repository: Search/Browse/Explore (https://mvnrepository.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: DeepSeek | 深度求索 (https://www.deepseek.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Kimi - 更强大的 AI 助手 (https://www.kimi.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: V2EX (https://www.v2ex.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 📝 更新书签: DeepSeek | 深度求索
+logger.ts:14    描述长度: 203
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 深度求索（DeepSeek），成立于2023年，专注于研究世界领先的通用人工智能底层模型与技术，挑战...
+logger.ts:14 🧠 使用智能生成描述增强书签: Maven Repository: Search/Browse/Explore
+logger.ts:14    生成的描述: mvnrepository - 网站链接
+logger.ts:14 📝 更新书签: Maven Repository: Search/Browse/Explore
+logger.ts:14    描述长度: 20
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: mvnrepository - 网站链接...
+logger.ts:14 📝 更新书签: ALTER-TABLE-COMMENT | SelectDB
+logger.ts:14    描述长度: 16
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: SelectDB Website...
+logger.ts:14 📝 更新书签: StarRocks中文社区论坛 - StarRocks中文社区论坛
+logger.ts:14    描述长度: 15
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: StarRocks中文社区论坛...
+logger.ts:14 📝 更新书签: StarRocks | StarRocks
+logger.ts:14    描述长度: 16
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: docs - 技术文档和开发指南...
+logger.ts:14 📝 更新书签: Kimi - 更强大的 AI 助手
+logger.ts:14    描述长度: 80
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Kimi K2 是我们最新升级的 AI 助手，擅长推理、编程和调用工具，帮助你高效解决复杂问题。无论...
+logger.ts:14 📝 更新书签: 创建、查询与维护异步物化视图 - Apache Doris
+logger.ts:14    描述长度: 17
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: doris - 技术文档和开发指南...
+logger.ts:14 📝 更新书签: V2EX
+logger.ts:14    描述长度: 31
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 创意工作者的社区。讨论编程、设计、硬件、游戏等令人激动的话题。...
+logger.ts:14 🔄 开始增强书签: 稀土掘金 (https://juejin.cn/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: # Top Websites - AhrefsTop (https://ahrefstop.com/websites#trending)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Google 搜索中心 (https://developers.google.com/search/docs/fundamentals/creating-helpful-content?hl=zh-cn)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Starter Story Premium Solopreneur Report 2.0 - Google 表格 (https://docs.google.com/spreadsheets/d/1eUni44pIURML2VWFFXKzNmm-WKuuam9_ynr5Fo_Q74M/edit?pli=1&gid=83151001#gid=83151001)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 500MRR (https://www.500mrr.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: SEO行业资讯 (https://searchengineland.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Kiro: The AI IDE for prototype to production (https://kiro.dev/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Augment Code - AI coding platform for real software. (https://www.augmentcode.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 📝 更新书签: 稀土掘金
+logger.ts:14    描述长度: 89
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 掘金是面向全球中文开发者的技术内容分享与交流平台。我们通过技术文章、沸点、课程、直播等产品和服务，打...
+logger.ts:14 📝 更新书签: SEO行业资讯
+logger.ts:14    描述长度: 154
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Breaking news, updates, insights, analysis and gui...
+logger.ts:14 📝 更新书签: 500MRR
+logger.ts:14    描述长度: 103
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 500 MRR analyzes hundreds of projects from Hacker ...
+logger.ts:14 📝 更新书签: # Top Websites - AhrefsTop
+logger.ts:14    描述长度: 108
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: The top 1000 most visited websites in the World by...
+logger.ts:14 📝 更新书签: Kiro: The AI IDE for prototype to production
+logger.ts:14    描述长度: 99
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Kiro is an agentic IDE that helps you go from prot...
+logger.ts:14 📝 更新书签: Augment Code - AI coding platform for real software.
+logger.ts:14    描述长度: 92
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: The most powerful AI software development platform...
+logger.ts:14 📝 更新书签: Starter Story Premium Solopreneur Report 2.0 - Google 表格
+logger.ts:14    描述长度: 24
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Google - 全球领先的搜索引擎和互联网服务...
+logger.ts:14 📝 更新书签: Google 搜索中心
+logger.ts:14    描述长度: 187
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Google's ranking systems are designed to present h...
+logger.ts:14 🔄 开始增强书签: TRAE - Collaborate with Intelligence (https://www.trae.ai/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Semrush Blog | SEO, SEM, AI Search, & Content Strategy (https://www.semrush.com/blog/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Insights on SEO, Marketing, & Business (https://firstpagesage.com/seo-blog/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: The Complete SEO Checklist for 2025 (https://backlinko.com/seo-checklist)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Ahrefs Blog (https://ahrefs.com/blog/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Semrush 搜索统计 (https://www.semrush.com/blog/google-search-statistics/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: RankMath知识库 (https://rankmath.com/kb/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: ZAC个人博客 (https://www.seozac.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 📝 更新书签: Insights on SEO, Marketing, & Business
+logger.ts:14    描述长度: 99
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: SEO Blog Learn how Thought Leadership SEO can fit ...
+logger.ts:14 📝 更新书签: Ahrefs Blog
+logger.ts:14    描述长度: 152
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: We help you get better at SEO and marketing: detai...
+logger.ts:14 📝 更新书签: The Complete SEO Checklist for 2025
+logger.ts:14    描述长度: 185
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: A complete step-by-step SEO checklist to help you ...
+logger.ts:14 📝 更新书签: TRAE - Collaborate with Intelligence
+logger.ts:14    描述长度: 113
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: TRAE IDE integrates seamlessly into your workflow,...
+logger.ts:14 📝 更新书签: Semrush Blog | SEO, SEM, AI Search, & Content Strategy
+logger.ts:14    描述长度: 140
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Master SEO, AI search, content marketing, social m...
+logger.ts:14 📝 更新书签: Semrush 搜索统计
+logger.ts:14    描述长度: 108
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Discover the latest Google search statistics to ga...
+logger.ts:14 📝 更新书签: RankMath知识库
+logger.ts:14    描述长度: 125
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Check our extensive Knowledgebase on Rank Math SEO...
+logger.ts:14 📝 更新书签: ZAC个人博客
+logger.ts:14    描述长度: 74
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 19年经验老司机Zac的SEO每天一贴，中文SEO优化行业旗帜性博客。分享网站优化排名技术、搜索引擎...
+logger.ts:14 🔄 开始增强书签: 英文SEO实战派：不一样的Google SEO干货与资讯 (https://www.seoactionblog.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Your guide to AdSense - Google AdSense Help (https://support.google.com/adsense/answer/3180977?hl=en)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 维基百科域名条目 (https://en.wikipedia.org/wiki/Domain_name)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 25 年 6 月航海｜AI 应用 - Web 网站 (https://scys.com/view/docx/BMQhdCyDroXrYtx4we9cl9NHnBf#AO5idgqUNoxo6RxlMFMcwaQ3nBg)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 25年3月生财【AI应用-Web网站开发】资料收集 - 飞书云文档 (https://ccav9ey9jd.feishu.cn/docx/UXrTde7leodd1XxRHXccq9zDnqh)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 0 资源，做出 3 个日 UV 过十万、7-8 个日 UV (https://scys.com/articleDetail/xq_topic/182888851425182)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 不要轻易称自己为独立开发者 (https://scys.com/articleDetail/xq_topic/1525814845844482)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: AI编程赛道第一课：Build a business , n (https://scys.com/articleDetail/xq_topic/2858151258225521)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 📝 更新书签: 25 年 6 月航海｜AI 应用 - Web 网站
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: 0 资源，做出 3 个日 UV 过十万、7-8 个日 UV
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: AI编程赛道第一课：Build a business , n
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: 不要轻易称自己为独立开发者
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: 英文SEO实战派：不一样的Google SEO干货与资讯
+logger.ts:14    描述长度: 57
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: John的良心SEO干货文，9年英文网站营销经验，4年美国求学工作经历，只爱Google，不懂百度（...
+logger.ts:14 📝 更新书签: Your guide to AdSense - Google AdSense Help
+logger.ts:14    描述长度: 203
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: =0){var h=a[c].substring(0,e);f=a[c].substring(e+1...
+logger.ts:14 📝 更新书签: 维基百科域名条目
+logger.ts:14    描述长度: 9
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: en - 网站链接...
+logger.ts:14 📝 更新书签: 25年3月生财【AI应用-Web网站开发】资料收集 - 飞书云文档
+logger.ts:14    描述长度: 17
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: ccav9ey9jd - 网站链接...
+logger.ts:14 🔄 开始增强书签: 只靠想法就能赚钱的时代到来了！ (https://scys.com/articleDetail/xq_topic/4848511545851418)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: AI工具加速独立开发者产品MVP制作：从两天到两小时 (https://scys.com/articleDetail/xq_topic/5121548228815414)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 用AI自学编程的最好时机到来了 (https://scys.com/articleDetail/xq_topic/5122484888125484)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 善用黑科技工具，做十倍速全栈程序员总有人问我：小排老师，你怎 (https://scys.com/articleDetail/xq_topic/188545124485142)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 什么产品好做？三个一 (https://scys.com/articleDetail/xq_topic/811452228445512)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 写给独立开发者：如何快速做出产品 MVP (https://scys.com/articleDetail/xq_topic/814822455488822)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 如何获得产品 idea (https://scys.com/articleDetail/xq_topic/212485241245121)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 完美的创业项目，是怎么被想出来的？ (https://scys.com/articleDetail/xq_topic/415414825512158)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 📝 更新书签: 只靠想法就能赚钱的时代到来了！
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: AI工具加速独立开发者产品MVP制作：从两天到两小时
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: 用AI自学编程的最好时机到来了
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: 什么产品好做？三个一
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: 善用黑科技工具，做十倍速全栈程序员总有人问我：小排老师，你怎
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: 写给独立开发者：如何快速做出产品 MVP
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: 完美的创业项目，是怎么被想出来的？
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: 如何获得产品 idea
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 🔄 开始增强书签: 判断项目行不行的极简方法 (https://scys.com/articleDetail/xq_topic/184214255522812)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 2021 年 Google SEO 最关键有效的技巧· 站内 (https://scys.com/articleDetail/xq_topic/218514241452421)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 如何清晰的知道我们网站在搜索引擎的表现：Google Search Console 使用入门讲解 (https://mp.weixin.qq.com/s/bETdv9x1Ytozi49Nfm-l6g)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Receive SMS Online to a Temporary Phone Number from $0.05 (https://sms-man.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: SakuraCat (https://sakura-cat3.com/login)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Game Catalog - HTML5 Games for Websites and Messengers - GameDistribution (https://gamedistribution.com/games/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Most-played games on Miniplay.com (https://www.miniplay.com/most-played)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Poki (宝玩) - 免费在线小游戏 - 马上玩！ (https://poki.com/zh#utm_source=redirect-en-zh)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 📝 更新书签: 判断项目行不行的极简方法
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: 2021 年 Google SEO 最关键有效的技巧· 站内
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 🧠 使用智能生成描述增强书签: Receive SMS Online to a Temporary Phone Number from $0.05
+logger.ts:14    生成的描述: sms-man - 网站链接
+logger.ts:14 📝 更新书签: Receive SMS Online to a Temporary Phone Number from $0.05
+logger.ts:14    描述长度: 14
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: sms-man - 网站链接...
+logger.ts:14 📝 更新书签: 如何清晰的知道我们网站在搜索引擎的表现：Google Search Console 使用入门讲解
+logger.ts:14    描述长度: 39
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 网站做好之后，我们需要让搜索引擎尽快收录我们的网站，收录之后如何看数据表现呢？...
+logger.ts:14 📝 更新书签: SakuraCat
+logger.ts:14    描述长度: 20
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: sakura-cat3 - 用户登录注册...
+logger.ts:14 📝 更新书签: Poki (宝玩) - 免费在线小游戏 - 马上玩！
+logger.ts:14    描述长度: 47
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 与Poki (宝玩)一起探索免费在线游戏的世界！即刻玩耍，无需下载，享受与所有设备兼容的游戏。...
+api/fetch-meta?url=https%3A%2F%2Fgamedistribution.com%2Fgames%2F:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+logger.ts:14 fetch-meta unavailable or failed; skip external API and fallback to local generation. Error: HTTP 500
+    at eval (request-deduplicator.ts:114:13)
+    at async BackgroundMetadataEnhancer.enhanceBookmark (background-metadata-enhancer.ts:416:22)
+    at async eval (background-metadata-enhancer.ts:568:28)
+    at async Promise.all (index 5)
+    at async BackgroundMetadataEnhancer.processSlowBatch (background-metadata-enhancer.ts:583:7)
+    at async BackgroundMetadataEnhancer.enhanceBookmarks (background-metadata-enhancer.ts:730:13)
+    at async Object.startBackgroundEnhancement (use-bookmark-store.ts:734:11)
+logger.ts:14 🧠 使用智能生成描述增强书签: Game Catalog - HTML5 Games for Websites and Messengers - GameDistribution
+logger.ts:14    生成的描述: gamedistribution - 在线游戏平台
+logger.ts:14 📝 更新书签: Game Catalog - HTML5 Games for Websites and Messengers - GameDistribution
+logger.ts:14    描述长度: 25
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: gamedistribution - 在线游戏平台...
+api/fetch-meta?url=https%3A%2F%2Fwww.miniplay.com%2Fmost-played:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+logger.ts:14 fetch-meta unavailable or failed; skip external API and fallback to local generation. Error: HTTP 500
+    at eval (request-deduplicator.ts:114:13)
+    at async BackgroundMetadataEnhancer.enhanceBookmark (background-metadata-enhancer.ts:416:22)
+    at async eval (background-metadata-enhancer.ts:568:28)
+    at async Promise.all (index 6)
+    at async BackgroundMetadataEnhancer.processSlowBatch (background-metadata-enhancer.ts:583:7)
+    at async BackgroundMetadataEnhancer.enhanceBookmarks (background-metadata-enhancer.ts:730:13)
+    at async Object.startBackgroundEnhancement (use-bookmark-store.ts:734:11)
+logger.ts:14 🧠 使用智能生成描述增强书签: Most-played games on Miniplay.com
+logger.ts:14    生成的描述: miniplay - 网站链接
+logger.ts:14 📝 更新书签: Most-played games on Miniplay.com
+logger.ts:14    描述长度: 15
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: miniplay - 网站链接...
+logger.ts:14 🔄 开始增强书签: 免费在线游戏 - 在 Playhop.com 上免费玩 (https://playhop.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Play Free Online Games | USA TODAY (https://games.usatoday.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: iframe嵌入测试工具 - 免费在线检测网站iframe兼容性 (https://www.iframetest.xyz/zh)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: porkbun.com | An oddly satisfying experience. (https://porkbun.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Buy a domain name - Register cheap domain names from $0.99 - Namecheap (https://www.namecheap.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: v0 by Vercel (https://v0.app/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Same (https://same.new/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Webifier: Create AI Websites in 5 Minutes | Try For Free (https://www.webifier.io/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🧠 使用智能生成描述增强书签: v0 by Vercel
+logger.ts:14    生成的描述: v0 - 网站链接
+logger.ts:14 📝 更新书签: v0 by Vercel
+logger.ts:14    描述长度: 9
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: v0 - 网站链接...
+logger.ts:14 🧠 使用智能生成描述增强书签: Buy a domain name - Register cheap domain names from $0.99 - Namecheap
+logger.ts:14    生成的描述: namecheap - 网站链接
+logger.ts:14 📝 更新书签: Buy a domain name - Register cheap domain names from $0.99 - Namecheap
+logger.ts:14    描述长度: 16
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: namecheap - 网站链接...
+logger.ts:14 🧠 使用智能生成描述增强书签: Same
+logger.ts:14    生成的描述: same - 网站链接
+logger.ts:14 📝 更新书签: Same
+logger.ts:14    描述长度: 11
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: same - 网站链接...
+logger.ts:14 📝 更新书签: iframe嵌入测试工具 - 免费在线检测网站iframe兼容性
+logger.ts:14    描述长度: 93
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 专业的iframe嵌入检测工具，实时分析网站的X-Frame-Options和CSP策略，帮助开发者...
+logger.ts:14 📝 更新书签: Webifier: Create AI Websites in 5 Minutes | Try For Free
+logger.ts:14    描述长度: 134
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Turn ideas into fully designed websites with AI. G...
+logger.ts:14 📝 更新书签: porkbun.com | An oddly satisfying experience.
+logger.ts:14    描述长度: 109
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Porkbun is an amazingly awesome ICANN accredited d...
+logger.ts:14 📝 更新书签: Play Free Online Games | USA TODAY
+logger.ts:14    描述长度: 106
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Spend hours playing free games on USA TODAY. Play ...
+logger.ts:14 📝 更新书签: 免费在线游戏 - 在 Playhop.com 上免费玩
+logger.ts:14    描述长度: 14
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: playhop - 网站链接...
+logger.ts:14 🔄 开始增强书签: Build Apps with AI in Minutes | Base44 (https://base44.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: SEO反向链接 (https://freelancer-tools.shop/zh-CN/backlinks/1)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: BacklinkHelper - №1 自动化外链建设与SEO推广的Chrome扩展 (https://backlinkhelper.com/zh)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: SEO 入门指南全新改版  |  Google 搜索中心博客  |  Google for Developers (https://developers.google.com/search/blog/2024/02/ssg-gets-a-makeover?hl=zh-cn)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 21st.dev - Craft with AI (https://21st.dev/components)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Marquee | Magic UI (https://magicui.design/docs/components/marquee)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Components - Aceternity UI (https://ui.aceternity.com/components)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Ship Any AI SaaS Startups in hours | ShipAny (https://shipany.ai/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 📝 更新书签: 21st.dev - Craft with AI
+logger.ts:14    描述长度: 49
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Craft with AI. Build with your team&#x27;s taste....
+logger.ts:14 📝 更新书签: Marquee | Magic UI
+logger.ts:14    描述长度: 84
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: An infinite scrolling component that can be used t...
+logger.ts:14 📝 更新书签: Build Apps with AI in Minutes | Base44
+logger.ts:14    描述长度: 124
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: From idea to live app in minutes. Base44 gives you...
+logger.ts:14 📝 更新书签: Components - Aceternity UI
+logger.ts:14    描述长度: 51
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Beautiful Tailwind CSS and Framer Motion Component...
+logger.ts:14 📝 更新书签: Ship Any AI SaaS Startups in hours | ShipAny
+logger.ts:14    描述长度: 116
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: ShipAny is a NextJS boilerplate for building AI Sa...
+logger.ts:14 📝 更新书签: SEO 入门指南全新改版  |  Google 搜索中心博客  |  Google for Developers
+logger.ts:14    描述长度: 68
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: .gargardate, .byline-author {font-size: smaller; f...
+logger.ts:14 📝 更新书签: SEO反向链接
+logger.ts:14    描述长度: 22
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 通过优质反向链接提升独立开发者的SEO和流量...
+logger.ts:14 📝 更新书签: BacklinkHelper - №1 自动化外链建设与SEO推广的Chrome扩展
+logger.ts:14    描述长度: 62
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 专业的Chrome扩展，支持自动外链提交、SEO表单自动填充及外链流程自动化。受到全球数千名SEO专...
+logger.ts:14 🔄 开始增强书签: Creem (https://www.creem.io/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Paddle - The complete billing solution for SaaS & digital products (https://www.paddle.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Buy Me a Coffee (https://buymeacoffee.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Neon Serverless Postgres — Ship faster (https://neon.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 独立开发收款：Paddle申请流程_独立开发前线 (https://91wink.com/%e7%8b%ac%e7%ab%8b%e5%bc%80%e5%8f%91%e6%94%b6%e6%ac%be%ef%bc%9apaddle%e7%94%b3%e8%af%b7%e6%b5%81%e7%a8%8b/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 小白如何使用 Google Trends (https://mp.weixin.qq.com/s/i06GMX9nsJJpN0PXBDXXGA)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 出海游戏站玩法及挖掘潜力游戏方法 (https://scys.com/articleDetail/xq_topic/4845251428522458)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: AI web网站运营优化 初级指南 (https://articles.zsxq.com/id_lvjso7hfuuwe.html)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 📝 更新书签: Creem
+logger.ts:14    描述长度: 73
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Smooth payments for SaaS and Indie Hackers that do...
+logger.ts:14 📝 更新书签: Neon Serverless Postgres — Ship faster
+logger.ts:14    描述长度: 117
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: The database you love, on a serverless platform de...
+logger.ts:14 📝 更新书签: 出海游戏站玩法及挖掘潜力游戏方法
+logger.ts:14    描述长度: 127
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 生财有术是赚钱领域的头部社群，拥有7万多名会员，持续多年续费高于60%。我们致力于提供各种前沿最新赚...
+logger.ts:14 📝 更新书签: Paddle - The complete billing solution for SaaS & digital products
+logger.ts:14    描述长度: 154
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: We&#x27;re the merchant of record powering 6,000+ ...
+logger.ts:14 📝 更新书签: 小白如何使用 Google Trends
+logger.ts:14    描述长度: 203
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: = 200 && retryStatus -1; var respJsonFlag = res.js...
+logger.ts:14 📝 更新书签: Buy Me a Coffee
+logger.ts:14    描述长度: 106
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Buy Me a Coffee is the best way for creators and a...
+logger.ts:14 📝 更新书签: AI web网站运营优化 初级指南
+logger.ts:14    描述长度: 106
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 知识星球是创作者连接铁杆粉丝，实现知识变现的工具。任何从事创作或艺术的人，例如艺术家、工匠、教师、学...
+logger.ts:14 📝 更新书签: 独立开发收款：Paddle申请流程_独立开发前线
+logger.ts:14    描述长度: 161
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 作者：haoran 收款向来是独立开发者最头疼的问题，Stripe和Paypal风控严格，非企业很难...
+logger.ts:14 🔄 开始增强书签: 免费调整图片大小 (https://bulkresizephotos.com/zh)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: 免费在线压缩图片 (https://compressimage.com/zh)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Watermark Image - 免费照片水印 (https://watermarkimage.com/zh)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Ubersuggest - 免费的关键词分析与追踪工具 (https://app.neilpatel.com/zh/ubersuggest/overview)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: Semrush：数据驱动的营销工具，助您拓展业务 (https://zh.semrush.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 🔄 开始增强书签: MaxCompute日期函数_云原生大数据计算服务 MaxCompute(MaxCompute)-阿里云帮助中心 (https://help.aliyun.com/zh/maxcompute/user-guide/date-functions/?spm=a2c4g.11186623.0.0.763fcd53RAryfb#section-a2d-rfm-vdb)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: MaxCompute日期函数_云原生大数据计算服务 MaxCompute(MaxCompute)-阿里云帮助中心
+logger.ts:14 🔄 开始增强书签: 流计算Flink_实时计算 Flink版(Flink)-阿里云帮助中心 (https://help.aliyun.com/zh/flink/realtime-flink/?spm=a2c4g.11174283.help-menu-sub-45029.d_1.7fc02215svm5LM)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: 流计算Flink_实时计算 Flink版(Flink)-阿里云帮助中心
+logger.ts:14 🔄 开始增强书签: JSON在线 | JSON解析格式化—SO JSON在线工具 (https://www.sojson.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: JSON在线 | JSON解析格式化—SO JSON在线工具
+logger.ts:14 📝 更新书签: Watermark Image - 免费照片水印
+logger.ts:14    描述长度: 38
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 在线为照片添加水印。无限制免费使用，可批量处理图片，无需登录或安装任何软件。...
+logger.ts:14 📝 更新书签: MaxCompute日期函数_云原生大数据计算服务 MaxCompute(MaxCompute)-阿里云帮助中心
+logger.ts:14    描述长度: 76
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 本文为您介绍MaxCompute支持的日期函数，包括日期函数的命令格式、参数说明和使用示例。您可以根...
+logger.ts:14 📝 更新书签: 免费调整图片大小
+logger.ts:14    描述长度: 44
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 无限免费图片调整器。调整一张或多张图片的大小。无需账户；仅提供方便且免费的在线图片调整。...
+logger.ts:14 📝 更新书签: 流计算Flink_实时计算 Flink版(Flink)-阿里云帮助中心
+logger.ts:14    描述长度: 203
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: { "@context": "https://schema.org", "@type": "Orga...
+logger.ts:14 📝 更新书签: Ubersuggest - 免费的关键词分析与追踪工具
+logger.ts:14    描述长度: 137
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Sign up for Ubersuggest to access powerful SEO and...
+logger.ts:14 📝 更新书签: JSON在线 | JSON解析格式化—SO JSON在线工具
+logger.ts:14    描述长度: 148
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: SO JSON在线提供在线JSON解析，可以把JSON内容或JSON文件进行格式化解析，按JSON层...
+logger.ts:14 📝 更新书签: Semrush：数据驱动的营销工具，助您拓展业务
+logger.ts:14    描述长度: 40
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 利用 AI 营销工具推动每项任务的 SEO、PPC、内容、社交媒体和流量的增长。...
+logger.ts:14 📝 更新书签: 免费在线压缩图片
+logger.ts:14    描述长度: 60
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 使用Compress Image免费在线压缩图片。无需注册或安装。快速优化JPEG/WebP格式，设...
+logger.ts:14 🔄 开始增强书签: 时间戳(Unix timestamp)转换工具 - 在线工具 (https://tool.lu/timestamp/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: 时间戳(Unix timestamp)转换工具 - 在线工具
+logger.ts:14 🔄 开始增强书签: Google Gemini (https://gemini.google.com/app)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Google Gemini
+logger.ts:14 🔄 开始增强书签: Claude (https://claude.ai/new)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 使用预置描述增强书签: Claude
+logger.ts:14 🔄 开始增强书签: ChatGPT (https://chatgpt.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 使用预置描述增强书签: ChatGPT
+logger.ts:14 🔄 开始增强书签: Grok (https://grok.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Grok
+logger.ts:14 🔄 开始增强书签: Reddit - 互联网的核心 (https://www.reddit.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Reddit - 互联网的核心
+logger.ts:14 🔄 开始增强书签: Ask HN Projects (https://news.ycombinator.com/item?id=42373343)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Ask HN Projects
+logger.ts:14 🔄 开始增强书签: Claude Code: Deep coding at terminal velocity \ Anthropic (https://www.anthropic.com/claude-code)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Claude Code: Deep coding at terminal velocity \ Anthropic
+logger.ts:14 📝 更新书签: Claude
+logger.ts:14    描述长度: 36
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Anthropic开发的AI助手，擅长代码分析、写作、数学和复杂推理任务...
+logger.ts:14 📝 更新书签: ChatGPT
+logger.ts:14    描述长度: 31
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: OpenAI开发的AI聊天机器人，基于GPT模型的智能对话助手...
+logger.ts:14 📝 更新书签: 时间戳(Unix timestamp)转换工具 - 在线工具
+logger.ts:14    描述长度: 24
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Unix时间戳转换可以把Unix时间转成北京时间...
+logger.ts:14 🧠 使用智能生成描述增强书签: Grok
+logger.ts:14    生成的描述: AI对话和智能助手服务
+logger.ts:14 📝 更新书签: Grok
+logger.ts:14    描述长度: 11
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: AI对话和智能助手服务...
+logger.ts:14 📝 更新书签: Google Gemini
+logger.ts:14    描述长度: 63
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 认识 Gemini：Google 旗下的 AI 助理。在写作、规划和开展头脑风暴等方面获得帮助。体验...
+logger.ts:14 🧠 使用智能生成描述增强书签: Ask HN Projects
+logger.ts:14    生成的描述: news - 网站链接
+logger.ts:14 📝 更新书签: Ask HN Projects
+logger.ts:14    描述长度: 11
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: news - 网站链接...
+logger.ts:14 📝 更新书签: Claude Code: Deep coding at terminal velocity \ Anthropic
+logger.ts:14    描述长度: 203
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Transform hours of debugging into seconds with a s...
+logger.ts:14 📝 更新书签: Reddit - 互联网的核心
+logger.ts:14    描述长度: 55
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Reddit 拥有超过 100,000 个 subreddit 社区，数百万用户在此聚集，讨论各自关...
+logger.ts:14 🔄 开始增强书签: Google AdSense 官方YouTube频道 (https://www.youtube.com/@AdSense)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 使用预置描述增强书签: Google AdSense 官方YouTube频道
+logger.ts:14 🔄 开始增强书签: New games - CrazyGames (https://www.crazygames.com/new)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: New games - CrazyGames
+logger.ts:14 🔄 开始增强书签: Scratch - Explore (https://scratch.mit.edu/explore/projects/all/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Scratch - Explore
+logger.ts:14 🔄 开始增强书签: FreezeNova - Online Games (https://freezenova.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: FreezeNova - Online Games
+logger.ts:14 🔄 开始增强书签: Domain Name Search: Find Available Domains Instantly (https://instantdomainsearch.com/?q=)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Domain Name Search: Find Available Domains Instantly
+logger.ts:14 🔄 开始增强书签: Query.Domains: 免费批量检查域名可用性 - 基于WHOIS查询 (https://query.domains/zh-hans)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Query.Domains: 免费批量检查域名可用性 - 基于WHOIS查询
+logger.ts:14 🔄 开始增强书签: Lean Domain Search – Search for and register available domain names in seconds. (https://leandomainsearch.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Lean Domain Search – Search for and register available domain names in seconds.
+logger.ts:14 🔄 开始增强书签: Launch into the future - Spaceship (https://www.spaceship.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Launch into the future - Spaceship
+logger.ts:14 📝 更新书签: Google AdSense 官方YouTube频道
+logger.ts:14    描述长度: 28
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 全球最大的视频分享平台，用户可以上传、观看和分享视频内容...
+logger.ts:14 📝 更新书签: Scratch - Explore
+logger.ts:14    描述长度: 133
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Scratch is a free programming language and online ...
+logger.ts:14 📝 更新书签: Domain Name Search: Find Available Domains Instantly
+logger.ts:14    描述长度: 171
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Domain name search with instant results. The faste...
+logger.ts:14 📝 更新书签: FreezeNova - Online Games
+logger.ts:14    描述长度: 32
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Play online games on FreezeNova....
+logger.ts:14 📝 更新书签: Query.Domains: 免费批量检查域名可用性 - 基于WHOIS查询
+logger.ts:14    描述长度: 45
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 免费批量域名可用性检查工具，基于WHOIS查询获得即时结果。支持批量WHOIS查询API。...
+logger.ts:14 🧠 使用智能生成描述增强书签: Launch into the future - Spaceship
+logger.ts:14    生成的描述: 域名注册和网站建设服务
+logger.ts:14 📝 更新书签: Launch into the future - Spaceship
+logger.ts:14    描述长度: 11
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: 域名注册和网站建设服务...
+logger.ts:14 📝 更新书签: New games - CrazyGames
+logger.ts:14    描述长度: 126
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Play free online games at CrazyGames, the best pla...
+logger.ts:14 📝 更新书签: Lean Domain Search – Search for and register available domain names in seconds.
+logger.ts:14    描述长度: 58
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Search for and register available domain names in ...
+logger.ts:14 🔄 开始增强书签: 欢迎使用 Google Search Console (https://search.google.com/search-console/welcome)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: 欢迎使用 Google Search Console
+logger.ts:14 🔄 开始增强书签: Google Analytics (https://analytics.google.com/analytics/web/#/provision)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Google Analytics
+logger.ts:14 🔄 开始增强书签: Lovable (https://lovable.dev/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Lovable
+logger.ts:14 🔄 开始增强书签: SEO Audit for gptshunter.com - SEOptimer (https://www.seoptimer.com/gptshunter.com)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: SEO Audit for gptshunter.com - SEOptimer
+logger.ts:14 🔄 开始增强书签: SEO: The Complete Guide for Beginners (https://ahrefs.com/seo)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: SEO: The Complete Guide for Beginners
+logger.ts:14 🔄 开始增强书签: Replicate - Run AI with an API (https://replicate.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Replicate - Run AI with an API
+logger.ts:14 🔄 开始增强书签: Astria - Finetune Flux (https://www.astria.ai/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Astria - Finetune Flux
+logger.ts:14 🔄 开始增强书签: AI导航站的需求列表 (https://theresanaiforthat.com/requests%EF%BB%BF)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: AI导航站的需求列表
+logger.ts:14 📝 更新书签: Google Analytics
+logger.ts:14    描述长度: 24
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Google - 全球领先的搜索引擎和互联网服务...
+logger.ts:14 📝 更新书签: Lovable
+logger.ts:14    描述长度: 52
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Build software products, using only a chat interfa...
+logger.ts:14 📝 更新书签: SEO: The Complete Guide for Beginners
+logger.ts:14    描述长度: 101
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Everything you need to build a strong foundation o...
+logger.ts:14 🧠 使用智能生成描述增强书签: AI导航站的需求列表
+logger.ts:14    生成的描述: AI工具和人工智能服务
+logger.ts:14 📝 更新书签: AI导航站的需求列表
+logger.ts:14    描述长度: 11
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: AI工具和人工智能服务...
+logger.ts:14 📝 更新书签: Replicate - Run AI with an API
+logger.ts:14    描述长度: 56
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Run open-source machine learning models with a clo...
+logger.ts:14 📝 更新书签: SEO Audit for gptshunter.com - SEOptimer
+logger.ts:14    描述长度: 119
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: View the comprehensive SEO Audit Results covering ...
+logger.ts:14 📝 更新书签: Astria - Finetune Flux
+logger.ts:14    描述长度: 29
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Create custom images using AI...
+api/fetch-meta?url=https%3A%2F%2Fsearch.google.com%2Fsearch-console%2Fwelcome:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+logger.ts:14 fetch-meta unavailable or failed; skip external API and fallback to local generation. Error: HTTP 500
+    at eval (request-deduplicator.ts:114:13)
+    at async BackgroundMetadataEnhancer.enhanceBookmark (background-metadata-enhancer.ts:416:22)
+    at async eval (background-metadata-enhancer.ts:568:28)
+    at async Promise.all (index 0)
+    at async BackgroundMetadataEnhancer.processSlowBatch (background-metadata-enhancer.ts:583:7)
+    at async BackgroundMetadataEnhancer.enhanceBookmarks (background-metadata-enhancer.ts:730:13)
+    at async Object.startBackgroundEnhancement (use-bookmark-store.ts:734:11)
+logger.ts:14 🧠 使用智能生成描述增强书签: 欢迎使用 Google Search Console
+logger.ts:14    生成的描述: search - 搜索和发现平台
+logger.ts:14 📝 更新书签: 欢迎使用 Google Search Console
+logger.ts:14    描述长度: 16
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: search - 搜索和发现平台...
+logger.ts:14 🔄 开始增强书签: 关键词难度 - Ahrefs (https://ahrefs.com/keyword-difficulty)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: 关键词难度 - Ahrefs
+logger.ts:14 🔄 开始增强书签: Search Suggest (https://www.searchsuggest.tips/?keyword=)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Search Suggest
+logger.ts:14 🔄 开始增强书签: toolify榜单 (https://www.toolify.ai/Best-AI-Tools-revenue)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: toolify榜单
+logger.ts:14 🔄 开始增强书签: 探索 - Google 趋势 (https://trends.google.com/trends/explore?geo=US&hl=zh-CN)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: 探索 - Google 趋势
+logger.ts:14 🔄 开始增强书签: AITDK: Free AI SEO Tools, AI Generator for SEO (https://aitdk.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: AITDK: Free AI SEO Tools, AI Generator for SEO
+logger.ts:14 🔄 开始增强书签: Website Traffic Checker: Estimate Any Site’s Traffic (https://ahrefs.com/traffic-checker/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Website Traffic Checker: Estimate Any Site’s Traffic
+logger.ts:14 🔄 开始增强书签: Free SEO Tools - Made by Ahrefs (https://ahrefs.com/free-seo-tools)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Free SEO Tools - Made by Ahrefs
+logger.ts:14 🔄 开始增强书签: Free Backlink Checker by Ahrefs: Check Backlinks to Any Site (https://ahrefs.com/backlink-checker)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Free Backlink Checker by Ahrefs: Check Backlinks to Any Site
+logger.ts:14 🧠 使用智能生成描述增强书签: 探索 - Google 趋势
+logger.ts:14    生成的描述: trends - 搜索和发现平台
+logger.ts:14 📝 更新书签: 探索 - Google 趋势
+logger.ts:14    描述长度: 16
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: trends - 搜索和发现平台...
+logger.ts:14 📝 更新书签: AITDK: Free AI SEO Tools, AI Generator for SEO
+logger.ts:14    描述长度: 160
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Explore free AI SEO tools and generators to enhanc...
+logger.ts:14 📝 更新书签: 关键词难度 - Ahrefs
+logger.ts:14    描述长度: 110
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Find the easiest keywords to rank for with our fre...
+logger.ts:14 📝 更新书签: Website Traffic Checker: Estimate Any Site’s Traffic
+logger.ts:14    描述长度: 131
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Dig into the traffic data for any website and find...
+logger.ts:14 📝 更新书签: Free SEO Tools - Made by Ahrefs
+logger.ts:14    描述长度: 122
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Get more traffic with Ahrefs’ free SEO tools: Webm...
+logger.ts:14 📝 更新书签: Free Backlink Checker by Ahrefs: Check Backlinks to Any Site
+logger.ts:14    描述长度: 163
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: With the world&apos;s biggest index of live backli...
+logger.ts:14 📝 更新书签: toolify榜单
+logger.ts:14    描述长度: 116
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: AI High Revenue Ranking based on AI website rankin...
+fetch-meta:1  Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+logger.ts:14 fetch-meta unavailable or failed; skip external API and fallback to local generation. Error: HTTP 500
+    at eval (request-deduplicator.ts:114:13)
+    at async BackgroundMetadataEnhancer.enhanceBookmark (background-metadata-enhancer.ts:416:22)
+    at async eval (background-metadata-enhancer.ts:568:28)
+    at async Promise.all (index 1)
+    at async BackgroundMetadataEnhancer.processSlowBatch (background-metadata-enhancer.ts:583:7)
+    at async BackgroundMetadataEnhancer.enhanceBookmarks (background-metadata-enhancer.ts:730:13)
+    at async Object.startBackgroundEnhancement (use-bookmark-store.ts:734:11)
+logger.ts:14 🧠 使用智能生成描述增强书签: Search Suggest
+logger.ts:14    生成的描述: searchsuggest - 网站链接
+logger.ts:14 📝 更新书签: Search Suggest
+logger.ts:14    描述长度: 20
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: searchsuggest - 网站链接...
+logger.ts:14 🔄 开始增强书签: Semrush: Data-Driven Marketing Tools to Grow Your Business (https://www.semrush.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Semrush: Data-Driven Marketing Tools to Grow Your Business
+logger.ts:14 🔄 开始增强书签: Similarweb: AI-Powered Digital Data Intelligence Solutions (https://www.similarweb.com/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Similarweb: AI-Powered Digital Data Intelligence Solutions
+logger.ts:14 🔄 开始增强书签: Free Keyword Generator Tool: Find 100+ Keyword Ideas in Seconds (https://ahrefs.com/keyword-generator/)
+logger.ts:14    当前描述长度: 0
+logger.ts:14    模式: 单个添加
+logger.ts:14    保留原始内容: 是
+logger.ts:14 ✅ 预置可用，但封面为占位图，继续尝试抓取 og:image: Free Keyword Generator Tool: Find 100+ Keyword Ideas in Seconds
+logger.ts:14 📝 更新书签: Semrush: Data-Driven Marketing Tools to Grow Your Business
+logger.ts:14    描述长度: 108
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Drive growth in SEO, PPC, content, social media, a...
+logger.ts:14 📝 更新书签: Free Keyword Generator Tool: Find 100+ Keyword Ideas in Seconds
+logger.ts:14    描述长度: 146
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Generate hundreds of free keyword ideas for Google...
+logger.ts:14 📝 更新书签: Similarweb: AI-Powered Digital Data Intelligence Solutions
+logger.ts:14    描述长度: 162
+logger.ts:14    封面图片: 有
+logger.ts:14    新描述: Similarweb is an AI-powered digital data company p...
+logger.ts:14 ✅ 自动增强完成！成功增强了 196 个书签
+logger.ts:14 📊 增强后统计：还有 20 个书签需要增强
+logger.ts:14 🎉 您的 196 个书签现在拥有了详细的描述信息！
+logger.ts:14 🔄 增强完成
+logger.ts:14 🔄 自动增强完成，数据已保存到本地存储
+cover-image-debug.ts:36 🖼️ 封面图调试: Archery-SQL审核查询平台
+cover-image-debug.ts:37 书签URL: http://172.30.96.8:9123/sqlworkflow/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=http%3A%2F%2F172.30.96.8%3A9123%2Fsqlworkflow%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=http%3A%2F%2F172.30.96.8%3A9123%2Fsqlworkflow%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=http%3A%2F%2F172.30.96.8%3A9123%2Fsqlworkflow%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 开发环境2.0 plus-中间件信息 - 螃蟹主站运维文档 - 螃蟹知识库
+cover-image-debug.ts:37 书签URL: http://wiki.pxb7.internal/pages/viewpage.action?pageId=7276166
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=http%3A%2F%2Fwiki.pxb7.internal%2Fpages%2Fviewpage.action%3FpageId%3D7276166
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=http%3A%2F%2Fwiki.pxb7.internal%2Fpages%2Fviewpage.action%3FpageId%3D7276166
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=http%3A%2F%2Fwiki.pxb7.internal%2Fpages%2Fviewpage.action%3FpageId%3D7276166&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 阿里云控制台首页
+cover-image-debug.ts:37 书签URL: https://home.console.aliyun.com/home/dashboard/ProductAndService
+cover-image-debug.ts:38 原始封面图: https://img.alicdn.com/tfs/TB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fimg.alicdn.com%2Ftfs%2FTB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fhome.console.aliyun.com%2Fhome%2Fdashboard%2FProductAndService&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: SelectDB Studio
+cover-image-debug.ts:37 书签URL: https://selectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com:8010/query/editor
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fselectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com%3A8010%2Fquery%2Feditor
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fselectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com%3A8010%2Fquery%2Feditor
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fselectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com%3A8010%2Fquery%2Feditor&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: DMS - Data Management Service
+cover-image-debug.ts:37 书签URL: https://dms.aliyun.com/?spm=5176.19907426.top-nav.41.54681450uyuKi0
+cover-image-debug.ts:38 原始封面图: https://img.alicdn.com/tfs/TB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fimg.alicdn.com%2Ftfs%2FTB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fdms.aliyun.com%2F%3Fspm%3D5176.19907426.top-nav.41.54681450uyuKi0&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: JumpServer 开源堡垒机
+cover-image-debug.ts:37 书签URL: http://server.pxb7.internal/core/auth/profile/otp/enable/install-app/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=http%3A%2F%2Fserver.pxb7.internal%2Fcore%2Fauth%2Fprofile%2Fotp%2Fenable%2Finstall-app%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=http%3A%2F%2Fserver.pxb7.internal%2Fcore%2Fauth%2Fprofile%2Fotp%2Fenable%2Finstall-app%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=http%3A%2F%2Fserver.pxb7.internal%2Fcore%2Fauth%2Fprofile%2Fotp%2Fenable%2Finstall-app%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Apache Flink Documentation | Apache Flink
+cover-image-debug.ts:37 书签URL: https://nightlies.apache.org/flink/flink-docs-master/zh/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fnightlies.apache.org%2Fflink%2Fflink-docs-master%2Fzh%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fnightlies.apache.org%2Fflink%2Fflink-docs-master%2Fzh%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fnightlies.apache.org%2Fflink%2Fflink-docs-master%2Fzh%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Apache Paimon | Apache Paimon
+cover-image-debug.ts:37 书签URL: https://paimon.apache.org/docs/master/
+cover-image-debug.ts:38 原始封面图: https://paimon.apache.org/docs/master/favicon.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fpaimon.apache.org%2Fdocs%2Fmaster%2Ffavicon.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fpaimon.apache.org%2Fdocs%2Fmaster%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 创建、查询与维护异步物化视图 - Apache Doris
+cover-image-debug.ts:37 书签URL: https://doris.incubator.apache.org/zh-CN/docs/query-acceleration/materialized-view/async-materialized-view/functions-and-demands/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fdoris.incubator.apache.org%2Fzh-CN%2Fdocs%2Fquery-acceleration%2Fmaterialized-view%2Fasync-materialized-view%2Ffunctions-and-demands%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fdoris.incubator.apache.org%2Fzh-CN%2Fdocs%2Fquery-acceleration%2Fmaterialized-view%2Fasync-materialized-view%2Ffunctions-and-demands%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fdoris.incubator.apache.org%2Fzh-CN%2Fdocs%2Fquery-acceleration%2Fmaterialized-view%2Fasync-materialized-view%2Ffunctions-and-demands%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: ALTER-TABLE-COMMENT | SelectDB
+cover-image-debug.ts:37 书签URL: https://docs.selectdb.com/docs/cloud/sql-manual/sql-statements/Data-Definition-Statements/Alter/ALTER-TABLE-COMMENT
+cover-image-debug.ts:38 原始封面图: https://docs.selectdb.com/favicon/favicon-32x32.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fdocs.selectdb.com%2Ffavicon%2Ffavicon-32x32.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fdocs.selectdb.com%2Fdocs%2Fcloud%2Fsql-manual%2Fsql-statements%2FData-Definition-Statements%2FAlter%2FALTER-TABLE-COMMENT&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: StarRocks中文社区论坛 - StarRocks中文社区论坛
+cover-image-debug.ts:37 书签URL: https://forum.mirrorship.cn/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fforum.mirrorship.cn%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fforum.mirrorship.cn%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fforum.mirrorship.cn%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: StarRocks | StarRocks
+cover-image-debug.ts:37 书签URL: https://docs.starrocks.io/zh/docs/introduction/StarRocks_intro/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fdocs.starrocks.io%2Fzh%2Fdocs%2Fintroduction%2FStarRocks_intro%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fdocs.starrocks.io%2Fzh%2Fdocs%2Fintroduction%2FStarRocks_intro%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fdocs.starrocks.io%2Fzh%2Fdocs%2Fintroduction%2FStarRocks_intro%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: MaxCompute日期函数_云原生大数据计算服务 MaxCompute(MaxCompute)-阿里云帮助中心
+cover-image-debug.ts:37 书签URL: https://help.aliyun.com/zh/maxcompute/user-guide/date-functions/?spm=a2c4g.11186623.0.0.763fcd53RAryfb#section-a2d-rfm-vdb
+cover-image-debug.ts:38 原始封面图: https://img.alicdn.com/imgextra/i2/O1CN01TFs5Qw27uYvfA6gib_!!6000000007857-55-tps-32-32.svg
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fimg.alicdn.com%2Fimgextra%2Fi2%2FO1CN01TFs5Qw27uYvfA6gib_!!6000000007857-55-tps-32-32.svg
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fhelp.aliyun.com%2Fzh%2Fmaxcompute%2Fuser-guide%2Fdate-functions%2F%3Fspm%3Da2c4g.11186623.0.0.763fcd53RAryfb%23section-a2d-rfm-vdb&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: JSON在线 | JSON解析格式化—SO JSON在线工具
+cover-image-debug.ts:37 书签URL: https://www.sojson.com/
+cover-image-debug.ts:38 原始封面图: https://scdn.sojson.com/sojson/favicon64.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fscdn.sojson.com%2Fsojson%2Ffavicon64.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fwww.sojson.com%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 时间戳(Unix timestamp)转换工具 - 在线工具
+cover-image-debug.ts:37 书签URL: https://tool.lu/timestamp/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Ftool.lu%2Ftimestamp%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Ftool.lu%2Ftimestamp%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Ftool.lu%2Ftimestamp%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Maven Repository: Search/Browse/Explore
+cover-image-debug.ts:37 书签URL: https://mvnrepository.com/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fmvnrepository.com%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fmvnrepository.com%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fmvnrepository.com%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Semrush Blog | SEO, SEM, AI Search, & Content Strategy
+cover-image-debug.ts:37 书签URL: https://www.semrush.com/blog/
+cover-image-debug.ts:38 原始封面图: https://static.semrush.com/semblog-next-static/favicon/apple-touch-icon.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fstatic.semrush.com%2Fsemblog-next-static%2Ffavicon%2Fapple-touch-icon.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fwww.semrush.com%2Fblog%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Insights on SEO, Marketing, & Business
+cover-image-debug.ts:37 书签URL: https://firstpagesage.com/seo-blog/
+cover-image-debug.ts:38 原始封面图: https://firstpagesage.com/wp-content/uploads/2023/05/cropped-favicon-192x192.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Ffirstpagesage.com%2Fwp-content%2Fuploads%2F2023%2F05%2Fcropped-favicon-192x192.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Ffirstpagesage.com%2Fseo-blog%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: The Complete SEO Checklist for 2025
+cover-image-debug.ts:37 书签URL: https://backlinko.com/seo-checklist
+cover-image-debug.ts:38 原始封面图: https://api.backlinko.com/app/uploads/2016/07/seo-checklist.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fapi.backlinko.com%2Fapp%2Fuploads%2F2016%2F07%2Fseo-checklist.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fbacklinko.com%2Fseo-checklist&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Ahrefs Blog
+cover-image-debug.ts:37 书签URL: https://ahrefs.com/blog/
+cover-image-debug.ts:38 原始封面图: https://ahrefs.com/blog/wp-content/uploads/2022/05/ahrefs_blog.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fahrefs.com%2Fblog%2Fwp-content%2Fuploads%2F2022%2F05%2Fahrefs_blog.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fahrefs.com%2Fblog%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Receive SMS Online to a Temporary Phone Number from $0.05
+cover-image-debug.ts:37 书签URL: https://sms-man.com/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fsms-man.com%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fsms-man.com%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fsms-man.com%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: SakuraCat
+cover-image-debug.ts:37 书签URL: https://sakura-cat3.com/login
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fsakura-cat3.com%2Flogin
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fsakura-cat3.com%2Flogin
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fsakura-cat3.com%2Flogin&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Vercel模板中心
+cover-image-debug.ts:37 书签URL: https://vercel.com/templates
+cover-image-debug.ts:38 原始封面图: https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fv1588805858%2Frepositories%2Fvercel%2Flogo.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fvercel.com%2Ftemplates&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Domain Name Search: Find Available Domains Instantly
+cover-image-debug.ts:37 书签URL: https://instantdomainsearch.com/?q=
+cover-image-debug.ts:38 原始封面图: https://instantdomainsearch.com/opengraph.webp
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Finstantdomainsearch.com%2Fopengraph.webp
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Finstantdomainsearch.com%2F%3Fq%3D&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Query.Domains: 免费批量检查域名可用性 - 基于WHOIS查询
+cover-image-debug.ts:37 书签URL: https://query.domains/zh-hans
+cover-image-debug.ts:38 原始封面图: https://query.domains/apple-touch-icon.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fquery.domains%2Fapple-touch-icon.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fquery.domains%2Fzh-hans&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Lean Domain Search – Search for and register available domain names in seconds.
+cover-image-debug.ts:37 书签URL: https://leandomainsearch.com/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fleandomainsearch.com%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fleandomainsearch.com%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fleandomainsearch.com%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 免费调整图片大小
+cover-image-debug.ts:37 书签URL: https://bulkresizephotos.com/zh
+cover-image-debug.ts:38 原始封面图: https://bulkresizephotos.com/api/og?lang=zh
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fbulkresizephotos.com%2Fapi%2Fog%3Flang%3Dzh
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fbulkresizephotos.com%2Fzh&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 免费在线压缩图片
+cover-image-debug.ts:37 书签URL: https://compressimage.com/zh
+cover-image-debug.ts:38 原始封面图: https://compressimage.com/api/og?lang=zh
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fcompressimage.com%2Fapi%2Fog%3Flang%3Dzh
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fcompressimage.com%2Fzh&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Watermark Image - 免费照片水印
+cover-image-debug.ts:37 书签URL: https://watermarkimage.com/zh
+cover-image-debug.ts:38 原始封面图: https://watermarkimage.com/api/og?lang=zh
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fwatermarkimage.com%2Fapi%2Fog%3Flang%3Dzh
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fwatermarkimage.com%2Fzh&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: AI导航站的需求列表
+cover-image-debug.ts:37 书签URL: https://theresanaiforthat.com/requests%EF%BB%BF
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Ftheresanaiforthat.com%2Frequests%25EF%25BB%25BF
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Ftheresanaiforthat.com%2Frequests%25EF%25BB%25BF
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Ftheresanaiforthat.com%2Frequests%25EF%25BB%25BF&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 关键词难度 - Ahrefs
+cover-image-debug.ts:37 书签URL: https://ahrefs.com/keyword-difficulty
+cover-image-debug.ts:38 原始封面图: https://static.ahrefs.com/assets/img/og/keyword-difficulty-checker.png?v=2
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fstatic.ahrefs.com%2Fassets%2Fimg%2Fog%2Fkeyword-difficulty-checker.png%3Fv%3D2
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fahrefs.com%2Fkeyword-difficulty&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Search Suggest
+cover-image-debug.ts:37 书签URL: https://www.searchsuggest.tips/?keyword=
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fwww.searchsuggest.tips%2F%3Fkeyword%3D
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fwww.searchsuggest.tips%2F%3Fkeyword%3D
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fwww.searchsuggest.tips%2F%3Fkeyword%3D&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: toolify榜单
+cover-image-debug.ts:37 书签URL: https://www.toolify.ai/Best-AI-Tools-revenue
+cover-image-debug.ts:38 原始封面图: https://www.toolify.ai/favicon.ico
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fwww.toolify.ai%2Ffavicon.ico
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fwww.toolify.ai%2FBest-AI-Tools-revenue&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 探索 - Google 趋势
+cover-image-debug.ts:37 书签URL: https://trends.google.com/trends/explore?geo=US&hl=zh-CN
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Ftrends.google.com%2Ftrends%2Fexplore%3Fgeo%3DUS%26hl%3Dzh-CN
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Ftrends.google.com%2Ftrends%2Fexplore%3Fgeo%3DUS%26hl%3Dzh-CN
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Ftrends.google.com%2Ftrends%2Fexplore%3Fgeo%3DUS%26hl%3Dzh-CN&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+logger.ts:14 🖼️ 检测到封面图开关从关闭变为打开，将在后台刷新缺失的封面图...
+cover-image-debug.ts:36 🖼️ 封面图调试: Archery-SQL审核查询平台
+cover-image-debug.ts:37 书签URL: http://172.30.96.8:9123/sqlworkflow/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=http%3A%2F%2F172.30.96.8%3A9123%2Fsqlworkflow%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=http%3A%2F%2F172.30.96.8%3A9123%2Fsqlworkflow%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=http%3A%2F%2F172.30.96.8%3A9123%2Fsqlworkflow%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 开发环境2.0 plus-中间件信息 - 螃蟹主站运维文档 - 螃蟹知识库
+cover-image-debug.ts:37 书签URL: http://wiki.pxb7.internal/pages/viewpage.action?pageId=7276166
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=http%3A%2F%2Fwiki.pxb7.internal%2Fpages%2Fviewpage.action%3FpageId%3D7276166
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=http%3A%2F%2Fwiki.pxb7.internal%2Fpages%2Fviewpage.action%3FpageId%3D7276166
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=http%3A%2F%2Fwiki.pxb7.internal%2Fpages%2Fviewpage.action%3FpageId%3D7276166&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 阿里云控制台首页
+cover-image-debug.ts:37 书签URL: https://home.console.aliyun.com/home/dashboard/ProductAndService
+cover-image-debug.ts:38 原始封面图: https://img.alicdn.com/tfs/TB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fimg.alicdn.com%2Ftfs%2FTB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fhome.console.aliyun.com%2Fhome%2Fdashboard%2FProductAndService&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: SelectDB Studio
+cover-image-debug.ts:37 书签URL: https://selectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com:8010/query/editor
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fselectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com%3A8010%2Fquery%2Feditor
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fselectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com%3A8010%2Fquery%2Feditor
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fselectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com%3A8010%2Fquery%2Feditor&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: DMS - Data Management Service
+cover-image-debug.ts:37 书签URL: https://dms.aliyun.com/?spm=5176.19907426.top-nav.41.54681450uyuKi0
+cover-image-debug.ts:38 原始封面图: https://img.alicdn.com/tfs/TB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fimg.alicdn.com%2Ftfs%2FTB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fdms.aliyun.com%2F%3Fspm%3D5176.19907426.top-nav.41.54681450uyuKi0&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: JumpServer 开源堡垒机
+cover-image-debug.ts:37 书签URL: http://server.pxb7.internal/core/auth/profile/otp/enable/install-app/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=http%3A%2F%2Fserver.pxb7.internal%2Fcore%2Fauth%2Fprofile%2Fotp%2Fenable%2Finstall-app%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=http%3A%2F%2Fserver.pxb7.internal%2Fcore%2Fauth%2Fprofile%2Fotp%2Fenable%2Finstall-app%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=http%3A%2F%2Fserver.pxb7.internal%2Fcore%2Fauth%2Fprofile%2Fotp%2Fenable%2Finstall-app%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Apache Flink Documentation | Apache Flink
+cover-image-debug.ts:37 书签URL: https://nightlies.apache.org/flink/flink-docs-master/zh/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fnightlies.apache.org%2Fflink%2Fflink-docs-master%2Fzh%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fnightlies.apache.org%2Fflink%2Fflink-docs-master%2Fzh%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fnightlies.apache.org%2Fflink%2Fflink-docs-master%2Fzh%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Apache Paimon | Apache Paimon
+cover-image-debug.ts:37 书签URL: https://paimon.apache.org/docs/master/
+cover-image-debug.ts:38 原始封面图: https://paimon.apache.org/docs/master/favicon.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fpaimon.apache.org%2Fdocs%2Fmaster%2Ffavicon.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fpaimon.apache.org%2Fdocs%2Fmaster%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 创建、查询与维护异步物化视图 - Apache Doris
+cover-image-debug.ts:37 书签URL: https://doris.incubator.apache.org/zh-CN/docs/query-acceleration/materialized-view/async-materialized-view/functions-and-demands/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fdoris.incubator.apache.org%2Fzh-CN%2Fdocs%2Fquery-acceleration%2Fmaterialized-view%2Fasync-materialized-view%2Ffunctions-and-demands%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fdoris.incubator.apache.org%2Fzh-CN%2Fdocs%2Fquery-acceleration%2Fmaterialized-view%2Fasync-materialized-view%2Ffunctions-and-demands%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fdoris.incubator.apache.org%2Fzh-CN%2Fdocs%2Fquery-acceleration%2Fmaterialized-view%2Fasync-materialized-view%2Ffunctions-and-demands%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: ALTER-TABLE-COMMENT | SelectDB
+cover-image-debug.ts:37 书签URL: https://docs.selectdb.com/docs/cloud/sql-manual/sql-statements/Data-Definition-Statements/Alter/ALTER-TABLE-COMMENT
+cover-image-debug.ts:38 原始封面图: https://docs.selectdb.com/favicon/favicon-32x32.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fdocs.selectdb.com%2Ffavicon%2Ffavicon-32x32.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fdocs.selectdb.com%2Fdocs%2Fcloud%2Fsql-manual%2Fsql-statements%2FData-Definition-Statements%2FAlter%2FALTER-TABLE-COMMENT&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: StarRocks中文社区论坛 - StarRocks中文社区论坛
+cover-image-debug.ts:37 书签URL: https://forum.mirrorship.cn/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fforum.mirrorship.cn%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fforum.mirrorship.cn%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fforum.mirrorship.cn%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: StarRocks | StarRocks
+cover-image-debug.ts:37 书签URL: https://docs.starrocks.io/zh/docs/introduction/StarRocks_intro/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fdocs.starrocks.io%2Fzh%2Fdocs%2Fintroduction%2FStarRocks_intro%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fdocs.starrocks.io%2Fzh%2Fdocs%2Fintroduction%2FStarRocks_intro%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fdocs.starrocks.io%2Fzh%2Fdocs%2Fintroduction%2FStarRocks_intro%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: MaxCompute日期函数_云原生大数据计算服务 MaxCompute(MaxCompute)-阿里云帮助中心
+cover-image-debug.ts:37 书签URL: https://help.aliyun.com/zh/maxcompute/user-guide/date-functions/?spm=a2c4g.11186623.0.0.763fcd53RAryfb#section-a2d-rfm-vdb
+cover-image-debug.ts:38 原始封面图: https://img.alicdn.com/imgextra/i2/O1CN01TFs5Qw27uYvfA6gib_!!6000000007857-55-tps-32-32.svg
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fimg.alicdn.com%2Fimgextra%2Fi2%2FO1CN01TFs5Qw27uYvfA6gib_!!6000000007857-55-tps-32-32.svg
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fhelp.aliyun.com%2Fzh%2Fmaxcompute%2Fuser-guide%2Fdate-functions%2F%3Fspm%3Da2c4g.11186623.0.0.763fcd53RAryfb%23section-a2d-rfm-vdb&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: JSON在线 | JSON解析格式化—SO JSON在线工具
+cover-image-debug.ts:37 书签URL: https://www.sojson.com/
+cover-image-debug.ts:38 原始封面图: https://scdn.sojson.com/sojson/favicon64.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fscdn.sojson.com%2Fsojson%2Ffavicon64.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fwww.sojson.com%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 时间戳(Unix timestamp)转换工具 - 在线工具
+cover-image-debug.ts:37 书签URL: https://tool.lu/timestamp/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Ftool.lu%2Ftimestamp%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Ftool.lu%2Ftimestamp%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Ftool.lu%2Ftimestamp%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Maven Repository: Search/Browse/Explore
+cover-image-debug.ts:37 书签URL: https://mvnrepository.com/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fmvnrepository.com%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fmvnrepository.com%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fmvnrepository.com%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Semrush Blog | SEO, SEM, AI Search, & Content Strategy
+cover-image-debug.ts:37 书签URL: https://www.semrush.com/blog/
+cover-image-debug.ts:38 原始封面图: https://static.semrush.com/semblog-next-static/favicon/apple-touch-icon.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fstatic.semrush.com%2Fsemblog-next-static%2Ffavicon%2Fapple-touch-icon.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fwww.semrush.com%2Fblog%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Insights on SEO, Marketing, & Business
+cover-image-debug.ts:37 书签URL: https://firstpagesage.com/seo-blog/
+cover-image-debug.ts:38 原始封面图: https://firstpagesage.com/wp-content/uploads/2023/05/cropped-favicon-192x192.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Ffirstpagesage.com%2Fwp-content%2Fuploads%2F2023%2F05%2Fcropped-favicon-192x192.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Ffirstpagesage.com%2Fseo-blog%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: The Complete SEO Checklist for 2025
+cover-image-debug.ts:37 书签URL: https://backlinko.com/seo-checklist
+cover-image-debug.ts:38 原始封面图: https://api.backlinko.com/app/uploads/2016/07/seo-checklist.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fapi.backlinko.com%2Fapp%2Fuploads%2F2016%2F07%2Fseo-checklist.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fbacklinko.com%2Fseo-checklist&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Ahrefs Blog
+cover-image-debug.ts:37 书签URL: https://ahrefs.com/blog/
+cover-image-debug.ts:38 原始封面图: https://ahrefs.com/blog/wp-content/uploads/2022/05/ahrefs_blog.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fahrefs.com%2Fblog%2Fwp-content%2Fuploads%2F2022%2F05%2Fahrefs_blog.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fahrefs.com%2Fblog%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Receive SMS Online to a Temporary Phone Number from $0.05
+cover-image-debug.ts:37 书签URL: https://sms-man.com/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fsms-man.com%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fsms-man.com%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fsms-man.com%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: SakuraCat
+cover-image-debug.ts:37 书签URL: https://sakura-cat3.com/login
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fsakura-cat3.com%2Flogin
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fsakura-cat3.com%2Flogin
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fsakura-cat3.com%2Flogin&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Vercel模板中心
+cover-image-debug.ts:37 书签URL: https://vercel.com/templates
+cover-image-debug.ts:38 原始封面图: https://assets.vercel.com/image/upload/v1588805858/repositories/vercel/logo.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fv1588805858%2Frepositories%2Fvercel%2Flogo.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fvercel.com%2Ftemplates&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Domain Name Search: Find Available Domains Instantly
+cover-image-debug.ts:37 书签URL: https://instantdomainsearch.com/?q=
+cover-image-debug.ts:38 原始封面图: https://instantdomainsearch.com/opengraph.webp
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Finstantdomainsearch.com%2Fopengraph.webp
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Finstantdomainsearch.com%2F%3Fq%3D&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Query.Domains: 免费批量检查域名可用性 - 基于WHOIS查询
+cover-image-debug.ts:37 书签URL: https://query.domains/zh-hans
+cover-image-debug.ts:38 原始封面图: https://query.domains/apple-touch-icon.png
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fquery.domains%2Fapple-touch-icon.png
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fquery.domains%2Fzh-hans&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Lean Domain Search – Search for and register available domain names in seconds.
+cover-image-debug.ts:37 书签URL: https://leandomainsearch.com/
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fleandomainsearch.com%2F
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fleandomainsearch.com%2F
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fleandomainsearch.com%2F&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 免费调整图片大小
+cover-image-debug.ts:37 书签URL: https://bulkresizephotos.com/zh
+cover-image-debug.ts:38 原始封面图: https://bulkresizephotos.com/api/og?lang=zh
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fbulkresizephotos.com%2Fapi%2Fog%3Flang%3Dzh
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fbulkresizephotos.com%2Fzh&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 免费在线压缩图片
+cover-image-debug.ts:37 书签URL: https://compressimage.com/zh
+cover-image-debug.ts:38 原始封面图: https://compressimage.com/api/og?lang=zh
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fcompressimage.com%2Fapi%2Fog%3Flang%3Dzh
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fcompressimage.com%2Fzh&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Watermark Image - 免费照片水印
+cover-image-debug.ts:37 书签URL: https://watermarkimage.com/zh
+cover-image-debug.ts:38 原始封面图: https://watermarkimage.com/api/og?lang=zh
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fwatermarkimage.com%2Fapi%2Fog%3Flang%3Dzh
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fwatermarkimage.com%2Fzh&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: AI导航站的需求列表
+cover-image-debug.ts:37 书签URL: https://theresanaiforthat.com/requests%EF%BB%BF
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Ftheresanaiforthat.com%2Frequests%25EF%25BB%25BF
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Ftheresanaiforthat.com%2Frequests%25EF%25BB%25BF
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Ftheresanaiforthat.com%2Frequests%25EF%25BB%25BF&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 关键词难度 - Ahrefs
+cover-image-debug.ts:37 书签URL: https://ahrefs.com/keyword-difficulty
+cover-image-debug.ts:38 原始封面图: https://static.ahrefs.com/assets/img/og/keyword-difficulty-checker.png?v=2
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fstatic.ahrefs.com%2Fassets%2Fimg%2Fog%2Fkeyword-difficulty-checker.png%3Fv%3D2
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fahrefs.com%2Fkeyword-difficulty&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: Search Suggest
+cover-image-debug.ts:37 书签URL: https://www.searchsuggest.tips/?keyword=
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Fwww.searchsuggest.tips%2F%3Fkeyword%3D
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fwww.searchsuggest.tips%2F%3Fkeyword%3D
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fwww.searchsuggest.tips%2F%3Fkeyword%3D&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: toolify榜单
+cover-image-debug.ts:37 书签URL: https://www.toolify.ai/Best-AI-Tools-revenue
+cover-image-debug.ts:38 原始封面图: https://www.toolify.ai/favicon.ico
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fwww.toolify.ai%2Ffavicon.ico
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Fwww.toolify.ai%2FBest-AI-Tools-revenue&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+cover-image-debug.ts:36 🖼️ 封面图调试: 探索 - Google 趋势
+cover-image-debug.ts:37 书签URL: https://trends.google.com/trends/explore?geo=US&hl=zh-CN
+cover-image-debug.ts:38 原始封面图: /api/screenshot?url=https%3A%2F%2Ftrends.google.com%2Ftrends%2Fexplore%3Fgeo%3DUS%26hl%3Dzh-CN
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Ftrends.google.com%2Ftrends%2Fexplore%3Fgeo%3DUS%26hl%3Dzh-CN
+cover-image-debug.ts:40 回退URL: /api/screenshot?url=https%3A%2F%2Ftrends.google.com%2Ftrends%2Fexplore%3Fgeo%3DUS%26hl%3Dzh-CN&width=400&height=300
+cover-image-debug.ts:41 加载状态: loading
+react-dom.development.js:8016 [Violation] 'click' handler took 240ms
+cover-image-debug.ts:36 🖼️ 封面图调试: DMS - Data Management Service
+cover-image-debug.ts:37 书签URL: https://dms.aliyun.com/?spm=5176.19907426.top-nav.41.54681450uyuKi0
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fimg.alicdn.com%2Ftfs%2FTB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: 阿里云控制台首页
+cover-image-debug.ts:37 书签URL: https://home.console.aliyun.com/home/dashboard/ProductAndService
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fimg.alicdn.com%2Ftfs%2FTB1Ly5oS3HqK1RjSZFPXXcwapXa-238-54.png
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: Apache Paimon | Apache Paimon
+cover-image-debug.ts:37 书签URL: https://paimon.apache.org/docs/master/
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fpaimon.apache.org%2Fdocs%2Fmaster%2Ffavicon.png
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: ALTER-TABLE-COMMENT | SelectDB
+cover-image-debug.ts:37 书签URL: https://docs.selectdb.com/docs/cloud/sql-manual/sql-statements/Data-Definition-Statements/Alter/ALTER-TABLE-COMMENT
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fdocs.selectdb.com%2Ffavicon%2Ffavicon-32x32.png
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: MaxCompute日期函数_云原生大数据计算服务 MaxCompute(MaxCompute)-阿里云帮助中心
+cover-image-debug.ts:37 书签URL: https://help.aliyun.com/zh/maxcompute/user-guide/date-functions/?spm=a2c4g.11186623.0.0.763fcd53RAryfb#section-a2d-rfm-vdb
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fimg.alicdn.com%2Fimgextra%2Fi2%2FO1CN01TFs5Qw27uYvfA6gib_!!6000000007857-55-tps-32-32.svg
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: JSON在线 | JSON解析格式化—SO JSON在线工具
+cover-image-debug.ts:37 书签URL: https://www.sojson.com/
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/proxy-image?url=https%3A%2F%2Fscdn.sojson.com%2Fsojson%2Ffavicon64.png
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: Archery-SQL审核查询平台
+cover-image-debug.ts:37 书签URL: http://172.30.96.8:9123/sqlworkflow/
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=http%3A%2F%2F172.30.96.8%3A9123%2Fsqlworkflow%2F
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+logger.ts:14 🖼️ 找到 32 个需要刷新封面图的书签，开始后台处理...
+logger.ts:14 🖼️ 开始刷新 32 个书签的封面图...
+logger.ts:14 🖼️ 开始刷新书签封面图: Archery-SQL审核查询平台
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=http%3A%2F%2F172.30.96.8%3A9123%2Fsqlworkflow%2F
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+[Violation] 'setTimeout' handler 用时 <N> 毫秒
+logger.ts:14 🖼️ 已刷新书签封面图: Archery-SQL审核查询平台
+logger.ts:14 🖼️ 开始刷新书签封面图: 开发环境2.0 plus-中间件信息 - 螃蟹主站运维文档 - 螃蟹知识库
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=http%3A%2F%2Fwiki.pxb7.internal%2Fpages%2Fviewpage.action%3FpageId%3D7276166
+logger.ts:14 🖼️ 已刷新书签封面图: 开发环境2.0 plus-中间件信息 - 螃蟹主站运维文档 - 螃蟹知识库
+logger.ts:14 🖼️ 开始刷新书签封面图: SelectDB Studio
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fselectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com%3A8010%2Fquery%2Feditor
+logger.ts:14 🖼️ 已刷新书签封面图: SelectDB Studio
+logger.ts:14 🖼️ 开始刷新书签封面图: JumpServer 开源堡垒机
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=http%3A%2F%2Fserver.pxb7.internal%2Fcore%2Fauth%2Fprofile%2Fotp%2Fenable%2Finstall-app%2F
+logger.ts:14 🖼️ 已刷新书签封面图: JumpServer 开源堡垒机
+logger.ts:14 🖼️ 开始刷新书签封面图: Apache Flink Documentation | Apache Flink
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fnightlies.apache.org%2Fflink%2Fflink-docs-master%2Fzh%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Apache Flink Documentation | Apache Flink
+logger.ts:14 🖼️ 开始刷新书签封面图: 创建、查询与维护异步物化视图 - Apache Doris
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fdoris.incubator.apache.org%2Fzh-CN%2Fdocs%2Fquery-acceleration%2Fmaterialized-view%2Fasync-materialized-view%2Ffunctions-and-demands%2F
+logger.ts:14 🖼️ 已刷新书签封面图: 创建、查询与维护异步物化视图 - Apache Doris
+logger.ts:14 🖼️ 开始刷新书签封面图: StarRocks中文社区论坛 - StarRocks中文社区论坛
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fforum.mirrorship.cn%2F
+logger.ts:14 🖼️ 已刷新书签封面图: StarRocks中文社区论坛 - StarRocks中文社区论坛
+logger.ts:14 🖼️ 开始刷新书签封面图: StarRocks | StarRocks
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fdocs.starrocks.io%2Fzh%2Fdocs%2Fintroduction%2FStarRocks_intro%2F
+logger.ts:14 🖼️ 已刷新书签封面图: StarRocks | StarRocks
+logger.ts:14 🖼️ 开始刷新书签封面图: 时间戳(Unix timestamp)转换工具 - 在线工具
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Ftool.lu%2Ftimestamp%2F
+logger.ts:14 🖼️ 已刷新书签封面图: 时间戳(Unix timestamp)转换工具 - 在线工具
+logger.ts:14 🖼️ 开始刷新书签封面图: Maven Repository: Search/Browse/Explore
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fmvnrepository.com%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Maven Repository: Search/Browse/Explore
+logger.ts:14 🖼️ 开始刷新书签封面图: Grok
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fgrok.com%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Grok
+logger.ts:14 🖼️ 开始刷新书签封面图: Kimi - 更强大的 AI 助手
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fwww.kimi.com%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Kimi - 更强大的 AI 助手
+logger.ts:14 🖼️ 开始刷新书签封面图: Ask HN Projects
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fnews.ycombinator.com%2Fitem%3Fid%3D42373343
+logger.ts:14 🖼️ 已刷新书签封面图: Ask HN Projects
+logger.ts:14 🖼️ 开始刷新书签封面图: Your guide to AdSense - Google AdSense Help
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fsupport.google.com%2Fadsense%2Fanswer%2F3180977%3Fhl%3Den
+logger.ts:14 🖼️ 已刷新书签封面图: Your guide to AdSense - Google AdSense Help
+logger.ts:14 🖼️ 开始刷新书签封面图: Receive SMS Online to a Temporary Phone Number from $0.05
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fsms-man.com%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Receive SMS Online to a Temporary Phone Number from $0.05
+logger.ts:14 🖼️ 开始刷新书签封面图: SakuraCat
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fsakura-cat3.com%2Flogin
+logger.ts:14 🖼️ 已刷新书签封面图: SakuraCat
+logger.ts:14 🖼️ 开始刷新书签封面图: Game Catalog - HTML5 Games for Websites and Messengers - GameDistribution
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fgamedistribution.com%2Fgames%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Game Catalog - HTML5 Games for Websites and Messengers - GameDistribution
+logger.ts:14 🖼️ 开始刷新书签封面图: Most-played games on Miniplay.com
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fwww.miniplay.com%2Fmost-played
+logger.ts:14 🖼️ 已刷新书签封面图: Most-played games on Miniplay.com
+logger.ts:14 🖼️ 开始刷新书签封面图: 免费在线游戏 - 在 Playhop.com 上免费玩
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fplayhop.com%2F
+logger.ts:14 🖼️ 已刷新书签封面图: 免费在线游戏 - 在 Playhop.com 上免费玩
+logger.ts:14 🖼️ 开始刷新书签封面图: Lean Domain Search – Search for and register available domain names in seconds.
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fleandomainsearch.com%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Lean Domain Search – Search for and register available domain names in seconds.
+logger.ts:14 🖼️ 开始刷新书签封面图: Launch into the future - Spaceship
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fwww.spaceship.com%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Launch into the future - Spaceship
+logger.ts:14 🖼️ 开始刷新书签封面图: Buy a domain name - Register cheap domain names from $0.99 - Namecheap
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fwww.namecheap.com%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Buy a domain name - Register cheap domain names from $0.99 - Namecheap
+logger.ts:14 🖼️ 开始刷新书签封面图: 欢迎使用 Google Search Console
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fsearch.google.com%2Fsearch-console%2Fwelcome
+logger.ts:14 🖼️ 已刷新书签封面图: 欢迎使用 Google Search Console
+logger.ts:14 🖼️ 开始刷新书签封面图: Google Analytics
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fanalytics.google.com%2Fanalytics%2Fweb%2F%23%2Fprovision
+logger.ts:14 🖼️ 已刷新书签封面图: Google Analytics
+logger.ts:14 🖼️ 开始刷新书签封面图: v0 by Vercel
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fv0.app%2F
+logger.ts:14 🖼️ 已刷新书签封面图: v0 by Vercel
+logger.ts:14 🖼️ 开始刷新书签封面图: Same
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fsame.new%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Same
+logger.ts:14 🖼️ 开始刷新书签封面图: 21st.dev - Craft with AI
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2F21st.dev%2Fcomponents
+logger.ts:14 🖼️ 已刷新书签封面图: 21st.dev - Craft with AI
+logger.ts:14 🖼️ 开始刷新书签封面图: AI web网站运营优化 初级指南
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Farticles.zsxq.com%2Fid_lvjso7hfuuwe.html
+logger.ts:14 🖼️ 已刷新书签封面图: AI web网站运营优化 初级指南
+logger.ts:14 🖼️ 开始刷新书签封面图: AI导航站的需求列表
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Ftheresanaiforthat.com%2Frequests%25EF%25BB%25BF
+logger.ts:14 🖼️ 已刷新书签封面图: AI导航站的需求列表
+logger.ts:14 🖼️ 开始刷新书签封面图: Search Suggest
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fwww.searchsuggest.tips%2F%3Fkeyword%3D
+logger.ts:14 🖼️ 已刷新书签封面图: Search Suggest
+logger.ts:14 🖼️ 开始刷新书签封面图: 探索 - Google 趋势
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Ftrends.google.com%2Ftrends%2Fexplore%3Fgeo%3DUS%26hl%3Dzh-CN
+logger.ts:14 🖼️ 已刷新书签封面图: 探索 - Google 趋势
+logger.ts:14 🖼️ 开始刷新书签封面图: Website Traffic Checker: Estimate Any Site’s Traffic
+logger.ts:14 ✅ 成功生成新的封面图: /api/screenshot?url=https%3A%2F%2Fahrefs.com%2Ftraffic-checker%2F
+logger.ts:14 🖼️ 已刷新书签封面图: Website Traffic Checker: Estimate Any Site’s Traffic
+logger.ts:14 ✅ 封面图刷新完成！成功刷新了 32 个书签的封面图
+cover-image-debug.ts:36 🖼️ 封面图调试: 开发环境2.0 plus-中间件信息 - 螃蟹主站运维文档 - 螃蟹知识库
+cover-image-debug.ts:37 书签URL: http://wiki.pxb7.internal/pages/viewpage.action?pageId=7276166
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=http%3A%2F%2Fwiki.pxb7.internal%2Fpages%2Fviewpage.action%3FpageId%3D7276166
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: SelectDB Studio
+cover-image-debug.ts:37 书签URL: https://selectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com:8010/query/editor
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fselectdb-cn-ce74ba0r401-webui.selectdbfe.rds.aliyuncs.com%3A8010%2Fquery%2Feditor
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: JumpServer 开源堡垒机
+cover-image-debug.ts:37 书签URL: http://server.pxb7.internal/core/auth/profile/otp/enable/install-app/
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=http%3A%2F%2Fserver.pxb7.internal%2Fcore%2Fauth%2Fprofile%2Fotp%2Fenable%2Finstall-app%2F
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: Apache Flink Documentation | Apache Flink
+cover-image-debug.ts:37 书签URL: https://nightlies.apache.org/flink/flink-docs-master/zh/
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fnightlies.apache.org%2Fflink%2Fflink-docs-master%2Fzh%2F
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: 创建、查询与维护异步物化视图 - Apache Doris
+cover-image-debug.ts:37 书签URL: https://doris.incubator.apache.org/zh-CN/docs/query-acceleration/materialized-view/async-materialized-view/functions-and-demands/
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fdoris.incubator.apache.org%2Fzh-CN%2Fdocs%2Fquery-acceleration%2Fmaterialized-view%2Fasync-materialized-view%2Ffunctions-and-demands%2F
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: StarRocks中文社区论坛 - StarRocks中文社区论坛
+cover-image-debug.ts:37 书签URL: https://forum.mirrorship.cn/
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fforum.mirrorship.cn%2F
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: StarRocks | StarRocks
+cover-image-debug.ts:37 书签URL: https://docs.starrocks.io/zh/docs/introduction/StarRocks_intro/
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fdocs.starrocks.io%2Fzh%2Fdocs%2Fintroduction%2FStarRocks_intro%2F
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: 时间戳(Unix timestamp)转换工具 - 在线工具
+cover-image-debug.ts:37 书签URL: https://tool.lu/timestamp/
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Ftool.lu%2Ftimestamp%2F
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+cover-image-debug.ts:36 🖼️ 封面图调试: Maven Repository: Search/Browse/Explore
+cover-image-debug.ts:37 书签URL: https://mvnrepository.com/
+cover-image-debug.ts:38 原始封面图: 无
+cover-image-debug.ts:39 代理封面图: /api/screenshot?url=https%3A%2F%2Fmvnrepository.com%2F
+cover-image-debug.ts:40 回退URL: 无
+cover-image-debug.ts:41 加载状态: success
+[Violation] Forced reflow while executing JavaScript took 57ms
+ 🖼️ 封面图调试: Insights on SEO, Marketing, & Business
+ 书签URL: https://firstpagesage.com/seo-blog/
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Ffirstpagesage.com%2Fwp-content%2Fuploads%2F2023%2F05%2Fcropped-favicon-192x192.png
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: Ahrefs Blog
+ 书签URL: https://ahrefs.com/blog/
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Fahrefs.com%2Fblog%2Fwp-content%2Fuploads%2F2022%2F05%2Fahrefs_blog.png
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: Semrush Blog | SEO, SEM, AI Search, & Content Strategy
+ 书签URL: https://www.semrush.com/blog/
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Fstatic.semrush.com%2Fsemblog-next-static%2Ffavicon%2Fapple-touch-icon.png
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: The Complete SEO Checklist for 2025
+ 书签URL: https://backlinko.com/seo-checklist
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Fapi.backlinko.com%2Fapp%2Fuploads%2F2016%2F07%2Fseo-checklist.png
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: Receive SMS Online to a Temporary Phone Number from $0.05
+ 书签URL: https://sms-man.com/
+ 原始封面图: 无
+ 代理封面图: /api/screenshot?url=https%3A%2F%2Fsms-man.com%2F
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: SakuraCat
+ 书签URL: https://sakura-cat3.com/login
+ 原始封面图: 无
+ 代理封面图: /api/screenshot?url=https%3A%2F%2Fsakura-cat3.com%2Flogin
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: Vercel模板中心
+ 书签URL: https://vercel.com/templates
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Fv1588805858%2Frepositories%2Fvercel%2Flogo.png
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: Query.Domains: 免费批量检查域名可用性 - 基于WHOIS查询
+ 书签URL: https://query.domains/zh-hans
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Fquery.domains%2Fapple-touch-icon.png
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: Domain Name Search: Find Available Domains Instantly
+ 书签URL: https://instantdomainsearch.com/?q=
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Finstantdomainsearch.com%2Fopengraph.webp
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: Lean Domain Search – Search for and register available domain names in seconds.
+ 书签URL: https://leandomainsearch.com/
+ 原始封面图: 无
+ 代理封面图: /api/screenshot?url=https%3A%2F%2Fleandomainsearch.com%2F
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: 免费调整图片大小
+ 书签URL: https://bulkresizephotos.com/zh
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Fbulkresizephotos.com%2Fapi%2Fog%3Flang%3Dzh
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: 免费在线压缩图片
+ 书签URL: https://compressimage.com/zh
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Fcompressimage.com%2Fapi%2Fog%3Flang%3Dzh
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: Watermark Image - 免费照片水印
+ 书签URL: https://watermarkimage.com/zh
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Fwatermarkimage.com%2Fapi%2Fog%3Flang%3Dzh
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: AI导航站的需求列表
+ 书签URL: https://theresanaiforthat.com/requests%EF%BB%BF
+ 原始封面图: 无
+ 代理封面图: /api/screenshot?url=https%3A%2F%2Ftheresanaiforthat.com%2Frequests%25EF%25BB%25BF
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: Search Suggest
+ 书签URL: https://www.searchsuggest.tips/?keyword=
+ 原始封面图: 无
+ 代理封面图: /api/screenshot?url=https%3A%2F%2Fwww.searchsuggest.tips%2F%3Fkeyword%3D
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: 探索 - Google 趋势
+ 书签URL: https://trends.google.com/trends/explore?geo=US&hl=zh-CN
+ 原始封面图: 无
+ 代理封面图: /api/screenshot?url=https%3A%2F%2Ftrends.google.com%2Ftrends%2Fexplore%3Fgeo%3DUS%26hl%3Dzh-CN
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: 关键词难度 - Ahrefs
+ 书签URL: https://ahrefs.com/keyword-difficulty
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Fstatic.ahrefs.com%2Fassets%2Fimg%2Fog%2Fkeyword-difficulty-checker.png%3Fv%3D2
+ 回退URL: 无
+ 加载状态: success
+ 🖼️ 封面图调试: toolify榜单
+ 书签URL: https://www.toolify.ai/Best-AI-Tools-revenue
+ 原始封面图: 无
+ 代理封面图: /api/proxy-image?url=https%3A%2F%2Fwww.toolify.ai%2Ffavicon.ico
+ 回退URL: 无
+ 加载状态: success
+ [Fast Refresh] rebuilding

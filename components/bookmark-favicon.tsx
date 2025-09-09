@@ -19,42 +19,48 @@ interface BookmarkFaviconProps {
 export function BookmarkFavicon({ bookmark, size = "md", className }: BookmarkFaviconProps) {
   // 缓存图标URL，避免每次渲染都重新计算
   const { primarySrc, fallbackSrc } = useMemo(() => {
-    const primary = bookmark.favicon 
-      ? `/api/proxy-image?url=${encodeURIComponent(bookmark.favicon)}`
-      : null
-    
-    const fallback = getFaviconUrl(bookmark.url)
-    
-    return {
-      primarySrc: primary,
-      fallbackSrc: fallback || undefined
+    // 添加URL验证，避免无效URL导致的问题
+    try {
+      const primary = bookmark.favicon
+        ? `/api/proxy-image?url=${encodeURIComponent(bookmark.favicon)}`
+        : null
+
+      // 暂时禁用fallback，避免循环问题
+      // const fallbackUrl = getFaviconUrl(bookmark.url)
+      // const fallback = fallbackUrl || undefined
+
+      return {
+        primarySrc: primary,
+        fallbackSrc: undefined // 暂时禁用fallback
+      }
+    } catch (error) {
+      // 如果URL处理失败，返回安全的默认值
+      return {
+        primarySrc: null,
+        fallbackSrc: undefined
+      }
     }
   }, [bookmark.favicon, bookmark.url])
 
-  // 根据尺寸设置样式
-  const sizeClasses = {
-    sm: "w-4 h-4",
-    md: "w-6 h-6", 
-    lg: "w-8 h-8"
-  }
-
-  const iconSizes = {
-    sm: "w-2 h-2",
-    md: "w-3 h-3",
-    lg: "w-4 h-4"
-  }
-
-  const finalSrc = primarySrc || fallbackSrc
-
-  // 占位符组件
-  const placeholder = (
+  // 稳定的占位符，避免每次渲染都创建新对象
+  const placeholder = useMemo(() => (
     <div className={cn(
       "rounded-sm bg-gradient-to-br from-muted to-muted/60 flex items-center justify-center shadow-sm",
-      sizeClasses[size]
+      {
+        "w-4 h-4": size === "sm",
+        "w-6 h-6": size === "md",
+        "w-8 h-8": size === "lg"
+      }
     )}>
-      <Globe className={cn("text-muted-foreground", iconSizes[size])} />
+      <Globe className={cn("text-muted-foreground", {
+        "w-2 h-2": size === "sm",
+        "w-3 h-3": size === "md",
+        "w-4 h-4": size === "lg"
+      })} />
     </div>
-  )
+  ), [size])
+
+  const finalSrc = primarySrc || fallbackSrc
 
   if (!finalSrc) {
     return <div className={className}>{placeholder}</div>
@@ -68,7 +74,11 @@ export function BookmarkFavicon({ bookmark, size = "md", className }: BookmarkFa
         alt={`${bookmark.title} favicon`}
         className={cn(
           "rounded-sm shadow-sm object-cover",
-          sizeClasses[size]
+          {
+            "w-4 h-4": size === "sm",
+            "w-6 h-6": size === "md",
+            "w-8 h-8": size === "lg"
+          }
         )}
         placeholder={placeholder}
         loading="lazy"
