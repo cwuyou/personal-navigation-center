@@ -1,0 +1,278 @@
+# PROJECT_INDEX
+
+**Personal Navigation Center** — 基于 Next.js 14 App Router 构建的个人书签管理 / 导航起始页 PWA。几乎全部逻辑运行在客户端，数据持久化在浏览器 localStorage，API 路由仅作为跨域代理和元数据抓取的轻量服务端。
+
+---
+
+## 1. 技术栈
+
+### 核心框架
+| 类别 | 选型 | 说明 |
+|---|---|---|
+| 框架 | **Next.js 14.2** (App Router) | 页面 + API Routes；所有 API 跑在 `edge` runtime |
+| 运行时 | React 18 + TypeScript 5 | `"use client"` 组件为主 |
+| 样式 | Tailwind CSS 3.4 + `tailwindcss-animate` | 通过 `lib/utils.ts` 的 `cn()` 合并类名 |
+| UI 原子 | **Radix UI** 全家桶 + `lucide-react` 图标 | 封装在 `components/ui/` |
+| 主题 | `next-themes` + 自定义 `theme-loader` | 支持深浅色 + 用户自定义 primary/radius |
+| 字体 | `geist/font` (Sans + Mono) | 通过 `next/font` 本地化 |
+
+### 状态与数据
+| 类别 | 选型 | 说明 |
+|---|---|---|
+| 状态管理 | **Zustand** + `persist` 中间件 | 两个独立 store,分别持久化到 `bookmark-store`、`display-settings` |
+| 不可变更新 | `immer`(已装,未普遍使用) | 当前 store 以展开运算符手动更新 |
+| 表单 | `react-hook-form` + `@hookform/resolvers` + **Zod** | 新增/编辑对话框统一模式 |
+| 提示 | `sonner` (顶部 toast) + Radix Toast | 两套并存 |
+| 虚拟化 | `components/virtual-bookmark-grid.tsx` | 自实现,用于大列表 |
+
+### 运维 / 观测
+| 类别 | 选型 |
+|---|---|
+| Web Vitals | `web-vitals` → `POST /api/analytics/web-vitals` |
+| PWA | `public/manifest.json` + `components/pwa-install.tsx` |
+| SEO | 结构化数据 (`components/seo-structured-data.tsx`),`app/sitemap.ts`,`app/robots.ts` |
+| 分析 | Google Analytics (`components/google-analytics.tsx`) |
+
+### 工具链
+- `eslint` + `eslint-config-next`
+- `critters`(关键 CSS 内联)
+- **无测试框架**,`npm run lint` 是唯一的质量门槛
+
+### 命令
+```bash
+npm run dev      # 开发服务器
+npm run build    # 生产构建
+npm run start    # 启动生产服务
+npm run lint     # ESLint
+```
+
+### 路径别名
+`@/*` 指向仓库根目录(非 `src/`)。
+
+---
+
+## 2. 模块关系
+
+### 顶层分层
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  app/                                                           │
+│  ├─ page.tsx          着陆页 (营销,localStorage 判断老用户跳转)  │
+│  ├─ dashboard/page.tsx  主应用壳 (Header + Sidebar + Content)   │
+│  ├─ layout.tsx          RootLayout (主题注入、GA、ErrorBoundary) │
+│  └─ api/*               Edge Runtime 代理 / 元数据接口           │
+└─────────────────────────────────────────────────────────────────┘
+             │ 组合
+             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  components/                                                    │
+│  ├─ header.tsx, sidebar.tsx, enhanced-main-content.tsx          │
+│  ├─ *-dialog.tsx        (添加/编辑/删除/导入/导出对话框)          │
+│  ├─ bookmark-card, enhanced-bookmark-card, virtual-grid...      │
+│  └─ ui/                 Radix 封装的原子组件                    │
+└─────────────────────────────────────────────────────────────────┘
+             │ 读写
+             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  hooks/                                                         │
+│  ├─ use-bookmark-store.ts     (主数据 Zustand store,持久化)     │
+│  ├─ use-display-settings.ts   (UI 偏好 Zustand store,持久化)    │
+│  ├─ use-smart-recommendations.ts                                │
+│  ├─ use-image-preloader.ts                                      │
+│  ├─ use-mobile.tsx, use-toast.ts                                │
+└─────────────────────────────────────────────────────────────────┘
+             │ 依赖
+             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  lib/                                                           │
+│  ├─ background-metadata-enhancer.ts  核心: 书签增强流水线       │
+│  ├─ metadata-fetcher.ts              favicon / 站点名提取       │
+│  ├─ request-deduplicator.ts          前端 fetch-meta 去重       │
+│  ├─ image-cache.ts                   客户端图像缓存              │
+│  ├─ theme-loader.ts, i18n.ts, logger.ts, utils.ts, url-utils.ts │
+└─────────────────────────────────────────────────────────────────┘
+             │ (可选) HTTP
+             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  app/api/*  (Edge)                                              │
+│  └─ 抓取外部站点元数据 / 代理图片 / 生成截图占位图              │
+└─────────────────────────────────────────────────────────────────┘
+             │
+             ▼
+       data/website-descriptions-1000plus.json   (离线预置数据库)
+```
+
+### 关键依赖方向
+- **组件 → hooks → lib**:单向依赖,`lib` 不感知 React。
+- **Zustand store 是枢纽**:所有对话框、卡片、导入导出都直接从 `useBookmarkStore()` 读写,无 Context Provider。
+- **增强服务 `backgroundEnhancer` 是单例**:`lib/background-metadata-enhancer.ts` 导出 `export const backgroundEnhancer = new BackgroundMetadataEnhancer()`,被 store 的 `startBackgroundEnhancement` / `refreshCoverImages` 调用。
+
+---
+
+## 3. 关键入口
+
+### 路由入口
+
+| 路径 | 文件 | 职责 |
+|---|---|---|
+| `/` | `app/page.tsx` | **着陆页**。检测 `localStorage.hasVisitedDashboard`,老用户显示"快速进入"按钮 |
+| `/dashboard` | `app/dashboard/page.tsx` | **主应用**。装配 Header/Sidebar/EnhancedMainContent,管理 `selectedCategory`、`selectedSubCategory`、`searchQuery`、设置面板开关 |
+| `/demo`, `/blog`, `/help`, `/privacy`, `/terms` | `app/*/page.tsx` | 静态内容页 |
+| `/debug/cover-images`, `/test-api`, `/test-cover-images` | `app/*/page.tsx` | 开发调试页(生产可考虑 `.claudeignore` 过滤) |
+
+### 应用壳装配(`app/dashboard/page.tsx`)
+```
+HomePage
+├─ WebSiteStructuredData / StructuredData (SEO)
+├─ Header              ← 搜索、logo、设置按钮
+├─ Sidebar             ← 分类树、折叠控件
+├─ EmptyState | EnhancedMainContent
+├─ OnboardingModal
+├─ AddCategoryDialog / AddBookmarkWithCategoryDialog
+├─ PWAInstall
+├─ SettingsPanel
+└─ EnhancementProgress ← 后台元数据增强进度条
+```
+
+### 数据入口(Store)
+`hooks/use-bookmark-store.ts` 是**唯一的主数据源**。关键动作:
+- `initializeStore()` — 检查 `localStorage['data-cleared']`,未清空且无数据时注入 `defaultCategories`/`defaultBookmarks`。
+- `addBookmark / addCategory / addSubCategory` — 带 URL 归一化与子分类内去重。
+- `importBookmarks(data, { enableBackgroundEnhancement })` — 分类/子分类按同名合并,书签按同 URL 去重;导入完成后异步触发增强。
+- `startBackgroundEnhancement(ids?, { isImport? })` — 调用 `backgroundEnhancer.enhanceBookmarks()`,通过 `onUpdate` 回写。
+- `refreshCoverImages(ids?)` — 仅刷新封面图(独立于完整增强)。
+- `ensureUncategorizedExists()` — 懒创建系统分类 `system/uncategorized`,用于无归属的新书签。
+
+### 增强流水线入口(`lib/background-metadata-enhancer.ts`)
+`BackgroundMetadataEnhancer` 单例。外部只调:
+- `enhanceBookmarks(bookmarks, { onProgress, onUpdate, preserveOriginal })` — 批量,内部拆分 preset / unknown 两阶段。
+- `enhanceSingleBookmark(bookmark, { seed })` — 单条,可带前端已抓到的种子元数据。
+- `refreshBookmarkCoverImage(bookmark)` — 仅封面。
+- `stop()` — 通过内部 `AbortController` 中止。
+
+---
+
+## 4. 数据流
+
+### 数据模型
+```ts
+Category {
+  id, name,
+  subCategories: SubCategory[]
+}
+SubCategory { id, name, parentId }
+Bookmark {
+  id, title, url, description?, favicon?, coverImage?, tags?,
+  subCategoryId, createdAt
+}
+```
+
+### 持久化
+- **主数据**:Zustand `persist({ name: "bookmark-store", version: 2 })` → `localStorage`。
+- **显示偏好**:独立 Zustand store → `localStorage["display-settings"]`。
+- **标志位**(均在 `localStorage`):
+  - `hasVisitedDashboard` — 老用户识别,用于着陆页跳转按钮。
+  - `data-cleared` — 用户主动清空数据后,阻止 `initializeStore()` 重新注入演示数据。
+  - `hasUserData` / `hideDemoNotice` — 用户已有真实数据,隐藏演示提示。
+  - `showOnboarding` — 一次性 Onboarding 触发旗帜(清空数据后设置)。
+  - `theme-config` — 主题 primary 颜色、圆角、字号等,`layout.tsx` 内联脚本在首屏前读取应用。
+
+### 水合(hydration)策略
+`app/dashboard/page.tsx:143` — `hasHydrated` 为 false 时仅渲染占位 div,避免 persist 未恢复就闪出空态。挂载后 `setTimeout(() => setHasHydrated(true), 0)` 放行。
+
+### 书签生命周期
+```
+┌──────────────────┐
+│ 1. 用户输入 URL  │
+└──────────┬───────┘
+           ▼
+┌─────────────────────────────────────────────┐
+│ 2. addBookmark / importBookmarks             │
+│    - URL 归一化(去 hash/utm/gclid/末尾斜杠) │
+│    - 同子分类内 URL 去重                     │
+│    - 立即写入 store (id = bm_<ts>_<rand>)   │
+│    - favicon = Google s2 favicon            │
+│    - coverImage = /api/screenshot?url=...   │ ← SVG 占位
+└────────────────────────┬────────────────────┘
+                         │ 异步(setTimeout 100~500ms)
+                         ▼
+┌──────────────────────────────────────────────────────┐
+│ 3. startBackgroundEnhancement                        │
+│    ├─ categorizeBookmarks()                          │
+│    │    ├─ preset (命中 website-descriptions-1000+)   │
+│    │    └─ unknown                                    │
+│    ├─ processFastBatch(preset, batch=40)             │
+│    │    └─ 同步读取预置,经 onUpdate 回写              │
+│    └─ processSlowBatch(unknown + presetMissingCover) │
+│         ├─ request-deduplicator.fetchMetadataDeduped │
+│         │    └─ GET /api/fetch-meta?url=...           │
+│         ├─ 解析 og:image / twitter:image / icon      │
+│         └─ 回落 /api/screenshot 占位                  │
+└──────────────────────────┬───────────────────────────┘
+                           │ onUpdate(id, metadata)
+                           ▼
+┌─────────────────────────────────────────────┐
+│ 4. store.set() → 更新单条 bookmark 字段     │
+│    (保留 isEnhancing 标志,避免触发同步)    │
+└─────────────────────────────────────────────┘
+```
+
+### 导入流特殊点
+- `importBookmarks` 先 **克隆** `categories` / `bookmarks`(`use-bookmark-store.ts:489`),避免原地 mutate 让订阅者拿到旧引用(已修过 bug)。
+- 分类/子分类按**同名大小写无关**合并,维护 `categoryMapping` / `subCategoryMapping` 两张 `Map<旧ID, 新ID>`,书签据此重绑定 `subCategoryId`。
+- 若 `options.isImport = true`,增强阶段 `preserveOriginal` 为真:**保留用户原始的 title / description**,增强仅补充 favicon / coverImage 等缺失字段。
+
+### 封面图开关特殊副作用(`app/dashboard/page.tsx:44-83`)
+`displaySettings.showCover` 从 false → true 时,延迟 300ms 触发 `refreshCoverImages()`,仅处理 `coverImage` 缺失或仍是 `/api/screenshot` 占位的书签。使用 `ref` 跟踪前值,避免依赖 bookmarks 造成循环。
+
+### UI 读取路径
+```
+Component
+  └─ useBookmarkStore(selector)          // 选择性订阅
+  └─ useDisplaySettings(selector)        // 卡片布局 / 可见性
+  └─ useResponsiveLayout()               // 基于 window 宽度推 breakpoint
+         ↓
+      EnhancedMainContent
+         ├─ 搜索模式 → SearchResults
+         ├─ 分类选择 → DynamicBookmarkGrid
+         └─ 批量选择模式 → SelectableBookmarkCard + BatchSelectionToolbar
+```
+
+---
+
+## 5. API 结构
+
+所有路由位于 `app/api/`,**一律跑在 Edge Runtime**(`export const runtime = 'edge'`),首要作用是**规避 CORS** 并提供统一的元数据/图像代理。
+
+| 路由 | 方法 | 入参 | 产出 | 说明 |
+|---|---|---|---|---|
+| `/api/fetch-meta` | GET | `?url=` | `{ title, description, coverImage, url }` | 抓取 HTML,解析 `<title>` / og:* / twitter:* / JSON-LD / 站点特定正文选择器(CSDN/掘金/知乎/Medium/HubSpot 等),并 HEAD 验证封面图可达性。内存短缓存 20s。内网/本地/HTTP 协议直接返回智能兜底。知乎专栏使用特殊 UA。 |
+| `/api/fetch-title` | GET | `?url=` | `{ title }` | 仅标题,轻量版。 |
+| `/api/proxy-image` | GET | `?url=` | 图片字节流 | 代理外链图片,解决跨域、Referrer、HTTPS 升级。是 `coverImage` 中常见前缀。 |
+| `/api/screenshot` | GET | `?url=` | 动态生成的 SVG 占位图 | 当没有可用封面图时的**兜底占位**;域名首字母+配色,不发起外部请求。 |
+| `/api/website-preview` | GET | `?url=` | 综合预览数据 | 组合 meta + 图像的一次性接口。 |
+| `/api/analytics/web-vitals` | POST | `{ name, value, id, ... }` | `{ ok: true }` | 接收 `web-vitals` 库的 LCP/CLS/INP 等指标。 |
+
+### 客户端请求层
+`lib/request-deduplicator.ts` 暴露 `fetchMetadataDeduped(url)`:
+- 同一 URL 并发请求**合并为单次**,挂起的 Promise 共享。
+- 供 `backgroundEnhancer` 和若干对话框(如 AddBookmark)使用,避免批量增强时对 `/api/fetch-meta` 压力过大。
+
+### 特殊路由文件
+- `app/favicon.ico/route.ts`, `app/icon.tsx`, `app/apple-icon.tsx`, `app/opengraph-image.tsx`, `app/twitter-image.tsx` — Next.js 约定式资源生成。
+- `app/sitemap.ts`, `app/robots.ts` — SEO 产物,构建时生成。
+
+### 不使用外部 API 的原则
+`lib/background-metadata-enhancer.ts` 里保留了 `fetchDetailedMetadata()`(调用 `api.microlink.io`)但**默认禁用**,所有抓取都走自家 `/api/fetch-meta`,避免外部限频(429)和隐私外泄。代码注释:
+> 不再退回外部API,保持本地生成,避免 400/429 噪音与外部依赖
+
+---
+
+## 附:需要注意的约定
+
+1. **所有数据都在客户端**:没有数据库、没有用户系统。清空浏览器 = 丢失数据(除非先 Export)。
+2. **`"use client"` 是默认**:仅 `app/layout.tsx` 等极少数是 Server Component。
+3. **Edge Runtime 限制**:API 路由不能用 Node 原生模块(fs/path/crypto 等需 polyfill),不能超过 size 限制。
+4. **URL 归一化在入库前做**(`use-bookmark-store.ts:397-413`),所以 store 里的 `bookmark.url` 已经是规范化后的字符串。
+5. **演示数据是"软"的**:用户第一次添加书签会清除 `data-cleared` 标志,导入/重置走独立路径。切勿在组件里直接读 `defaultBookmarks`。

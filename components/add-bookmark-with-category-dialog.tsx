@@ -19,12 +19,20 @@ import { logger } from "@/lib/logger"
 interface AddBookmarkWithCategoryDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  defaultSubCategoryId?: string // 可选的默认分类
+  defaultCategoryId?: string // 可选的默认一级分类
+  defaultSubCategoryId?: string // 可选的默认子分类
 }
+
+// 虚拟分类/子分类 ID（用于"暂无"场景下的占位选项）
+const VIRTUAL_SYSTEM_CAT_ID = 'system'
+const VIRTUAL_UNCATEGORIZED_SUB_ID = 'uncategorized'
+const NEW_DEFAULT_SUB_SENTINEL = '__new_default_sub__'
+const DEFAULT_NEW_SUB_NAME = '未分组'
 
 export function AddBookmarkWithCategoryDialog({
   open,
   onOpenChange,
+  defaultCategoryId,
   defaultSubCategoryId
 }: AddBookmarkWithCategoryDialogProps) {
   const [title, setTitle] = useState("")
@@ -32,51 +40,94 @@ export function AddBookmarkWithCategoryDialog({
   const [description, setDescription] = useState("")
   const [coverImage, setCoverImage] = useState("")
   const [tags, setTags] = useState<string[]>([])
+  const [selectedCategoryId, setSelectedCategoryId] = useState("")
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState("")
   const [loading, setLoading] = useState(false)
-  // 首次添加书签（已有一级但无二级）引导字段
   const { addBookmark, categories, bookmarks, ensureUncategorizedExists, ensureSubCategory } = useBookmarkStore()
   const allTagSuggestions = Array.from(new Set(bookmarks.flatMap(b => b.tags || [])))
-  const totalSubCount = categories.reduce((sum, c) => sum + c.subCategories.length, 0)
-  const firstSubcase = categories.length > 0 && totalSubCount === 0
-  const [firstParentId, setFirstParentId] = useState<string>("")
-  const [firstSubName, setFirstSubName] = useState<string>("未分组")
 
-  useEffect(() => {
-    if (firstSubcase) {
-      const firstCat = categories[0]
-      setFirstParentId(firstCat?.id || "")
+  // 一级分类下拉选项：真实分类为主，若完全没有则提供"系统"虚拟项
+  const categoryOptions = useMemo(() => {
+    if (categories.length === 0) {
+      return [{ id: VIRTUAL_SYSTEM_CAT_ID, name: '系统', isVirtual: true }]
     }
-  }, [firstSubcase, categories])
-
-  // 获取所有可用的子分类（使用 useMemo 避免每次渲染都创建新数组导致副作用反复触发）
-  // 仅当完全没有任何一级分类时，才提供“未分类”占位
-  const allSubCategories = useMemo(() => {
-    const list = categories.flatMap(category =>
-      category.subCategories.map(subCategory => ({
-        ...subCategory,
-        categoryName: category.name
-      }))
-    )
-    if (categories.length === 0 && list.length === 0) {
-      return [{ id: 'uncategorized', name: '未分类', parentId: 'system', categoryName: '系统' } as any]
-    }
-    return list
+    return categories.map(c => ({ id: c.id, name: c.name, isVirtual: false }))
   }, [categories])
 
-  // 设置默认选中的分类（仅当未选择或选择的项不再存在时才设定，避免覆盖用户操作）
+  // 当前一级分类下的子分类下拉选项
+  const subCategoryOptions = useMemo(() => {
+    if (!selectedCategoryId) return []
+    // 虚拟"系统"分类 → 固定展示"未分类"
+    if (selectedCategoryId === VIRTUAL_SYSTEM_CAT_ID && !categories.find(c => c.id === VIRTUAL_SYSTEM_CAT_ID)) {
+      return [{ id: VIRTUAL_UNCATEGORIZED_SUB_ID, name: '未分类' }]
+    }
+    const cat = categories.find(c => c.id === selectedCategoryId)
+    const subs = cat?.subCategories ?? []
+    // 真实一级下没有子分类 → 展示"未分组（将自动创建）"占位项
+    if (subs.length === 0) {
+      return [{ id: NEW_DEFAULT_SUB_SENTINEL, name: `${DEFAULT_NEW_SUB_NAME}（将自动创建）` }]
+    }
+    return subs.map(s => ({ id: s.id, name: s.name }))
+  }, [categories, selectedCategoryId])
+
+  // 初始化默认选中：打开对话框时根据 defaultCategoryId / defaultSubCategoryId 推导一级和二级
   useEffect(() => {
     if (!open) return
-    const exists = selectedSubCategoryId && allSubCategories.some(sub => sub.id === selectedSubCategoryId)
-    if (defaultSubCategoryId && allSubCategories.some(sub => sub.id === defaultSubCategoryId)) {
-      // 如果传入了默认二级分类且存在，优先使用
-      setSelectedSubCategoryId(prev => (prev ? prev : defaultSubCategoryId))
+
+    // 1) 指定了 defaultSubCategoryId 且能在真实分类里找到 → 直接选中该子分类及其所属一级
+    if (defaultSubCategoryId) {
+      for (const cat of categories) {
+        const sub = cat.subCategories.find(s => s.id === defaultSubCategoryId)
+        if (sub) {
+          setSelectedCategoryId(cat.id)
+          setSelectedSubCategoryId(defaultSubCategoryId)
+          return
+        }
+      }
+    }
+
+    // 2) 指定了 defaultCategoryId → 用该一级分类，子分类取其第一个（无则用"未分组"占位）
+    if (defaultCategoryId) {
+      const cat = categories.find(c => c.id === defaultCategoryId)
+      if (cat) {
+        setSelectedCategoryId(cat.id)
+        setSelectedSubCategoryId(cat.subCategories[0]?.id ?? NEW_DEFAULT_SUB_SENTINEL)
+        return
+      }
+    }
+
+    // 3) 未传入默认值 → 选第一个有子分类的一级分类
+    for (const cat of categories) {
+      if (cat.subCategories.length > 0) {
+        setSelectedCategoryId(cat.id)
+        setSelectedSubCategoryId(cat.subCategories[0].id)
+        return
+      }
+    }
+
+    // 4) 有一级但全无二级 → 默认第一个一级 + "未分组（将自动创建）"占位
+    if (categories.length > 0) {
+      setSelectedCategoryId(categories[0].id)
+      setSelectedSubCategoryId(NEW_DEFAULT_SUB_SENTINEL)
       return
     }
-    if (!exists && allSubCategories.length > 0) {
-      setSelectedSubCategoryId(allSubCategories[0].id)
+
+    // 5) 完全没有分类 → 虚拟"系统 / 未分类"
+    setSelectedCategoryId(VIRTUAL_SYSTEM_CAT_ID)
+    setSelectedSubCategoryId(VIRTUAL_UNCATEGORIZED_SUB_ID)
+  }, [open, defaultCategoryId, defaultSubCategoryId, categories])
+
+  // 切换一级分类时，自动选中该分类下第一个子分类（或占位项）
+  const handleCategoryChange = (catId: string) => {
+    setSelectedCategoryId(catId)
+    if (catId === VIRTUAL_SYSTEM_CAT_ID && !categories.find(c => c.id === VIRTUAL_SYSTEM_CAT_ID)) {
+      setSelectedSubCategoryId(VIRTUAL_UNCATEGORIZED_SUB_ID)
+      return
     }
-  }, [open, defaultSubCategoryId, allSubCategories, selectedSubCategoryId])
+    const cat = categories.find(c => c.id === catId)
+    const firstSub = cat?.subCategories[0]
+    setSelectedSubCategoryId(firstSub ? firstSub.id : NEW_DEFAULT_SUB_SENTINEL)
+  }
 
   // 获取预置数据的函数
   const getPresetData = (url: string) => {
@@ -121,17 +172,6 @@ export function AddBookmarkWithCategoryDialog({
     return null
   }
 
-  // 获取网站完整元数据的函数
-  const fetchWebsiteMetadata = async (url: string) => {
-    try {
-      const { fetchMetadataDeduped } = await import('@/lib/request-deduplicator')
-      const data = await fetchMetadataDeduped(url)
-      return data
-    } catch (error) {
-      return null
-    }
-  }
-
   const handleUrlChange = (newUrl: string) => {
     // 直接更新URL状态，保持用户输入的原始状态
     setUrl(newUrl)
@@ -153,17 +193,20 @@ export function AddBookmarkWithCategoryDialog({
       return
     }
 
-    // 首次添加：先确保创建一个子分类
+    // 解析目标子分类 ID：占位项在提交时转化为真实 ID
     let targetSubCategoryId = selectedSubCategoryId
-    if (firstSubcase) {
-      if (!firstParentId) return
-      const name = firstSubName?.trim() || '未分组'
-      targetSubCategoryId = ensureSubCategory(firstParentId, name)
-    } else {
-      if (!selectedSubCategoryId) return
-      if (selectedSubCategoryId === 'uncategorized') {
-        targetSubCategoryId = ensureUncategorizedExists()
-      }
+    if (!targetSubCategoryId) return
+
+    if (targetSubCategoryId === VIRTUAL_UNCATEGORIZED_SUB_ID) {
+      targetSubCategoryId = ensureUncategorizedExists()
+    } else if (targetSubCategoryId === NEW_DEFAULT_SUB_SENTINEL) {
+      if (!selectedCategoryId) return
+      targetSubCategoryId = ensureSubCategory(selectedCategoryId, DEFAULT_NEW_SUB_NAME)
+    }
+
+    if (!targetSubCategoryId) {
+      toast.error('创建子分类失败，请重试')
+      return
     }
 
     setLoading(true)
@@ -175,13 +218,11 @@ export function AddBookmarkWithCategoryDialog({
       let initialCoverImage = coverImage.trim()
 
       // 如果没有标题，先尝试从预置数据库快速获取
-      if (!initialTitle) {
-        const presetData = getPresetData(normalizedUrl)
-        if (presetData) {
-          initialTitle = presetData.title
-          if (!initialDescription) initialDescription = presetData.description
-          if (!initialCoverImage && presetData.coverImage) initialCoverImage = presetData.coverImage
-        }
+      const presetData = !initialTitle ? getPresetData(normalizedUrl) : null
+      if (presetData) {
+        initialTitle = presetData.title
+        if (!initialDescription) initialDescription = presetData.description
+        if (!initialCoverImage && presetData.coverImage) initialCoverImage = presetData.coverImage
       }
 
       // 如果还是没有标题，使用域名作为临时标题
@@ -196,39 +237,26 @@ export function AddBookmarkWithCategoryDialog({
 
       const tagsArray = tags.map(t => t.trim()).filter(t => t.length > 0)
 
-      // 立即添加书签（使用基础信息）
+      // 立即添加书签（后台增强由 store 内的 startBackgroundEnhancement 统一处理）
       await addBookmark({
         title: initialTitle,
         url: normalizedUrl,
         description: initialDescription || undefined,
         coverImage: initialCoverImage || undefined,
         tags: tagsArray.length ? tagsArray : undefined,
-        subCategoryId: targetSubCategoryId!,
+        subCategoryId: targetSubCategoryId,
       })
 
-      // 立即重置表单并关闭对话框
+      // 重置表单并关闭对话框
       setTitle("")
       setUrl("")
       setDescription("")
       setCoverImage("")
       setTags([])
+      setSelectedCategoryId("")
       setSelectedSubCategoryId("")
-      setLoading(false)
       onOpenChange(false)
       toast.success("书签添加成功")
-
-      // 如果没有从预置数据库获取到完整信息，在后台异步获取元数据
-      if (!getPresetData(normalizedUrl)) {
-        // 后台异步获取元数据（不阻塞用户界面）
-        fetchWebsiteMetadata(normalizedUrl).then(metadata => {
-          if (metadata && (metadata.title || metadata.description || metadata.coverImage)) {
-            // 实际的更新会通过 addBookmark 中的增强逻辑自动处理
-          }
-        }).catch(() => {
-          // 静默处理错误，不影响用户体验
-        })
-      }
-      return // 提前返回，避免执行 finally 块
     } catch (err: any) {
       if (err && err.code === 'DUPLICATE_BOOKMARK') {
         toast.warning('该子分类下已存在相同网址的书签')
@@ -245,19 +273,9 @@ export function AddBookmarkWithCategoryDialog({
       }
       logger.error(err)
       toast.error('添加失败，请重试')
-      return
     } finally {
       setLoading(false)
     }
-
-    // 重置表单
-    setTitle("")
-    setUrl("")
-    setDescription("")
-    setCoverImage("")
-    setTags([])
-    setSelectedSubCategoryId("")
-    onOpenChange(false)
   }
 
   const handleClose = () => {
@@ -266,61 +284,46 @@ export function AddBookmarkWithCategoryDialog({
     setDescription("")
     setCoverImage("")
     setTags([])
+    setSelectedCategoryId("")
     setSelectedSubCategoryId("")
     onOpenChange(false)
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose() }}>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>添加书签</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="category">选择分类 *</Label>
-
-	          {firstSubcase && (
-	            <div className="space-y-2">
-	              <Label>首次添加引导</Label>
-	              <div className="grid grid-cols-1 gap-2">
-	                <div>
-	                  <Label>父级分类</Label>
-	                  <Select value={firstParentId} onValueChange={setFirstParentId}>
-	                    <SelectTrigger>
-	                      <SelectValue placeholder="选择父级分类" />
-	                    </SelectTrigger>
-	                    <SelectContent>
-	                      {categories.map(cat => (
-	                        <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
-	                      ))}
-	                    </SelectContent>
-	                  </Select>
-	                </div>
-	                <div>
-	                  <Label>子分类名称</Label>
-	                  <Input value={firstSubName} onChange={(e) => setFirstSubName(e.target.value)} placeholder="未分组" />
-	                </div>
-	              </div>
-	            </div>
-	          )}
-
-	            {!firstSubcase && (
-	              <Select value={selectedSubCategoryId} onValueChange={setSelectedSubCategoryId}>
-	                <SelectTrigger>
-	                  <SelectValue placeholder="请选择分类" />
-	                </SelectTrigger>
-	                <SelectContent>
-	                  {allSubCategories.map((subCategory) => (
-	                    <SelectItem key={subCategory.id} value={subCategory.id}>
-	                      {subCategory.categoryName} / {subCategory.name}
-	                    </SelectItem>
-	                  ))}
-	                </SelectContent>
-	              </Select>
-	            )}
-
-
+            <Label>选择分类 *</Label>
+            <div className="grid grid-cols-2 gap-2 mt-1.5">
+              <Select value={selectedCategoryId} onValueChange={handleCategoryChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="一级分类" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categoryOptions.map(cat => (
+                    <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select
+                value={selectedSubCategoryId}
+                onValueChange={setSelectedSubCategoryId}
+                disabled={subCategoryOptions.length === 0}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="子分类" />
+                </SelectTrigger>
+                <SelectContent>
+                  {subCategoryOptions.map(sub => (
+                    <SelectItem key={sub.id} value={sub.id}>{sub.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div>
@@ -400,7 +403,7 @@ export function AddBookmarkWithCategoryDialog({
             </Button>
             <Button
               type="submit"
-              disabled={loading || !(firstSubcase ? Boolean(firstParentId && firstSubName.trim()) : Boolean(selectedSubCategoryId))}
+              disabled={loading || !selectedCategoryId || !selectedSubCategoryId}
             >
               添加
             </Button>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Trash, FolderPlus, Bookmark, Download } from "lucide-react"
+import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Square, Trash, FolderPlus, Bookmark, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Input } from "@/components/ui/input"
@@ -114,6 +114,14 @@ export function Sidebar({
     setSelectedCategoryIds(new Set())
   }
 
+  const toggleSelectAll = () => {
+    if (categories.length > 0 && selectedCategoryIds.size === categories.length) {
+      clearSelection()
+    } else {
+      selectAllCategories()
+    }
+  }
+
   const handleBatchDelete = () => {
     setBatchDeleteDialogOpen(true)
   }
@@ -221,8 +229,17 @@ export function Sidebar({
               </>
             ) : (
               <>
-                <Button variant="ghost" size="icon-sm" onClick={selectAllCategories} title="全选" className="hover:bg-primary/10 hover:text-primary">
-                  <CheckSquare className="h-4 w-4" />
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={toggleSelectAll}
+                  disabled={categories.length === 0}
+                  title={categories.length > 0 && selectedCategoryIds.size === categories.length ? "取消全选" : "全选"}
+                  className="hover:bg-primary/10 hover:text-primary"
+                >
+                  {categories.length > 0 && selectedCategoryIds.size === categories.length
+                    ? <Square className="h-4 w-4" />
+                    : <CheckSquare className="h-4 w-4" />}
                 </Button>
                 <Button
                   variant="ghost"

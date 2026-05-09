@@ -483,7 +483,14 @@ export const useBookmarkStore = create<BookmarkStore>()(
 
       importBookmarks: async (data, options: { enableBackgroundEnhancement?: boolean } = {}) => {
         const { enableBackgroundEnhancement = true } = options
-        const { categories: existingCategories, bookmarks: existingBookmarks } = get()
+        const { categories: existingCategoriesRaw, bookmarks: existingBookmarksRaw } = get()
+
+        // 🔧 克隆一份再做修改，避免原地 mutate 导致订阅者（如添加书签对话框的 useMemo）读到旧引用
+        const existingCategories = existingCategoriesRaw.map(cat => ({
+          ...cat,
+          subCategories: [...cat.subCategories],
+        }))
+        const existingBookmarks = [...existingBookmarksRaw]
 
         logger.debug(`🚀 开始快速导入 ${data.bookmarks.length} 个书签...`)
         const startTime = Date.now()

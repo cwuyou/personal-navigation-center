@@ -154,6 +154,7 @@ export default function HomePage() {
         onSearchChange={setSearchQuery}
         onLogoClick={handleBackToHome}
         onSettingsClick={() => setSettingsPanelOpen(true)}
+        selectedCategory={selectedCategory}
         selectedSubCategory={selectedSubCategory}
       />
 

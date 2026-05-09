@@ -28,10 +28,11 @@ interface HeaderProps {
   onSearchChange: (query: string) => void
   onLogoClick?: () => void
   onSettingsClick?: () => void
+  selectedCategory?: string | null
   selectedSubCategory?: string | null
 }
 
-export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsClick, selectedSubCategory }: HeaderProps) {
+export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsClick, selectedCategory, selectedSubCategory }: HeaderProps) {
   const [importDialogOpen, setImportDialogOpen] = useState(false)
 
   // 监听从页面发出的“打开导入对话框”事件（用于空态/Onboarding）
@@ -140,11 +141,28 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
 
   const { toast } = useToast()
 
+  // 获取默认的一级分类ID（用于全局添加书签）
+  const getDefaultCategoryId = () => {
+    if (selectedCategory) return selectedCategory
+    // 回退到当前选中的子分类所属的一级
+    if (selectedSubCategory) {
+      const parent = categories.find(cat => cat.subCategories.some(sub => sub.id === selectedSubCategory))
+      if (parent) return parent.id
+    }
+    return categories[0]?.id ?? null
+  }
+
   // 获取默认的子分类ID（用于全局添加书签）
   const getDefaultSubCategoryId = () => {
     if (selectedSubCategory) return selectedSubCategory
 
-    // 如果没有选中的子分类，使用第一个可用的子分类
+    // 优先用当前选中一级分类下的第一个子分类
+    if (selectedCategory) {
+      const cat = categories.find(c => c.id === selectedCategory)
+      if (cat && cat.subCategories.length > 0) return cat.subCategories[0].id
+    }
+
+    // 否则使用第一个可用的子分类
     for (const category of categories) {
       if (category.subCategories.length > 0) {
         return category.subCategories[0].id
@@ -747,12 +765,12 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
 
 
 
-          <Link href="/help" title="帮助与文档">
-            <Button variant="ghost" size="sm" className="hover:bg-primary/10">
+          <Button asChild variant="ghost" size="sm" className="hover:bg-primary/10" title="帮助与文档">
+            <Link href="/help">
               <HelpCircle className="h-4 w-4 sm:mr-2" />
               <span className="hidden sm:inline">帮助</span>
-            </Button>
-          </Link>
+            </Link>
+          </Button>
           <Button variant="ghost" size="sm" onClick={onSettingsClick} className="hover:bg-primary/10" title="设置">
             <Settings className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline">设置</span>
@@ -781,6 +799,7 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
       <AddBookmarkWithCategoryDialog
         open={addBookmarkOpen}
         onOpenChange={setAddBookmarkOpen}
+        defaultCategoryId={getDefaultCategoryId() || undefined}
         defaultSubCategoryId={getDefaultSubCategoryId() || undefined}
       />
     </header>
