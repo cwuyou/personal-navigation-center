@@ -111,7 +111,7 @@ export default function HelpPage() {
                             <strong>书签归类规则：</strong>
                             <ul className="ml-4 mt-1 space-y-1">
                               <li>• <span className="bg-yellow-100 px-1 rounded">书签栏下的直接书签</span> → 放入"未分类书签"分类</li>
-                              <li>• <span className="bg-yellow-100 px-1 rounded">一级分类下的直接书签</span> → 放入该分类的"默认"子分类</li>
+                              <li>• <span className="bg-yellow-100 px-1 rounded">一级分类下的直接书签</span> → 放入该分类的"未分组"子分类</li>
                               <li>• <span className="bg-yellow-100 px-1 rounded">深层文件夹中的书签</span> → 添加前缀标识来源文件夹</li>
                             </ul>
                           </div>
@@ -124,7 +124,7 @@ export default function HelpPage() {
                           <div className="mb-2 font-medium">原始结构：</div>
                           <CopyablePre>{`书签栏/\n├── Google (直接书签)\n├── 开发工具/\n│   ├── VSCode (直接书签)\n│   ├── 前端工具/\n│   │   └── React文档\n│   └── 后端工具/\n│       └── API工具/\n│           └── Postman`}</CopyablePre>
                           <div className="mt-3 mb-2 font-medium">导入后结构：</div>
-                          <CopyablePre>{`📂 未分类书签\n  └── 📁 默认\n      └── 🔗 Google\n\n📂 开发工具\n  ├── 📁 默认\n  │   └── 🔗 VSCode\n  ├── 📁 前端工具\n  │   └── 🔗 React文档\n  └── 📁 后端工具\n      └── 🔗 [API工具] Postman`}</CopyablePre>
+                          <CopyablePre>{`📂 未分类书签\n  └── 📁 未分组\n      └── 🔗 Google\n\n📂 开发工具\n  ├── 📁 未分组\n  │   └── 🔗 VSCode\n  ├── 📁 前端工具\n  │   └── 🔗 React文档\n  └── 📁 后端工具\n      └── 🔗 [API工具] Postman`}</CopyablePre>
                         </div>
                       </div>
 
@@ -151,7 +151,7 @@ export default function HelpPage() {
                       <p className="text-sm text-muted-foreground mb-4">这是浏览器标准的书签导出格式，所有主流浏览器都支持导出为此格式。系统会智能识别书签栏结构并合理组织分类。</p>
                       <div className="bg-muted p-4 rounded-lg mb-4">
                         <h4 className="font-medium mb-2">Chrome/Edge 导出的典型结构：</h4>
-                        <CopyablePre>{`<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">\n<TITLE>Bookmarks</TITLE>\n<H1>Bookmarks</H1>\n<DL><p>\n    <DT><H3 PERSONAL_TOOLBAR_FOLDER="true">书签栏</H3>\n    <DL><p>\n        <!-- 直接书签 → 未分类书签/默认 -->\n        <DT><A HREF="https://www.google.com/">Google</A>\n\n        <!-- 一级文件夹 → 一级分类 -->\n        <DT><H3>开发工具</H3>\n        <DL><p>\n            <!-- 直接书签 → 开发工具/默认 -->\n            <DT><A HREF="https://code.visualstudio.com/">VSCode</A>\n\n            <!-- 二级文件夹 → 二级分类 -->\n            <DT><H3>前端工具</H3>\n            <DL><p>\n                <DT><A HREF="https://reactjs.org/">React</A>\n\n                <!-- 三级文件夹 → 扁平化到前端工具，添加前缀 -->\n                <DT><H3>框架文档</H3>\n                <DL><p>\n                    <DT><A HREF="https://vuejs.org/">Vue.js</A>\n                </DL><p>\n            </DL><p>\n        </DL><p>\n    </DL><p>\n</DL><p>`}</CopyablePre>
+                        <CopyablePre>{`<!DOCTYPE NETSCAPE-Bookmark-file-1>\n<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">\n<TITLE>Bookmarks</TITLE>\n<H1>Bookmarks</H1>\n<DL><p>\n    <DT><H3 PERSONAL_TOOLBAR_FOLDER="true">书签栏</H3>\n    <DL><p>\n        <!-- 直接书签 → 未分类书签/未分组 -->\n        <DT><A HREF="https://www.google.com/">Google</A>\n\n        <!-- 一级文件夹 → 一级分类 -->\n        <DT><H3>开发工具</H3>\n        <DL><p>\n            <!-- 直接书签 → 开发工具/未分组 -->\n            <DT><A HREF="https://code.visualstudio.com/">VSCode</A>\n\n            <!-- 二级文件夹 → 二级分类 -->\n            <DT><H3>前端工具</H3>\n            <DL><p>\n                <DT><A HREF="https://reactjs.org/">React</A>\n\n                <!-- 三级文件夹 → 扁平化到前端工具，添加前缀 -->\n                <DT><H3>框架文档</H3>\n                <DL><p>\n                    <DT><A HREF="https://vuejs.org/">Vue.js</A>\n                </DL><p>\n            </DL><p>\n        </DL><p>\n    </DL><p>\n</DL><p>`}</CopyablePre>
                       </div>
                       <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
                         <h4 className="font-medium text-amber-900 mb-2">智能处理特性</h4>

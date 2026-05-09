@@ -25,6 +25,11 @@ interface SubCategory {
 import { AddCategoryDialog } from "@/components/add-category-dialog"
 import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog"
 import { cn } from "@/lib/utils"
+import { FALLBACK_SUBCATEGORY_NAME } from "@/lib/bookmark-importer"
+
+const isCollapsibleFallback = (category: Category) =>
+  category.subCategories.length === 1 &&
+  category.subCategories[0].name === FALLBACK_SUBCATEGORY_NAME
 
 interface SidebarProps {
   collapsed: boolean
@@ -297,7 +302,9 @@ export function Sidebar({
                       </div>
                     ) : (
                       <>
-                        {expandedCategories.has(category.id) ? (
+                        {isCollapsibleFallback(category) ? (
+                          <span className="w-4 h-4 mr-2" aria-hidden />
+                        ) : expandedCategories.has(category.id) ? (
                           <ChevronDown className="h-4 w-4 mr-2" />
                         ) : (
                           <ChevronRight className="h-4 w-4 mr-2" />
@@ -429,7 +436,7 @@ export function Sidebar({
                 )}
               </div>
 
-              {!isBatchMode && expandedCategories.has(category.id) && (
+              {!isBatchMode && expandedCategories.has(category.id) && !isCollapsibleFallback(category) && (
                 <div className="ml-6 mt-1">
                   {category.subCategories.map((subCategory: SubCategory) => (
                     <div

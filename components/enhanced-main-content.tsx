@@ -14,6 +14,7 @@ import { DynamicBookmarkGrid } from "@/components/dynamic-bookmark-grid"
 import { Button } from "@/components/ui/button"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useBookmarkImagePreloader } from "@/hooks/use-image-preloader"
+import { FALLBACK_SUBCATEGORY_NAME } from "@/lib/bookmark-importer"
 
 interface Bookmark {
   id: string
@@ -137,6 +138,15 @@ export function EnhancedMainContent({
     ? categories.find(cat => cat.id === selectedCategory)
     : null
 
+  // 当一级分类只有一个"未分组"占位子分类时,折叠中间层:
+  // 直接把该子分类当作已选中,不显示 chip 导航
+  const isCollapsedFallback = !!currentCategory &&
+    currentCategory.subCategories.length === 1 &&
+    currentCategory.subCategories[0].name === FALLBACK_SUBCATEGORY_NAME
+  const effectiveSubCategory = isCollapsedFallback
+    ? currentCategory!.subCategories[0].id
+    : selectedSubCategory
+
   // 🔧 使用useMemo缓存当前书签，避免不必要的重新计算
   const currentBookmarks = useMemo(() => {
     if (selectedSubCategory) {
@@ -231,30 +241,34 @@ export function EnhancedMainContent({
               )}
             </div>
             <p className="text-xs sm:text-sm text-muted-foreground ml-4 sm:ml-5">
-              {currentCategory.subCategories.length} 个子分类 · {currentBookmarks.length} 个书签
+              {isCollapsedFallback
+                ? `${currentBookmarks.length} 个书签`
+                : `${currentCategory.subCategories.length} 个子分类 · ${currentBookmarks.length} 个书签`}
             </p>
           </div>
 
           {/* 子分类导航 */}
-          <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
-            {currentCategory.subCategories.map((subCategory) => (
-              <button
-                key={subCategory.id}
-                className={cn(
-                  "px-3 py-1.5 text-xs sm:text-sm rounded-full transition-all duration-200 touch-manipulation active:scale-95",
-                  selectedSubCategory === subCategory.id
-                    ? "bg-primary text-primary-foreground shadow-md hover:shadow-lg"
-                    : "bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary border border-transparent hover:border-primary/30"
-                )}
-                onClick={() => onSubCategorySelect(subCategory.id)}
-              >
-                {subCategory.name}
-                <span className="ml-1.5 text-xs opacity-60">
-                  {bookmarks.filter(b => b.subCategoryId === subCategory.id).length}
-                </span>
-              </button>
-            ))}
-          </div>
+          {!isCollapsedFallback && (
+            <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
+              {currentCategory.subCategories.map((subCategory) => (
+                <button
+                  key={subCategory.id}
+                  className={cn(
+                    "px-3 py-1.5 text-xs sm:text-sm rounded-full transition-all duration-200 touch-manipulation active:scale-95",
+                    selectedSubCategory === subCategory.id
+                      ? "bg-primary text-primary-foreground shadow-md hover:shadow-lg"
+                      : "bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary border border-transparent hover:border-primary/30"
+                  )}
+                  onClick={() => onSubCategorySelect(subCategory.id)}
+                >
+                  {subCategory.name}
+                  <span className="ml-1.5 text-xs opacity-60">
+                    {bookmarks.filter(b => b.subCategoryId === subCategory.id).length}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Bookmarks grid */}
           <DynamicBookmarkGrid>
@@ -277,10 +291,10 @@ export function EnhancedMainContent({
               )
             ))}
 
-            {selectedSubCategory && !isSelectionMode && currentBookmarks.length > 0 && <AddBookmarkCard subCategoryId={selectedSubCategory} />}
+            {effectiveSubCategory && !isSelectionMode && currentBookmarks.length > 0 && <AddBookmarkCard subCategoryId={effectiveSubCategory} />}
           </DynamicBookmarkGrid>
 
-          {currentBookmarks.length === 0 && selectedSubCategory && (
+          {currentBookmarks.length === 0 && effectiveSubCategory && (
             <div className="text-center mt-16">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-muted/50 flex items-center justify-center">
                 <svg className="w-10 h-10 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -289,7 +303,7 @@ export function EnhancedMainContent({
               </div>
               <h3 className="text-lg font-medium text-foreground mb-2">还没有书签</h3>
               <p className="text-muted-foreground mb-6">点击下方按钮添加第一个书签</p>
-              <AddBookmarkCard subCategoryId={selectedSubCategory} />
+              <AddBookmarkCard subCategoryId={effectiveSubCategory} />
             </div>
           )}
         </div>

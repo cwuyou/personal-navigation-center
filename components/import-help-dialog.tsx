@@ -168,7 +168,7 @@ export function ImportHelpDialog({ open, onOpenChange }: ImportHelpDialogProps) 
                           <strong>书签归类规则：</strong>
                           <ul className="ml-4 mt-1 space-y-1">
                             <li>• <span className="bg-yellow-100 px-1 rounded">书签栏下的直接书签</span> → 放入"未分类书签"分类</li>
-                            <li>• <span className="bg-yellow-100 px-1 rounded">一级分类下的直接书签</span> → 放入该分类的"默认"子分类</li>
+                            <li>• <span className="bg-yellow-100 px-1 rounded">一级分类下的直接书签</span> → 放入该分类的"未分组"子分类</li>
                             <li>• <span className="bg-yellow-100 px-1 rounded">深层文件夹中的书签</span> → 添加前缀标识来源文件夹</li>
                           </ul>
                         </div>
@@ -194,11 +194,11 @@ export function ImportHelpDialog({ open, onOpenChange }: ImportHelpDialogProps) 
                         <div className="mt-3 mb-2"><strong>导入后结构：</strong></div>
                         <pre className="bg-white p-2 rounded text-xs overflow-x-auto border">
 {`📂 未分类书签
-  └── 📁 默认
+  └── 📁 未分组
       └── 🔗 Google
 
 📂 开发工具
-  ├── 📁 默认
+  ├── 📁 未分组
   │   └── 🔗 VSCode
   ├── 📁 前端工具
   │   └── 🔗 React文档
@@ -242,13 +242,13 @@ export function ImportHelpDialog({ open, onOpenChange }: ImportHelpDialogProps) 
 <DL><p>
     <DT><H3 PERSONAL_TOOLBAR_FOLDER="true">书签栏</H3>
     <DL><p>
-        <!-- 直接书签 → 未分类书签/默认 -->
+        <!-- 直接书签 → 未分类书签/未分组 -->
         <DT><A HREF="https://www.google.com/">Google</A>
 
         <!-- 一级文件夹 → 一级分类 -->
         <DT><H3>开发工具</H3>
         <DL><p>
-            <!-- 直接书签 → 开发工具/默认 -->
+            <!-- 直接书签 → 开发工具/未分组 -->
             <DT><A HREF="https://code.visualstudio.com/">VSCode</A>
 
             <!-- 二级文件夹 → 二级分类 -->
