@@ -1,9 +1,9 @@
 "use client"
 
 import { useMemo } from "react"
-import { Globe } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { CachedImage } from "./cached-image"
+import { getLetterPlaceholder } from "@/lib/letter-placeholder"
 
 interface BookmarkCoverProps {
   bookmark: {
@@ -50,10 +50,18 @@ export function BookmarkCover({ bookmark, className, aspectRatio = "video" }: Bo
     wide: "aspect-[21/9]" // 21:9 超宽屏
   }
 
-  // 占位符组件
+  // 占位符:与服务端 /api/screenshot 字母+纯色风格一致
+  const { color: placeholderColor, letter: placeholderLetter } = useMemo(
+    () => getLetterPlaceholder(bookmark.url),
+    [bookmark.url]
+  )
   const placeholder = (
-    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted/50 to-muted/20">
-      <Globe className="w-8 h-8 text-muted-foreground/40" />
+    <div
+      className="w-full h-full flex items-center justify-center text-white font-semibold select-none"
+      style={{ backgroundColor: placeholderColor, fontSize: 'clamp(32px, 18%, 128px)' }}
+      aria-hidden="true"
+    >
+      {placeholderLetter}
     </div>
   )
 

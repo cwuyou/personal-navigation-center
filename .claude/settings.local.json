@@ -4,7 +4,9 @@
       "Bash(npm run *)",
       "Bash(npx next *)",
       "Bash(npx tsc *)",
-      "Bash(git stash *)"
+      "Bash(git stash *)",
+      "Bash(npx eslint *)",
+      "Bash(node *)"
     ]
   }
 }

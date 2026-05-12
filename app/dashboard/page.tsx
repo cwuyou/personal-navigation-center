@@ -17,10 +17,12 @@ import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useSmartRecommendations } from "@/hooks/use-smart-recommendations"
 import { useResponsiveLayout, useDisplaySettings } from "@/hooks/use-display-settings"
 import { logger } from "@/lib/logger"
+import { DEFAULT_SEARCH_FILTERS, type SearchFilters } from "@/lib/search-utils"
 
 export default function HomePage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>(DEFAULT_SEARCH_FILTERS)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null)
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false)
@@ -152,6 +154,8 @@ export default function HomePage() {
       <Header
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        searchFilters={searchFilters}
+        onSearchFiltersChange={setSearchFilters}
         onLogoClick={handleBackToHome}
         onSettingsClick={() => setSettingsPanelOpen(true)}
         selectedCategory={selectedCategory}
@@ -195,6 +199,12 @@ export default function HomePage() {
         })() : (
           <EnhancedMainContent
             searchQuery={searchQuery}
+            searchFilters={searchFilters}
+            onCategorySelectFromSearch={(categoryId) => {
+              setSelectedCategory(categoryId)
+              setSelectedSubCategory(null)
+              setSearchQuery("")
+            }}
             selectedCategory={selectedCategory}
             selectedSubCategory={selectedSubCategory}
             onSubCategorySelect={handleSubCategorySelect}

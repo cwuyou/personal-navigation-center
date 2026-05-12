@@ -14,12 +14,14 @@ export interface WebsiteMetadata {
 
 /**
  * 从URL获取网站的favicon
+ * 返回经过 /api/proxy-image 代理的 URL,服务端会按以下顺序回退:
+ * 站点自身 /favicon.ico -> /apple-touch-icon.png -> DuckDuckGo -> Google S2
  */
 export function getFaviconUrl(url: string): string | undefined {
   try {
     const domain = new URL(url).hostname
-    // 优先使用 DuckDuckGo ip3（对部分站点更稳）；前端 onError 中再回退到 Google S2
-    return `https://icons.duckduckgo.com/ip3/${domain}.ico`
+    const target = `https://${domain}/favicon.ico`
+    return `/api/proxy-image?url=${encodeURIComponent(target)}`
   } catch {
     return undefined
   }

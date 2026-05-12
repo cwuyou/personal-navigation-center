@@ -87,7 +87,9 @@ npm run lint     # ESLint
 ┌─────────────────────────────────────────────────────────────────┐
 │  lib/                                                           │
 │  ├─ background-metadata-enhancer.ts  核心: 书签增强流水线       │
-│  ├─ metadata-fetcher.ts              favicon / 站点名提取       │
+│  ├─ metadata-fetcher.ts              favicon(走代理) / 站点名   │
+│  ├─ search-utils.ts                  搜索过滤/解析共享逻辑      │
+│  ├─ letter-placeholder.ts            字母+纯色占位颜色/字母派生  │
 │  ├─ request-deduplicator.ts          前端 fetch-meta 去重       │
 │  ├─ image-cache.ts                   客户端图像缓存              │
 │  ├─ theme-loader.ts, i18n.ts, logger.ts, utils.ts, url-utils.ts │
@@ -126,11 +128,14 @@ npm run lint     # ESLint
 HomePage
 ├─ WebSiteStructuredData / StructuredData (SEO)
 ├─ Header              ← 搜索、logo、设置按钮
+│   └─ EnhancedSearch  ← 受控 filters、Ctrl+K 快捷键、键盘导航(↑/↓/Enter)
 ├─ Sidebar             ← 分类树、折叠控件
 ├─ EmptyState | EnhancedMainContent
+│   ├─ SearchResults   ← 有搜索词时取代常规视图,filters/onCategorySelect 受控
+│   └─ DynamicBookmarkGrid + EnhancedBookmarkCard ← 正常分类视图
 ├─ OnboardingModal
 ├─ AddCategoryDialog / AddBookmarkWithCategoryDialog
-├─ PWAInstall
+├─ PWAInstall          ← dev 环境主动卸载旧 SW + 清 cache,生产才注册
 ├─ SettingsPanel
 └─ EnhancementProgress ← 后台元数据增强进度条
 ```
@@ -249,8 +254,8 @@ Component
 |---|---|---|---|---|
 | `/api/fetch-meta` | GET | `?url=` | `{ title, description, coverImage, url }` | 抓取 HTML,解析 `<title>` / og:* / twitter:* / JSON-LD / 站点特定正文选择器(CSDN/掘金/知乎/Medium/HubSpot 等),并 HEAD 验证封面图可达性。内存短缓存 20s。内网/本地/HTTP 协议直接返回智能兜底。知乎专栏使用特殊 UA。 |
 | `/api/fetch-title` | GET | `?url=` | `{ title }` | 仅标题,轻量版。 |
-| `/api/proxy-image` | GET | `?url=` | 图片字节流 | 代理外链图片,解决跨域、Referrer、HTTPS 升级。是 `coverImage` 中常见前缀。 |
-| `/api/screenshot` | GET | `?url=` | 动态生成的 SVG 占位图 | 当没有可用封面图时的**兜底占位**;域名首字母+配色,不发起外部请求。 |
+| `/api/proxy-image` | GET | `?url=` | 图片字节流 / 302 | 代理外链图片。6 级 fallback,全部失败时 **302 跳转到 `/api/screenshot`** 避免 broken image。stream 转发用 `pipeTo` + `AbortSignal.any` 保证客户端断流时快速中断上游,避免 `ERR_INVALID_STATE`。详见 架构文档 §6.4/§6.5。 |
+| `/api/screenshot` | GET | `?url=` | 动态生成的 SVG 占位图 | 字母 + 纯色背景(域名 hash 派生)。颜色/字母派生逻辑来自 `lib/letter-placeholder.ts`,与客户端 placeholder 完全一致。不发起任何外部请求,`max-age=86400 immutable`。 |
 | `/api/website-preview` | GET | `?url=` | 综合预览数据 | 组合 meta + 图像的一次性接口。 |
 | `/api/analytics/web-vitals` | POST | `{ name, value, id, ... }` | `{ ok: true }` | 接收 `web-vitals` 库的 LCP/CLS/INP 等指标。 |
 
@@ -276,3 +281,6 @@ Component
 3. **Edge Runtime 限制**:API 路由不能用 Node 原生模块(fs/path/crypto 等需 polyfill),不能超过 size 限制。
 4. **URL 归一化在入库前做**(`use-bookmark-store.ts:397-413`),所以 store 里的 `bookmark.url` 已经是规范化后的字符串。
 5. **演示数据是"软"的**:用户第一次添加书签会清除 `data-cleared` 标志,导入/重置走独立路径。切勿在组件里直接读 `defaultBookmarks`。
+6. **国内网络友好**:代码中禁止出现裸 `google.com/s2/favicons` / `icons.duckduckgo.com` 作为 `<img src>`。所有 favicon 必须走 `/api/proxy-image`(由它决定 fallback 顺序)或 `getFaviconUrl()`(已封装代理 URL)。
+7. **字母占位单一数据源**:`lib/letter-placeholder.ts` 的调色板与 hash 函数必须和 `app/api/screenshot/route.ts` **字节级一致**,否则服务端 SVG 兜底和客户端 placeholder 颜色会不统一。
+8. **SW 只在生产生效**:`components/pwa-install.tsx` 在 dev 环境主动 `unregister()` 所有 SW + `caches.delete()`,避免缓存旧 chunk 导致首次进入白屏/ChunkLoadError。

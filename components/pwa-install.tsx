@@ -75,35 +75,46 @@ export function PWAInstall() {
     window.addEventListener('offline', handleOffline)
 
     // 注册 Service Worker
+    // dev 环境下 SW 会缓存陈旧的 HTML,导致引用的 chunk hash 对不上,
+    // 出现首次进入白屏/ChunkLoadError。开发环境改为"卸载并清理缓存"。
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then((registration) => {
-          console.log('SW registered: ', registration)
+      if (process.env.NODE_ENV !== 'production') {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          regs.forEach(r => r.unregister())
+        }).catch(() => {})
+        if ('caches' in window) {
+          caches.keys().then(keys => keys.forEach(k => caches.delete(k))).catch(() => {})
+        }
+      } else {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW registered: ', registration)
 
-          // 检查更新
-          registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing
-            if (newWorker) {
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  toast.info('应用有新版本可用', {
-                    action: {
-                      label: '更新',
-                      onClick: () => {
-                        newWorker.postMessage({ type: 'SKIP_WAITING' })
-                        window.location.reload()
+            // 检查更新
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing
+              if (newWorker) {
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    toast.info('应用有新版本可用', {
+                      action: {
+                        label: '更新',
+                        onClick: () => {
+                          newWorker.postMessage({ type: 'SKIP_WAITING' })
+                          window.location.reload()
+                        }
                       }
-                    }
-                  })
-                }
-              })
-            }
+                    })
+                  }
+                })
+              }
+            })
           })
-        })
-        .catch((registrationError) => {
-          console.warn('SW registration failed: ', registrationError)
-          // Service Worker 注册失败不应该阻止应用运行
-        })
+          .catch((registrationError) => {
+            console.warn('SW registration failed: ', registrationError)
+            // Service Worker 注册失败不应该阻止应用运行
+          })
+      }
     }
 
     return () => {

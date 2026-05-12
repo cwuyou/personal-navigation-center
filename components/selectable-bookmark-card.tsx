@@ -99,7 +99,7 @@ export function SelectableBookmarkCard({
                         const domain = new URL(bookmark.url).hostname
                         if (!img.dataset.fallbackTried) {
                           img.dataset.fallbackTried = '1'
-                          img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+                          img.src = `/api/proxy-image?url=${encodeURIComponent(`https://${domain}/favicon.ico`)}`
                           return
                         }
                       } catch {}

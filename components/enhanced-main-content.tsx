@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useBookmarkImagePreloader } from "@/hooks/use-image-preloader"
 import { FALLBACK_SUBCATEGORY_NAME } from "@/lib/bookmark-importer"
+import type { SearchFilters } from "@/lib/search-utils"
 
 interface Bookmark {
   id: string
@@ -31,6 +32,8 @@ import { cn } from "@/lib/utils"
 
 interface EnhancedMainContentProps {
   searchQuery: string
+  searchFilters?: SearchFilters
+  onCategorySelectFromSearch?: (categoryId: string) => void
   selectedCategory: string | null
   selectedSubCategory: string | null
   onSubCategorySelect: (subCategoryId: string) => void
@@ -39,6 +42,8 @@ interface EnhancedMainContentProps {
 
 export function EnhancedMainContent({
   searchQuery,
+  searchFilters,
+  onCategorySelectFromSearch,
   selectedCategory,
   selectedSubCategory,
   onSubCategorySelect,
@@ -170,12 +175,16 @@ export function EnhancedMainContent({
   //   }
   // }, [currentBookmarks.length])
 
-  // 如果有搜索查询，显示搜索结果
   if (searchQuery.trim()) {
     return (
       <main className={cn("flex-1 p-4 sm:p-6 transition-all duration-300 bg-gradient-to-br from-background to-muted/20", sidebarCollapsed ? "ml-0" : "ml-0")}>
         <div className="max-w-7xl mx-auto">
-          <SearchResults searchQuery={searchQuery} onPreview={handlePreview} />
+          <SearchResults
+            searchQuery={searchQuery}
+            filters={searchFilters}
+            onPreview={handlePreview}
+            onCategorySelect={onCategorySelectFromSearch}
+          />
           {previewBookmark && (
             <BookmarkPreview
               bookmark={previewBookmark}

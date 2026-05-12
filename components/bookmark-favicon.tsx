@@ -1,9 +1,9 @@
 "use client"
 
 import { useMemo } from "react"
-import { Globe } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getFaviconUrl } from "@/lib/metadata-fetcher"
+import { getLetterPlaceholder } from "@/lib/letter-placeholder"
 import { CachedImage } from "./cached-image"
 
 interface BookmarkFaviconProps {
@@ -19,46 +19,50 @@ interface BookmarkFaviconProps {
 export function BookmarkFavicon({ bookmark, size = "md", className }: BookmarkFaviconProps) {
   // 缓存图标URL，避免每次渲染都重新计算
   const { primarySrc, fallbackSrc } = useMemo(() => {
-    // 添加URL验证，避免无效URL导致的问题
     try {
-      const primary = bookmark.favicon
-        ? `/api/proxy-image?url=${encodeURIComponent(bookmark.favicon)}`
-        : null
-
-      // 暂时禁用fallback，避免循环问题
-      // const fallbackUrl = getFaviconUrl(bookmark.url)
-      // const fallback = fallbackUrl || undefined
+      // bookmark.favicon 优先;为空时从 URL 现场派生一个走代理的 favicon。
+      // 如果 favicon 已是同源代理路径,直接用,避免双重编码。
+      let primary: string | null = null
+      if (bookmark.favicon) {
+        primary = bookmark.favicon.startsWith('/api/')
+          ? bookmark.favicon
+          : `/api/proxy-image?url=${encodeURIComponent(bookmark.favicon)}`
+      } else {
+        primary = getFaviconUrl(bookmark.url) || null
+      }
 
       return {
         primarySrc: primary,
-        fallbackSrc: undefined // 暂时禁用fallback
+        fallbackSrc: undefined,
       }
     } catch (error) {
-      // 如果URL处理失败，返回安全的默认值
       return {
         primarySrc: null,
-        fallbackSrc: undefined
+        fallbackSrc: undefined,
       }
     }
   }, [bookmark.favicon, bookmark.url])
 
-  // 稳定的占位符，避免每次渲染都创建新对象
-  const placeholder = useMemo(() => (
-    <div className={cn(
-      "rounded-sm bg-gradient-to-br from-muted to-muted/60 flex items-center justify-center shadow-sm",
-      {
-        "w-4 h-4": size === "sm",
-        "w-6 h-6": size === "md",
-        "w-8 h-8": size === "lg"
-      }
-    )}>
-      <Globe className={cn("text-muted-foreground", {
-        "w-2 h-2": size === "sm",
-        "w-3 h-3": size === "md",
-        "w-4 h-4": size === "lg"
-      })} />
-    </div>
-  ), [size])
+  // 稳定的占位符:与服务端 /api/screenshot 的字母+纯色风格保持一致
+  const placeholder = useMemo(() => {
+    const { color, letter } = getLetterPlaceholder(bookmark.url)
+    return (
+      <div
+        className={cn(
+          "rounded-sm flex items-center justify-center shadow-sm text-white font-semibold select-none",
+          {
+            "w-4 h-4 text-[10px]": size === "sm",
+            "w-6 h-6 text-sm": size === "md",
+            "w-8 h-8 text-base": size === "lg",
+          }
+        )}
+        style={{ backgroundColor: color }}
+        aria-hidden="true"
+      >
+        {letter}
+      </div>
+    )
+  }, [bookmark.url, size])
 
   const finalSrc = primarySrc || fallbackSrc
 

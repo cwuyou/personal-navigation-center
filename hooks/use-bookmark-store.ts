@@ -115,6 +115,12 @@ const defaultCategories: Category[] = [
   },
 ]
 
+// 为默认演示书签批量补上 favicon（defaultBookmarks 数据里没写此字段，
+// 走 /api/proxy-image 代理以命中 Edge 侧的 favicon fallback 链）
+function withFavicons<T extends { url: string; favicon?: string }>(list: T[]): T[] {
+  return list.map(b => b.favicon ? b : { ...b, favicon: getFaviconUrl(b.url) })
+}
+
 const defaultBookmarks: Bookmark[] = [
   // 开发工具 - 代码编辑器
   {
@@ -122,7 +128,6 @@ const defaultBookmarks: Bookmark[] = [
     title: "Visual Studio Code",
     url: "https://code.visualstudio.com/",
     description: "微软开发的免费代码编辑器",
-    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dcode.visualstudio.com%26sz%3D256",
     subCategoryId: "code-editors",
     createdAt: new Date(),
   },
@@ -131,7 +136,6 @@ const defaultBookmarks: Bookmark[] = [
     title: "WebStorm",
     url: "https://www.jetbrains.com/webstorm/",
     description: "JetBrains出品的专业Web开发IDE",
-    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dwww.jetbrains.com%26sz%3D256",
     subCategoryId: "code-editors",
     createdAt: new Date(),
   },
@@ -151,7 +155,6 @@ const defaultBookmarks: Bookmark[] = [
     title: "GitLab",
     url: "https://gitlab.com/",
     description: "完整的DevOps平台",
-    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dgitlab.com%26sz%3D256",
     subCategoryId: "version-control",
     createdAt: new Date(),
   },
@@ -162,7 +165,6 @@ const defaultBookmarks: Bookmark[] = [
     title: "Postman",
     url: "https://www.postman.com/",
     description: "API开发和测试工具",
-    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dwww.postman.com%26sz%3D256",
     subCategoryId: "api-tools",
     createdAt: new Date(),
   },
@@ -171,7 +173,6 @@ const defaultBookmarks: Bookmark[] = [
     title: "Insomnia",
     url: "https://insomnia.rest/",
     description: "简洁的API客户端工具",
-    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dinsomnia.rest%26sz%3D256",
     subCategoryId: "api-tools",
     createdAt: new Date(),
   },
@@ -182,7 +183,6 @@ const defaultBookmarks: Bookmark[] = [
     title: "MDN Web Docs",
     url: "https://developer.mozilla.org/",
     description: "Web开发权威文档",
-    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Ddeveloper.mozilla.org%26sz%3D256",
     subCategoryId: "documentation",
     createdAt: new Date(),
   },
@@ -202,7 +202,6 @@ const defaultBookmarks: Bookmark[] = [
     title: "freeCodeCamp",
     url: "https://www.freecodecamp.org/",
     description: "免费编程学习平台",
-    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dwww.freecodecamp.org%26sz%3D256",
     subCategoryId: "tutorials",
     createdAt: new Date(),
   },
@@ -211,7 +210,6 @@ const defaultBookmarks: Bookmark[] = [
     title: "Codecademy",
     url: "https://www.codecademy.com/",
     description: "交互式编程学习平台",
-    coverImage: "/api/proxy-image?url=https%3A%2F%2Fwww.google.com%2Fs2%2Ffavicons%3Fdomain%3Dwww.codecademy.com%26sz%3D256",
     subCategoryId: "tutorials",
     createdAt: new Date(),
   },
@@ -665,7 +663,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
           // 如果数据无效，重置为默认数据
           set({
             categories: defaultCategories,
-            bookmarks: defaultBookmarks,
+            bookmarks: withFavicons(defaultBookmarks),
           })
         }
       },
@@ -679,7 +677,7 @@ export const useBookmarkStore = create<BookmarkStore>()(
         }
         set({
           categories: defaultCategories,
-          bookmarks: defaultBookmarks,
+          bookmarks: withFavicons(defaultBookmarks),
         })
       },
 

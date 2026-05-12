@@ -56,7 +56,30 @@ function s2FaviconUrl(host: string) {
   return `https://www.google.com/s2/favicons?domain=${d}&sz=256`
 }
 
-async function fetchWithReferer(u: URL) {
+function mergeSignals(...signals: (AbortSignal | undefined)[]): AbortSignal {
+  const valid = signals.filter((s): s is AbortSignal => !!s)
+  const anyFn = (AbortSignal as unknown as { any?: (list: AbortSignal[]) => AbortSignal }).any
+  if (typeof anyFn === 'function') return anyFn(valid)
+  const ctrl = new AbortController()
+  for (const s of valid) {
+    if (s.aborted) { ctrl.abort((s as any).reason); break }
+    s.addEventListener('abort', () => ctrl.abort((s as any).reason), { once: true })
+  }
+  return ctrl.signal
+}
+
+function relayBody(upstream: Response, clientSignal: AbortSignal): ReadableStream<Uint8Array> {
+  const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>()
+  upstream.body!
+    .pipeTo(writable, { signal: clientSignal })
+    .catch(() => {
+      // 客户端中途断开、上游提前结束、abort 均在此静默吞掉
+      // 避免 Edge Runtime 里 enqueue-after-close 冒泡成 unhandledRejection
+    })
+  return readable
+}
+
+async function fetchWithReferer(u: URL, clientSignal: AbortSignal) {
   const referer = REFERER_HOST_OVERRIDE[u.hostname] || `${u.origin}/`
   return fetch(u.toString(), {
     headers: {
@@ -70,12 +93,12 @@ async function fetchWithReferer(u: URL) {
     },
     redirect: 'follow',
     cache: 'no-store',
-    signal: AbortSignal.timeout(10000), // 增加到10秒
+    signal: mergeSignals(clientSignal, AbortSignal.timeout(4000)),
   })
 }
 
 // 尝试不同的User-Agent策略
-async function fetchWithDifferentUA(u: URL) {
+async function fetchWithDifferentUA(u: URL, clientSignal: AbortSignal) {
   const userAgents = [
     // 标准浏览器
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
@@ -86,6 +109,7 @@ async function fetchWithDifferentUA(u: URL) {
   ]
 
   for (const ua of userAgents) {
+    if (clientSignal.aborted) break
     try {
       const response = await fetch(u.toString(), {
         headers: {
@@ -94,7 +118,7 @@ async function fetchWithDifferentUA(u: URL) {
         },
         redirect: 'follow',
         cache: 'no-store',
-        signal: AbortSignal.timeout(8000),
+        signal: mergeSignals(clientSignal, AbortSignal.timeout(3000)),
       })
       if (response.ok) return response
     } catch (e) {
@@ -102,6 +126,19 @@ async function fetchWithDifferentUA(u: URL) {
     }
   }
   throw new Error('All user agents failed')
+}
+
+async function fetchSiteAsset(origin: string, path: string, clientSignal: AbortSignal, timeoutMs: number) {
+  const url = `${origin}${path}`
+  return fetch(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
+      'Accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+    },
+    redirect: 'follow',
+    cache: 'no-store',
+    signal: mergeSignals(clientSignal, AbortSignal.timeout(timeoutMs)),
+  })
 }
 
 export async function GET(request: NextRequest) {
@@ -127,12 +164,51 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Blocked host' }, { status: 403 })
   }
 
+  const clientSignal = request.signal
+
+  // 识别"聚合 favicon 服务"。如果目标已经是这类服务，
+  // 我们可以从其参数还原出真实站点，先尝试用真实站点自身的资产，
+  // 避免在国内网络下被这些不可达服务拖死。
+  let realSiteOrigin: string | null = null
+  if (target.hostname === 'www.google.com' && target.pathname.startsWith('/s2/favicons')) {
+    const domain = target.searchParams.get('domain')
+    if (domain) realSiteOrigin = `https://${domain}`
+  } else if (target.hostname === 'icons.duckduckgo.com' && target.pathname.startsWith('/ip3/')) {
+    const host = target.pathname.replace(/^\/ip3\//, '').replace(/\.ico$/, '')
+    if (host) realSiteOrigin = `https://${host}`
+  } else {
+    realSiteOrigin = target.origin
+  }
+
+  // 0) 如果是聚合服务请求,优先取真实站点的 favicon (国内最快)
+  const isAggregator = target.hostname === 'www.google.com' || target.hostname === 'icons.duckduckgo.com'
+  if (isAggregator && realSiteOrigin) {
+    for (const path of ['/favicon.ico', '/apple-touch-icon.png']) {
+      if (clientSignal.aborted) return new NextResponse(null, { status: 499 })
+      try {
+        const resp = await fetchSiteAsset(realSiteOrigin, path, clientSignal, 3500)
+        if (resp.ok) {
+          const contentType = resp.headers.get('content-type') || 'image/x-icon'
+          return new NextResponse(relayBody(resp, clientSignal), {
+            status: 200,
+            headers: {
+              'Content-Type': contentType,
+              'Cache-Control': 'public, max-age=86400, immutable',
+              'X-Proxy-From': new URL(realSiteOrigin).hostname,
+              'X-Proxy-Method': `site-asset${path}`,
+            },
+          })
+        }
+      } catch (_) { /* 继续 */ }
+    }
+  }
+
   // 1) 主请求 - 带Referer
   try {
-    const resp = await fetchWithReferer(target)
+    const resp = await fetchWithReferer(target, clientSignal)
     if (resp.ok) {
       const contentType = resp.headers.get('content-type') || 'application/octet-stream'
-      return new NextResponse(resp.body, {
+      return new NextResponse(relayBody(resp, clientSignal), {
         status: 200,
         headers: {
           'Content-Type': contentType,
@@ -146,12 +222,38 @@ export async function GET(request: NextRequest) {
     // 继续尝试其他方法
   }
 
-  // 2) 尝试不同User-Agent
+  if (clientSignal.aborted) return new NextResponse(null, { status: 499 })
+
+  // 2) 目标站自身的 favicon / apple-touch-icon (跳过聚合服务,因为 0) 已经试过)
+  if (!isAggregator && realSiteOrigin) {
+    for (const path of ['/favicon.ico', '/apple-touch-icon.png']) {
+      if (clientSignal.aborted) return new NextResponse(null, { status: 499 })
+      try {
+        const resp = await fetchSiteAsset(realSiteOrigin, path, clientSignal, 3500)
+        if (resp.ok) {
+          const contentType = resp.headers.get('content-type') || 'image/x-icon'
+          return new NextResponse(relayBody(resp, clientSignal), {
+            status: 200,
+            headers: {
+              'Content-Type': contentType,
+              'Cache-Control': 'public, max-age=86400, immutable',
+              'X-Proxy-From': new URL(realSiteOrigin).hostname,
+              'X-Proxy-Method': `site-asset${path}`,
+            },
+          })
+        }
+      } catch (_) { /* 继续 */ }
+    }
+  }
+
+  if (clientSignal.aborted) return new NextResponse(null, { status: 499 })
+
+  // 3) 尝试不同User-Agent (针对原始 URL)
   try {
-    const resp = await fetchWithDifferentUA(target)
+    const resp = await fetchWithDifferentUA(target, clientSignal)
     if (resp.ok) {
       const contentType = resp.headers.get('content-type') || 'application/octet-stream'
-      return new NextResponse(resp.body, {
+      return new NextResponse(relayBody(resp, clientSignal), {
         status: 200,
         headers: {
           'Content-Type': contentType,
@@ -165,36 +267,9 @@ export async function GET(request: NextRequest) {
     // 继续尝试其他方法
   }
 
-  // 3) 回退到 Google S2 favicon（使用站点主域）
-  try {
-    const fallbackUrl = s2FaviconUrl(target.hostname)
-    const resp2 = await fetch(fallbackUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
-        'Accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
-      },
-      redirect: 'follow',
-      cache: 'no-store',
-      signal: AbortSignal.timeout(7000),
-    })
+  if (clientSignal.aborted) return new NextResponse(null, { status: 499 })
 
-    if (resp2.ok) {
-      const contentType = resp2.headers.get('content-type') || 'image/png'
-      return new NextResponse(resp2.body, {
-        status: 200,
-        headers: {
-          'Content-Type': contentType,
-          'Cache-Control': 'public, max-age=86400, immutable',
-          'X-Proxy-From': target.hostname,
-          'X-Proxy-Method': 's2-favicon',
-        },
-      })
-    }
-  } catch (_) {
-    // 继续尝试最后的回退
-  }
-
-  // 4) 最终回退：DuckDuckGo favicon
+  // 4) 回退到 DuckDuckGo (国际网络可达性较好)
   try {
     const duckUrl = `https://icons.duckduckgo.com/ip3/${target.hostname}.ico`
     const resp3 = await fetch(duckUrl, {
@@ -204,12 +279,12 @@ export async function GET(request: NextRequest) {
       },
       redirect: 'follow',
       cache: 'no-store',
-      signal: AbortSignal.timeout(5000),
+      signal: mergeSignals(clientSignal, AbortSignal.timeout(3000)),
     })
 
     if (resp3.ok) {
       const contentType = resp3.headers.get('content-type') || 'image/x-icon'
-      return new NextResponse(resp3.body, {
+      return new NextResponse(relayBody(resp3, clientSignal), {
         status: 200,
         headers: {
           'Content-Type': contentType,
@@ -220,9 +295,43 @@ export async function GET(request: NextRequest) {
       })
     }
   } catch (_) {
+    // 继续尝试最后的回退
+  }
+
+  if (clientSignal.aborted) return new NextResponse(null, { status: 499 })
+
+  // 5) 最终回退：Google S2 favicon (国内通常不可达,放最后)
+  try {
+    const fallbackUrl = s2FaviconUrl(target.hostname)
+    const resp2 = await fetch(fallbackUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
+        'Accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+      },
+      redirect: 'follow',
+      cache: 'no-store',
+      signal: mergeSignals(clientSignal, AbortSignal.timeout(3000)),
+    })
+
+    if (resp2.ok) {
+      const contentType = resp2.headers.get('content-type') || 'image/png'
+      return new NextResponse(relayBody(resp2, clientSignal), {
+        status: 200,
+        headers: {
+          'Content-Type': contentType,
+          'Cache-Control': 'public, max-age=86400, immutable',
+          'X-Proxy-From': target.hostname,
+          'X-Proxy-Method': 's2-favicon',
+        },
+      })
+    }
+  } catch (_) {
     // 所有方法都失败了
   }
 
-  return NextResponse.json({ error: 'Upstream error with fallback failed' }, { status: 502 })
+  // 终极兜底:所有上游都失败时,跳到纯本地生成的 SVG 占位图,
+  // 避免浏览器出现 broken image,也不再污染控制台日志
+  const screenshotUrl = `/api/screenshot?url=${encodeURIComponent(target.origin)}`
+  return NextResponse.redirect(new URL(screenshotUrl, request.url), 302)
 }
 

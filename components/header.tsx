@@ -23,17 +23,20 @@ import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
 import { parseBookmarkHTML } from "@/lib/bookmark-importer"
+import type { SearchFilters } from "@/lib/search-utils"
 
 interface HeaderProps {
   searchQuery: string
   onSearchChange: (query: string) => void
+  searchFilters?: SearchFilters
+  onSearchFiltersChange?: (filters: SearchFilters) => void
   onLogoClick?: () => void
   onSettingsClick?: () => void
   selectedCategory?: string | null
   selectedSubCategory?: string | null
 }
 
-export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsClick, selectedCategory, selectedSubCategory }: HeaderProps) {
+export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFiltersChange, onLogoClick, onSettingsClick, selectedCategory, selectedSubCategory }: HeaderProps) {
   const [importDialogOpen, setImportDialogOpen] = useState(false)
 
   // 监听从页面发出的“打开导入对话框”事件（用于空态/Onboarding）
@@ -283,6 +286,8 @@ export function Header({ searchQuery, onSearchChange, onLogoClick, onSettingsCli
         <EnhancedSearch
           searchQuery={searchQuery}
           onSearchChange={onSearchChange}
+          filters={searchFilters}
+          onFiltersChange={onSearchFiltersChange}
         />
 
         <div className="flex items-center space-x-2">
