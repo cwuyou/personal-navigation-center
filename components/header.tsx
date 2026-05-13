@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home, Download, MoreHorizontal, Eye } from "lucide-react"
+import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home, Download, MoreHorizontal, Eye, Menu } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -39,9 +39,10 @@ interface HeaderProps {
   onSettingsClick?: () => void
   selectedCategory?: string | null
   selectedSubCategory?: string | null
+  onMobileMenuClick?: () => void
 }
 
-export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFiltersChange, onLogoClick, onSettingsClick, selectedCategory, selectedSubCategory }: HeaderProps) {
+export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFiltersChange, onLogoClick, onSettingsClick, selectedCategory, selectedSubCategory, onMobileMenuClick }: HeaderProps) {
   const [importDialogOpen, setImportDialogOpen] = useState(false)
 
   // 监听从页面发出的“打开导入对话框”事件（用于空态/Onboarding）
@@ -272,15 +273,26 @@ export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFil
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center space-x-4">
+      <div className="container flex h-16 items-center justify-between gap-2 px-4">
+        <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0 min-w-0">
+          {onMobileMenuClick && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="sm:hidden h-9 w-9 hover:bg-primary/10 flex-shrink-0"
+              onClick={onMobileMenuClick}
+              aria-label="打开分类导航"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          )}
           <div
-            className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
+            className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity min-w-0"
             onClick={onLogoClick}
             role="banner"
           >
-            <Home className="h-6 w-6 text-primary" aria-hidden="true" />
-            <h1 className="text-xl sm:text-2xl font-bold">
+            <Home className="h-6 w-6 text-primary flex-shrink-0" aria-hidden="true" />
+            <h1 className="text-xl sm:text-2xl font-bold hidden md:inline-flex truncate">
               <span className="sr-only">My Homepage - </span>
               My Homepage
               <span className="sr-only"> - Personal Start Page & Bookmark Manager</span>
@@ -295,7 +307,7 @@ export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFil
           onFiltersChange={onSearchFiltersChange}
         />
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
           {/* 添加书签按钮（无分类时展示提示） */}
           {(() => {
             const isAddDisabled = categories.length === 0 || categories.every(cat => cat.subCategories.length === 0)

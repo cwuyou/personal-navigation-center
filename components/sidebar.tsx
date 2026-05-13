@@ -88,10 +88,18 @@ export function Sidebar({
       // 批量模式下，点击切换选择状态
       toggleCategorySelection(category.id)
     } else {
-      toggleCategory(category.id)
-      // 点击分类时，显示整个分类的概览，不自动选择子分类
+      // 点击分类标题：展开 + 切到该分类详情视图
+      if (!expandedCategories.has(category.id)) {
+        toggleCategory(category.id)
+      }
       onCategorySelect(category.id, undefined)
     }
+  }
+
+  const handleChevronClick = (e: React.MouseEvent, categoryId: string) => {
+    // 仅切换展开/收起，不影响视图选择
+    e.stopPropagation()
+    toggleCategory(categoryId)
   }
 
   // 批量选择相关函数
@@ -304,10 +312,19 @@ export function Sidebar({
                       <>
                         {isCollapsibleFallback(category) ? (
                           <span className="w-4 h-4 mr-2" aria-hidden />
-                        ) : expandedCategories.has(category.id) ? (
-                          <ChevronDown className="h-4 w-4 mr-2" />
                         ) : (
-                          <ChevronRight className="h-4 w-4 mr-2" />
+                          <button
+                            type="button"
+                            onClick={(e) => handleChevronClick(e, category.id)}
+                            className="w-4 h-4 mr-2 flex items-center justify-center hover:text-primary transition-colors"
+                            aria-label={expandedCategories.has(category.id) ? "收起子分类" : "展开子分类"}
+                          >
+                            {expandedCategories.has(category.id) ? (
+                              <ChevronDown className="h-4 w-4" />
+                            ) : (
+                              <ChevronRight className="h-4 w-4" />
+                            )}
+                          </button>
                         )}
                       </>
                     )}

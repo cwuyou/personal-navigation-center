@@ -12,6 +12,7 @@ import { EmptyState } from "@/components/empty-state"
 import { OnboardingModal } from "@/components/onboarding-modal"
 import { AddCategoryDialog } from "@/components/add-category-dialog"
 import { AddBookmarkWithCategoryDialog } from "@/components/add-bookmark-with-category-dialog"
+import { Sheet, SheetContent } from "@/components/ui/sheet"
 
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useSmartRecommendations } from "@/hooks/use-smart-recommendations"
@@ -31,6 +32,7 @@ function readInitialNavParams() {
 
 export default function HomePage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [searchFilters, setSearchFilters] = useState<SearchFilters>(DEFAULT_SEARCH_FILTERS)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -207,20 +209,40 @@ export default function HomePage() {
         onSettingsClick={() => setSettingsPanelOpen(true)}
         selectedCategory={selectedCategory}
         selectedSubCategory={selectedSubCategory}
+        onMobileMenuClick={breakpoint === 'mobile' ? () => setMobileSidebarOpen(true) : undefined}
       />
 
       <div className="flex">
-        <Sidebar
-          collapsed={sidebarCollapsed}
-          onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
-          selectedCategory={selectedCategory}
-          selectedSubCategory={selectedSubCategory}
-          onCategorySelect={(categoryId, subCategoryId) => {
-            setSelectedCategory(categoryId)
-            setSelectedSubCategory(subCategoryId || null)
-            setSearchQuery("") // Clear search when navigating
-          }}
-        />
+        {breakpoint === 'mobile' ? (
+          <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
+            <SheetContent side="left" className="p-0 w-64 max-w-[85vw]">
+              <Sidebar
+                collapsed={false}
+                onToggleCollapse={() => setMobileSidebarOpen(false)}
+                selectedCategory={selectedCategory}
+                selectedSubCategory={selectedSubCategory}
+                onCategorySelect={(categoryId, subCategoryId) => {
+                  setSelectedCategory(categoryId)
+                  setSelectedSubCategory(subCategoryId || null)
+                  setSearchQuery("")
+                  setMobileSidebarOpen(false)
+                }}
+              />
+            </SheetContent>
+          </Sheet>
+        ) : (
+          <Sidebar
+            collapsed={sidebarCollapsed}
+            onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+            selectedCategory={selectedCategory}
+            selectedSubCategory={selectedSubCategory}
+            onCategorySelect={(categoryId, subCategoryId) => {
+              setSelectedCategory(categoryId)
+              setSelectedSubCategory(subCategoryId || null)
+              setSearchQuery("") // Clear search when navigating
+            }}
+          />
+        )}
 
         {isEmpty ? (() => {
           // 细分空态：无一级分类 / 有一级无二级 / 有分类但无书签

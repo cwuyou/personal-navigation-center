@@ -127,18 +127,34 @@ npm run lint     # ESLint
 ```
 HomePage
 ├─ WebSiteStructuredData / StructuredData (SEO)
-├─ Header              ← 搜索、logo、设置按钮
-│   └─ EnhancedSearch  ← 受控 filters、Ctrl+K 快捷键、键盘导航(↑/↓/Enter)
-├─ Sidebar             ← 分类树、折叠控件
+├─ Header              ← 搜索、logo、设置;一级 3 个按钮(添加/导入/设置) + ⋯ 更多
+│   ├─ EnhancedSearch  ← 受控 filters、Ctrl+K 快捷键、键盘导航(↑/↓/Enter)
+│   ├─ "⋯ 更多" (DropdownMenu)
+│   │   ├─ 显示 (Sub) → QuickDisplaySettingsContent
+│   │   ├─ 导出 (Sub) → HTML / JSON / CSV / TXT
+│   │   ├─ 产品首页 → 跳 / (营销页)
+│   │   ├─ 帮助
+│   │   └─ 关于
+│   └─ Menu (汉堡按钮, 仅 mobile, prop onMobileMenuClick 存在时显示)
+├─ 移动端: <Sheet side="left"> 包 Sidebar; 桌面端: 常驻 Sidebar
+│   └─ Sidebar         ← 分类树、折叠控件;批量管理用 FolderCog 图标
 ├─ EmptyState | EnhancedMainContent
 │   ├─ SearchResults   ← 有搜索词时取代常规视图,filters/onCategorySelect 受控
-│   └─ DynamicBookmarkGrid + EnhancedBookmarkCard ← 正常分类视图
+│   ├─ 详情视图        ← 选中分类时;每分类一行子分类胶囊
+│   └─ 首页视图        ← 未选中时;每个子分类一行书签(数量=clamp(4..6, gridColumns[bp]))
 ├─ OnboardingModal
 ├─ AddCategoryDialog / AddBookmarkWithCategoryDialog
 ├─ PWAInstall          ← dev 环境主动卸载旧 SW + 清 cache,生产才注册
 ├─ SettingsPanel
 └─ EnhancementProgress ← 后台元数据增强进度条
 ```
+
+### 导航状态 ↔ URL
+`selectedCategory` / `selectedSubCategory` / `searchQuery` 与 URL `?category=&sub=&q=` **双向绑定**:
+- 首次水合后从 `window.location.search` 回灌 state(`urlBootstrapped` ref 防回环)
+- state 变化 → `window.history.replaceState`(不堆历史栈、不触发 Next 路由刷新)
+- 浏览器前进/后退 → 监听 `popstate` 重灌 state
+- **不使用 `useSearchParams` / `router.replace`**,避免 Suspense 边界要求与多余 RSC 刷新
 
 ### 数据入口(Store)
 `hooks/use-bookmark-store.ts` 是**唯一的主数据源**。关键动作:
@@ -284,3 +300,9 @@ Component
 6. **国内网络友好**:代码中禁止出现裸 `google.com/s2/favicons` / `icons.duckduckgo.com` 作为 `<img src>`。所有 favicon 必须走 `/api/proxy-image`(由它决定 fallback 顺序)或 `getFaviconUrl()`(已封装代理 URL)。
 7. **字母占位单一数据源**:`lib/letter-placeholder.ts` 的调色板与 hash 函数必须和 `app/api/screenshot/route.ts` **字节级一致**,否则服务端 SVG 兜底和客户端 placeholder 颜色会不统一。
 8. **SW 只在生产生效**:`components/pwa-install.tsx` 在 dev 环境主动 `unregister()` 所有 SW + `caches.delete()`,避免缓存旧 chunk 导致首次进入白屏/ChunkLoadError。
+9. **Header 一级按钮 = 3 个**:添加书签 / 导入 / 设置;其余(显示、导出、产品首页、帮助、关于)走"⋯ 更多"溢出菜单。新增按钮前先把已有的下沉,别再往一级塞。
+10. **导航状态 ↔ URL 走 `history.replaceState`**:不要换成 `useSearchParams` + `router.replace`;原因见 §3"导航状态 ↔ URL"。
+11. **移动端 Sidebar 用 Sheet,不用 `w-64` 常驻块**:dashboard 按 `breakpoint === 'mobile'` 走两个分支;移动端选完分类要 `setMobileSidebarOpen(false)`。Header 的 `onMobileMenuClick` prop 只有有值才渲染汉堡按钮。
+12. **`QuickDisplaySettingsContent` 是可复用的 panel body**;独立组件 `QuickDisplaySettings` 已不再使用,`components/display-settings-panel.tsx` 是另一份遗留 Sheet 组件(未引用),命名易混淆 —— 新接入显示设置入口时用 `QuickDisplaySettingsContent`。
+13. **演示横幅依赖 `bookmarks` 重读 flag**:`enhanced-main-content.tsx` 的 `useEffect(..., [bookmarks])` 在每次书签变化时重读 `localStorage.hasUserData / hideDemoNotice`。如果新增了应隐藏横幅的动作,记得在 store action 里写这两个 flag,而不是组件里。
+

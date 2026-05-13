@@ -1,7 +1,7 @@
 # 架构设计文档
 
 > Personal Navigation Center — Next.js 14 App Router 书签管理 PWA
-> 文档日期:2026-05-12
+> 文档日期:2026-05-14
 
 本文档聚焦**为什么这样设计**与**组件间协作的细节**。若需要快速查表(目录、路由清单、命令等),请看 [PROJECT_INDEX.md](../PROJECT_INDEX.md)。
 
@@ -17,6 +17,9 @@
 6. [API 层设计](#6-api-层设计)
 7. [持久化与水合](#7-持久化与水合)
 8. [UI 渲染管线](#8-ui-渲染管线)
+   - 8.5 移动端 Sidebar 抽屉
+   - 8.6 Header 按钮折叠
+   - 8.7 导航状态 ↔ URL 同步
 8A. [搜索子系统](#8a-搜索子系统)
 9. [性能与安全策略](#9-性能与安全策略)
 10. [已知权衡与技术债](#10-已知权衡与技术债)
@@ -409,23 +412,36 @@ if (!hasHydrated) 返回占位 <div/>,避免空态闪烁
 ### 8.1 应用壳组合
 
 ```
-<RootLayout>                     (server; 主题脚本、GA、ErrorBoundary)
-  <HomePage>                     (client; dashboard/page.tsx)
-    <Header>                     (搜索、导入、设置按钮)
-    <Sidebar>                    (分类树)
-    <EmptyState>                 (无数据时)
+<RootLayout>                          (server; 主题脚本、GA、ErrorBoundary)
+  <HomePage>                          (client; dashboard/page.tsx)
+    <Header>                          (搜索、3 个一级按钮 + ⋯ 更多)
+      ├─ <Menu> 汉堡按钮              (仅 mobile, prop onMobileMenuClick 存在时)
+      ├─ <EnhancedSearch>
+      └─ "⋯ 更多" 菜单
+          ├─ 显示 → <QuickDisplaySettingsContent>
+          ├─ 导出 → HTML / JSON / CSV / TXT
+          ├─ 产品首页 (跳 /)
+          ├─ 帮助
+          └─ 关于
+    {breakpoint === 'mobile'
+      ? <Sheet side="left"><Sidebar/></Sheet>     (移动端抽屉)
+      : <Sidebar/>}                                (桌面端常驻)
+    <EmptyState>                      (无数据时)
       OR
     <EnhancedMainContent>
-      ├─ <SearchResults>         (如果 searchQuery 非空)
-      ├─ <DynamicBookmarkGrid>   (按子分类分组渲染)
-      │   └─ <BookmarkCard | EnhancedBookmarkCard | SelectableBookmarkCard>
-      └─ <BatchSelectionToolbar> (选择模式下)
+      ├─ <SearchResults>              (如果 searchQuery 非空)
+      ├─ 详情视图                      (selectedCategory 非空)
+      │   ├─ 子分类胶囊导航
+      │   └─ <DynamicBookmarkGrid> + <EnhancedBookmarkCard|SelectableBookmarkCard>
+      ├─ 首页视图                      (未选中分类)
+      │   └─ 每分类标题 + 每子分类一行 (4..6 张, 由 clamp(4, min(6, gridCols[bp])))
+      └─ <BatchSelectionToolbar>      (选择模式下)
     <OnboardingModal>
     <AddCategoryDialog>
     <AddBookmarkWithCategoryDialog>
     <PWAInstall>
     <SettingsPanel>
-    <EnhancementProgress>        (订阅 enhancementProgress state)
+    <EnhancementProgress>             (订阅 enhancementProgress state)
   </HomePage>
 </RootLayout>
 ```
@@ -441,11 +457,97 @@ if (!hasHydrated) 返回占位 <div/>,避免空态闪烁
 
 `hooks/use-display-settings.ts` 定义了 `breakpoints = { mobile: 640, tablet: 1024, desktop: 1536 }`。`useResponsiveLayout()` 返回当前 `breakpoint`,卡片网格据此选用 `gridColumns.mobile|tablet|desktop|large`。
 
+**Dashboard 在两个地方依赖此 breakpoint**:
+1. **移动端 Sidebar 改抽屉**(`breakpoint === 'mobile'`):见 §8.5。
+2. **首页每子分类一行的数量**:`enhanced-main-content.tsx` 用 `clamp(4, min(6, gridColumns[breakpoint]))` —— 最少 4 张、最多 6 张,跟随用户网格列数设置但带上下界。
+
 ### 8.4 事件通信的"逃生口"
 
 Header 组件监听 `window.addEventListener('open-import-dialog', ...)`,允许任何深层组件(如 EmptyState、OnboardingModal)通过 `window.dispatchEvent(new CustomEvent('open-import-dialog'))` 打开导入对话框,不需要 prop drilling。
 
 这是**有意识的权衡**:仅用于少数跨层通信场景,不滥用。
+
+### 8.5 移动端 Sidebar 抽屉
+
+桌面端 Sidebar 是常驻 `w-64` 块;移动端(< 640px)用 `<Sheet side="left">` 包同一个 Sidebar 组件,通过 Header 上的汉堡按钮触发。
+
+```
+breakpoint === 'mobile'
+   ↓ 是
+Header.onMobileMenuClick → setMobileSidebarOpen(true)
+   ↓
+<Sheet open={mobileSidebarOpen}>
+  <SheetContent side="left" className="p-0 w-64 max-w-[85vw]">
+    <Sidebar … onCategorySelect={(...) => {
+       setSelectedCategory/Sub(...)
+       setMobileSidebarOpen(false)   ← 关键:选完自动关
+    }}/>
+  </SheetContent>
+</Sheet>
+```
+
+**几个有意识的取舍**:
+- Sidebar 组件内部 `w-64 border-r` 在 Sheet 里仍然有效;SheetContent 外层加 `p-0 w-64 max-w-[85vw]`,跟内部宽度对齐,避免抽屉太宽。
+- Header 的汉堡按钮通过 `onMobileMenuClick` prop 控制:dashboard 仅在 mobile 时传值,Header 内部用 `sm:hidden` 双重保险;桌面端汉堡按钮根本不渲染。
+- `mobileSidebarOpen` 在窗口宽度跨越 640px 时不需要清理(常驻分支不读该 state),抽屉切回常驻自然消失。
+
+### 8.6 Header 按钮折叠
+
+Header 一级位置只放 3 个高频按钮:添加书签 / 导入 / 设置。低频项收纳到 `<MoreHorizontal />` 弹出菜单:
+
+```
+⋯ 更多
+├─ 显示  (Sub) → <QuickDisplaySettingsContent>   (开关、密度、圆角)
+├─ 导出  (Sub) → HTML / JSON / CSV / TXT
+├─ ─────────────────────────
+├─ 产品首页 → /                                   (营销页, 低频访问)
+├─ 帮助    → /help
+└─ 关于    → AboutDialog
+```
+
+**为什么不放在一级?**
+- 14" 屏幕能放下 4-5 个按钮就到极限,留出搜索框宽度比按钮数量更重要。
+- `产品首页` 跳的是营销页 `/`,**老用户会被它重定向回 `/dashboard`**,所以这是"分享给他人"或"看介绍"的低频入口,不该占一级位置。
+- "显示"和"设置"职责重叠(都能改卡片显示) —— 暂时保留两者,但快速密度调整放"⋯ 显示",完整设置面板放 Settings 一级按钮。这是已知技术债(见 §10.2)。
+
+`QuickDisplaySettingsContent` 是从老 `QuickDisplaySettings` 组件抽出的纯 Card body —— 可以嵌进任意菜单/Sheet。老的 `QuickDisplaySettings`(自带 Dropdown 包装)已不再使用,保留只为兼容引用。
+
+### 8.7 导航状态 ↔ URL 同步
+
+Dashboard 把 3 个导航 state 双向绑定到 URL:
+
+| state | URL 参数 |
+|---|---|
+| `selectedCategory` | `?category=` |
+| `selectedSubCategory` | `?sub=` |
+| `searchQuery` | `?q=` |
+
+**实现**(`app/dashboard/page.tsx`):
+
+```
+首次水合 → urlBootstrapped ref = false
+   ↓
+useEffect([hasHydrated]) 触发一次
+   ├─ window.location.search → 解析 3 个参数
+   ├─ setSelectedCategory / setSelectedSubCategory / setSearchQuery
+   └─ urlBootstrapped.current = true (后续 state→URL 才生效)
+   ↓
+state 变化 → useEffect 把 3 个 state 拼成 query string
+   ↓ 与 window.location.search 比对,有差异才写
+window.history.replaceState(...)   ← 不堆历史栈
+   ↓
+浏览器前进/后退 → popstate 监听 → 回灌 state
+```
+
+**为什么用 `history.replaceState` 而不是 `router.replace`?**
+- Next.js 14 的 `useSearchParams` 在客户端组件里需要 Suspense 边界,会触发 build warning。
+- `router.replace` 会推/replace 路由帧(虽然不导航),仍可能引起 RSC 重新请求(尽管 dashboard 没有 RSC 内容)。
+- `window.history.replaceState` 是纯浏览器 API,绕开 Next 路由器,行为最可控。
+- 代价:`router.refresh()` / `usePathname` 之类感知不到这个变化 —— dashboard 里没用这些 API,可控。
+
+**为什么是 `replaceState` 而非 `pushState`?**
+- 每次切分类都堆历史栈会让用户"返回"按钮卡在 dashboard 内部,而不是回到来源页。
+- 切换分类是"过滤"语义,不是"导航到新页面",`replace` 更符合直觉。
 
 ---
 
@@ -541,6 +643,9 @@ HomePage (dashboard)                            ┐
 - **`data/website-descriptions-1000plus.json` (250KB) 被静态 import 三处**:`background-metadata-enhancer.ts` / `add-bookmark-dialog.tsx` / `add-bookmark-with-category-dialog.tsx`。改 dynamic import 能大幅减小 dev 增量编译时间和生产首屏 bundle。
 - **无测试**:`package.json` 无测试命令;关键逻辑(URL 归一化、`lib/search-utils.ts` 过滤、增强回退链)值得单元测试覆盖。
 - **历史 bug 文档散落在根 `docs/`**(`infinite-loop-*.md`、`cover-image-fix-summary.md` 等):建议合并或移入变更日志。
+- **显示设置两条入口**:`⋯ 更多 → 显示` 与 Settings 一级按钮里都有显示偏好,用户有时不知道该去哪改(§12 P3 待决)。
+- **`components/display-settings-panel.tsx` 孤儿组件**:未被引用,与新的 `quick-display-settings-content.tsx` 命名相近,易误引。应删除或合并。
+- **`components/quick-display-settings.tsx` 已不再使用**:内容被抽到 `quick-display-settings-content.tsx`,自带 Dropdown 包装的版本目前没有调用方,可清理。
 
 ### 10.3 演进方向(若项目继续)
 1. **可选云同步**:在保留本地优先的前提下,加一个可选的"上传到 Gist / WebDAV"能力。
