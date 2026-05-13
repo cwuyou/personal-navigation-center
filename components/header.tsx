@@ -460,6 +460,13 @@ export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFil
               <DropdownMenuSeparator />
 
               <DropdownMenuItem asChild>
+                <Link href="/">
+                  <Home className="mr-2 h-4 w-4" />
+                  <span>产品首页</span>
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem asChild>
                 <Link href="/help">
                   <HelpCircle className="mr-2 h-4 w-4" />
                   <span>帮助</span>
