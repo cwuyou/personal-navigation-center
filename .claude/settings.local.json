@@ -6,7 +6,15 @@
       "Bash(npx tsc *)",
       "Bash(git stash *)",
       "Bash(npx eslint *)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(powershell *)",
+      "Bash(git -C D:/scys/personal-navigation-center log --all --oneline -- \"docs/书签页待优化点.md\")",
+      "Bash(git -C D:/scys/personal-navigation-center log --all --oneline --diff-filter=A -- \"docs/\")",
+      "Bash(git -C D:/scys/personal-navigation-center ls-files \"docs/\")",
+      "Bash(curl -sS -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3002/dashboard\")",
+      "Read(//tmp/**)",
+      "Bash(curl -sS -o /dev/null -w \"GET /dashboard?category=dev&sub=ide&q=react -> %{http_code}\\\\n\" \"http://localhost:3002/dashboard?category=dev&sub=ide&q=react\")",
+      "Bash(pkill -f \"next dev\")"
     ]
   }
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useMemo, useEffect } from "react"
-import { CheckSquare, X } from "lucide-react"
+import { CheckSquare, X, ChevronRight, Info } from "lucide-react"
 import { BookmarkCard } from "@/components/bookmark-card"
 import { SelectableBookmarkCard } from "@/components/selectable-bookmark-card"
 import { EnhancedBookmarkCard } from "@/components/enhanced-bookmark-card"
@@ -14,6 +14,7 @@ import { DynamicBookmarkGrid } from "@/components/dynamic-bookmark-grid"
 import { Button } from "@/components/ui/button"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useBookmarkImagePreloader } from "@/hooks/use-image-preloader"
+import { useResponsiveLayout, useDisplaySettings } from "@/hooks/use-display-settings"
 import { FALLBACK_SUBCATEGORY_NAME } from "@/lib/bookmark-importer"
 import type { SearchFilters } from "@/lib/search-utils"
 
@@ -52,9 +53,30 @@ export function EnhancedMainContent({
   const [previewBookmark, setPreviewBookmark] = useState<Bookmark | null>(null)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [selectedBookmarkIds, setSelectedBookmarkIds] = useState<string[]>([])
+  const [demoNoticeDismissed, setDemoNoticeDismissed] = useState(false)
 
   const { categories, bookmarks, deleteBookmark, clearAllData, exportBookmarks } = useBookmarkStore()
   const { preloadBookmarkImages } = useBookmarkImagePreloader()
+  const { breakpoint } = useResponsiveLayout()
+  const { settings: displaySettings } = useDisplaySettings()
+
+  // 添加/导入书签时 store 会写入 hasUserData/hideDemoNotice，
+  // 依赖 bookmarks 让我们在变化后重新读 flag，避免横幅"幽灵显示"
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (
+      localStorage.getItem('hideDemoNotice') === 'true' ||
+      localStorage.getItem('hasUserData') === 'true'
+    ) {
+      setDemoNoticeDismissed(true)
+    }
+  }, [bookmarks])
+
+  // 首页每个子分类一行展示几个书签：与当前网格列数一致（最少 4，最多 6）
+  const homeRowCount = useMemo(() => {
+    const cols = displaySettings.gridColumns[breakpoint]
+    return Math.max(4, Math.min(6, cols))
+  }, [breakpoint, displaySettings.gridColumns])
 
 
 
@@ -177,7 +199,7 @@ export function EnhancedMainContent({
 
   if (searchQuery.trim()) {
     return (
-      <main className={cn("flex-1 p-4 sm:p-6 transition-all duration-300 bg-gradient-to-br from-background to-muted/20", sidebarCollapsed ? "ml-0" : "ml-0")}>
+      <main className={cn("flex-1 p-4 sm:p-6 transition-all duration-300 bg-background", sidebarCollapsed ? "ml-0" : "ml-0")}>
         <div className="max-w-7xl mx-auto">
           <SearchResults
             searchQuery={searchQuery}
@@ -200,7 +222,7 @@ export function EnhancedMainContent({
   // 如果选择了分类，显示单个分类的详细视图
   if (selectedCategory && currentCategory) {
     return (
-      <main className={cn("flex-1 p-4 sm:p-6 transition-all duration-300 bg-gradient-to-br from-background to-muted/20", sidebarCollapsed ? "ml-0" : "ml-0")}>
+      <main className={cn("flex-1 p-4 sm:p-6 transition-all duration-300 bg-background", sidebarCollapsed ? "ml-0" : "ml-0")}>
         <div className="max-w-7xl mx-auto">
           {/* 分类标题区域 */}
           <div className="mb-6 sm:mb-8">
@@ -342,89 +364,43 @@ export function EnhancedMainContent({
   const isDemoData = bookmarks.some(bookmark =>
     bookmark.id === "vscode" || bookmark.id === "github" || bookmark.id === "postman"
   )
-  const hideDemoNotice = typeof window !== 'undefined' && localStorage.getItem('hideDemoNotice') === 'true'
-  const hasUserDataFlag = typeof window !== 'undefined' && localStorage.getItem('hasUserData') === 'true'
-  const showDemoNotice = isDemoData && !hideDemoNotice && !hasUserDataFlag
+  const showDemoNotice = isDemoData && !demoNoticeDismissed
 
   return (
-    <main className={cn("flex-1 transition-all duration-300 bg-gradient-to-br from-background to-muted/20", sidebarCollapsed ? "ml-0" : "ml-0")}>
-      {/* 演示数据提示横幅 */}
+    <main className={cn("flex-1 transition-all duration-300 bg-background", sidebarCollapsed ? "ml-0" : "ml-0")}>
+      {/* 演示数据提示横幅（轻量） */}
       {showDemoNotice && (
-        <div className="bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 border-b border-primary/20 dark:border-primary/30">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-primary dark:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-primary dark:text-primary">
-                    🎯 这些是演示书签，帮助您了解应用功能
-                  </div>
-                  <div className="text-xs text-primary/80 dark:text-primary/90">
-                    您可以直接使用这些分类，或者清除后创建自己的书签收藏
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    if (confirm('确定要清除所有演示数据吗？此操作不可撤销。')) {
-                      // 清除演示数据的逻辑
-                      localStorage.removeItem('bookmark-store')
-                      // 使用clearAllData方法清空所有数据
-                      clearAllData()
-                      window.location.reload()
-                    }
-                  }}
-                  className="text-xs px-3 py-1.5 rounded-md bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors"
-                >
-                  清除演示数据
-                </button>
-                <button
-                  onClick={() => {
-                    localStorage.setItem('hideDemoNotice', 'true')
-                    window.location.reload()
-                  }}
-                  className="text-xs px-2 py-1.5 text-primary dark:text-primary hover:text-primary/80 dark:hover:text-primary/90"
-                >
-                  ✕
-                </button>
-              </div>
+        <div className="border-b border-border/40">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground min-w-0">
+              <Info className="w-4 h-4 text-primary flex-shrink-0" />
+              <span className="truncate">
+                当前为演示数据，添加自己的书签后将自动隐藏
+              </span>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* 筛选状态栏 - 仅在有搜索或筛选时显示 */}
-      {(searchQuery || selectedCategory || selectedSubCategory) && (
-        <div className="border-b border-border/30 bg-muted/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              {searchQuery && (
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                  <span>搜索: "{searchQuery}"</span>
-                </div>
-              )}
-              {selectedCategory && (
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                  <span>分类: {categories.find(c => c.id === selectedCategory)?.name}</span>
-                  {selectedSubCategory && (
-                    <>
-                      <span>→</span>
-                      <span>{categories.find(c => c.id === selectedCategory)?.subCategories.find(s => s.id === selectedSubCategory)?.name}</span>
-                    </>
-                  )}
-                </div>
-              )}
+            <div className="flex items-center gap-1 flex-shrink-0">
+              <button
+                onClick={() => {
+                  if (confirm('确定要清除所有演示数据吗？此操作不可撤销。')) {
+                    localStorage.removeItem('bookmark-store')
+                    clearAllData()
+                    window.location.reload()
+                  }
+                }}
+                className="text-xs px-2 py-1 rounded-md text-primary hover:bg-primary/10 transition-colors"
+              >
+                清除演示
+              </button>
+              <button
+                onClick={() => {
+                  localStorage.setItem('hideDemoNotice', 'true')
+                  setDemoNoticeDismissed(true)
+                }}
+                className="text-muted-foreground hover:text-foreground p-1 rounded-md hover:bg-muted/60"
+                title="关闭"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
             </div>
           </div>
         </div>
@@ -432,20 +408,20 @@ export function EnhancedMainContent({
 
       {/* 分类内容区域 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8 sm:space-y-12 lg:space-y-16">
-        {categories.map((category, index) => {
+        {categories.map((category) => {
           const categoryBookmarks = bookmarks.filter(bookmark =>
             category.subCategories.some(sub => sub.id === bookmark.subCategoryId)
           )
-          const firstSubCategory = category.subCategories[0]
-          const firstSubCategoryBookmarks = firstSubCategory
-            ? bookmarks.filter(b => b.subCategoryId === firstSubCategory.id)
-            : []
+          const isFallbackOnly =
+            category.subCategories.length === 1 &&
+            category.subCategories[0].name === FALLBACK_SUBCATEGORY_NAME
 
           return (
             <div key={category.id} className="space-y-4 sm:space-y-6">
               {/* 分类标题 */}
               <div className="flex items-center justify-between">
-                <div
+                <button
+                  type="button"
                   className="flex items-center space-x-3 cursor-pointer group"
                   onClick={() => onSubCategorySelect(category.id)}
                 >
@@ -456,38 +432,52 @@ export function EnhancedMainContent({
                   <span className="text-xs sm:text-sm text-muted-foreground">
                     {categoryBookmarks.length} 个书签
                   </span>
-                </div>
+                </button>
               </div>
 
-              {/* 二级分类胶囊标签 */}
-              {category.subCategories.length > 0 && (
-                <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
-                  {category.subCategories.map((subCategory) => (
-                    <button
-                      key={subCategory.id}
-                      className={cn(
-                        "px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200",
-                        "hover:scale-105 hover:shadow-lg border touch-manipulation active:scale-95",
-                        firstSubCategory?.id === subCategory.id
-                          ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg border-primary/20 hover:shadow-xl"
-                          : "bg-muted/60 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 border-border/50"
+              {/* 每个子分类一行书签 */}
+              <div className="space-y-6 sm:space-y-8">
+                {category.subCategories.map((subCategory) => {
+                  const subBookmarks = bookmarks.filter(b => b.subCategoryId === subCategory.id)
+                  if (subBookmarks.length === 0) return null
+                  const visible = subBookmarks.slice(0, homeRowCount)
+                  const remaining = subBookmarks.length - visible.length
+
+                  return (
+                    <div key={subCategory.id} className="space-y-3">
+                      {/* 子分类小标题（折叠态分类不显示） */}
+                      {!isFallbackOnly && (
+                        <div className="flex items-center justify-between gap-2">
+                          <button
+                            type="button"
+                            className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors group"
+                            onClick={() => onSubCategorySelect(subCategory.id)}
+                          >
+                            <span>{subCategory.name}</span>
+                            <span className="text-xs opacity-60">{subBookmarks.length}</span>
+                          </button>
+                          {remaining > 0 && (
+                            <button
+                              type="button"
+                              className="text-xs text-muted-foreground hover:text-primary flex items-center gap-0.5"
+                              onClick={() => onSubCategorySelect(subCategory.id)}
+                            >
+                              查看全部 {subBookmarks.length}
+                              <ChevronRight className="w-3 h-3" />
+                            </button>
+                          )}
+                        </div>
                       )}
-                      onClick={() => onSubCategorySelect(subCategory.id)}
-                    >
-                      {subCategory.name}
-                    </button>
-                  ))}
-                </div>
-              )}
 
-              {/* 书签网格 */}
-              <DynamicBookmarkGrid>
-                {firstSubCategoryBookmarks.slice(0, 7).map((bookmark) => (
-                  <EnhancedBookmarkCard key={bookmark.id} bookmark={bookmark} onPreview={handlePreview} />
-                ))}
-
-
-              </DynamicBookmarkGrid>
+                      <DynamicBookmarkGrid>
+                        {visible.map((bookmark) => (
+                          <EnhancedBookmarkCard key={bookmark.id} bookmark={bookmark} onPreview={handlePreview} />
+                        ))}
+                      </DynamicBookmarkGrid>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           )
         })}

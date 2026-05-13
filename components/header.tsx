@@ -1,27 +1,32 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home, Download, Database } from "lucide-react"
+import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home, Download, MoreHorizontal, Eye } from "lucide-react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu"
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import { ImportDialog } from "@/components/import-dialog"
 import { AboutDialog } from "@/components/about-dialog"
 import { DataManagementDialog } from "@/components/data-management-dialog"
-// import { HelpCenter } from "@/components/help-center"
 import { ImportHelpDialog } from "@/components/import-help-dialog"
 
 import { EnhancedSearch } from "@/components/enhanced-search"
 import { AddBookmarkWithCategoryDialog } from "@/components/add-bookmark-with-category-dialog"
-import { QuickDisplaySettings } from "@/components/quick-display-settings"
+import { QuickDisplaySettingsContent } from "@/components/quick-display-settings-content"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useToast } from "@/hooks/use-toast"
-import Link from "next/link"
 import { parseBookmarkHTML } from "@/lib/bookmark-importer"
 import type { SearchFilters } from "@/lib/search-utils"
 
@@ -291,19 +296,6 @@ export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFil
         />
 
         <div className="flex items-center space-x-2">
-          {/* 返回首页按钮 */}
-          <Link href="/">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hover:bg-primary/10"
-              title="返回首页"
-            >
-              <Home className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">首页</span>
-            </Button>
-          </Link>
-
           {/* 添加书签按钮（无分类时展示提示） */}
           {(() => {
             const isAddDisabled = categories.length === 0 || categories.every(cat => cat.subCategories.length === 0)
@@ -412,71 +404,79 @@ export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFil
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* 顶部导出按钮 - 卡片式（在显示按钮左侧） */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="hover:bg-primary/10" title="导出书签">
-                <Download className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">导出</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className="w-64 p-0 shadow-xl border border-border/20 bg-background/95 backdrop-blur-sm rounded-lg animate-in slide-in-from-top-2 duration-200"
-              align="end"
-              sideOffset={8}
-            >
-              <Card className="border-0 shadow-none">
-                <CardContent className="p-2">
-                  <div className="space-y-1">
-                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => handleExport('html')}>
-                      <FileText className="w-4 h-4 text-blue-500" />
-                      <span className="text-sm">HTML</span>
-                    </button>
-                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => handleExport('json')}>
-                      <FileText className="w-4 h-4 text-green-500" />
-                      <span className="text-sm">JSON</span>
-                    </button>
-                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => handleExport('csv')}>
-                      <FileText className="w-4 h-4 text-amber-500" />
-                      <span className="text-sm">CSV</span>
-                    </button>
-                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-primary/10 hover:text-primary transition-colors" onClick={() => handleExport('txt')}>
-                      <FileText className="w-4 h-4 text-purple-500" />
-                      <span className="text-sm">TXT</span>
-                    </button>
-                  </div>
-                </CardContent>
-              </Card>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* 显示设置按钮 */}
-          <QuickDisplaySettings />
-
-
-
-
-          <Button asChild variant="ghost" size="sm" className="hover:bg-primary/10" title="帮助与文档">
-            <Link href="/help">
-              <HelpCircle className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">帮助</span>
-            </Link>
-          </Button>
           <Button variant="ghost" size="sm" onClick={onSettingsClick} className="hover:bg-primary/10" title="设置">
             <Settings className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline">设置</span>
           </Button>
-      <DataManagementDialog
-        open={dataDialogOpen}
-        onOpenChange={setDataDialogOpen}
-      />
 
-          <Button variant="ghost" size="sm" onClick={() => setAboutDialogOpen(true)} className="hover:bg-primary/10" title="关于">
-            <Info className="h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline">关于</span>
-          </Button>
+          {/* 更多菜单：显示/导出/帮助/关于 */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="hover:bg-primary/10" title="更多">
+                <MoreHorizontal className="h-4 w-4" />
+                <span className="sr-only">更多</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" sideOffset={8} className="w-48">
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <Eye className="mr-2 h-4 w-4" />
+                  <span>显示</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent className="w-80 p-0">
+                    <QuickDisplaySettingsContent />
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
 
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <Download className="mr-2 h-4 w-4" />
+                  <span>导出</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent className="w-40">
+                    <DropdownMenuItem onClick={() => handleExport('html')}>
+                      <FileText className="mr-2 h-4 w-4 text-blue-500" />
+                      <span>HTML</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleExport('json')}>
+                      <FileText className="mr-2 h-4 w-4 text-green-500" />
+                      <span>JSON</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleExport('csv')}>
+                      <FileText className="mr-2 h-4 w-4 text-amber-500" />
+                      <span>CSV</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleExport('txt')}>
+                      <FileText className="mr-2 h-4 w-4 text-purple-500" />
+                      <span>TXT</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
 
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem asChild>
+                <Link href="/help">
+                  <HelpCircle className="mr-2 h-4 w-4" />
+                  <span>帮助</span>
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem onClick={() => setAboutDialogOpen(true)}>
+                <Info className="mr-2 h-4 w-4" />
+                <span>关于</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DataManagementDialog
+            open={dataDialogOpen}
+            onOpenChange={setDataDialogOpen}
+          />
         </div>
       </div>
 

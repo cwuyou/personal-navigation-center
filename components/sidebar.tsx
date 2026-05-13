@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Square, Trash, FolderPlus, Bookmark, Download } from "lucide-react"
+import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Square, Trash, FolderPlus, Bookmark, Download, FolderCog } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Input } from "@/components/ui/input"
@@ -225,8 +225,8 @@ export function Sidebar({
                 <Button variant="ghost" size="icon-sm" onClick={() => setAddDialogOpen(true)} title="添加分类" className="hover:bg-primary/10 hover:text-primary">
                   <Plus className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="icon-sm" onClick={toggleBatchMode} title="批量管理" className="hover:bg-primary/10 hover:text-primary">
-                  <CheckSquare className="h-4 w-4" />
+                <Button variant="ghost" size="icon-sm" onClick={toggleBatchMode} title="批量管理分类" className="hover:bg-primary/10 hover:text-primary">
+                  <FolderCog className="h-4 w-4" />
                 </Button>
                 <Button variant="ghost" size="icon-sm" onClick={onToggleCollapse} title="收起侧边栏" className="hover:bg-primary/10 hover:text-primary">
                   <PanelLeftClose className="h-4 w-4" />
@@ -282,7 +282,7 @@ export function Sidebar({
                 className={cn(
                   "group flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-accent",
                   selectedCategory === category.id && !isBatchMode && "bg-accent",
-                  isBatchMode && selectedCategoryIds.has(category.id) && "bg-blue-50 border border-blue-200",
+                  isBatchMode && selectedCategoryIds.has(category.id) && "bg-primary/15 border border-primary/30",
                 )}
               >
                 <div

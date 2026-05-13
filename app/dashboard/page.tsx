@@ -19,6 +19,16 @@ import { useResponsiveLayout, useDisplaySettings } from "@/hooks/use-display-set
 import { logger } from "@/lib/logger"
 import { DEFAULT_SEARCH_FILTERS, type SearchFilters } from "@/lib/search-utils"
 
+function readInitialNavParams() {
+  if (typeof window === 'undefined') return { category: null, sub: null, q: "" }
+  const params = new URLSearchParams(window.location.search)
+  return {
+    category: params.get('category'),
+    sub: params.get('sub'),
+    q: params.get('q') ?? "",
+  }
+}
+
 export default function HomePage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -39,6 +49,43 @@ export default function HomePage() {
     // 标记用户已访问过dashboard
     localStorage.setItem('hasVisitedDashboard', 'true')
   }, [initializeStore])
+
+  // 首次水合后从 URL 读初始导航状态（在挂载后做一次，避免 SSR/水合分歧）
+  const urlBootstrapped = useRef(false)
+  useEffect(() => {
+    if (!hasHydrated || urlBootstrapped.current) return
+    urlBootstrapped.current = true
+    const init = readInitialNavParams()
+    if (init.category) setSelectedCategory(init.category)
+    if (init.sub) setSelectedSubCategory(init.sub)
+    if (init.q) setSearchQuery(init.q)
+  }, [hasHydrated])
+
+  // state → URL：用 history.replaceState 同步，避免堆历史栈、避免触发 Next 路由刷新
+  useEffect(() => {
+    if (!hasHydrated || !urlBootstrapped.current) return
+    const params = new URLSearchParams()
+    if (selectedCategory) params.set('category', selectedCategory)
+    if (selectedSubCategory) params.set('sub', selectedSubCategory)
+    if (searchQuery) params.set('q', searchQuery)
+    const next = params.toString()
+    const current = window.location.search.replace(/^\?/, '')
+    if (next === current) return
+    const url = next ? `${window.location.pathname}?${next}` : window.location.pathname
+    window.history.replaceState(window.history.state, '', url)
+  }, [selectedCategory, selectedSubCategory, searchQuery, hasHydrated])
+
+  // 浏览器前进/后退（popstate）→ state
+  useEffect(() => {
+    const handler = () => {
+      const next = readInitialNavParams()
+      setSelectedCategory(next.category)
+      setSelectedSubCategory(next.sub)
+      setSearchQuery(next.q)
+    }
+    window.addEventListener('popstate', handler)
+    return () => window.removeEventListener('popstate', handler)
+  }, [])
 
   // 🔧 使用ref跟踪上一次的封面图开关状态
   const prevShowCover = useRef<boolean>(false)
