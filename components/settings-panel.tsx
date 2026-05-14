@@ -27,6 +27,7 @@ import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { useDisplaySettings, useResponsiveLayout, type CardLayout } from "@/hooks/use-display-settings"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { QuickDisplaySettingsContent } from "@/components/quick-display-settings-content"
 
 
 interface SettingsPanelProps {
@@ -329,118 +330,21 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
             </CardContent>
           </Card>
 
-          {/* 显示设置 */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm flex items-center space-x-2">
-                <Eye className="w-4 h-4" />
-                <span>显示设置</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-4">
-                {/* 显示内容开关 */}
+          {/* 显示设置（与"⋯ 更多 → 显示"共用同一面板，避免两处偏差） */}
+          <QuickDisplaySettingsContent />
+
+          {/* 网格列数 - 仅在网格布局下显示（设置面板独有） */}
+          {config.layout === 'grid' && (
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm flex items-center space-x-2">
+                  <Eye className="w-4 h-4" />
+                  <span>网格列数</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
                 <div className="space-y-3">
-                  <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">显示内容</h4>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
-                      <Label htmlFor="show-cover" className="text-xs font-normal cursor-pointer">
-                        封面图片
-                      </Label>
-                      <Switch
-                        id="show-cover"
-                        checked={displaySettings.showCover}
-                        onCheckedChange={(checked) => updateDisplaySettings({ showCover: checked })}
-                        className="scale-75"
-                      />
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
-                      <Label htmlFor="show-favicon" className="text-xs font-normal cursor-pointer">
-                        网站图标
-                      </Label>
-                      <Switch
-                        id="show-favicon"
-                        checked={displaySettings.showFavicon}
-                        onCheckedChange={(checked) => updateDisplaySettings({ showFavicon: checked })}
-                        className="scale-75"
-                      />
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
-                      <Label htmlFor="show-title" className="text-xs font-normal cursor-pointer">
-                        标题
-                      </Label>
-                      <Switch
-                        id="show-title"
-                        checked={displaySettings.showTitle}
-                        onCheckedChange={(checked) => updateDisplaySettings({ showTitle: checked })}
-                        className="scale-75"
-                      />
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
-                      <Label htmlFor="show-description" className="text-xs font-normal cursor-pointer">
-                        描述
-                      </Label>
-                      <Switch
-                        id="show-description"
-                        checked={displaySettings.showDescription}
-                        onCheckedChange={(checked) => updateDisplaySettings({ showDescription: checked })}
-                        className="scale-75"
-                      />
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
-                      <Label htmlFor="show-url" className="text-xs font-normal cursor-pointer">
-                        网址
-                      </Label>
-                      <Switch
-                        id="show-url"
-                        checked={displaySettings.showUrl}
-                        onCheckedChange={(checked) => updateDisplaySettings({ showUrl: checked })}
-                        className="scale-75"
-                      />
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg border border-border/50">
-                      <Label htmlFor="show-tags" className="text-xs font-normal cursor-pointer">
-                        标签
-                      </Label>
-                      <Switch
-                        id="show-tags"
-                        checked={displaySettings.showTags}
-                        onCheckedChange={(checked) => updateDisplaySettings({ showTags: checked })}
-                        className="scale-75"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-
-
-                {/* 圆角样式 */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">圆角样式</h4>
-                  <Select
-                    value={displaySettings.cardRadius}
-                    onValueChange={(value: typeof displaySettings.cardRadius) =>
-                      updateDisplaySettings({ cardRadius: value })
-                    }
-                  >
-                    <SelectTrigger className="h-8 text-xs">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">无圆角</SelectItem>
-                      <SelectItem value="sm">小圆角</SelectItem>
-                      <SelectItem value="md">中圆角</SelectItem>
-                      <SelectItem value="lg">大圆角</SelectItem>
-                      <SelectItem value="xl">超大圆角</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* 网格列数 - 仅在网格布局下显示 */}
-                {config.layout === 'grid' && (
-                  <div className="space-y-3">
-                    <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">网格列数</h4>
-                    <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                       {/* 手机 */}
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
@@ -586,10 +490,9 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
                       </div>
                     </div>
                   </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                </CardContent>
+              </Card>
+          )}
 
           {/* 界面调整 */}
           <Card>

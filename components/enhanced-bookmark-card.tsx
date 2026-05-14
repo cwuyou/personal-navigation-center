@@ -112,7 +112,12 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
 
   const isListMode = layoutMode === 'list'
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (e.shiftKey && onPreview) {
+      e.preventDefault()
+      onPreview(bookmark)
+      return
+    }
     window.open(bookmark.url, "_blank", "noopener,noreferrer")
   }
 

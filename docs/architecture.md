@@ -1,7 +1,7 @@
 # 架构设计文档
 
 > Personal Navigation Center — Next.js 14 App Router 书签管理 PWA
-> 文档日期:2026-05-14
+> 文档日期:2026-05-15
 
 本文档聚焦**为什么这样设计**与**组件间协作的细节**。若需要快速查表(目录、路由清单、命令等),请看 [PROJECT_INDEX.md](../PROJECT_INDEX.md)。
 
@@ -20,7 +20,12 @@
    - 8.5 移动端 Sidebar 抽屉
    - 8.6 Header 按钮折叠
    - 8.7 导航状态 ↔ URL 同步
+   - 8.8 Sidebar 折叠态分类导航
+   - 8.9 面包屑导航
+   - 8.10 Header 增强进度指示器
 8A. [搜索子系统](#8a-搜索子系统)
+8B. [键盘快捷键](#8b-键盘快捷键)
+8C. [删除撤销机制](#8c-删除撤销机制)
 9. [性能与安全策略](#9-性能与安全策略)
 10. [已知权衡与技术债](#10-已知权衡与技术债)
 
@@ -245,12 +250,21 @@ categorizeBookmarks()
 - **preset 批**:`processFastBatch`,同步处理,`batchSize=40`,无延迟。
 - **unknown 批** + **缺封面的 preset**:`processSlowBatch`,并发处理,`batchSize=8`,批次间 `delay=100ms`。
 
-合并逻辑在 `lib/background-metadata-enhancer.ts:710-726`:
+合并逻辑:
 ```ts
 const slowList = [...unknownBookmarks, ...presetNeedingCover]
     .filter((b, idx, arr) => arr.findIndex(x => x.id === b.id) === idx)
 ```
 去重后进入慢速管线。
+
+**进度 `total` 的语义**:**工作量,不是去重书签数**。预置缺封面的书签会在 preset 批和 slow 批被各处理一次,因此:
+
+```
+total = presetBookmarks.length + slowList.length    // 真实工作量
+≠ bookmarks.length                                   // 输入数
+```
+
+例:输入 173 个书签,38 个预置缺封面 → `total = 173 + 38 = 211`,与 `completed` 严格匹配。如果回到 `bookmarks.length`,UI 会出现 `211/173` 溢出。`slowList` 计算被提前到工作流头部以构造 `total`,这是 enhancer 与 UI 的契约,**不要改回 `bookmarks.length`**。UI 端(`components/header.tsx`)另外用 `Math.min(completed, total)` 和进度条容器 `overflow-hidden` 做兜底防御。
 
 ### 5.2 封面图回退链
 
@@ -417,6 +431,7 @@ if (!hasHydrated) 返回占位 <div/>,避免空态闪烁
     <Header>                          (搜索、3 个一级按钮 + ⋯ 更多)
       ├─ <Menu> 汉堡按钮              (仅 mobile, prop onMobileMenuClick 存在时)
       ├─ <EnhancedSearch>
+      ├─ 增强进度指示器                (enhancementProgress.status==='running' 时显示)
       └─ "⋯ 更多" 菜单
           ├─ 显示 → <QuickDisplaySettingsContent>
           ├─ 导出 → HTML / JSON / CSV / TXT
@@ -425,12 +440,13 @@ if (!hasHydrated) 返回占位 <div/>,避免空态闪烁
           └─ 关于
     {breakpoint === 'mobile'
       ? <Sheet side="left"><Sidebar/></Sheet>     (移动端抽屉)
-      : <Sidebar/>}                                (桌面端常驻)
+      : <Sidebar/>}                                (桌面端常驻; 折叠态显示分类首字符)
     <EmptyState>                      (无数据时)
       OR
     <EnhancedMainContent>
       ├─ <SearchResults>              (如果 searchQuery 非空)
       ├─ 详情视图                      (selectedCategory 非空)
+      │   ├─ 面包屑导航 (首页 / 分类 / 子分类)
       │   ├─ 子分类胶囊导航
       │   └─ <DynamicBookmarkGrid> + <EnhancedBookmarkCard|SelectableBookmarkCard>
       ├─ 首页视图                      (未选中分类)
@@ -440,8 +456,7 @@ if (!hasHydrated) 返回占位 <div/>,避免空态闪烁
     <AddCategoryDialog>
     <AddBookmarkWithCategoryDialog>
     <PWAInstall>
-    <SettingsPanel>
-    <EnhancementProgress>             (订阅 enhancementProgress state)
+    <SettingsPanel>                   (复用 QuickDisplaySettingsContent + 网格列数)
   </HomePage>
 </RootLayout>
 ```
@@ -452,6 +467,8 @@ if (!hasHydrated) 返回占位 <div/>,避免空态闪烁
 - `BookmarkCard`:默认只读,最轻。
 - `EnhancedBookmarkCard`:带 hover 预览、推荐评分。
 - `SelectableBookmarkCard`:批量选择模式,带 checkbox。
+
+**Shift+Click 直接预览**:三个组件的 `handleClick` 都先检查 `e.shiftKey`,持 shift 时调 `onPreview(bookmark)` 而不是 `window.open`。这降低了预览功能的发现成本——以前必须 hover 卡片 → 三点菜单 → 点预览,现在按住 shift 点卡片即可。三点菜单里的"预览"按钮保留作为备选入口。
 
 ### 8.3 响应式断点
 
@@ -549,6 +566,81 @@ window.history.replaceState(...)   ← 不堆历史栈
 - 每次切分类都堆历史栈会让用户"返回"按钮卡在 dashboard 内部,而不是回到来源页。
 - 切换分类是"过滤"语义,不是"导航到新页面",`replace` 更符合直觉。
 
+### 8.8 Sidebar 折叠态分类导航
+
+折叠态原本只剩一个"展开"按钮,毫无导航价值。现在改为类似 VS Code Activity Bar 的图标条:
+
+```
+collapsed === true
+   ↓
+<div className="w-12 ...">
+  <Button onClick={onToggleCollapse}><PanelLeft/></Button>   ← 展开
+  <ScrollArea>
+    {collapsibleCategories.map(cat => (
+      <button
+        onClick={() => onCategorySelect(cat.id)}
+        className={isActive ? "bg-primary text-primary-foreground" : "hover:bg-primary/10"}
+      >
+        {cat.name.charAt(0)}                               ← 首字符
+      </button>
+    ))}
+  </ScrollArea>
+</div>
+```
+
+**几个有意识的取舍**:
+- **不自动展开**:点击直接切换 `selectedCategory`,sidebar 保持折叠。用户想看子分类才手动展开。理由:Activity Bar 模式更紧凑,避免"点错一次就触发整个 UI 重排"。
+- **`system` 分类排除**:系统分类(`uncategorized`)是隐藏实现细节,不应出现在快捷导航条。
+- **选中态高亮**:`selectedCategory === cat.id` 时用 `bg-primary`,与展开态高亮风格保持一致。
+
+### 8.9 面包屑导航
+
+详情视图(`selectedCategory !== null`)顶部渲染面包屑,提供"当前位置"指示和回溯入口:
+
+```
+首页  ›  开发工具  ›  代码编辑器
+ ↑       ↑           ↑
+ │       │           └─ 当前位置, 不可点击
+ │       └─ 点击: setSelectedSubCategory(null), 回到分类层
+ └─ 点击: setSelectedCategory(null), 回到首页
+```
+
+**设计要点**:
+- 通过新 prop `onCategorySelect(categoryId | null, subCategoryId?)` 暴露给 dashboard,后者 setter 三件套
+- 与导航状态 ↔ URL 同步(§8.7)自动联动,面包屑点击后 URL 也更新
+- 当前层级文字加粗(`font-medium`),前面祖先用 muted 颜色 + hover primary
+- 不在搜索结果或首页视图渲染——这两个视图没有"路径"概念
+
+### 8.10 Header 增强进度指示器
+
+后台元数据增强(§5)运行时,Header 在"设置"按钮和"⋯ 更多"之间显示一个 Loader2 旋转图标 + `已完成/总数` 计数,点击展开 Popover 显示进度条、当前 URL、停止按钮。
+
+```
+enhancementProgress.status
+   ├─ 'running' → 显示指示器 + Popover
+   ├─ 'completed' → 隐藏(由 store 在 setTimeout 2s 后清空 enhancementProgress)
+   └─ 'error' → 隐藏
+```
+
+**为什么放 Header 而不是底部**:
+- 旧设计是右下角悬浮 Card,但 dashboard 底部已经有 `<BatchSelectionToolbar>` 抢占位置,且离用户视线焦点远
+- 增强是"后台操作"的语义,放 Header 与其他全局状态(搜索、设置)在一起更直观
+- Popover 默认隐藏详情,只在用户主动展开时才占用屏幕,不打扰阅读
+
+**渲染端的防御性 clamp**:`total` 来自 enhancer,语义见 §5.1(工作量,可能大于输入书签数)。即便如此,UI 侧不直接信任 `enhancementProgress` 的原始值,做两层防御:
+
+```tsx
+const completed = Math.min(enhancementProgress.completed, total)
+const percent   = total > 0 ? Math.min(100, Math.round(completed / total * 100)) : 0
+```
+
+外加进度条容器 `overflow-hidden`,保证即使未来 enhancer 计数失准,UI 也不会出现 `211/173` 或进度条溢出 Popover 边界这类视觉异常。这两层是**纯防御**,正常情况下不应触发——若触发,说明 enhancer 的 total 计算出 bug,应回到 §5.1 修。
+
+**`components/enhancement-progress.tsx` 的现状**:
+- 函数体始终 `return null`(线上完全静默),保留是历史遗留
+- 新的 Header 实现完全内联在 `header.tsx` 中,不复用 `EnhancementProgress`(那个版本是悬浮 Card,与 Header 内嵌按钮形态不兼容)
+- 可清理:dashboard 已移除 `<EnhancementProgress />` 和对应 import
+
 ---
 
 ## 8A. 搜索子系统
@@ -601,6 +693,64 @@ HomePage (dashboard)                            ┐
 
 ---
 
+## 8B. 键盘快捷键
+
+快捷键按"作用域"拆成两组,各自管自己的状态边界:
+
+| 快捷键 | 作用 | 注册位置 | 触发条件 |
+|---|---|---|---|
+| `Ctrl/Cmd+K` | 聚焦搜索 | `EnhancedSearch` 内部 useEffect | 全局,但可在输入框中触发(覆盖默认行为) |
+| `/` | 聚焦搜索 | `app/dashboard/page.tsx` | 不在输入控件内 |
+| `N` | 打开添加书签对话框 | `app/dashboard/page.tsx` | 不在输入控件内,无修饰键 |
+| `Esc` | 退出选择模式 | `EnhancedMainContent` | `isSelectionMode === true` |
+| `Ctrl/Cmd+A` | 全选当前视图 | `EnhancedMainContent` | `isSelectionMode === true` 且不在输入控件 |
+| `↑/↓/Enter` | 搜索建议导航 | `EnhancedSearch` | 下拉打开时 |
+
+**输入控件保护**:dashboard 全局快捷键(`/`、`N`)会检查 `e.target` 的 tag(`INPUT/TEXTAREA/SELECT`)和 `isContentEditable`,在输入控件内不触发,以免影响打字。
+
+**搜索框查找方式**:`/` 快捷键通过 `document.querySelector('input[data-search-input]')` 找到搜索框聚焦,而不是通过组件 ref。原因:dashboard 不持有 `EnhancedSearch` 的 ref,而 `data-*` 属性提供了无侵入的跨组件查找能力。
+
+**Esc 与对话框**:Radix Dialog/Sheet 自带 `Esc` 关闭,本节的 `Esc` 仅作用于"选择模式"(非对话框、非搜索下拉)。如果对话框打开,Radix 会先消费 `Esc`,选择模式不会受影响。
+
+---
+
+## 8C. 删除撤销机制
+
+所有删除操作支持 5 秒内撤销,实现集中在 `hooks/use-bookmark-store.ts`,**调用方零改动**:
+
+```
+用户点击删除
+   ↓
+deleteBookmark(id) / deleteSubCategory(id) / deleteCategory(id)
+deleteBookmarksBatch(ids) / deleteCategoriesBatch(ids)
+   ↓
+captureSnapshot({ categories, bookmarks })   ← 模块级变量, 不进 persist
+   ├─ token = ++deleteTokenSeq               ← 新 token 让旧快照失效
+   └─ 深拷贝 categories + bookmarks
+   ↓
+set({ categories, bookmarks })  ← 应用删除
+   ↓
+showUndoToast("已删除 XXX", token)
+   ↓ sonner toast (5s)
+   ├─ 用户点击"撤销"
+   │     ├─ token 仍匹配 → setState 恢复, lastDeleteSnapshot=null
+   │     └─ token 不匹配(被新删除覆盖) → toast.error("撤销已过期")
+   └─ 5s 超时 → toast 消失, 快照仍在内存但无 UI 入口
+```
+
+**设计要点**:
+- **模块级 `let lastDeleteSnapshot`**:不进 Zustand store(避免污染持久化),也不放 `useRef`(撤销按钮在 toast 里,与 React 树脱钩)
+- **token 单调递增**:同时只允许一个有效快照,新删除会让旧 toast 上的撤销按钮变 no-op,简单且符合用户心理预期(只能撤销最近一次)
+- **Batch action 不是循环 single**:批量删除单独提供 `deleteBookmarksBatch / deleteCategoriesBatch`,只产生一条 toast 和一个快照,避免 5 个删除产生 5 条 toast
+- **不持久化**:刷新页面快照丢失。这是有意识的取舍——撤销是"瞬时反悔"语义,跨刷新的恢复属于"垃圾桶"特性,不在本机制范围
+
+**调用方迁移规则**:
+- 单删:无需改动,直接调 `deleteXxx(id)` 即可
+- 批量删:**禁止** `ids.forEach(id => deleteXxx(id))`,改用 `deleteXxxBatch(ids)`
+- 删除前的确认对话框文案中不要再写"无法撤销",已统一改为"删除后可在短时间内撤销"
+
+---
+
 ## 9. 性能与安全策略
 
 ### 9.1 性能
@@ -641,11 +791,13 @@ HomePage (dashboard)                            ┐
 - **`components/` 扁平结构**(50+ 文件同级):文件多时难检索,可按 `bookmark/` `category/` `dialog/` `settings/` 分组。
 - **`app/test-api`、`app/debug/*`** 在生产构建中也会产出,应通过环境变量或路由组 `(debug)` 排除。
 - **`data/website-descriptions-1000plus.json` (250KB) 被静态 import 三处**:`background-metadata-enhancer.ts` / `add-bookmark-dialog.tsx` / `add-bookmark-with-category-dialog.tsx`。改 dynamic import 能大幅减小 dev 增量编译时间和生产首屏 bundle。
-- **无测试**:`package.json` 无测试命令;关键逻辑(URL 归一化、`lib/search-utils.ts` 过滤、增强回退链)值得单元测试覆盖。
+- **无测试**:`package.json` 无测试命令;关键逻辑(URL 归一化、`lib/search-utils.ts` 过滤、增强回退链、删除撤销快照机制)值得单元测试覆盖。
 - **历史 bug 文档散落在根 `docs/`**(`infinite-loop-*.md`、`cover-image-fix-summary.md` 等):建议合并或移入变更日志。
-- **显示设置两条入口**:`⋯ 更多 → 显示` 与 Settings 一级按钮里都有显示偏好,用户有时不知道该去哪改(§12 P3 待决)。
+- **显示设置去重已落地但仍有两个入口**:`⋯ 更多 → 显示` 和 Settings 都用同一份 `QuickDisplaySettingsContent`(代码层不再重复),但 UI 层仍有两个发现入口。是否进一步收敛(只留一个入口)是产品决策,未定。
 - **`components/display-settings-panel.tsx` 孤儿组件**:未被引用,与新的 `quick-display-settings-content.tsx` 命名相近,易误引。应删除或合并。
 - **`components/quick-display-settings.tsx` 已不再使用**:内容被抽到 `quick-display-settings-content.tsx`,自带 Dropdown 包装的版本目前没有调用方,可清理。
+- **`components/enhancement-progress.tsx` 是僵尸组件**:函数体始终 `return null`,不再被 dashboard 引用。Header 内的新版进度指示器是内联实现,该文件可删除。
+- **删除快照仅内存**:刷新页面后失去撤销能力。如要做"垃圾桶"持久化恢复,需要新设计(可能进 IndexedDB,不污染 Zustand persist)。
 
 ### 10.3 演进方向(若项目继续)
 1. **可选云同步**:在保留本地优先的前提下,加一个可选的"上传到 Gist / WebDAV"能力。

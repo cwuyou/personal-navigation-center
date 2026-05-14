@@ -128,7 +128,8 @@ npm run lint     # ESLint
 HomePage
 ├─ WebSiteStructuredData / StructuredData (SEO)
 ├─ Header              ← 搜索、logo、设置;一级 3 个按钮(添加/导入/设置) + ⋯ 更多
-│   ├─ EnhancedSearch  ← 受控 filters、Ctrl+K 快捷键、键盘导航(↑/↓/Enter)
+│   ├─ EnhancedSearch  ← 受控 filters、Ctrl+K / "/" 快捷键、键盘导航(↑/↓/Enter)
+│   ├─ 增强进度指示器   ← enhancementProgress.status==='running' 时显示 Loader2+count, Popover 展开详情
 │   ├─ "⋯ 更多" (DropdownMenu)
 │   │   ├─ 显示 (Sub) → QuickDisplaySettingsContent
 │   │   ├─ 导出 (Sub) → HTML / JSON / CSV / TXT
@@ -138,15 +139,15 @@ HomePage
 │   └─ Menu (汉堡按钮, 仅 mobile, prop onMobileMenuClick 存在时显示)
 ├─ 移动端: <Sheet side="left"> 包 Sidebar; 桌面端: 常驻 Sidebar
 │   └─ Sidebar         ← 分类树、折叠控件;批量管理用 FolderCog 图标
+│       └─ 折叠态: 每个分类首字符按钮(点击直达), 选中高亮
 ├─ EmptyState | EnhancedMainContent
 │   ├─ SearchResults   ← 有搜索词时取代常规视图,filters/onCategorySelect 受控
-│   ├─ 详情视图        ← 选中分类时;每分类一行子分类胶囊
+│   ├─ 详情视图        ← 选中分类时;面包屑导航 + 子分类胶囊
 │   └─ 首页视图        ← 未选中时;每个子分类一行书签(数量=clamp(4..6, gridColumns[bp]))
 ├─ OnboardingModal
 ├─ AddCategoryDialog / AddBookmarkWithCategoryDialog
 ├─ PWAInstall          ← dev 环境主动卸载旧 SW + 清 cache,生产才注册
-├─ SettingsPanel
-└─ EnhancementProgress ← 后台元数据增强进度条
+└─ SettingsPanel       ← 复用 QuickDisplaySettingsContent + 独有的网格列数
 ```
 
 ### 导航状态 ↔ URL
@@ -164,6 +165,7 @@ HomePage
 - `startBackgroundEnhancement(ids?, { isImport? })` — 调用 `backgroundEnhancer.enhanceBookmarks()`,通过 `onUpdate` 回写。
 - `refreshCoverImages(ids?)` — 仅刷新封面图(独立于完整增强)。
 - `ensureUncategorizedExists()` — 懒创建系统分类 `system/uncategorized`,用于无归属的新书签。
+- **删除支持撤销**:`deleteBookmark / deleteSubCategory / deleteCategory / deleteBookmarksBatch / deleteCategoriesBatch` 删除前捕获模块级快照,通过 sonner toast 暴露 5 秒"撤销"按钮。仅保留最近一次快照,新删除使旧 toast 失效。
 
 ### 增强流水线入口(`lib/background-metadata-enhancer.ts`)
 `BackgroundMetadataEnhancer` 单例。外部只调:
@@ -303,6 +305,13 @@ Component
 9. **Header 一级按钮 = 3 个**:添加书签 / 导入 / 设置;其余(显示、导出、产品首页、帮助、关于)走"⋯ 更多"溢出菜单。新增按钮前先把已有的下沉,别再往一级塞。
 10. **导航状态 ↔ URL 走 `history.replaceState`**:不要换成 `useSearchParams` + `router.replace`;原因见 §3"导航状态 ↔ URL"。
 11. **移动端 Sidebar 用 Sheet,不用 `w-64` 常驻块**:dashboard 按 `breakpoint === 'mobile'` 走两个分支;移动端选完分类要 `setMobileSidebarOpen(false)`。Header 的 `onMobileMenuClick` prop 只有有值才渲染汉堡按钮。
-12. **`QuickDisplaySettingsContent` 是可复用的 panel body**;独立组件 `QuickDisplaySettings` 已不再使用,`components/display-settings-panel.tsx` 是另一份遗留 Sheet 组件(未引用),命名易混淆 —— 新接入显示设置入口时用 `QuickDisplaySettingsContent`。
+12. **`QuickDisplaySettingsContent` 是可复用的 panel body**;独立组件 `QuickDisplaySettings` 已不再使用,`components/display-settings-panel.tsx` 是另一份遗留 Sheet 组件(未引用),命名易混淆 —— 新接入显示设置入口时用 `QuickDisplaySettingsContent`。**设置面板也复用了它**,只有"网格列数"是设置面板独有。
 13. **演示横幅依赖 `bookmarks` 重读 flag**:`enhanced-main-content.tsx` 的 `useEffect(..., [bookmarks])` 在每次书签变化时重读 `localStorage.hasUserData / hideDemoNotice`。如果新增了应隐藏横幅的动作,记得在 store action 里写这两个 flag,而不是组件里。
+14. **删除全部可撤销**:`deleteBookmark / deleteSubCategory / deleteCategory` 及对应批量版本在删除前捕获快照,弹 sonner toast 提供 5 秒撤销按钮。新增删除路径必须走这些 store action,不要直接 `set({ bookmarks: ... })`。
+15. **面包屑导航在详情视图顶部**:`EnhancedMainContent` 当 `selectedCategory` 非空时渲染面包屑(`首页 / 分类 / 子分类`),通过 `onCategorySelect(categoryId|null, subCategoryId?)` 回溯。
+16. **Sidebar 折叠态保留分类导航**:`collapsed === true` 时,sidebar 渲染垂直条状按钮(每个分类首字符),点击直达。`system` 系统分类排除。
+17. **全局快捷键在 `app/dashboard/page.tsx`**:`/` 聚焦搜索(查找 `input[data-search-input]`)、`N` 打开添加书签对话框。两者都跳过输入控件。选择模式下的 `Esc`/`Ctrl+A` 在 `EnhancedMainContent` 自管。
+18. **Shift+Click 卡片直接预览**:`enhanced-bookmark-card` / `bookmark-card` / `selectable-bookmark-card` 的 `handleClick` 都检查 `e.shiftKey`,持 shift 时调 `onPreview` 而不是 `window.open`。
+19. **增强进度指示器在 Header**:`enhancementProgress.status === 'running'` 时 Header 显示 Loader2+count,Popover 展开详情。旧的底部 `<EnhancementProgress />` 已不再渲染,组件文件保留但函数体始终返回 null。
+20. **增强 `total` 是工作量,不是去重书签数**:`processSlowBatch` 会重处理"预置缺封面"那部分,所以 `total = presetBookmarks.length + slowList.length` > `bookmarks.length`。不要改回 `bookmarks.length` —— 否则 UI 会出 `completed > total` 溢出。UI 侧另用 `Math.min(completed, total)` 和 `overflow-hidden` 做兜底。
 

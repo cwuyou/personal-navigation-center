@@ -40,7 +40,12 @@ export function SelectableBookmarkCard({
   const [moveDialogOpen, setMoveDialogOpen] = useState(false)
   const { deleteBookmark } = useBookmarkStore()
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (e.shiftKey && onPreview && !isSelectionMode) {
+      e.preventDefault()
+      onPreview(bookmark)
+      return
+    }
     if (isSelectionMode) {
       onSelectionChange?.(bookmark.id, !isSelected)
     } else {

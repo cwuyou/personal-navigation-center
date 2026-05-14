@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home, Download, MoreHorizontal, Eye, Menu } from "lucide-react"
+import { Upload, Info, Settings, FileText, HelpCircle, Plus, Home, Download, MoreHorizontal, Eye, Menu, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -22,6 +22,7 @@ import { AboutDialog } from "@/components/about-dialog"
 import { DataManagementDialog } from "@/components/data-management-dialog"
 import { ImportHelpDialog } from "@/components/import-help-dialog"
 
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { EnhancedSearch } from "@/components/enhanced-search"
 import { AddBookmarkWithCategoryDialog } from "@/components/add-bookmark-with-category-dialog"
 import { QuickDisplaySettingsContent } from "@/components/quick-display-settings-content"
@@ -62,6 +63,8 @@ export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFil
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { importBookmarks, categories } = useBookmarkStore()
   const { exportBookmarks } = useBookmarkStore()
+  const enhancementProgress = useBookmarkStore(s => s.enhancementProgress)
+  const stopBackgroundEnhancement = useBookmarkStore(s => s.stopBackgroundEnhancement)
 
   const handleExport = (type: 'json' | 'html' | 'csv' | 'txt' = 'json') => {
     const data = exportBookmarks()
@@ -420,6 +423,49 @@ export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFil
             <Settings className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline">设置</span>
           </Button>
+
+          {/* 增强进度指示器 */}
+          {enhancementProgress && enhancementProgress.status === 'running' && (() => {
+            const total = enhancementProgress.total
+            const completed = Math.min(enhancementProgress.completed, total)
+            const percent = total > 0 ? Math.min(100, Math.round((completed / total) * 100)) : 0
+            return (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="sm" className="hover:bg-primary/10 relative" title="增强进度">
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                  <span className="ml-1 text-xs text-muted-foreground">
+                    {completed}/{total}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-72 p-3">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">正在增强书签</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 px-2 text-xs text-muted-foreground hover:text-destructive"
+                      onClick={stopBackgroundEnhancement}
+                    >
+                      停止
+                    </Button>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
+                    <div
+                      className="bg-primary h-1.5 rounded-full transition-all duration-300"
+                      style={{ width: `${percent}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {enhancementProgress.current || '准备中...'}
+                  </p>
+                </div>
+              </PopoverContent>
+            </Popover>
+            )
+          })()}
 
           {/* 更多菜单：显示/导出/帮助/关于 */}
           <DropdownMenu>

@@ -6,7 +6,6 @@ import { Sidebar } from "@/components/sidebar"
 import { EnhancedMainContent } from "@/components/enhanced-main-content"
 import { PWAInstall } from "@/components/pwa-install"
 import { SettingsPanel } from "@/components/settings-panel"
-import { EnhancementProgress } from "@/components/enhancement-progress"
 import { StructuredData, WebSiteStructuredData } from "@/components/seo-structured-data"
 import { EmptyState } from "@/components/empty-state"
 import { OnboardingModal } from "@/components/onboarding-modal"
@@ -342,8 +341,6 @@ export default function HomePage() {
         onToggle={() => setSettingsPanelOpen(!settingsPanelOpen)}
       />
 
-      {/* 后台增强进度 */}
-      <EnhancementProgress />
     </div>
   )
 }

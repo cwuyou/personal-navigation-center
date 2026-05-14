@@ -662,7 +662,33 @@ export class BackgroundMetadataEnhancer {
     this.isRunning = true
     this.abortController = new AbortController()
 
-    const total = bookmarks.length
+    // 找出预置但缺少封面的书签（会被加入慢速批次,与原始预置批次构成"双重处理")
+    const presetNeedingCover = config.fastMode
+      ? presetBookmarks.filter((b) => {
+          try {
+            const u = new URL(b.url)
+            const domain = u.hostname.replace(/^www\./, '')
+            const preset = (websiteDescriptions as any)[domain]
+            const cover: string | undefined = preset?.coverImage
+            const isFavicon = !!cover && (/\.ico(\?|$)/i.test(cover) || cover.toLowerCase().includes('favicon') || /icon-\d+x\d+/i.test(cover) || cover.toLowerCase().includes('apple-touch-icon'))
+            return !cover || isFavicon
+          } catch {
+            return true
+          }
+        })
+      : []
+
+    // 慢速阶段实际处理的书签集合(未知 + 预置缺封面, 已去重)
+    const slowList = config.fastMode
+      ? [...unknownBookmarks, ...presetNeedingCover]
+          .filter((b, idx, arr) => arr.findIndex(x => x.id === b.id) === idx)
+      : []
+
+    // 真实工作量 = 预置阶段处理数 + 慢速阶段处理数
+    // (注意:慢速阶段会再次处理 presetNeedingCover, 所以 total 会大于 bookmarks.length, 这是预期的)
+    const total = config.fastMode
+      ? presetBookmarks.length + slowList.length
+      : bookmarks.length
     let completed = 0
 
     try {
@@ -708,23 +734,6 @@ export class BackgroundMetadataEnhancer {
 
         // 第二阶段：处理未知书签（需要API调用） + 预置但缺少封面的书签
         if (!this.abortController?.signal.aborted) {
-          // 找出预置但缺少封面的书签，加入慢速批次以尝试抓取 og:image
-          const presetNeedingCover = presetBookmarks.filter((b) => {
-            try {
-              const u = new URL(b.url)
-              const domain = u.hostname.replace(/^www\./, '')
-              const preset = (websiteDescriptions as any)[domain]
-              const cover: string | undefined = preset?.coverImage
-              const isFavicon = !!cover && (/\.ico(\?|$)/i.test(cover) || cover.toLowerCase().includes('favicon') || /icon-\d+x\d+/i.test(cover) || cover.toLowerCase().includes('apple-touch-icon'))
-              return !cover || isFavicon
-            } catch {
-              return true
-            }
-          })
-
-          const slowList = [...unknownBookmarks, ...presetNeedingCover]
-            .filter((b, idx, arr) => arr.findIndex(x => x.id === b.id) === idx)
-
           if (slowList.length > 0) {
             logger.debug(`🌐 处理 ${slowList.length} 个需要抓取的书签（未知 + 预置缺封面）...`)
             await this.processSlowBatch(slowList, {
@@ -772,14 +781,14 @@ export class BackgroundMetadataEnhancer {
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
         onProgress?.({
-          total: bookmarks.length,
+          total,
           completed,
           status: 'idle'
         })
       } else {
         logger.error('Enhancement failed:', error)
         onProgress?.({
-          total: bookmarks.length,
+          total,
           completed,
           status: 'error'
         })
