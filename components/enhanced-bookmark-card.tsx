@@ -21,7 +21,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { MoreHorizontal, ExternalLink, Edit, Trash2, Globe, Eye, Copy, Move, MoreVertical } from "lucide-react"
+import { MoreHorizontal, ExternalLink, Edit, Trash2, Globe, Copy, Move, MoreVertical } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { BookmarkFavicon } from "@/components/bookmark-favicon"
 import { BookmarkCover } from "@/components/bookmark-cover"
@@ -56,10 +56,9 @@ interface Bookmark {
 
 interface EnhancedBookmarkCardProps {
   bookmark: Bookmark
-  onPreview?: (bookmark: Bookmark) => void
 }
 
-export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCardProps) {
+export function EnhancedBookmarkCard({ bookmark }: EnhancedBookmarkCardProps) {
   // 可选：用于高亮展示的命中词（由搜索结果传入）
   // 当前卡片内部未使用高亮，保持现有样式，如需在卡片内部高亮可在标题/描述处接入
   // const highlight = (text: string, q: string) => text
@@ -112,12 +111,7 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
 
   const isListMode = layoutMode === 'list'
 
-  const handleClick = (e: React.MouseEvent) => {
-    if (e.shiftKey && onPreview) {
-      e.preventDefault()
-      onPreview(bookmark)
-      return
-    }
+  const handleClick = () => {
     window.open(bookmark.url, "_blank", "noopener,noreferrer")
   }
 
@@ -250,12 +244,6 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-48">
                         {/* 查看操作组 */}
-                        {onPreview && (
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onPreview(bookmark) }}>
-                            <Eye className="mr-2 h-4 w-4" />
-                            预览网站
-                          </DropdownMenuItem>
-                        )}
                         <DropdownMenuItem onClick={(e) => { e.stopPropagation(); window.open(bookmark.url, '_blank') }}>
                           <ExternalLink className="mr-2 h-4 w-4" />
                           新窗口打开
@@ -315,12 +303,6 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
                       {/* 查看操作组 */}
-                      {onPreview && (
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onPreview(bookmark) }}>
-                          <Eye className="mr-2 h-4 w-4" />
-                          预览网站
-                        </DropdownMenuItem>
-                      )}
                       <DropdownMenuItem onClick={(e) => { e.stopPropagation(); window.open(bookmark.url, '_blank') }}>
                         <ExternalLink className="mr-2 h-4 w-4" />
                         新窗口打开
@@ -429,12 +411,6 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
                       {/* 查看操作组 */}
-                      {onPreview && (
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onPreview(bookmark) }}>
-                          <Eye className="mr-2 h-4 w-4" />
-                          预览网站
-                        </DropdownMenuItem>
-                      )}
                       <DropdownMenuItem onClick={(e) => { e.stopPropagation(); window.open(bookmark.url, '_blank') }}>
                         <ExternalLink className="mr-2 h-4 w-4" />
                         新窗口打开

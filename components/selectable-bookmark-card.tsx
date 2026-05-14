@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { getFaviconUrl } from "@/lib/metadata-fetcher"
 
 import { useState } from "react"
-import { ExternalLink, Edit2, Trash2, Globe, Eye, FolderOpen, Check } from "lucide-react"
+import { ExternalLink, Edit2, Trash2, Globe, FolderOpen, Check } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { EditBookmarkDialog } from "@/components/edit-bookmark-dialog"
@@ -22,7 +22,6 @@ interface SelectableBookmarkCardProps {
     subCategoryId: string
     createdAt: Date
   }
-  onPreview?: (bookmark: SelectableBookmarkCardProps['bookmark']) => void
   isSelectionMode?: boolean
   isSelected?: boolean
   onSelectionChange?: (bookmarkId: string, selected: boolean) => void
@@ -30,7 +29,6 @@ interface SelectableBookmarkCardProps {
 
 export function SelectableBookmarkCard({
   bookmark,
-  onPreview,
   isSelectionMode = false,
   isSelected = false,
   onSelectionChange,
@@ -40,12 +38,7 @@ export function SelectableBookmarkCard({
   const [moveDialogOpen, setMoveDialogOpen] = useState(false)
   const { deleteBookmark } = useBookmarkStore()
 
-  const handleClick = (e: React.MouseEvent) => {
-    if (e.shiftKey && onPreview && !isSelectionMode) {
-      e.preventDefault()
-      onPreview(bookmark)
-      return
-    }
+  const handleClick = () => {
     if (isSelectionMode) {
       onSelectionChange?.(bookmark.id, !isSelected)
     } else {
@@ -141,18 +134,6 @@ export function SelectableBookmarkCard({
             {/* 非选择模式下的操作按钮 */}
             {!isSelectionMode && (
               <div className="opacity-0 bookmark-group-hover:opacity-100 flex items-center space-x-1 ml-2 transition-all duration-200">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 w-7 p-0 hover:bg-primary/10 hover:text-primary rounded-md"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onPreview?.(bookmark)
-                  }}
-                  title="预览网站"
-                >
-                  <Eye className="h-3.5 w-3.5" />
-                </Button>
                 <Button
                   variant="ghost"
                   size="sm"

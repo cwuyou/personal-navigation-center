@@ -1,7 +1,7 @@
 # 架构设计文档
 
 > Personal Navigation Center — Next.js 14 App Router 书签管理 PWA
-> 文档日期:2026-05-15
+> 文档日期:2026-05-15(预览功能移除)
 
 本文档聚焦**为什么这样设计**与**组件间协作的细节**。若需要快速查表(目录、路由清单、命令等),请看 [PROJECT_INDEX.md](../PROJECT_INDEX.md)。
 
@@ -465,10 +465,17 @@ if (!hasHydrated) 返回占位 <div/>,避免空态闪烁
 
 同一张书签有三种渲染形态,由父组件决定用哪个:
 - `BookmarkCard`:默认只读,最轻。
-- `EnhancedBookmarkCard`:带 hover 预览、推荐评分。
+- `EnhancedBookmarkCard`:带 hover 操作、推荐评分。
 - `SelectableBookmarkCard`:批量选择模式,带 checkbox。
 
-**Shift+Click 直接预览**:三个组件的 `handleClick` 都先检查 `e.shiftKey`,持 shift 时调 `onPreview(bookmark)` 而不是 `window.open`。这降低了预览功能的发现成本——以前必须 hover 卡片 → 三点菜单 → 点预览,现在按住 shift 点卡片即可。三点菜单里的"预览"按钮保留作为备选入口。
+**已移除:站内预览面板**。曾经的 `BookmarkPreview` 通过 iframe 嵌入目标站点(配合 `/api/screenshot` 字母占位作 fallback),后因下列原因整体下线:
+
+- 大部分目标站点设置 `X-Frame-Options: DENY/SAMEORIGIN` 或 CSP `frame-ancestors`,iframe 静默失败且不触发 `onError`,只能用 5 秒定时器兜底,体验差
+- `/api/screenshot` 并非真实截图,只是字母+纯色 SVG,fallback 看到的是大字母,几乎没有"预览"价值
+- 真实信息密度其实已经在卡片自带的 `coverImage`(og:image/social-card)上呈现,预览面板的边际收益不足
+- 移除一并清理了:`components/bookmark-preview.tsx`、`onPreview` prop(3 张卡片 + `SearchResults`)、Shift+Click 预览快捷键、孤儿组件 `components/main-content.tsx`(旧版主内容区)
+
+未来若重新加入,应该走"真实截图服务"或"沙盒代理"路线,而不是直接 iframe 目标 URL。
 
 ### 8.3 响应式断点
 

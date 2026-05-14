@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { BookmarkFavicon } from "@/components/bookmark-favicon"
 
 import { useState, useMemo } from "react"
-import { ExternalLink, Edit2, Trash2, Globe, Eye, FolderOpen, Copy } from "lucide-react"
+import { ExternalLink, Edit2, Trash2, Globe, FolderOpen, Copy } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { EditBookmarkDialog } from "@/components/edit-bookmark-dialog"
@@ -22,21 +22,15 @@ interface BookmarkCardProps {
     favicon?: string
     subCategoryId: string
   }
-  onPreview?: (bookmark: BookmarkCardProps['bookmark']) => void
 }
 
-export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
+export function BookmarkCard({ bookmark }: BookmarkCardProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [moveDialogOpen, setMoveDialogOpen] = useState(false)
   const { deleteBookmark } = useBookmarkStore()
 
-  const handleClick = (e: React.MouseEvent) => {
-    if (e.shiftKey && onPreview) {
-      e.preventDefault()
-      onPreview(bookmark)
-      return
-    }
+  const handleClick = () => {
     window.open(bookmark.url, "_blank", "noopener,noreferrer")
   }
 
@@ -87,18 +81,6 @@ export function BookmarkCard({ bookmark, onPreview }: BookmarkCardProps) {
             </div>
 
             <div className="opacity-0 bookmark-group-hover:opacity-100 flex items-center space-x-1 ml-2 transition-all duration-200">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 w-7 p-0 hover:bg-primary/10 hover:text-primary rounded-md"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onPreview?.(bookmark)
-                }}
-                title="预览网站"
-              >
-                <Eye className="h-3.5 w-3.5" />
-              </Button>
               <Button
                 variant="ghost"
                 size="sm"

@@ -311,7 +311,7 @@ Component
 15. **面包屑导航在详情视图顶部**:`EnhancedMainContent` 当 `selectedCategory` 非空时渲染面包屑(`首页 / 分类 / 子分类`),通过 `onCategorySelect(categoryId|null, subCategoryId?)` 回溯。
 16. **Sidebar 折叠态保留分类导航**:`collapsed === true` 时,sidebar 渲染垂直条状按钮(每个分类首字符),点击直达。`system` 系统分类排除。
 17. **全局快捷键在 `app/dashboard/page.tsx`**:`/` 聚焦搜索(查找 `input[data-search-input]`)、`N` 打开添加书签对话框。两者都跳过输入控件。选择模式下的 `Esc`/`Ctrl+A` 在 `EnhancedMainContent` 自管。
-18. **Shift+Click 卡片直接预览**:`enhanced-bookmark-card` / `bookmark-card` / `selectable-bookmark-card` 的 `handleClick` 都检查 `e.shiftKey`,持 shift 时调 `onPreview` 而不是 `window.open`。
-19. **增强进度指示器在 Header**:`enhancementProgress.status === 'running'` 时 Header 显示 Loader2+count,Popover 展开详情。旧的底部 `<EnhancementProgress />` 已不再渲染,组件文件保留但函数体始终返回 null。
-20. **增强 `total` 是工作量,不是去重书签数**:`processSlowBatch` 会重处理"预置缺封面"那部分,所以 `total = presetBookmarks.length + slowList.length` > `bookmarks.length`。不要改回 `bookmarks.length` —— 否则 UI 会出 `completed > total` 溢出。UI 侧另用 `Math.min(completed, total)` 和 `overflow-hidden` 做兜底。
+18. **增强进度指示器在 Header**:`enhancementProgress.status === 'running'` 时 Header 显示 Loader2+count,Popover 展开详情。旧的底部 `<EnhancementProgress />` 已不再渲染,组件文件保留但函数体始终返回 null。
+19. **增强 `total` 是工作量,不是去重书签数**:`processSlowBatch` 会重处理"预置缺封面"那部分,所以 `total = presetBookmarks.length + slowList.length` > `bookmarks.length`。不要改回 `bookmarks.length` —— 否则 UI 会出 `completed > total` 溢出。UI 侧另用 `Math.min(completed, total)` 和 `overflow-hidden` 做兜底。
+20. **书签预览功能已移除**:`BookmarkPreview` 组件、卡片的 `onPreview` prop、Shift+Click 快捷键全部删除。原因:iframe 成功率太低(大部分站点用 `X-Frame-Options` 阻止),封面图已经承担了"看一眼"的信息密度,功能 ROI 不足。若重新引入,需要新预览策略(真实截图服务或沙盒代理)而非 iframe。
 

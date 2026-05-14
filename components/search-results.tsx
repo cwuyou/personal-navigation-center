@@ -17,14 +17,12 @@ import {
 interface SearchResultsProps {
   searchQuery: string
   filters?: SearchFilters
-  onPreview?: (bookmark: any) => void
   onCategorySelect?: (categoryId: string) => void
 }
 
 export function SearchResults({
   searchQuery,
   filters = DEFAULT_SEARCH_FILTERS,
-  onPreview,
   onCategorySelect,
 }: SearchResultsProps) {
   const { categories, bookmarks } = useBookmarkStore()
@@ -157,7 +155,7 @@ export function SearchResults({
               const sources = getHitSources(bookmark)
               return (
                 <div key={bookmark.id} className="space-y-1.5">
-                  <EnhancedBookmarkCard bookmark={bookmark} onPreview={onPreview} />
+                  <EnhancedBookmarkCard bookmark={bookmark} />
                   <div className="flex items-center gap-2 px-1 flex-wrap">
                     <span className="text-[11px] text-muted-foreground truncate">
                       {getCategoryPath(bookmark.subCategoryId)}

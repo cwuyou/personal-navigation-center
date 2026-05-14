@@ -1,13 +1,12 @@
 "use client"
 
-import { useState, useCallback, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { CheckSquare, X, ChevronRight, Info } from "lucide-react"
 import { BookmarkCard } from "@/components/bookmark-card"
 import { SelectableBookmarkCard } from "@/components/selectable-bookmark-card"
 import { EnhancedBookmarkCard } from "@/components/enhanced-bookmark-card"
 import { AddBookmarkCard } from "@/components/add-bookmark-card"
 import { SearchResults } from "@/components/search-results"
-import { BookmarkPreview } from "@/components/bookmark-preview"
 import { BatchSelectionToolbar } from "@/components/batch-selection-toolbar"
 import { DynamicBookmarkGrid } from "@/components/dynamic-bookmark-grid"
 
@@ -17,18 +16,6 @@ import { useBookmarkImagePreloader } from "@/hooks/use-image-preloader"
 import { useResponsiveLayout, useDisplaySettings } from "@/hooks/use-display-settings"
 import { FALLBACK_SUBCATEGORY_NAME } from "@/lib/bookmark-importer"
 import type { SearchFilters } from "@/lib/search-utils"
-
-interface Bookmark {
-  id: string
-  title: string
-  url: string
-  description?: string
-  favicon?: string
-  coverImage?: string
-  tags?: string[]
-  subCategoryId: string
-  createdAt: Date
-}
 import { cn } from "@/lib/utils"
 
 interface EnhancedMainContentProps {
@@ -52,7 +39,6 @@ export function EnhancedMainContent({
   onCategorySelect,
   sidebarCollapsed,
 }: EnhancedMainContentProps) {
-  const [previewBookmark, setPreviewBookmark] = useState<Bookmark | null>(null)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [selectedBookmarkIds, setSelectedBookmarkIds] = useState<string[]>([])
   const [demoNoticeDismissed, setDemoNoticeDismissed] = useState(false)
@@ -81,11 +67,6 @@ export function EnhancedMainContent({
   }, [breakpoint, displaySettings.gridColumns])
 
 
-
-  // 处理预览
-  const handlePreview = useCallback((bookmark: Bookmark) => {
-    setPreviewBookmark(bookmark)
-  }, [])
 
   // 处理选择模式切换
   const toggleSelectionMode = () => {
@@ -228,16 +209,8 @@ export function EnhancedMainContent({
           <SearchResults
             searchQuery={searchQuery}
             filters={searchFilters}
-            onPreview={handlePreview}
             onCategorySelect={onCategorySelectFromSearch}
           />
-          {previewBookmark && (
-            <BookmarkPreview
-              bookmark={previewBookmark}
-              isOpen={!!previewBookmark}
-              onClose={() => setPreviewBookmark(null)}
-            />
-          )}
         </div>
       </main>
     )
@@ -359,7 +332,6 @@ export function EnhancedMainContent({
                 <SelectableBookmarkCard
                   key={bookmark.id}
                   bookmark={bookmark}
-                  onPreview={handlePreview}
                   isSelectionMode={isSelectionMode}
                   isSelected={selectedBookmarkIds.includes(bookmark.id)}
                   onSelectionChange={handleBookmarkSelection}
@@ -368,7 +340,6 @@ export function EnhancedMainContent({
                 <EnhancedBookmarkCard
                   key={bookmark.id}
                   bookmark={bookmark}
-                  onPreview={handlePreview}
                 />
               )
             ))}
@@ -398,14 +369,6 @@ export function EnhancedMainContent({
           onMoveComplete={handleMoveComplete}
           onExportSelected={handleExportSelected}
         />
-
-        {previewBookmark && (
-          <BookmarkPreview
-            bookmark={previewBookmark}
-            isOpen={!!previewBookmark}
-            onClose={() => setPreviewBookmark(null)}
-          />
-        )}
       </main>
     )
   }
@@ -522,7 +485,7 @@ export function EnhancedMainContent({
 
                       <DynamicBookmarkGrid>
                         {visible.map((bookmark) => (
-                          <EnhancedBookmarkCard key={bookmark.id} bookmark={bookmark} onPreview={handlePreview} />
+                          <EnhancedBookmarkCard key={bookmark.id} bookmark={bookmark} />
                         ))}
                       </DynamicBookmarkGrid>
                     </div>
@@ -533,14 +496,6 @@ export function EnhancedMainContent({
           )
         })}
       </div>
-
-      {previewBookmark && (
-        <BookmarkPreview
-          bookmark={previewBookmark}
-          isOpen={!!previewBookmark}
-          onClose={() => setPreviewBookmark(null)}
-        />
-      )}
     </main>
   )
 }
