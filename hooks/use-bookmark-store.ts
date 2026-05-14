@@ -2,6 +2,7 @@
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
+import { toast } from "sonner"
 import { getFaviconUrl } from "@/lib/metadata-fetcher"
 import { backgroundEnhancer, type EnhancementProgress } from "@/lib/background-metadata-enhancer"
 import { logger } from "@/lib/logger"
@@ -45,6 +46,7 @@ interface BookmarkStore {
   addCategory: (name: string) => void
   updateCategory: (id: string, name: string) => void
   deleteCategory: (id: string) => void
+  deleteCategoriesBatch: (ids: string[]) => void
 
   // SubCategory actions
   addSubCategory: (parentId: string, name: string) => void
@@ -56,6 +58,7 @@ interface BookmarkStore {
   addBookmark: (bookmark: Omit<Bookmark, "id" | "createdAt">) => void
   updateBookmark: (id: string, updates: Partial<Bookmark>) => void
   deleteBookmark: (id: string) => void
+  deleteBookmarksBatch: (ids: string[]) => void
   moveBookmark: (bookmarkId: string, targetSubCategoryId: string) => void
   moveBookmarks: (bookmarkIds: string[], targetSubCategoryId: string) => void
 
@@ -119,6 +122,52 @@ const defaultCategories: Category[] = [
 // 走 /api/proxy-image 代理以命中 Edge 侧的 favicon fallback 链）
 function withFavicons<T extends { url: string; favicon?: string }>(list: T[]): T[] {
   return list.map(b => b.favicon ? b : { ...b, favicon: getFaviconUrl(b.url) })
+}
+
+// 删除撤销：模块级快照槽，仅在浏览器内存中存活，不进 persist。
+// 同时只保留最近一次删除快照；新的删除会让旧快照失效（旧 toast 上的撤销按钮变 no-op）。
+type DeleteSnapshot = {
+  token: number
+  categories: Category[]
+  bookmarks: Bookmark[]
+}
+let lastDeleteSnapshot: DeleteSnapshot | null = null
+let deleteTokenSeq = 0
+const UNDO_TOAST_DURATION = 5000
+
+function captureSnapshot(state: { categories: Category[]; bookmarks: Bookmark[] }): number {
+  const token = ++deleteTokenSeq
+  lastDeleteSnapshot = {
+    token,
+    categories: state.categories.map(cat => ({
+      ...cat,
+      subCategories: cat.subCategories.map(sub => ({ ...sub })),
+    })),
+    bookmarks: state.bookmarks.map(b => ({ ...b })),
+  }
+  return token
+}
+
+function showUndoToast(message: string, token: number) {
+  toast(message, {
+    duration: UNDO_TOAST_DURATION,
+    action: {
+      label: "撤销",
+      onClick: () => {
+        const snap = lastDeleteSnapshot
+        if (!snap || snap.token !== token) {
+          toast.error("撤销已过期")
+          return
+        }
+        useBookmarkStore.setState({
+          categories: snap.categories,
+          bookmarks: snap.bookmarks,
+        })
+        lastDeleteSnapshot = null
+        toast.success("已恢复")
+      },
+    },
+  })
 }
 
 const defaultBookmarks: Bookmark[] = [
@@ -327,17 +376,34 @@ export const useBookmarkStore = create<BookmarkStore>()(
       },
 
       deleteCategory: (id: string) => {
-        set((state) => {
-          const category = state.categories.find((cat) => cat.id === id)
-          if (!category) return state
+        const state = get()
+        const category = state.categories.find((cat) => cat.id === id)
+        if (!category) return
 
-          const subCategoryIds = category.subCategories.map((sub) => sub.id)
-
-          return {
-            categories: state.categories.filter((cat) => cat.id !== id),
-            bookmarks: state.bookmarks.filter((bookmark) => !subCategoryIds.includes(bookmark.subCategoryId)),
-          }
+        const token = captureSnapshot(state)
+        const subCategoryIds = category.subCategories.map((sub) => sub.id)
+        set({
+          categories: state.categories.filter((cat) => cat.id !== id),
+          bookmarks: state.bookmarks.filter((bookmark) => !subCategoryIds.includes(bookmark.subCategoryId)),
         })
+        showUndoToast(`已删除分类"${category.name}"`, token)
+      },
+
+      deleteCategoriesBatch: (ids: string[]) => {
+        if (ids.length === 0) return
+        const state = get()
+        const idSet = new Set(ids)
+        const removingCategories = state.categories.filter(cat => idSet.has(cat.id))
+        if (removingCategories.length === 0) return
+
+        const token = captureSnapshot(state)
+        const removingSubIds = new Set<string>()
+        removingCategories.forEach(cat => cat.subCategories.forEach(sub => removingSubIds.add(sub.id)))
+        set({
+          categories: state.categories.filter(cat => !idSet.has(cat.id)),
+          bookmarks: state.bookmarks.filter(b => !removingSubIds.has(b.subCategoryId)),
+        })
+        showUndoToast(`已删除 ${removingCategories.length} 个分类`, token)
       },
 
       addSubCategory: (parentId: string, name: string) => {
@@ -364,13 +430,23 @@ export const useBookmarkStore = create<BookmarkStore>()(
       },
 
       deleteSubCategory: (id: string) => {
-        set((state) => ({
+        const state = get()
+        let subName = ""
+        for (const cat of state.categories) {
+          const found = cat.subCategories.find(sub => sub.id === id)
+          if (found) { subName = found.name; break }
+        }
+        if (!subName) return
+
+        const token = captureSnapshot(state)
+        set({
           categories: state.categories.map((cat) => ({
             ...cat,
             subCategories: cat.subCategories.filter((sub) => sub.id !== id),
           })),
           bookmarks: state.bookmarks.filter((bookmark) => bookmark.subCategoryId !== id),
-        }))
+        })
+        showUndoToast(`已删除子分类"${subName}"`, token)
       },
 
       ensureSubCategory: (parentId: string, name: string) => {
@@ -454,9 +530,25 @@ export const useBookmarkStore = create<BookmarkStore>()(
       },
 
       deleteBookmark: (id: string) => {
-        set((state) => ({
-          bookmarks: state.bookmarks.filter((bookmark) => bookmark.id !== id),
-        }))
+        const state = get()
+        const bookmark = state.bookmarks.find(b => b.id === id)
+        if (!bookmark) return
+
+        const token = captureSnapshot(state)
+        set({ bookmarks: state.bookmarks.filter((b) => b.id !== id) })
+        showUndoToast(`已删除"${bookmark.title}"`, token)
+      },
+
+      deleteBookmarksBatch: (ids: string[]) => {
+        if (ids.length === 0) return
+        const state = get()
+        const idSet = new Set(ids)
+        const removing = state.bookmarks.filter(b => idSet.has(b.id))
+        if (removing.length === 0) return
+
+        const token = captureSnapshot(state)
+        set({ bookmarks: state.bookmarks.filter(b => !idSet.has(b.id)) })
+        showUndoToast(`已删除 ${removing.length} 个书签`, token)
       },
 
       moveBookmark: (bookmarkId: string, targetSubCategoryId: string) => {

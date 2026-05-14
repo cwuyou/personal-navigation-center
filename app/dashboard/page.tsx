@@ -38,6 +38,8 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null)
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false)
+  const [addCategoryOpen, setAddCategoryOpen] = useState(false)
+  const [addBookmarkOpen, setAddBookmarkOpen] = useState(false)
 
   const { categories, bookmarks, initializeStore, hasHydrated, setHasHydrated, refreshCoverImages } = useBookmarkStore()
   const { trackActivity } = useSmartRecommendations()
@@ -87,6 +89,35 @@ export default function HomePage() {
     }
     window.addEventListener('popstate', handler)
     return () => window.removeEventListener('popstate', handler)
+  }, [])
+
+  // 全局快捷键：/ 聚焦搜索，N 新建书签
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null
+      const tag = target?.tagName
+      const isTyping =
+        tag === 'INPUT' ||
+        tag === 'TEXTAREA' ||
+        tag === 'SELECT' ||
+        target?.isContentEditable === true
+      if (isTyping) return
+      if (e.ctrlKey || e.metaKey || e.altKey) return
+
+      if (e.key === '/') {
+        const input = document.querySelector<HTMLInputElement>('input[data-search-input]')
+        if (input) {
+          e.preventDefault()
+          input.focus()
+          input.select()
+        }
+      } else if (e.key === 'n' || e.key === 'N') {
+        e.preventDefault()
+        setAddBookmarkOpen(true)
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
   }, [])
 
   // 🔧 使用ref跟踪上一次的封面图开关状态
@@ -185,11 +216,6 @@ export default function HomePage() {
     }
   }, [])
 
-  // 控制新增分类/书签对话框
-  const [addCategoryOpen, setAddCategoryOpen] = useState(false)
-  const [addBookmarkOpen, setAddBookmarkOpen] = useState(false)
-
-
 	  // 如果还未完成水合，则先不渲染主体，避免看到空态闪烁
 	  if (!hasHydrated) {
 	    return <div className="min-h-screen bg-background" />
@@ -277,6 +303,10 @@ export default function HomePage() {
             selectedCategory={selectedCategory}
             selectedSubCategory={selectedSubCategory}
             onSubCategorySelect={handleSubCategorySelect}
+            onCategorySelect={(categoryId, subCategoryId) => {
+              setSelectedCategory(categoryId)
+              setSelectedSubCategory(subCategoryId ?? null)
+            }}
             sidebarCollapsed={sidebarCollapsed}
           />
         )}

@@ -46,7 +46,7 @@ export function Sidebar({
   selectedSubCategory,
   onCategorySelect,
 }: SidebarProps) {
-  const { categories, updateCategory, updateSubCategory, deleteCategory, deleteSubCategory, exportBookmarks } = useBookmarkStore()
+  const { categories, updateCategory, updateSubCategory, deleteCategory, deleteSubCategory, deleteCategoriesBatch, exportBookmarks } = useBookmarkStore()
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -140,9 +140,7 @@ export function Sidebar({
   }
 
   const confirmBatchDelete = () => {
-    selectedCategoryIds.forEach(categoryId => {
-      deleteCategory(categoryId)
-    })
+    deleteCategoriesBatch(Array.from(selectedCategoryIds))
     setSelectedCategoryIds(new Set())
     setIsBatchMode(false)
     setBatchDeleteDialogOpen(false)
@@ -211,13 +209,44 @@ export function Sidebar({
   }
 
   if (collapsed) {
+    const collapsibleCategories = categories.filter(cat => cat.id !== 'system')
     return (
-      <div className="w-12 border-r bg-muted/10">
-        <div className="p-2">
-          <Button variant="ghost" size="sm" onClick={onToggleCollapse} className="w-full">
+      <div className="w-12 border-r bg-muted/10 flex flex-col">
+        <div className="p-2 border-b">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={onToggleCollapse}
+            className="w-full hover:bg-primary/10 hover:text-primary"
+            title="展开侧边栏"
+          >
             <PanelLeft className="h-4 w-4" />
           </Button>
         </div>
+        <ScrollArea className="flex-1">
+          <div className="p-1.5 space-y-1">
+            {collapsibleCategories.map((category) => {
+              const isActive = selectedCategory === category.id
+              const initial = (category.name || '').trim().charAt(0) || '·'
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => onCategorySelect(category.id)}
+                  title={category.name}
+                  className={cn(
+                    "w-9 h-9 mx-auto flex items-center justify-center rounded-md text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                  )}
+                >
+                  {initial}
+                </button>
+              )
+            })}
+          </div>
+        </ScrollArea>
       </div>
     )
   }
@@ -625,7 +654,7 @@ export function Sidebar({
         open={batchDeleteDialogOpen}
         onOpenChange={setBatchDeleteDialogOpen}
         title="批量删除分类"
-        description={`确定要删除选中的 ${selectedCategoryIds.size} 个分类吗？此操作将同时删除这些分类下的所有子分类和书签，且无法撤销。`}
+        description={`确定要删除选中的 ${selectedCategoryIds.size} 个分类吗？此操作将同时删除这些分类下的所有子分类和书签。删除后可在短时间内撤销。`}
         onConfirm={confirmBatchDelete}
         onClose={() => setBatchDeleteDialogOpen(false)}
       />

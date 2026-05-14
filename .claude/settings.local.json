@@ -14,7 +14,8 @@
       "Bash(curl -sS -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3002/dashboard\")",
       "Read(//tmp/**)",
       "Bash(curl -sS -o /dev/null -w \"GET /dashboard?category=dev&sub=ide&q=react -> %{http_code}\\\\n\" \"http://localhost:3002/dashboard?category=dev&sub=ide&q=react\")",
-      "Bash(pkill -f \"next dev\")"
+      "Bash(pkill -f \"next dev\")",
+      "Bash(curl -s http://localhost:3000/dashboard)"
     ]
   }
 }

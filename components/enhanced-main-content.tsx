@@ -38,6 +38,7 @@ interface EnhancedMainContentProps {
   selectedCategory: string | null
   selectedSubCategory: string | null
   onSubCategorySelect: (subCategoryId: string) => void
+  onCategorySelect: (categoryId: string | null, subCategoryId?: string | null) => void
   sidebarCollapsed: boolean
 }
 
@@ -48,6 +49,7 @@ export function EnhancedMainContent({
   selectedCategory,
   selectedSubCategory,
   onSubCategorySelect,
+  onCategorySelect,
   sidebarCollapsed,
 }: EnhancedMainContentProps) {
   const [previewBookmark, setPreviewBookmark] = useState<Bookmark | null>(null)
@@ -55,7 +57,7 @@ export function EnhancedMainContent({
   const [selectedBookmarkIds, setSelectedBookmarkIds] = useState<string[]>([])
   const [demoNoticeDismissed, setDemoNoticeDismissed] = useState(false)
 
-  const { categories, bookmarks, deleteBookmark, clearAllData, exportBookmarks } = useBookmarkStore()
+  const { categories, bookmarks, deleteBookmark, deleteBookmarksBatch, clearAllData, exportBookmarks } = useBookmarkStore()
   const { preloadBookmarkImages } = useBookmarkImagePreloader()
   const { breakpoint } = useResponsiveLayout()
   const { settings: displaySettings } = useDisplaySettings()
@@ -125,7 +127,7 @@ export function EnhancedMainContent({
 
   // 批量删除
   const handleBatchDelete = () => {
-    selectedBookmarkIds.forEach(id => deleteBookmark(id))
+    deleteBookmarksBatch(selectedBookmarkIds)
     setSelectedBookmarkIds([])
     setIsSelectionMode(false)
   }
@@ -187,6 +189,28 @@ export function EnhancedMainContent({
     return []
   }, [selectedSubCategory, selectedCategory, currentCategory, bookmarks])
 
+  // 选择模式下：Esc 退出，Ctrl/Cmd+A 全选
+  useEffect(() => {
+    if (!isSelectionMode) return
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        clearSelection()
+        return
+      }
+      const isMod = e.ctrlKey || e.metaKey
+      if (isMod && (e.key === 'a' || e.key === 'A')) {
+        const target = e.target as HTMLElement | null
+        const tag = target?.tagName
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || target?.isContentEditable) return
+        e.preventDefault()
+        handleSelectAll()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [isSelectionMode, selectedSubCategory, selectedCategory, currentCategory])
+
   // 🚀 预加载功能已禁用，避免循环问题
   // useEffect(() => {
   //   if (currentBookmarks.length > 0) {
@@ -224,6 +248,33 @@ export function EnhancedMainContent({
     return (
       <main className={cn("flex-1 p-4 sm:p-6 transition-all duration-300 bg-background", sidebarCollapsed ? "ml-0" : "ml-0")}>
         <div className="max-w-7xl mx-auto">
+          {/* 面包屑导航 */}
+          <nav className="flex items-center text-sm text-muted-foreground mb-4" aria-label="面包屑">
+            <button
+              className="hover:text-primary transition-colors"
+              onClick={() => onCategorySelect(null)}
+            >
+              首页
+            </button>
+            <ChevronRight className="w-3.5 h-3.5 mx-1.5 flex-shrink-0" />
+            {selectedSubCategory ? (
+              <>
+                <button
+                  className="hover:text-primary transition-colors"
+                  onClick={() => onCategorySelect(selectedCategory, null)}
+                >
+                  {currentCategory.name}
+                </button>
+                <ChevronRight className="w-3.5 h-3.5 mx-1.5 flex-shrink-0" />
+                <span className="text-foreground font-medium truncate">
+                  {currentCategory.subCategories.find(s => s.id === selectedSubCategory)?.name}
+                </span>
+              </>
+            ) : (
+              <span className="text-foreground font-medium truncate">{currentCategory.name}</span>
+            )}
+          </nav>
+
           {/* 分类标题区域 */}
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center justify-between mb-2">
@@ -425,7 +476,7 @@ export function EnhancedMainContent({
                   className="flex items-center space-x-3 cursor-pointer group"
                   onClick={() => onSubCategorySelect(category.id)}
                 >
-                  <div className="w-1 sm:w-1.5 h-4 sm:h-5 bg-gradient-to-b from-primary to-primary/60 rounded-full"></div>
+                  <div className="w-1.5 sm:w-2 h-5 sm:h-6 bg-gradient-to-b from-primary to-primary/60 rounded-full"></div>
                   <h2 className="text-base sm:text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                     {category.name}
                   </h2>

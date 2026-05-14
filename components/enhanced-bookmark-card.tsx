@@ -479,7 +479,7 @@ export function EnhancedBookmarkCard({ bookmark, onPreview }: EnhancedBookmarkCa
           <AlertDialogHeader>
             <AlertDialogTitle>确认删除</AlertDialogTitle>
             <AlertDialogDescription>
-              确定要删除书签 &quot;{bookmark.title}&quot; 吗？此操作无法撤销。
+              确定要删除书签 &quot;{bookmark.title}&quot; 吗？删除后可在短时间内撤销。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

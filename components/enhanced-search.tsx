@@ -263,6 +263,7 @@ export function EnhancedSearch({
         <Search className="absolute left-3 sm:left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           ref={inputRef}
+          data-search-input
           placeholder="搜索书签、分类... (Ctrl+K)"
           value={localQuery}
           onChange={(e) => setLocalQuery(e.target.value)}
