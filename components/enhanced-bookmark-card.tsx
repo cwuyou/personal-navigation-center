@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useMemo } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -28,6 +28,7 @@ import { BookmarkCover } from "@/components/bookmark-cover"
 
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useDisplaySettings } from "@/hooks/use-display-settings"
+import { useLayoutMode } from "@/hooks/use-layout-mode"
 import { EditBookmarkDialog } from "@/components/edit-bookmark-dialog"
 import { toast } from "sonner"
 
@@ -66,48 +67,9 @@ export function EnhancedBookmarkCard({ bookmark }: EnhancedBookmarkCardProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [imageError, setImageError] = useState(false)
-  const [layoutMode, setLayoutMode] = useState('grid')
+  const layoutMode = useLayoutMode()
   const { deleteBookmark } = useBookmarkStore()
   const { settings } = useDisplaySettings()
-
-  // 检测当前布局模式
-  const getCurrentLayoutMode = () => {
-    if (typeof window === 'undefined') return 'grid'
-    const root = document.documentElement
-    if (root.classList.contains('layout-masonry')) return 'masonry'
-    if (root.classList.contains('layout-list')) return 'list'
-    return 'grid'
-  }
-
-  // 监听布局模式变化
-  useEffect(() => {
-    const updateLayoutMode = () => {
-      setLayoutMode(getCurrentLayoutMode())
-    }
-
-    // 初始化布局模式
-    updateLayoutMode()
-
-    // 创建 MutationObserver 来监听 document.documentElement 的 class 变化
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          updateLayoutMode()
-        }
-      })
-    })
-
-    // 开始观察
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    })
-
-    // 清理函数
-    return () => {
-      observer.disconnect()
-    }
-  }, [])
 
   const isListMode = layoutMode === 'list'
 
@@ -238,7 +200,7 @@ export function EnhancedBookmarkCard({ bookmark }: EnhancedBookmarkCardProps) {
                   <div className="ml-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
@@ -296,7 +258,7 @@ export function EnhancedBookmarkCard({ bookmark }: EnhancedBookmarkCardProps) {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm hover:bg-background/90"
+                        className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm hover:bg-background/90"
                       >
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
@@ -405,7 +367,7 @@ export function EnhancedBookmarkCard({ bookmark }: EnhancedBookmarkCardProps) {
                 <div className="absolute top-2 right-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity">
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>

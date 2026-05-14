@@ -25,6 +25,7 @@ import {
 import { useTheme } from "next-themes"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import { confirmAction } from "@/lib/confirm-action"
 import { useDisplaySettings, useResponsiveLayout, type CardLayout } from "@/hooks/use-display-settings"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { QuickDisplaySettingsContent } from "@/components/quick-display-settings-content"
@@ -616,19 +617,22 @@ export function SettingsPanel({ isOpen, onToggle }: SettingsPanelProps) {
                 variant="destructive"
                 size="sm"
                 className="w-full justify-start"
-                onClick={() => {
-                  if (confirm('确定要清空所有数据吗？此操作将删除所有书签、分类、设置、搜索历史等数据，且不可撤销！')) {
-                    if (confirm('最后确认：这将清空应用的所有数据，包括：\n• 所有书签和分类\n• 主题和显示设置\n• 搜索历史和用户活动\n• PWA安装状态\n\n确定要继续吗？')) {
-                      // 清空所有localStorage数据
-                      localStorage.clear()
-
-                      // 清空sessionStorage（如果有的话）
-                      sessionStorage.clear()
-
-                      alert('所有数据已清空，页面将自动刷新')
-                      window.location.reload()
-                    }
-                  }
+                onClick={async () => {
+                  const first = await confirmAction({
+                    title: "清空所有数据",
+                    description: "此操作将删除所有书签、分类、设置、搜索历史等数据，且不可撤销！",
+                    confirmText: "继续",
+                  })
+                  if (!first) return
+                  const second = await confirmAction({
+                    title: "最后确认",
+                    description: "这将清空应用的所有数据，包括：\n• 所有书签和分类\n• 主题和显示设置\n• 搜索历史和用户活动\n• PWA安装状态\n\n确定要继续吗？",
+                    confirmText: "确认清空",
+                  })
+                  if (!second) return
+                  localStorage.clear()
+                  sessionStorage.clear()
+                  window.location.reload()
                 }}
               >
                 清空所有数据

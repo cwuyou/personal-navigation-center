@@ -211,13 +211,13 @@ export function Sidebar({
   if (collapsed) {
     const collapsibleCategories = categories.filter(cat => cat.id !== 'system')
     return (
-      <div className="w-12 border-r bg-muted/10 flex flex-col">
+      <div className="w-14 border-r bg-muted/10 flex flex-col">
         <div className="p-2 border-b">
           <Button
             variant="ghost"
             size="icon-sm"
             onClick={onToggleCollapse}
-            className="w-full hover:bg-primary/10 hover:text-primary"
+            className="w-full h-10 hover:bg-primary/10 hover:text-primary"
             title="展开侧边栏"
           >
             <PanelLeft className="h-4 w-4" />
@@ -234,8 +234,9 @@ export function Sidebar({
                   type="button"
                   onClick={() => onCategorySelect(category.id)}
                   title={category.name}
+                  aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    "w-9 h-9 mx-auto flex items-center justify-center rounded-md text-sm font-medium transition-colors",
+                    "w-10 h-10 mx-auto flex items-center justify-center rounded-md text-sm font-medium transition-colors",
                     isActive
                       ? "bg-primary text-primary-foreground shadow-sm"
                       : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
@@ -321,6 +322,7 @@ export function Sidebar({
                   selectedCategory === category.id && !isBatchMode && "bg-accent",
                   isBatchMode && selectedCategoryIds.has(category.id) && "bg-primary/15 border border-primary/30",
                 )}
+                aria-current={!isBatchMode && selectedCategory === category.id && !selectedSubCategory ? "page" : undefined}
               >
                 <div
                   className="flex items-center flex-1 cursor-pointer"
@@ -488,12 +490,19 @@ export function Sidebar({
                     <div
                       key={subCategory.id}
                       className={cn(
-                        "group flex items-center justify-between p-2 cursor-pointer text-sm transition-colors border border-transparent",
-                        "hover:bg-primary/10 hover:text-primary hover:border-primary/30",
-                        selectedSubCategory === subCategory.id && "bg-primary text-primary-foreground shadow-sm",
+                        "group relative flex items-center justify-between p-2 rounded-md cursor-pointer text-sm transition-colors",
+                        "hover:bg-accent",
+                        selectedSubCategory === subCategory.id && "bg-accent text-foreground font-medium",
                       )}
+                      aria-current={selectedSubCategory === subCategory.id ? "page" : undefined}
                       onClick={() => editingId !== subCategory.id && handleSubCategoryClick(category.id, subCategory.id)}
                     >
+                      {selectedSubCategory === subCategory.id && (
+                        <span
+                          aria-hidden
+                          className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-primary"
+                        />
+                      )}
                       {editingId === subCategory.id ? (
                         <div className="flex items-center flex-1 gap-1">
                           <Input

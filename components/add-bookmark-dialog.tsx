@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
-import websiteDescriptions from '@/data/website-descriptions-1000plus.json'
+import { loadWebsiteDescriptions } from "@/lib/website-descriptions"
 import { TagInput } from "@/components/tag-input"
 import { toast } from "sonner"
 import { processUserInput } from "@/lib/url-utils"
@@ -31,8 +31,9 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
   const { addBookmark, bookmarks } = useBookmarkStore()
   const allTagSuggestions = Array.from(new Set(bookmarks.flatMap(b => b.tags || [])))
 
-  const getPresetData = (url: string) => {
+  const getPresetData = async (url: string) => {
     try {
+      const websiteDescriptions = await loadWebsiteDescriptions()
       const domain = new URL(url).hostname.replace(/^www\./, '').toLowerCase()
       const preset = (websiteDescriptions as any)[domain]
 
@@ -107,7 +108,7 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
 
       // 如果没有标题，先尝试从预置数据库快速获取
       if (!initialTitle) {
-        const presetData = getPresetData(normalizedUrl)
+        const presetData = await getPresetData(normalizedUrl)
         if (presetData) {
           initialTitle = presetData.title
           if (!initialDescription) initialDescription = presetData.description
@@ -148,7 +149,7 @@ export function AddBookmarkDialog({ open, onOpenChange, subCategoryId }: AddBook
       toast.success("书签添加成功")
 
       // 如果没有从预置数据库获取到完整信息，在后台异步获取元数据
-      if (!getPresetData(normalizedUrl)) {
+      if (!(await getPresetData(normalizedUrl))) {
         // 后台异步获取元数据（不阻塞用户界面）
         fetchWebsiteMetadata(normalizedUrl).then(metadata => {
           if (metadata && (metadata.title || metadata.description || metadata.coverImage)) {

@@ -306,7 +306,6 @@ export default function HomePage() {
               setSelectedCategory(categoryId)
               setSelectedSubCategory(subCategoryId ?? null)
             }}
-            sidebarCollapsed={sidebarCollapsed}
           />
         )}
       </div>

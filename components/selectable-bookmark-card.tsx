@@ -70,6 +70,9 @@ export function SelectableBookmarkCard({
           {isSelectionMode && (
             <div className="absolute top-3 right-3 z-10">
               <div
+                role="checkbox"
+                aria-checked={isSelected}
+                aria-label={`选择书签 ${bookmark.title}`}
                 className={cn(
                   "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors",
                   isSelected

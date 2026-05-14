@@ -52,7 +52,6 @@ export default function DemoPage() {
         selectedCategory={selectedCategory}
         selectedSubCategory={selectedSubCategory}
         onSubCategorySelect={handleSubCategorySelect}
-        sidebarCollapsed={false}
       />
     </div>
   )

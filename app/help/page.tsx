@@ -9,10 +9,11 @@ import { DownloadSampleHTMLButton, DownloadSampleJSONButton } from '@/components
 import { BackToPreviousButton } from '@/components/navigation/back-to-previous'
 import { HelpTOC } from '@/components/help/help-toc'
 import { ImportHelpTabs } from '@/components/help/import-tabs'
+import { FeatureGuide } from '@/components/help/feature-guide'
 
 export const metadata: Metadata = {
-  title: '帮助与导入说明 - My Homepage',
-  description: '关于书签导入的文件格式说明与导入逻辑，包含 HTML 与自定义 JSON 示例，以及各浏览器导出指南。'
+  title: '帮助 - 功能说明与导入指南 - My Homepage',
+  description: '介绍快捷键、核心功能、数据隐私，并提供书签导入格式说明与示例。'
 }
 
 export default function HelpPage() {
@@ -36,10 +37,13 @@ export default function HelpPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-6 text-sm text-muted-foreground">
-          本页介绍如何准备导入文件、导入逻辑与效果示例，并提供示例文件下载。
+          本页包含快捷键、核心功能介绍，以及书签导入的格式说明、排查与示例。
         </div>
 
-        <Card className="mb-8">
+        {/* 功能与技巧 */}
+        <FeatureGuide />
+
+        <Card className="mt-12 mb-8">
             <div id="import-help-top" />
             <HelpTOC />
 

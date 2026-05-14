@@ -30,6 +30,8 @@ export function BatchSelectionToolbar({
   return (
     <>
       <div
+        role="toolbar"
+        aria-label={`已选择 ${selectedBookmarkIds.length} 个书签的操作`}
         className={cn(
           "fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50",
           "bg-card border border-border rounded-lg shadow-lg",
@@ -82,6 +84,7 @@ export function BatchSelectionToolbar({
             size="sm"
             onClick={onClearSelection}
             className="h-8 w-8 p-0 hover:bg-muted"
+            aria-label="取消选择"
           >
             <X className="w-4 h-4" />
           </Button>

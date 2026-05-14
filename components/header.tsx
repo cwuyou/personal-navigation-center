@@ -289,18 +289,17 @@ export function Header({ searchQuery, onSearchChange, searchFilters, onSearchFil
               <Menu className="h-5 w-5" />
             </Button>
           )}
-          <div
+          <button
+            type="button"
             className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity min-w-0"
             onClick={onLogoClick}
-            role="banner"
+            aria-label="返回首页"
           >
             <Home className="h-6 w-6 text-primary flex-shrink-0" aria-hidden="true" />
-            <h1 className="text-xl sm:text-2xl font-bold hidden md:inline-flex truncate">
-              <span className="sr-only">My Homepage - </span>
+            <span className="text-xl sm:text-2xl font-bold hidden md:inline-flex truncate">
               My Homepage
-              <span className="sr-only"> - Personal Start Page & Bookmark Manager</span>
-            </h1>
-          </div>
+            </span>
+          </button>
         </div>
 
         <EnhancedSearch

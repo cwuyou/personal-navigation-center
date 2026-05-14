@@ -258,7 +258,7 @@ export function EnhancedSearch({
   const activeFilterCount = filters.categories.length + (filters.hasDescription ? 1 : 0)
 
   return (
-    <div className={cn("relative flex-1 max-w-lg mx-4 sm:mx-8", className)}>
+    <div className={cn("relative flex-1 max-w-lg min-w-[160px] mx-4 sm:mx-8", className)}>
       <div className="relative">
         <Search className="absolute left-3 sm:left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input

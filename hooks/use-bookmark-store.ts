@@ -74,7 +74,7 @@ interface BookmarkStore {
   // Automatic enhancement (triggered after import)
   startBackgroundEnhancement: (bookmarkIds?: string[], options?: { isImport?: boolean }) => Promise<void>
   stopBackgroundEnhancement: () => void
-  getEnhancementStats: () => { totalSites: number, categories: string[] }
+  getEnhancementStats: () => Promise<{ totalSites: number, categories: string[] }>
 
   // Manual re-enhancement for cover images
   refreshCoverImages: (bookmarkIds?: string[]) => Promise<void>

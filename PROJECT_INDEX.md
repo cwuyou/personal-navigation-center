@@ -78,6 +78,7 @@ npm run lint     # ESLint
 │  hooks/                                                         │
 │  ├─ use-bookmark-store.ts     (主数据 Zustand store,持久化)     │
 │  ├─ use-display-settings.ts   (UI 偏好 Zustand store,持久化)    │
+│  ├─ use-layout-mode.ts        (单例 MutationObserver,共享布局态)│
 │  ├─ use-smart-recommendations.ts                                │
 │  ├─ use-image-preloader.ts                                      │
 │  ├─ use-mobile.tsx, use-toast.ts                                │
@@ -87,10 +88,12 @@ npm run lint     # ESLint
 ┌─────────────────────────────────────────────────────────────────┐
 │  lib/                                                           │
 │  ├─ background-metadata-enhancer.ts  核心: 书签增强流水线       │
+│  ├─ website-descriptions.ts          预置库 dynamic import + 缓存│
 │  ├─ metadata-fetcher.ts              favicon(走代理) / 站点名   │
 │  ├─ search-utils.ts                  搜索过滤/解析共享逻辑      │
 │  ├─ letter-placeholder.ts            字母+纯色占位颜色/字母派生  │
 │  ├─ request-deduplicator.ts          前端 fetch-meta 去重       │
+│  ├─ confirm-action.tsx               命令式 AlertDialog(替代 confirm)│
 │  ├─ image-cache.ts                   客户端图像缓存              │
 │  ├─ theme-loader.ts, i18n.ts, logger.ts, utils.ts, url-utils.ts │
 └─────────────────────────────────────────────────────────────────┘
@@ -120,8 +123,8 @@ npm run lint     # ESLint
 |---|---|---|
 | `/` | `app/page.tsx` | **着陆页**。检测 `localStorage.hasVisitedDashboard`,老用户显示"快速进入"按钮 |
 | `/dashboard` | `app/dashboard/page.tsx` | **主应用**。装配 Header/Sidebar/EnhancedMainContent,管理 `selectedCategory`、`selectedSubCategory`、`searchQuery`、设置面板开关 |
-| `/demo`, `/blog`, `/help`, `/privacy`, `/terms` | `app/*/page.tsx` | 静态内容页 |
-| `/debug/cover-images`, `/test-api`, `/test-cover-images` | `app/*/page.tsx` | 开发调试页(生产可考虑 `.claudeignore` 过滤) |
+| `/demo`, `/blog`, `/help`, `/privacy`, `/terms` | `app/*/page.tsx` | 静态内容页（`/help` 包含快捷键 / 核心功能说明 / 导入指南） |
+| `/debug/cover-images`, `/test-api`, `/test-cover-images` | `app/*/page.tsx` | 调试页;`app/{test-api,test-cover-images,debug}/layout.tsx` 在生产环境调用 `notFound()` 直接 404,仅在 dev 环境可访问 |
 
 ### 应用壳装配(`app/dashboard/page.tsx`)
 ```
@@ -169,10 +172,17 @@ HomePage
 
 ### 增强流水线入口(`lib/background-metadata-enhancer.ts`)
 `BackgroundMetadataEnhancer` 单例。外部只调:
-- `enhanceBookmarks(bookmarks, { onProgress, onUpdate, preserveOriginal })` — 批量,内部拆分 preset / unknown 两阶段。
-- `enhanceSingleBookmark(bookmark, { seed })` — 单条,可带前端已抓到的种子元数据。
+- `enhanceBookmarks(bookmarks, { onProgress, onUpdate, preserveOriginal })` — 批量,内部拆分 preset / unknown 两阶段。**入口处会 `await loadWebsiteDescriptions()`**,确保后续 sync 查找命中缓存。
+- `enhanceSingleBookmark(bookmark, { seed })` — 单条,可带前端已抓到的种子元数据。同样会先 await 加载预置库。
 - `refreshBookmarkCoverImage(bookmark)` — 仅封面。
 - `stop()` — 通过内部 `AbortController` 中止。
+- `getPresetStats()` — 异步,返回预置库统计(已 Promise 化)。
+
+### 预置库的 dynamic import(`lib/website-descriptions.ts`)
+250KB 的 `data/website-descriptions-1000plus.json` **禁止静态 import**(会拖累首屏 bundle 与 dev HMR)。统一通过:
+- `loadWebsiteDescriptions(): Promise<WebsitePresetMap>` — dynamic import,模块级缓存 + inflight 合并
+- `lookupPresetSync(domain)` — 加载后的 O(1) 查找(未加载返 `undefined`,调用方须先 await)
+- `getWebsitePresetsSync()` — 直接取整张表(用于统计场景),配合 fallback `?? await loadWebsiteDescriptions()`
 
 ---
 
@@ -314,4 +324,12 @@ Component
 18. **增强进度指示器在 Header**:`enhancementProgress.status === 'running'` 时 Header 显示 Loader2+count,Popover 展开详情。旧的底部 `<EnhancementProgress />` 已不再渲染,组件文件保留但函数体始终返回 null。
 19. **增强 `total` 是工作量,不是去重书签数**:`processSlowBatch` 会重处理"预置缺封面"那部分,所以 `total = presetBookmarks.length + slowList.length` > `bookmarks.length`。不要改回 `bookmarks.length` —— 否则 UI 会出 `completed > total` 溢出。UI 侧另用 `Math.min(completed, total)` 和 `overflow-hidden` 做兜底。
 20. **书签预览功能已移除**:`BookmarkPreview` 组件、卡片的 `onPreview` prop、Shift+Click 快捷键全部删除。原因:iframe 成功率太低(大部分站点用 `X-Frame-Options` 阻止),封面图已经承担了"看一眼"的信息密度,功能 ROI 不足。若重新引入,需要新预览策略(真实截图服务或沙盒代理)而非 iframe。
+21. **预置库走 dynamic import,见 §3 末尾**:严禁 `import websiteDescriptions from '@/data/...json'` 直接引入。两个 add-bookmark dialog 的 `getPresetData` 也是 async 的。
+22. **布局模式共享一个 MutationObserver**:`hooks/use-layout-mode.ts` 暴露 `useLayoutMode()`,内部用 `useSyncExternalStore` + 模块级单例 observer 监听 `<html>` 的 class。**禁止**在卡片组件里各自挂 observer,否则 N 张卡片 = N 个 observer。
+23. **禁用原生 `confirm()` / `alert()`**:统一用 `confirmAction({...})`(`lib/confirm-action.tsx`),返回 `Promise<boolean>`,样式跟随主题,iOS Safari 兼容。
+24. **debug / test 路由生产环境 404**:`app/{test-api,test-cover-images,debug}/layout.tsx` 在 `process.env.NODE_ENV === "production"` 时调用 `notFound()`。新增调试页时,同目录加一份相同的 layout。
+25. **三个僵尸组件已删除**:`enhancement-progress.tsx`(始终 return null)、`quick-display-settings.tsx`(Dropdown 包装,无引用)、`display-settings-panel.tsx`(legacy Sheet,无引用)。如需类似面板请用 `quick-display-settings-content.tsx`。
+26. **侧边栏折叠态布局规格**:`w-14`(56px) 容器 + `w-10 h-10`(40px) 按钮,满足触控目标 ≥40px。`aria-current="page"` 标记当前激活分类。展开态子分类选中态为 `bg-accent` + 左侧 2px primary 色条,**不要**用 `bg-primary text-primary-foreground`(会和卡片按钮风格冲突)。
+27. **面包屑溢出保护**:nav 容器 `min-w-0`,中间链接 `truncate max-w-[40%]`,叶子 `truncate min-w-0` + `title` tooltip。长名称不会撑宽容器或换行。
+28. **帮助页结构**:`app/help/page.tsx` 顶部嵌入 `<FeatureGuide />`(快捷键 / 核心功能 / 数据与隐私),其后才是导入说明 `<ImportHelpTabs />`。`HelpTOC` 的目录已拆为三组(功能与技巧 / 导入说明 / 更多)。新增使用说明请扩 `components/help/feature-guide.tsx`,新增导入相关扩 `import-tabs.tsx`。
 

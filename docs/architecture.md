@@ -1,7 +1,7 @@
 # 架构设计文档
 
 > Personal Navigation Center — Next.js 14 App Router 书签管理 PWA
-> 文档日期:2026-05-15(预览功能移除)
+> 文档日期:2026-05-15(UI 优化轮次:布局/性能/a11y)
 
 本文档聚焦**为什么这样设计**与**组件间协作的细节**。若需要快速查表(目录、路由清单、命令等),请看 [PROJECT_INDEX.md](../PROJECT_INDEX.md)。
 
@@ -23,6 +23,10 @@
    - 8.8 Sidebar 折叠态分类导航
    - 8.9 面包屑导航
    - 8.10 Header 增强进度指示器
+   - 8.11 布局模式订阅(单例 MutationObserver)
+   - 8.12 死代码守则(经验教训)
+   - 8.13 命令式确认对话框
+   - 8.14 帮助页结构
 8A. [搜索子系统](#8a-搜索子系统)
 8B. [键盘快捷键](#8b-键盘快捷键)
 8C. [删除撤销机制](#8c-删除撤销机制)
@@ -249,6 +253,22 @@ categorizeBookmarks()
 
 - **preset 批**:`processFastBatch`,同步处理,`batchSize=40`,无延迟。
 - **unknown 批** + **缺封面的 preset**:`processSlowBatch`,并发处理,`batchSize=8`,批次间 `delay=100ms`。
+
+### 5.1.1 预置库的 dynamic import(`lib/website-descriptions.ts`)
+
+`data/website-descriptions-1000plus.json` 约 250KB。早期三处(enhancer + 两个 add-bookmark dialog)直接 `import` 导致首屏 bundle 与 dev HMR 都被拖慢。现在统一通过 `lib/website-descriptions.ts`:
+
+```ts
+loadWebsiteDescriptions(): Promise<WebsitePresetMap>  // dynamic import + 模块级 cache + inflight 合并
+lookupPresetSync(domain): WebsitePreset | undefined    // 加载后的 O(1) 同步查找
+getWebsitePresetsSync(): WebsitePresetMap | null       // 取整张表(用于统计)
+```
+
+**契约**:`lookupPresetSync` 在未加载时返回 `undefined`,所以调用方必须先 await。enhancer 的两个 async 入口(`enhanceBookmarks` / `enhanceSingleBookmark`) **首行**就 `await loadWebsiteDescriptions()`,这样后面 `categorizeBookmarks` / `processFastBatch` 等内部 sync 路径都能直接 `lookupPresetSync`。`getPresetStats` 自带 fallback `?? await loadWebsiteDescriptions()`,用于不进 enhancer 流水线的统计调用。
+
+两个 add-bookmark dialog 的 `getPresetData` 改为 async,在 `handleSubmit` 中 await。代价是首次单条添加会比之前略慢(一次 250KB 解析),后续走缓存。
+
+### 5.2 封面图回退链
 
 合并逻辑:
 ```ts
@@ -643,10 +663,80 @@ const percent   = total > 0 ? Math.min(100, Math.round(completed / total * 100))
 
 外加进度条容器 `overflow-hidden`,保证即使未来 enhancer 计数失准,UI 也不会出现 `211/173` 或进度条溢出 Popover 边界这类视觉异常。这两层是**纯防御**,正常情况下不应触发——若触发,说明 enhancer 的 total 计算出 bug,应回到 §5.1 修。
 
-**`components/enhancement-progress.tsx` 的现状**:
-- 函数体始终 `return null`(线上完全静默),保留是历史遗留
-- 新的 Header 实现完全内联在 `header.tsx` 中,不复用 `EnhancementProgress`(那个版本是悬浮 Card,与 Header 内嵌按钮形态不兼容)
-- 可清理:dashboard 已移除 `<EnhancementProgress />` 和对应 import
+**`components/enhancement-progress.tsx` 的现状**:已删除(之前函数体始终 `return null`,无人引用)。新版进度指示器是 `header.tsx` 内联实现,与悬浮 Card 形态不兼容,不会复用旧组件。
+
+### 8.11 布局模式订阅(`hooks/use-layout-mode.ts`)
+
+卡片布局有三种模式 `grid | list | masonry`,通过 `<html>` 的 class 切换(`layout-grid` / `layout-list` / `layout-masonry`)。早期实现里 `EnhancedBookmarkCard` 在 `useEffect` 内**各自挂一个 `MutationObserver`**,N 张卡片就有 N 个 observer 同时监听同一节点,主题/布局切换时同步触发大量 setState,卡顿明显。
+
+现在改为**单例模式**:
+
+```
+hooks/use-layout-mode.ts
+  ├─ 模块级 currentMode + listeners Set
+  ├─ subscribe(cb): 第一个订阅者来时启动单一 MutationObserver, 最后一个走时 disconnect
+  ├─ getSnapshot / getServerSnapshot
+  └─ useLayoutMode(): useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+```
+
+- 无论页面有 5 张还是 500 张卡片,`<html>` 上只有 1 个 observer
+- 卡片内 `const layoutMode = useLayoutMode()`,React 18 的 `useSyncExternalStore` 保证 SSR/CSR 一致性,不再需要 `useState + useEffect` 的初始化竞态
+- 任何"读 documentElement.classList 来感知布局/主题"的新需求,都应该走这个共享 hook 模式,不要再在组件内手挂 observer
+
+### 8.12 死代码守则(经验教训)
+
+历次重构中累积过几类典型死代码,本节作为反面教材记下来,后续 review 时可对照检查:
+
+1. **`sidebarCollapsed` 三元 ml-0/ml-0**(已修复):`<main className={cn("...", sidebarCollapsed ? "ml-0" : "ml-0")}>` 三处出现,两个分支完全相同。Sidebar 是 flex 子项,自身宽度变化父容器自然回流,main 区根本不需要手动偏移。`sidebarCollapsed` prop 已从 `EnhancedMainContent` 移除。
+2. **僵尸组件**(已删除):`enhancement-progress.tsx`(始终 `return null`)、`quick-display-settings.tsx`(Dropdown 包装,无引用)、`display-settings-panel.tsx`(legacy Sheet,无引用)。任何"函数体被注释/return null/import 在 0 处"的组件都应该立即删除而不是"先留着"。
+3. **重复 filter**(已修复):首页渲染中 `categories.map(c => bookmarks.filter(b => c.subCategories.some(sub => sub.id === b.subCategoryId)))` 是 O(categories × bookmarks),每次状态变化重算。改为 `useMemo` 预计算 `bookmarksBySubCategory: Map<subId, Bookmark[]>`,渲染中改为 O(subCategories) 查找。`SearchResults` / `SubCategoryNav` 同样的子分类计数也复用此 Map。
+
+### 8.13 命令式确认对话框(`lib/confirm-action.tsx`)
+
+替代原生 `window.confirm()` 的同步阻塞 API,但保留同样的命令式调用风格:
+
+```ts
+const ok = await confirmAction({
+  title: "清空所有数据",
+  description: "此操作将删除...",
+  confirmText: "继续",
+  variant: "destructive",  // 默认
+})
+if (!ok) return
+```
+
+实现要点:
+- `createRoot` 把 AlertDialog 渲染到一个 detached `<div>` 容器,Promise resolve 后 `unmount()` + `container.remove()`,无内存泄漏
+- 默认 `defaultOpen`,`onOpenChange(false)` 时 resolve(false),保证 Esc / 遮罩点击 / 取消按钮都能关闭
+- 比双 `useState + Dialog` 模式精简,适合"一次性确认"场景;**不要**用于复杂表单或需要持久 UI 状态的对话框
+- iOS Safari 上原生 `confirm()` 在某些情况下会被静默阻止(如长按/滑动手势触发),此 helper 不受影响
+
+涉及替换的位置:`enhanced-main-content.tsx`(清除演示数据)+ `settings-panel.tsx`(双重确认清空所有数据)。`settings-dialog.tsx` 是孤儿文件,未替换。
+
+### 8.14 帮助页结构
+
+`/help` 页面承担两类内容,顺序固定:
+
+```
+HelpPage (server component)
+  ├─ <FeatureGuide>           ← components/help/feature-guide.tsx (新增)
+  │   ├─ §1 键盘快捷键 (id="shortcuts")
+  │   ├─ §2 核心功能   (id="features")
+  │   └─ §3 数据与隐私 (id="privacy")
+  ├─ <Card> 导入说明
+  │   ├─ <HelpTOC>            ← 右侧固定目录, xl:block
+  │   └─ <ImportHelpTabs>     ← Overview / HTML / JSON / Browser
+  ├─ §troubleshooting         ← 常见问题
+  └─ §dedupe                  ← 去重策略
+```
+
+**为什么这样划分**:
+- "功能与技巧"是用户高频访问点(快捷键、批量、撤销),**必须排在最前**,导入说明放后面
+- `FeatureGuide` 是单 client 组件,内部三个 section 共用一组 `id` + `scroll-mt-24`,被 `HelpTOC` 的 `scrollTo(id)` 锚点定位
+- `HelpTOC` 目录拆为三组(功能与技巧 / 导入说明 / 更多),功能与技巧组用 `scrollTo`,导入说明组用 `switchTab` 自定义事件
+- `AboutDialog` 不再罗列功能(以前列了 6 条泛泛特性),只保留 8 条对齐当前实际能力的列表 + 链向 `/help` 的"查看完整功能说明"
+
+**新增使用说明的入口**:扩 `feature-guide.tsx` 的 `shortcuts` 数组或新增 Card,**不要**回头扩 `AboutDialog`(它只是入口/概览,不是文档)。
 
 ---
 
@@ -796,15 +886,31 @@ showUndoToast("已删除 XXX", token)
 - **`eslint.ignoreDuringBuilds: true`**:同上。
 - **`immer` 装了但几乎未用**:store 仍用展开运算符。可移除或全面切换。
 - **`components/` 扁平结构**(50+ 文件同级):文件多时难检索,可按 `bookmark/` `category/` `dialog/` `settings/` 分组。
-- **`app/test-api`、`app/debug/*`** 在生产构建中也会产出,应通过环境变量或路由组 `(debug)` 排除。
-- **`data/website-descriptions-1000plus.json` (250KB) 被静态 import 三处**:`background-metadata-enhancer.ts` / `add-bookmark-dialog.tsx` / `add-bookmark-with-category-dialog.tsx`。改 dynamic import 能大幅减小 dev 增量编译时间和生产首屏 bundle。
-- **无测试**:`package.json` 无测试命令;关键逻辑(URL 归一化、`lib/search-utils.ts` 过滤、增强回退链、删除撤销快照机制)值得单元测试覆盖。
+- **`app/test-api`、`app/debug/*`、`app/test-cover-images`** 已通过 `layout.tsx` 在生产环境调用 `notFound()` 直接 404,但路由文件仍参与构建产出极小 chunk。彻底剔除需走 `pageExtensions` 配置,工程改动较大,当前方案已够用。
+- **无测试**:`package.json` 无测试命令;关键逻辑(URL 归一化、`lib/search-utils.ts` 过滤、增强回退链、删除撤销快照机制、`confirmAction` Promise 时序)值得单元测试覆盖。
 - **历史 bug 文档散落在根 `docs/`**(`infinite-loop-*.md`、`cover-image-fix-summary.md` 等):建议合并或移入变更日志。
-- **显示设置去重已落地但仍有两个入口**:`⋯ 更多 → 显示` 和 Settings 都用同一份 `QuickDisplaySettingsContent`(代码层不再重复),但 UI 层仍有两个发现入口。是否进一步收敛(只留一个入口)是产品决策,未定。
-- **`components/display-settings-panel.tsx` 孤儿组件**:未被引用,与新的 `quick-display-settings-content.tsx` 命名相近,易误引。应删除或合并。
-- **`components/quick-display-settings.tsx` 已不再使用**:内容被抽到 `quick-display-settings-content.tsx`,自带 Dropdown 包装的版本目前没有调用方,可清理。
-- **`components/enhancement-progress.tsx` 是僵尸组件**:函数体始终 `return null`,不再被 dashboard 引用。Header 内的新版进度指示器是内联实现,该文件可删除。
+- **`components/settings-dialog.tsx` 孤儿文件**:无外部引用,内含 4 处原生 `confirm()` / `alert()`,本轮重构未替换。建议整个文件删除。
+- **显示设置仍有两个 UI 入口**:`⋯ 更多 → 显示` 和 Settings 都使用同一份 `QuickDisplaySettingsContent`(代码层已收敛),但 UI 层仍有两个发现入口。是否进一步收敛(只留一个入口)是产品决策,未定。
 - **删除快照仅内存**:刷新页面后失去撤销能力。如要做"垃圾桶"持久化恢复,需要新设计(可能进 IndexedDB,不污染 Zustand persist)。
+- **错误边界已用主题 token**:`error-boundary.tsx` 从 `bg-gray-50/bg-white/bg-blue-600` 改为 `bg-background/bg-card/bg-primary` 等 Tailwind token,深色模式自动适配。本项已不是债务,记录在此说明:如果未来加新错误界面,**不要**写硬编码颜色。
+
+### 10.3 已偿还的债(本轮 2026-05-15)
+- ✅ 删 3 个僵尸组件(`enhancement-progress` / `quick-display-settings` / `display-settings-panel`)
+- ✅ debug / test 路由生产环境 404
+- ✅ `website-descriptions-1000plus.json`(250KB) 改 dynamic import + 模块级缓存
+- ✅ 每卡片各挂 MutationObserver → 单例订阅(`useLayoutMode`)
+- ✅ `sidebarCollapsed` 三元 ml-0/ml-0 死代码移除
+- ✅ 首页渲染 O(N²) filter → useMemo Map O(1) 查找
+- ✅ 卡片菜单触发器 `focus-visible:opacity-100`(键盘可见)
+- ✅ Sidebar 折叠态触控目标 36px → 40px,展开态子分类选中态从 `bg-primary` → `bg-accent` + 色条
+- ✅ 面包屑长名称 `truncate min-w-0` 溢出保护
+- ✅ 子分类 chip `max-w` + 内部 `truncate`
+- ✅ Logo `<div role="banner"><h1>` → `<button aria-label>`(语义修正)
+- ✅ `aria-current="page"` / `role="checkbox"` / `role="toolbar"` 等 a11y 标记补全
+- ✅ 详情视图 `<h1>` → `<h2>`,与首页层级一致
+- ✅ 错误边界硬编码颜色 → 主题 token
+- ✅ 原生 `confirm()` → `confirmAction()` AlertDialog (覆盖主入口)
+- ✅ 帮助页新增"功能与技巧"区,About Dialog 重写为入口/概览
 
 ### 10.3 演进方向(若项目继续)
 1. **可选云同步**:在保留本地优先的前提下,加一个可选的"上传到 Gist / WebDAV"能力。

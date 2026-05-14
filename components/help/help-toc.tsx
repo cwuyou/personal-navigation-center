@@ -2,7 +2,7 @@
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { List, BookOpen, FileText, Code, MonitorCog, Link as LinkIcon } from 'lucide-react'
+import { List, BookOpen, FileText, Code, MonitorCog, Link as LinkIcon, Keyboard, Sparkles, Shield } from 'lucide-react'
 
 export function HelpTOC() {
   const switchTab = (tab: 'overview' | 'html' | 'json' | 'browser') => {
@@ -26,7 +26,23 @@ export function HelpTOC() {
           <List className="h-4 w-4" />
           <span className="font-medium">目录</span>
         </div>
+
         <div className="mt-1 space-y-1">
+          <div className="text-xs text-muted-foreground px-1">功能与技巧</div>
+          <div className="grid grid-cols-1 gap-1">
+            <Button size="sm" variant="ghost" className={itemCls} onClick={() => scrollTo('shortcuts')}>
+              <Keyboard className="h-4 w-4 mr-2" /> 键盘快捷键
+            </Button>
+            <Button size="sm" variant="ghost" className={itemCls} onClick={() => scrollTo('features')}>
+              <Sparkles className="h-4 w-4 mr-2" /> 核心功能
+            </Button>
+            <Button size="sm" variant="ghost" className={itemCls} onClick={() => scrollTo('privacy')}>
+              <Shield className="h-4 w-4 mr-2" /> 数据与隐私
+            </Button>
+          </div>
+        </div>
+
+        <div className="mt-2 space-y-1">
           <div className="text-xs text-muted-foreground px-1">导入说明</div>
           <div className="grid grid-cols-2 gap-1">
             <Button size="sm" variant="ghost" className={itemCls} onClick={() => switchTab('overview')}>

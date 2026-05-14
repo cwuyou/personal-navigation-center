@@ -17,6 +17,7 @@ import { useResponsiveLayout, useDisplaySettings } from "@/hooks/use-display-set
 import { FALLBACK_SUBCATEGORY_NAME } from "@/lib/bookmark-importer"
 import type { SearchFilters } from "@/lib/search-utils"
 import { cn } from "@/lib/utils"
+import { confirmAction } from "@/lib/confirm-action"
 
 interface EnhancedMainContentProps {
   searchQuery: string
@@ -26,7 +27,6 @@ interface EnhancedMainContentProps {
   selectedSubCategory: string | null
   onSubCategorySelect: (subCategoryId: string) => void
   onCategorySelect: (categoryId: string | null, subCategoryId?: string | null) => void
-  sidebarCollapsed: boolean
 }
 
 export function EnhancedMainContent({
@@ -37,7 +37,6 @@ export function EnhancedMainContent({
   selectedSubCategory,
   onSubCategorySelect,
   onCategorySelect,
-  sidebarCollapsed,
 }: EnhancedMainContentProps) {
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [selectedBookmarkIds, setSelectedBookmarkIds] = useState<string[]>([])
@@ -66,7 +65,16 @@ export function EnhancedMainContent({
     return Math.max(4, Math.min(6, cols))
   }, [breakpoint, displaySettings.gridColumns])
 
-
+  // 预计算 subCategoryId → bookmarks 索引，避免首页 map 内 O(N) filter
+  const bookmarksBySubCategory = useMemo(() => {
+    const map = new Map<string, typeof bookmarks>()
+    for (const b of bookmarks) {
+      const list = map.get(b.subCategoryId)
+      if (list) list.push(b)
+      else map.set(b.subCategoryId, [b])
+    }
+    return map
+  }, [bookmarks])
 
   // 处理选择模式切换
   const toggleSelectionMode = () => {
@@ -204,7 +212,7 @@ export function EnhancedMainContent({
 
   if (searchQuery.trim()) {
     return (
-      <main className={cn("flex-1 p-4 sm:p-6 transition-all duration-300 bg-background", sidebarCollapsed ? "ml-0" : "ml-0")}>
+      <main className="flex-1 p-4 sm:p-6 bg-background">
         <div className="max-w-7xl mx-auto">
           <SearchResults
             searchQuery={searchQuery}
@@ -219,12 +227,12 @@ export function EnhancedMainContent({
   // 如果选择了分类，显示单个分类的详细视图
   if (selectedCategory && currentCategory) {
     return (
-      <main className={cn("flex-1 p-4 sm:p-6 transition-all duration-300 bg-background", sidebarCollapsed ? "ml-0" : "ml-0")}>
+      <main className="flex-1 p-4 sm:p-6 bg-background">
         <div className="max-w-7xl mx-auto">
           {/* 面包屑导航 */}
-          <nav className="flex items-center text-sm text-muted-foreground mb-4" aria-label="面包屑">
+          <nav className="flex items-center text-sm text-muted-foreground mb-4 min-w-0" aria-label="面包屑">
             <button
-              className="hover:text-primary transition-colors"
+              className="hover:text-primary transition-colors flex-shrink-0"
               onClick={() => onCategorySelect(null)}
             >
               首页
@@ -233,18 +241,24 @@ export function EnhancedMainContent({
             {selectedSubCategory ? (
               <>
                 <button
-                  className="hover:text-primary transition-colors"
+                  className="hover:text-primary transition-colors truncate max-w-[40%]"
                   onClick={() => onCategorySelect(selectedCategory, null)}
+                  title={currentCategory.name}
                 >
                   {currentCategory.name}
                 </button>
                 <ChevronRight className="w-3.5 h-3.5 mx-1.5 flex-shrink-0" />
-                <span className="text-foreground font-medium truncate">
+                <span
+                  className="text-foreground font-medium truncate min-w-0"
+                  title={currentCategory.subCategories.find(s => s.id === selectedSubCategory)?.name}
+                >
                   {currentCategory.subCategories.find(s => s.id === selectedSubCategory)?.name}
                 </span>
               </>
             ) : (
-              <span className="text-foreground font-medium truncate">{currentCategory.name}</span>
+              <span className="text-foreground font-medium truncate min-w-0" title={currentCategory.name}>
+                {currentCategory.name}
+              </span>
             )}
           </nav>
 
@@ -253,7 +267,7 @@ export function EnhancedMainContent({
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-3">
                 <div className="w-1.5 sm:w-2 h-5 sm:h-6 bg-gradient-to-b from-primary to-primary/60 rounded-full"></div>
-                <h1 className="text-lg sm:text-xl font-semibold text-foreground">{currentCategory.name}</h1>
+                <h2 className="text-lg sm:text-xl font-semibold text-foreground">{currentCategory.name}</h2>
               </div>
 
               {/* 批量操作按钮 */}
@@ -309,16 +323,17 @@ export function EnhancedMainContent({
                 <button
                   key={subCategory.id}
                   className={cn(
-                    "px-3 py-1.5 text-xs sm:text-sm rounded-full transition-all duration-200 touch-manipulation active:scale-95",
+                    "inline-flex items-center max-w-[180px] sm:max-w-[220px] px-3 py-1.5 text-xs sm:text-sm rounded-full transition-all duration-200 touch-manipulation active:scale-95",
                     selectedSubCategory === subCategory.id
                       ? "bg-primary text-primary-foreground shadow-md hover:shadow-lg"
                       : "bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary border border-transparent hover:border-primary/30"
                   )}
                   onClick={() => onSubCategorySelect(subCategory.id)}
+                  title={subCategory.name}
                 >
-                  {subCategory.name}
-                  <span className="ml-1.5 text-xs opacity-60">
-                    {bookmarks.filter(b => b.subCategoryId === subCategory.id).length}
+                  <span className="truncate">{subCategory.name}</span>
+                  <span className="ml-1.5 text-xs opacity-60 flex-shrink-0">
+                    {bookmarksBySubCategory.get(subCategory.id)?.length ?? 0}
                   </span>
                 </button>
               ))}
@@ -381,7 +396,7 @@ export function EnhancedMainContent({
   const showDemoNotice = isDemoData && !demoNoticeDismissed
 
   return (
-    <main className={cn("flex-1 transition-all duration-300 bg-background", sidebarCollapsed ? "ml-0" : "ml-0")}>
+    <main className="flex-1 bg-background">
       {/* 演示数据提示横幅（轻量） */}
       {showDemoNotice && (
         <div className="border-b border-border/40">
@@ -394,8 +409,13 @@ export function EnhancedMainContent({
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
               <button
-                onClick={() => {
-                  if (confirm('确定要清除所有演示数据吗？此操作不可撤销。')) {
+                onClick={async () => {
+                  const ok = await confirmAction({
+                    title: "清除演示数据",
+                    description: "确定要清除所有演示数据吗？此操作不可撤销。",
+                    confirmText: "清除",
+                  })
+                  if (ok) {
                     localStorage.removeItem('bookmark-store')
                     clearAllData()
                     window.location.reload()
@@ -423,8 +443,8 @@ export function EnhancedMainContent({
       {/* 分类内容区域 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8 sm:space-y-12 lg:space-y-16">
         {categories.map((category) => {
-          const categoryBookmarks = bookmarks.filter(bookmark =>
-            category.subCategories.some(sub => sub.id === bookmark.subCategoryId)
+          const categoryBookmarks = category.subCategories.flatMap(
+            sub => bookmarksBySubCategory.get(sub.id) ?? []
           )
           const isFallbackOnly =
             category.subCategories.length === 1 &&
@@ -452,7 +472,7 @@ export function EnhancedMainContent({
               {/* 每个子分类一行书签 */}
               <div className="space-y-6 sm:space-y-8">
                 {category.subCategories.map((subCategory) => {
-                  const subBookmarks = bookmarks.filter(b => b.subCategoryId === subCategory.id)
+                  const subBookmarks = bookmarksBySubCategory.get(subCategory.id) ?? []
                   if (subBookmarks.length === 0) return null
                   const visible = subBookmarks.slice(0, homeRowCount)
                   const remaining = subBookmarks.length - visible.length

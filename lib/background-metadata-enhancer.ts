@@ -3,9 +3,13 @@
  * 在书签导入后异步获取和更新描述信息
  */
 
-import websiteDescriptions from '@/data/website-descriptions-1000plus.json'
 import { getFaviconUrl, extractSiteName } from './metadata-fetcher'
 import { logger } from './logger'
+import {
+  loadWebsiteDescriptions,
+  lookupPresetSync,
+  getWebsitePresetsSync,
+} from './website-descriptions'
 
 
 export interface BookmarkMetadata {
@@ -42,7 +46,7 @@ export class BackgroundMetadataEnhancer {
         return null
       }
 
-      const preset = (websiteDescriptions as any)[domain]
+      const preset = lookupPresetSync(domain)
 
       if (preset) {
         const cover: string | undefined = preset.coverImage
@@ -319,6 +323,7 @@ export class BackgroundMetadataEnhancer {
     bookmark: { id: string, url: string, title: string, description?: string },
     options: { seed?: Partial<BookmarkMetadata> } = {}
   ): Promise<BookmarkMetadata | null> {
+    await loadWebsiteDescriptions()
     return this.enhanceBookmark(bookmark, { isBatchImport: false, seed: options.seed })
   }
 
@@ -476,7 +481,7 @@ export class BackgroundMetadataEnhancer {
       try {
         const u = new URL(bookmark.url)
         const domain = u.hostname.replace(/^www\./, '')
-        const preset = (websiteDescriptions as any)[domain]
+        const preset = lookupPresetSync(domain)
 
         // 文章类页面（如 CSDN /article/details/ 等）视为未知，需走详细提取流程
         if (preset && !this.isArticleUrl(u)) {
@@ -647,6 +652,8 @@ export class BackgroundMetadataEnhancer {
       throw new Error('Enhancement already in progress')
     }
 
+    await loadWebsiteDescriptions()
+
     const { onProgress, onUpdate } = options
 
     // 简化配置
@@ -668,7 +675,7 @@ export class BackgroundMetadataEnhancer {
           try {
             const u = new URL(b.url)
             const domain = u.hostname.replace(/^www\./, '')
-            const preset = (websiteDescriptions as any)[domain]
+            const preset = lookupPresetSync(domain)
             const cover: string | undefined = preset?.coverImage
             const isFavicon = !!cover && (/\.ico(\?|$)/i.test(cover) || cover.toLowerCase().includes('favicon') || /icon-\d+x\d+/i.test(cover) || cover.toLowerCase().includes('apple-touch-icon'))
             return !cover || isFavicon
@@ -818,9 +825,10 @@ export class BackgroundMetadataEnhancer {
   /**
    * 获取预置数据库的统计信息
    */
-  getPresetStats(): { totalSites: number, categories: string[] } {
-    const sites = Object.values(websiteDescriptions as any)
-    const categories = [...new Set(sites.map((site: any) => site.category))]
+  async getPresetStats(): Promise<{ totalSites: number, categories: string[] }> {
+    const data = getWebsitePresetsSync() ?? (await loadWebsiteDescriptions())
+    const sites = Object.values(data)
+    const categories = [...new Set(sites.map((site: any) => site.category).filter(Boolean))] as string[]
 
     return {
       totalSites: sites.length,

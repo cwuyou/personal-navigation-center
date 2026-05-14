@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useBookmarkStore } from "@/hooks/use-bookmark-store"
-import websiteDescriptions from '@/data/website-descriptions-1000plus.json'
+import { loadWebsiteDescriptions } from "@/lib/website-descriptions"
 import { TagInput } from "@/components/tag-input"
 import { toast } from "sonner"
 import { processUserInput } from "@/lib/url-utils"
@@ -130,8 +130,9 @@ export function AddBookmarkWithCategoryDialog({
   }
 
   // 获取预置数据的函数
-  const getPresetData = (url: string) => {
+  const getPresetData = async (url: string) => {
     try {
+      const websiteDescriptions = await loadWebsiteDescriptions()
       // 🔧 修复：正确提取域名，而不是保留完整路径
       const domain = new URL(url).hostname.replace(/^www\./, '').toLowerCase()
       logger.debug('🔍 查找预置数据，提取的域名:', domain)
@@ -218,7 +219,7 @@ export function AddBookmarkWithCategoryDialog({
       let initialCoverImage = coverImage.trim()
 
       // 如果没有标题，先尝试从预置数据库快速获取
-      const presetData = !initialTitle ? getPresetData(normalizedUrl) : null
+      const presetData = !initialTitle ? await getPresetData(normalizedUrl) : null
       if (presetData) {
         initialTitle = presetData.title
         if (!initialDescription) initialDescription = presetData.description

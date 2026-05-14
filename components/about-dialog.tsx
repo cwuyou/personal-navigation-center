@@ -1,8 +1,8 @@
 "use client"
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Github, Heart } from "lucide-react"
+import { ExternalLink } from "lucide-react"
+import Link from "next/link"
 
 interface AboutDialogProps {
   open: boolean
@@ -12,50 +12,44 @@ interface AboutDialogProps {
 export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>关于个人导航中心</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-5 text-sm">
           <div>
-            <h3 className="font-semibold mb-2">产品介绍</h3>
-            <p className="text-sm text-muted-foreground">
-              个人导航中心是一款简洁高效的书签管理工具，帮助您轻松整理和管理常用网站。
-              无论您是学生、职场人士、还是网络爱好者，都能通过智能分类和快速搜索功能，
-              让您的网络生活更加井然有序。
+            <p className="text-muted-foreground leading-relaxed">
+              一款以本地为中心、隐私优先的个人书签管理与导航起始页。
+              零账号、零后端，所有数据保存在你的浏览器中。
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">主要特性</h3>
-            <ul className="text-sm text-muted-foreground space-y-1">
-              <li>• 智能分类管理，让书签井然有序</li>
-              <li>• 快速搜索功能，秒速找到目标网站</li>
-              <li>• 一键导入浏览器书签，轻松迁移</li>
-              <li>• 本地存储数据，隐私安全有保障</li>
-              <li>• 多设备适配，手机电脑都能用</li>
-              <li>• 简洁美观界面，使用体验更舒适</li>
+            <h3 className="font-semibold mb-2 text-foreground">主要特性</h3>
+            <ul className="text-muted-foreground space-y-1.5">
+              <li>• <span className="text-foreground">两级分类</span>结构，支持双击重命名与拖拽组织</li>
+              <li>• <span className="text-foreground">智能搜索</span>：标题/URL/描述/标签/分类，支持 <code className="px-1 bg-muted rounded text-xs">tag:</code> 前缀</li>
+              <li>• <span className="text-foreground">后台元数据增强</span>：自动抓取标题、描述、图标、封面</li>
+              <li>• <span className="text-foreground">批量管理</span>：移动 / 导出 / 删除多个书签或分类</li>
+              <li>• <span className="text-foreground">删除可撤销</span>：5 秒内可恢复任意删除操作</li>
+              <li>• <span className="text-foreground">键盘快捷键</span>：<kbd className="px-1 bg-muted rounded text-xs">/</kbd> 搜索、<kbd className="px-1 bg-muted rounded text-xs">N</kbd> 新建</li>
+              <li>• <span className="text-foreground">移动端友好</span>：抽屉式侧边栏，PWA 离线可用</li>
+              <li>• <span className="text-foreground">导入导出</span>：HTML / JSON / CSV / TXT 四种格式</li>
             </ul>
+            <div className="mt-2 text-xs">
+              <Link href="/help" className="text-primary hover:underline inline-flex items-center gap-1">
+                查看完整功能说明与快捷键 <ExternalLink className="w-3 h-3" />
+              </Link>
+            </div>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-2">数据安全</h3>
-            <p className="text-sm text-muted-foreground">
-              您的所有书签数据都安全存储在本地浏览器中，无需注册登录，
-              不会上传到任何服务器，完全保护您的隐私安全。
+            <h3 className="font-semibold mb-2 text-foreground">数据与隐私</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              数据存储在浏览器 localStorage 中，不上传服务器，不需要注册登录。
+              清除浏览器数据会导致丢失，请定期使用「⋯ 更多 → 导出」备份。
             </p>
-          </div>
-
-          <div className="flex items-center justify-between pt-4 border-t">
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Heart className="w-4 h-4 mr-1 text-red-500" />
-              用心打造，为您的网络生活添彩
-            </div>
-            <Button variant="outline" size="sm">
-              <Github className="w-4 h-4 mr-2" />
-              GitHub
-            </Button>
           </div>
         </div>
       </DialogContent>
