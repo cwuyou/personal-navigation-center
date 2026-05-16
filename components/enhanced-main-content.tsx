@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { CheckSquare, X, ChevronRight, Info } from "lucide-react"
+import { CheckSquare, X, ChevronRight, Info, Star } from "lucide-react"
 import { BookmarkCard } from "@/components/bookmark-card"
 import { SelectableBookmarkCard } from "@/components/selectable-bookmark-card"
 import { EnhancedBookmarkCard } from "@/components/enhanced-bookmark-card"
@@ -75,6 +75,13 @@ export function EnhancedMainContent({
     }
     return map
   }, [bookmarks])
+
+  // 切换分类 / 子分类时,清空选中并退出选择模式
+  // (避免"取消全选"按钮在新分类上仍显示、选中 id 残留指向上一视图的书签)
+  useEffect(() => {
+    setSelectedBookmarkIds([])
+    setIsSelectionMode(false)
+  }, [selectedCategory, selectedSubCategory])
 
   // 处理选择模式切换
   const toggleSelectionMode = () => {
@@ -220,6 +227,77 @@ export function EnhancedMainContent({
             onCategorySelect={onCategorySelectFromSearch}
           />
         </div>
+      </main>
+    )
+  }
+
+  // 收藏夹视图
+  if (selectedCategory === '__favorites__') {
+    const favBookmarks = bookmarks.filter(b => b.isFavorite)
+    return (
+      <main className="flex-1 p-4 sm:p-6 bg-background">
+        <div className="max-w-7xl mx-auto">
+          {/* 面包屑 */}
+          <nav className="flex items-center text-sm text-muted-foreground mb-4 min-w-0" aria-label="面包屑">
+            <button
+              className="hover:text-primary transition-colors flex-shrink-0"
+              onClick={() => onCategorySelect(null)}
+            >
+              首页
+            </button>
+            <ChevronRight className="w-3.5 h-3.5 mx-1.5 flex-shrink-0" />
+            <span className="text-foreground font-medium">收藏夹</span>
+          </nav>
+
+          {/* 标题 */}
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center space-x-3 mb-2">
+              <Star className="h-5 w-5 fill-amber-400 text-amber-400 flex-shrink-0" />
+              <h2 className="text-lg sm:text-xl font-semibold text-foreground">收藏夹</h2>
+              <span className="text-sm text-muted-foreground">{favBookmarks.length} 个书签</span>
+            </div>
+          </div>
+
+          {favBookmarks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <Star className="w-12 h-12 text-muted-foreground/40 mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">还没有收藏的书签</h3>
+              <p className="text-sm text-muted-foreground">
+                点击书签卡片左上角的 <Star className="inline h-3.5 w-3.5 align-text-bottom mx-1" /> 图标即可加入收藏
+              </p>
+            </div>
+          ) : (
+            <DynamicBookmarkGrid>
+              {favBookmarks.map((bookmark) =>
+                isSelectionMode ? (
+                  <SelectableBookmarkCard
+                    key={bookmark.id}
+                    bookmark={bookmark}
+                    isSelectionMode={isSelectionMode}
+                    isSelected={selectedBookmarkIds.includes(bookmark.id)}
+                    onSelectionChange={handleBookmarkSelection}
+                  />
+                ) : (
+                  <EnhancedBookmarkCard key={bookmark.id} bookmark={bookmark} />
+                )
+              )}
+            </DynamicBookmarkGrid>
+          )}
+        </div>
+
+        {isSelectionMode && (
+          <BatchSelectionToolbar
+            selectedBookmarkIds={selectedBookmarkIds}
+            onClearSelection={() => { setSelectedBookmarkIds([]); setIsSelectionMode(false) }}
+            onDeleteSelected={() => {
+              deleteBookmarksBatch(selectedBookmarkIds)
+              setSelectedBookmarkIds([])
+              setIsSelectionMode(false)
+            }}
+            onMoveComplete={() => { setSelectedBookmarkIds([]); setIsSelectionMode(false) }}
+            onExportSelected={(ids) => exportBookmarks()}
+          />
+        )}
       </main>
     )
   }

@@ -1,7 +1,7 @@
 # 架构设计文档
 
 > Personal Navigation Center — Next.js 14 App Router 书签管理 PWA
-> 文档日期:2026-05-15(UI 优化轮次:布局/性能/a11y)
+> 文档日期:2026-05-16(书签操作按钮三层化 + 收藏夹 + 批量操作扩展)
 
 本文档聚焦**为什么这样设计**与**组件间协作的细节**。若需要快速查表(目录、路由清单、命令等),请看 [PROJECT_INDEX.md](../PROJECT_INDEX.md)。
 
@@ -27,6 +27,9 @@
    - 8.12 死代码守则(经验教训)
    - 8.13 命令式确认对话框
    - 8.14 帮助页结构
+   - 8.15 书签卡片操作三层架构(L1/L2/L3)
+   - 8.16 收藏夹(虚拟分类模式)
+   - 8.17 批量打开与 popup blocker
 8A. [搜索子系统](#8a-搜索子系统)
 8B. [键盘快捷键](#8b-键盘快捷键)
 8C. [删除撤销机制](#8c-删除撤销机制)
@@ -132,7 +135,7 @@
 
 ### 为什么不用单个 store?
 - **订阅粒度**:书签变更不应触发显示偏好的订阅者重渲染,反之亦然。Zustand 虽然支持 selector,但拆开 store 是更清晰的切面。
-- **持久化版本**:主数据 `version: 2`(历史上做过 schema 迁移);显示偏好频繁增删字段,不希望与主数据耦合 version。
+- **持久化版本**:主数据 `version: 3`(历史上做过 schema 迁移,见 §8.16 收藏夹);显示偏好频繁增删字段,不希望与主数据耦合 version。
 - **灾难半径**:清空数据时,只动主 store,用户的主题、布局保留。
 
 ### 为什么不用 Context + useReducer?
@@ -738,6 +741,96 @@ HelpPage (server component)
 
 **新增使用说明的入口**:扩 `feature-guide.tsx` 的 `shortcuts` 数组或新增 Card,**不要**回头扩 `AboutDialog`(它只是入口/概览,不是文档)。
 
+### 8.15 书签卡片操作三层架构(L1/L2/L3)
+
+历史上书签操作集中在卡片右上角的 ⋯ 下拉(4 项混杂)。问题:操作越来越多、视觉上看不出"哪些是高频"。本轮重构按"使用频率 / 是否需要批量"重新拆分,详细背景见 `docs/书签操作按钮迭代.md`。
+
+```
+┌─ L1 卡片表面(hover/focus 显示) ────────────────────────┐
+│   3 个图标按钮: [★ 收藏] [✎ 编辑] [⧉ 复制]            │
+│   ★ 已收藏时常驻金色填充;未收藏时仅 hover 出现          │
+│   ✎ / ⧉ 仅 hover/focus-within 时出现                   │
+│   故意不放删除 → 误触代价高,走 L2                       │
+│   故意不放"新窗口打开" → 单击卡片就是新窗口打开,冗余    │
+└────────────────────────────────────────────────────────┘
+┌─ L2 右键菜单(Radix ContextMenu 包整张 Card) ─────────┐
+│   完整动作集: 加入收藏 / 编辑 / 复制 / 移动 / 删除      │
+│   覆盖鼠标右键 + 长按(移动端)                          │
+└────────────────────────────────────────────────────────┘
+┌─ L3 批量工具栏(底部固定) ────────────────────────────┐
+│   进入选择模式后出现;7 个操作按 "非破坏性 → 破坏性" 排序│
+│   打开 / 收藏 / 加标签 / 移除标签 / 移动 / 导出 / 删除  │
+└────────────────────────────────────────────────────────┘
+```
+
+**为什么不在 L1 放删除**:删除有 5 秒撤销兜底,但点击瞬间仍会让用户慌一下。卡片右上角三个按钮密集排列,误触代价高。删除挪到 L2 后,实际使用并未感到不便(右键 → 删除两步对比 L1 一步,可接受)。
+
+**为什么不放"新窗口打开"**:单击卡片本身就是 `window.open(bookmark.url, "_blank")`,菜单里那一项是冗余。L3 的"打开"是为批量场景准备的。
+
+**为什么 ★ 已收藏时常驻可见**:用户需要从 UI 上一眼分辨哪些是收藏的,如果只 hover 显示,首次访问看不到任何收藏标记。常驻 + 金色填充等于一个状态指示器。未收藏的 ★ 隐藏起来保持视觉简洁。
+
+**实现要点**:
+- L1 在 `enhanced-bookmark-card.tsx` 三处重复(列表态 / 网格+封面态 / 网格无封面态),用相同的 `<TooltipProvider>` + 嵌套 div 结构
+- L2 是同一个 `<ContextMenu>` 包整张 `<Card>`,共用同一份 dialog state(编辑/移动/删除三个 AlertDialog 都在卡片 return 的 fragment 里)
+- L3 见 §8.17
+
+### 8.16 收藏夹(虚拟分类模式)
+
+收藏夹是"过滤视图",不是真实分类。为避免引入第二种存储概念,采用**保留 ID 虚拟分类**模式:
+
+```
+保留 ID: "__favorites__"
+不写入 store.categories,只作为 selectedCategory 的可选值
+Sidebar 顶部固定一项;EnhancedMainContent 在常规 detail view 之前有专属分支
+```
+
+**数据层**:
+- `Bookmark.isFavorite?: boolean` —— v3 新字段,默认 false
+- `toggleFavorite(id)` / `setFavorites(ids, isFavorite)` 两个 store action
+- persist `version: 2 → 3`,migrate 函数给所有书签补 `isFavorite: false`(用 `!!b.isFavorite` 保险)
+
+**UI 层**:
+- Sidebar 顶部一行,展开态在批量模式下隐藏(避免选择"收藏夹"造成误解);折叠态目前不做("系统"分类同样不做)
+- ★ 图标在没有收藏书签时显示灰色,有收藏时金色填充 + 显示计数
+- 进入收藏夹视图时,面包屑显示"首页 / 收藏夹",**没有**子分类层级(收藏跨分类)
+- 空态有专属文案 + 引导用户去点 ★
+
+**和 URL 同步**:
+- 走现有 `selectedCategory` ↔ `?category=` 机制,自动支持 `?category=__favorites__` 深链
+- `popstate` / `replaceState` 不需要额外改动
+
+**为什么不做真分类**:
+- 真分类需要让 Bookmark 同时属于多个分类(N:N 关系),整个 schema 要改
+- 用户的心智模型里"收藏夹"是一个标志,不是一个文件夹
+- 后续若加"多收藏夹"(如"工作 / 阅读 / 学习"),可以把 `isFavorite: boolean` 升级为 `favoriteLists: string[]`,这是兼容性扩展
+
+### 8.17 批量打开与 popup blocker
+
+浏览器对"一次用户手势内打开多个新标签页"有严格限制:**只允许第一次成功,从第二次起静默拦截**(Chromium 系都这样)。这不是 bug,是反弹窗滥用的反措施。
+
+**坑 #1**:`window.open(url, "_blank", "noopener,noreferrer")` 即使成功**也返回 null**(因为 `noopener` 切断了 opener 引用,规范要求不暴露 window 对象)。早期版本用 `if (w)` 判断成功,导致"明明都开了,但 toast 显示 0/N 已打开"。
+
+**修复**(`lib/open-batch.ts`):
+```ts
+// ❌ 错误:return null even on success
+window.open(url, "_blank", "noopener,noreferrer")
+
+// ✅ 正确:成功返回 Window,失败返回 null,opener 手动切断
+const w = window.open(url, "_blank")
+if (w) { try { w.opener = null } catch {} }
+```
+
+**坑 #2**:即使代码正确,浏览器默认仍只允许 1 个 popup。第 2..N 个被拦截。
+
+**用户体验设计**:
+1. 工具栏点"打开"按钮 → `openBookmarksBatch` 直接尝试。**全部成功**:toast 显示"已打开 N 个",不弹任何对话框。**有拦截**:打开引导对话框,把已成功的 id 传过去(避免重复尝试),显示"如何允许此站点弹窗"指引
+2. 引导对话框列出所有书签,每条都是真实 `<a target="_blank">`:用户**逐个点击**每次都是有效用户手势,不受限制
+3. 顶部用户授权"始终允许此站点弹窗"后,再点"全部打开"就能一次性开完
+
+**为什么不用 `a.click()` 绕过**:Chromium 把代码触发的 `a.click()` 也算作 popup,行为和 `window.open` 一致。两者都受同一个 popup-blocker 检查。
+
+**节流策略**:无。批量打开是用户主动行为,不需要节流。但 toast 在"部分成功部分失败"时改用 `toast.warning`,而非红色 `error`,因为这不是错误而是浏览器策略。
+
 ---
 
 ## 8A. 搜索子系统
@@ -912,10 +1005,22 @@ showUndoToast("已删除 XXX", token)
 - ✅ 原生 `confirm()` → `confirmAction()` AlertDialog (覆盖主入口)
 - ✅ 帮助页新增"功能与技巧"区,About Dialog 重写为入口/概览
 
+### 10.4 已偿还的债(本轮 2026-05-16,书签操作三层化)
+- ✅ 卡片 ⋯ 下拉拆分为 L1/L2/L3 三层(`docs/书签操作按钮迭代.md`)
+- ✅ L1 三个图标按钮 [★ ✎ ⧉],hover 显示,删除挪到 L2
+- ✅ Card 整体包 `<ContextMenu>`,鼠标右键调出完整菜单
+- ✅ 单卡片接入 `MoveBookmarkDialog`(过去只有批量场景能用)
+- ✅ 选择框右上圆形 → 左上方形 checkbox(`top-3 left-3` `rounded-md`),避开 L1 按钮组
+- ✅ 收藏夹完整链路: schema v2→v3 + `Bookmark.isFavorite` + `toggleFavorite` / `setFavorites` action + Sidebar 虚拟项 `__favorites__` + 专属视图
+- ✅ 批量工具栏从 4 操作扩展到 7 操作(打开 / 收藏智能切换 / 加标签 / 移除标签 / 移动 / 导出 / 删除)
+- ✅ `BatchAddTagsDialog` / `BatchRemoveTagsDialog`(后者按选中书签内的标签出现频率排序)
+- ✅ 批量打开规避 `noopener` 返回 null 陷阱,统一走 `lib/open-batch.ts`,工具栏直接触发,只在被拦截时弹引导对话框
+- ✅ 切换分类自动清空 `selectedBookmarkIds` + 退出 `isSelectionMode`(修"取消全选"卡死)
+
 ### 10.3 演进方向(若项目继续)
 1. **可选云同步**:在保留本地优先的前提下,加一个可选的"上传到 Gist / WebDAV"能力。
 2. **抽离 Worker**:把 `background-metadata-enhancer` 挪到 Web Worker,避免主线程卡顿。
-3. **schema 迁移管道**:当前 `version: 2` 是硬切换,缺平滑迁移逻辑。
+3. **schema 迁移管道**:`version: 3` 已落地 `migrate(state, version)` 函数(v2→v3 补 `isFavorite=false`),为后续平滑升级铺路。
 4. **插件化增强器**:允许用户注册自己的 preset 规则(例:公司内网站点库)。
 
 ---

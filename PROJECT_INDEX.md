@@ -94,6 +94,7 @@ npm run lint     # ESLint
 │  ├─ letter-placeholder.ts            字母+纯色占位颜色/字母派生  │
 │  ├─ request-deduplicator.ts          前端 fetch-meta 去重       │
 │  ├─ confirm-action.tsx               命令式 AlertDialog(替代 confirm)│
+│  ├─ open-batch.ts                    批量在新标签页打开链接(规避noopener返回null)│
 │  ├─ image-cache.ts                   客户端图像缓存              │
 │  ├─ theme-loader.ts, i18n.ts, logger.ts, utils.ts, url-utils.ts │
 └─────────────────────────────────────────────────────────────────┘
@@ -197,12 +198,13 @@ Category {
 SubCategory { id, name, parentId }
 Bookmark {
   id, title, url, description?, favicon?, coverImage?, tags?,
+  isFavorite?,            // v3 新增: 收藏夹标记
   subCategoryId, createdAt
 }
 ```
 
 ### 持久化
-- **主数据**:Zustand `persist({ name: "bookmark-store", version: 2 })` → `localStorage`。
+- **主数据**:Zustand `persist({ name: "bookmark-store", version: 3 })` → `localStorage`。`migrate(state, version)` 在 v<3 时把所有书签补 `isFavorite=false`。
 - **显示偏好**:独立 Zustand store → `localStorage["display-settings"]`。
 - **标志位**(均在 `localStorage`):
   - `hasVisitedDashboard` — 老用户识别,用于着陆页跳转按钮。
@@ -332,4 +334,12 @@ Component
 26. **侧边栏折叠态布局规格**:`w-14`(56px) 容器 + `w-10 h-10`(40px) 按钮,满足触控目标 ≥40px。`aria-current="page"` 标记当前激活分类。展开态子分类选中态为 `bg-accent` + 左侧 2px primary 色条,**不要**用 `bg-primary text-primary-foreground`(会和卡片按钮风格冲突)。
 27. **面包屑溢出保护**:nav 容器 `min-w-0`,中间链接 `truncate max-w-[40%]`,叶子 `truncate min-w-0` + `title` tooltip。长名称不会撑宽容器或换行。
 28. **帮助页结构**:`app/help/page.tsx` 顶部嵌入 `<FeatureGuide />`(快捷键 / 核心功能 / 数据与隐私),其后才是导入说明 `<ImportHelpTabs />`。`HelpTOC` 的目录已拆为三组(功能与技巧 / 导入说明 / 更多)。新增使用说明请扩 `components/help/feature-guide.tsx`,新增导入相关扩 `import-tabs.tsx`。
+29. **书签卡片操作分三层**(参见 `docs/书签操作按钮迭代.md`):
+    - **L1 卡片表面**(hover 显示): `[★ 收藏] [✎ 编辑] [⧉ 复制]` 三个图标按钮。★ 已收藏时常驻金色,未收藏时仅 hover 出现。**没有 `MoreHorizontal` 下拉**,完整菜单走 L2。
+    - **L2 右键菜单**(`<ContextMenu>` 包整张 `<Card>`): 收藏切换 / 编辑 / 复制 / 移动到 / 删除。删除**只在这里**,L1 故意不放删除避免误触。
+    - **L3 批量工具栏**(`BatchSelectionToolbar`): 进入选择模式后底部出现,固定 7 个操作: 打开 / 收藏(智能切换) / 加标签 / 移除标签 / 移动 / 导出 / 删除。
+30. **收藏夹是虚拟分类**:保留 ID `__favorites__`,**不写入 store**。Sidebar 顶部一个固定项,点击后 `selectedCategory='__favorites__'`,`EnhancedMainContent` 有专属分支 `bookmarks.filter(b => b.isFavorite)`。`Bookmark.isFavorite` 是单字段,`toggleFavorite(id)` / `setFavorites(ids, bool)` 切换。schema v2→v3 已迁移,新书签默认 `isFavorite=false`。
+31. **批量打开禁用 `noopener` features**:`window.open(url, "_blank", "noopener,...")` 在规范上返回 null 即使成功,会让"打开了 N 个"全部误判为被拦截。统一用 `lib/open-batch.ts` 的 `openBookmarksBatch(items)`(内部 `window.open` + `w.opener = null`),返回 `{ openedIds, blockedIds }`。工具栏直接尝试,只有真有拦截才弹引导对话框。
+32. **选中态在切分类时自动清空**:`EnhancedMainContent` 的 `useEffect([selectedCategory, selectedSubCategory])` 会清空 `selectedBookmarkIds` + 退出 `isSelectionMode`。避免"取消全选"按钮卡死和跨视图选中污染。
+33. **选择框在卡片左上角**:`SelectableBookmarkCard` 的 indicator 在 `top-3 left-3`(rounded-md 方形,不是右上圆形),避开 L1 按钮组,语义上像 checkbox。
 

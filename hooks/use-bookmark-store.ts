@@ -30,6 +30,7 @@ interface Bookmark {
   favicon?: string
   coverImage?: string  // 封面图片URL
   tags?: string[]      // 标签
+  isFavorite?: boolean // 收藏夹标记
   subCategoryId: string
   createdAt: Date
 }
@@ -61,6 +62,10 @@ interface BookmarkStore {
   deleteBookmarksBatch: (ids: string[]) => void
   moveBookmark: (bookmarkId: string, targetSubCategoryId: string) => void
   moveBookmarks: (bookmarkIds: string[], targetSubCategoryId: string) => void
+  toggleFavorite: (id: string) => void
+  setFavorites: (ids: string[], isFavorite: boolean) => void
+  addTagsToBookmarks: (ids: string[], tagsToAdd: string[]) => void
+  removeTagsFromBookmarks: (ids: string[], tagsToRemove: string[]) => void
 
   // Import/Export
   importBookmarks: (data: { categories: Category[]; bookmarks: Bookmark[] }, options?: { enableBackgroundEnhancement?: boolean }) => Promise<{
@@ -571,6 +576,49 @@ export const useBookmarkStore = create<BookmarkStore>()(
         }))
       },
 
+      toggleFavorite: (id: string) => {
+        set((state) => ({
+          bookmarks: state.bookmarks.map((b) =>
+            b.id === id ? { ...b, isFavorite: !b.isFavorite } : b
+          ),
+        }))
+      },
+
+      setFavorites: (ids: string[], isFavorite: boolean) => {
+        const idSet = new Set(ids)
+        set((state) => ({
+          bookmarks: state.bookmarks.map((b) =>
+            idSet.has(b.id) ? { ...b, isFavorite } : b
+          ),
+        }))
+      },
+
+      addTagsToBookmarks: (ids: string[], tagsToAdd: string[]) => {
+        const idSet = new Set(ids)
+        const cleanTags = tagsToAdd.map(t => t.trim()).filter(Boolean)
+        if (cleanTags.length === 0) return
+        set((state) => ({
+          bookmarks: state.bookmarks.map((b) => {
+            if (!idSet.has(b.id)) return b
+            const merged = new Set([...(b.tags || []), ...cleanTags])
+            return { ...b, tags: Array.from(merged) }
+          }),
+        }))
+      },
+
+      removeTagsFromBookmarks: (ids: string[], tagsToRemove: string[]) => {
+        const idSet = new Set(ids)
+        const removeSet = new Set(tagsToRemove.map(t => t.toLowerCase()))
+        if (removeSet.size === 0) return
+        set((state) => ({
+          bookmarks: state.bookmarks.map((b) => {
+            if (!idSet.has(b.id)) return b
+            const next = (b.tags || []).filter(t => !removeSet.has(t.toLowerCase()))
+            return { ...b, tags: next }
+          }),
+        }))
+      },
+
       importBookmarks: async (data, options: { enableBackgroundEnhancement?: boolean } = {}) => {
         const { enableBackgroundEnhancement = true } = options
         const { categories: existingCategoriesRaw, bookmarks: existingBookmarksRaw } = get()
@@ -986,7 +1034,20 @@ export const useBookmarkStore = create<BookmarkStore>()(
     }),
     {
       name: "bookmark-store",
-      version: 2, // 增加版本号以强制重置
+      version: 3,
+      migrate: (persistedState: any, version: number) => {
+        if (!persistedState) return persistedState
+        if (version < 3) {
+          // v2 → v3: 给所有书签补 isFavorite=false 默认值
+          if (Array.isArray(persistedState.bookmarks)) {
+            persistedState.bookmarks = persistedState.bookmarks.map((b: any) => ({
+              ...b,
+              isFavorite: !!b.isFavorite,
+            }))
+          }
+        }
+        return persistedState
+      },
     },
   ),
 )

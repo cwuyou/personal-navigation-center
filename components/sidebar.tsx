@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Square, Trash, FolderPlus, Bookmark, Download, FolderCog } from "lucide-react"
+import { ChevronDown, ChevronRight, Plus, Edit2, Trash2, PanelLeftClose, PanelLeft, Check, X, MoreHorizontal, CheckSquare, Square, Trash, FolderPlus, Bookmark, Download, FolderCog, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Input } from "@/components/ui/input"
@@ -46,7 +46,7 @@ export function Sidebar({
   selectedSubCategory,
   onCategorySelect,
 }: SidebarProps) {
-  const { categories, updateCategory, updateSubCategory, deleteCategory, deleteSubCategory, deleteCategoriesBatch, exportBookmarks } = useBookmarkStore()
+  const { categories, bookmarks, updateCategory, updateSubCategory, deleteCategory, deleteSubCategory, deleteCategoriesBatch, exportBookmarks } = useBookmarkStore()
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -314,6 +314,40 @@ export function Sidebar({
 
       <ScrollArea className="flex-1 h-[calc(100vh-8rem)]">
         <div className="p-2">
+          {/* 收藏夹虚拟项 */}
+          {!isBatchMode && (() => {
+            const favCount = bookmarks.filter(b => b.isFavorite).length
+            const isActive = selectedCategory === '__favorites__'
+            return (
+              <div className="mb-2">
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className={cn(
+                    "group flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-accent",
+                    isActive && "bg-accent",
+                  )}
+                  aria-current={isActive ? "page" : undefined}
+                  onClick={() => onCategorySelect('__favorites__')}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      onCategorySelect('__favorites__')
+                    }
+                  }}
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Star className={cn("h-4 w-4 flex-shrink-0", favCount > 0 ? "fill-amber-400 text-amber-400" : "text-muted-foreground")} />
+                    <span className="text-sm font-semibold truncate">收藏夹</span>
+                  </div>
+                  {favCount > 0 && (
+                    <span className="text-xs text-muted-foreground flex-shrink-0 ml-2">{favCount}</span>
+                  )}
+                </div>
+              </div>
+            )
+          })()}
+
           {categories.map((category) => (
             <div key={category.id} className="mb-1">
               <div

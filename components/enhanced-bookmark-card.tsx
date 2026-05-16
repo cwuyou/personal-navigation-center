@@ -5,13 +5,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu"
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -21,7 +14,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { MoreHorizontal, ExternalLink, Edit, Trash2, Globe, Copy, Move, MoreVertical } from "lucide-react"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { ExternalLink, Edit, Trash2, Globe, Copy, Move, Star } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { BookmarkFavicon } from "@/components/bookmark-favicon"
 import { BookmarkCover } from "@/components/bookmark-cover"
@@ -30,18 +31,8 @@ import { useBookmarkStore } from "@/hooks/use-bookmark-store"
 import { useDisplaySettings } from "@/hooks/use-display-settings"
 import { useLayoutMode } from "@/hooks/use-layout-mode"
 import { EditBookmarkDialog } from "@/components/edit-bookmark-dialog"
+import { MoveBookmarkDialog } from "@/components/move-bookmark-dialog"
 import { toast } from "sonner"
-
-// 复制到剪贴板的辅助函数
-const copyToClipboard = async (text: string) => {
-  try {
-    await navigator.clipboard.writeText(text)
-    toast.success("已复制到剪贴板")
-  } catch (err) {
-    console.error('Failed to copy: ', err)
-    toast.error("复制失败")
-  }
-}
 
 interface Bookmark {
   id: string
@@ -66,9 +57,10 @@ export function EnhancedBookmarkCard({ bookmark }: EnhancedBookmarkCardProps) {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const [moveDialogOpen, setMoveDialogOpen] = useState(false)
   const [imageError, setImageError] = useState(false)
   const layoutMode = useLayoutMode()
-  const { deleteBookmark } = useBookmarkStore()
+  const { deleteBookmark, toggleFavorite } = useBookmarkStore()
   const { settings } = useDisplaySettings()
 
   const isListMode = layoutMode === 'list'
@@ -116,6 +108,8 @@ export function EnhancedBookmarkCard({ bookmark }: EnhancedBookmarkCardProps) {
 
   return (
     <>
+      <ContextMenu>
+        <ContextMenuTrigger asChild>
       <Card
         data-bm-id={bookmark.id}
         id={`bm-${bookmark.id}`}
@@ -196,53 +190,68 @@ export function EnhancedBookmarkCard({ bookmark }: EnhancedBookmarkCardProps) {
                     )}
                   </div>
 
-                  {/* 操作菜单 */}
-                  <div className="ml-2">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48">
-                        {/* 查看操作组 */}
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); window.open(bookmark.url, '_blank') }}>
-                          <ExternalLink className="mr-2 h-4 w-4" />
-                          新窗口打开
-                        </DropdownMenuItem>
-
-                        <DropdownMenuSeparator />
-
-                        {/* 编辑操作组 */}
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setEditDialogOpen(true) }}>
-                          <Edit className="mr-2 h-4 w-4" />
-                          编辑书签
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); copyToClipboard(bookmark.url) }}>
-                          <Copy className="mr-2 h-4 w-4" />
-                          复制链接
-                        </DropdownMenuItem>
-
-                        <DropdownMenuSeparator />
-
-                        {/* 危险操作组 */}
-                        <DropdownMenuItem
-                          onClick={(e) => { e.stopPropagation(); setDeleteDialogOpen(true) }}
-                          className="text-destructive focus:text-destructive"
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          删除书签
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+                  {/* 操作按钮组（hover/focus-visible 显示） */}
+                  <TooltipProvider delayDuration={200}>
+                    <div className="ml-2 flex items-center gap-0.5">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className={cn(
+                              "h-8 w-8 p-0 transition-opacity",
+                              bookmark.isFavorite
+                                ? "opacity-100"
+                                : "opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                            )}
+                            aria-label={bookmark.isFavorite ? "取消收藏" : "加入收藏"}
+                            aria-pressed={bookmark.isFavorite}
+                            onClick={(e) => { e.stopPropagation(); toggleFavorite(bookmark.id) }}
+                          >
+                            <Star className={cn("h-4 w-4", bookmark.isFavorite && "fill-amber-400 text-amber-400")} />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{bookmark.isFavorite ? "取消收藏" : "加入收藏"}</TooltipContent>
+                      </Tooltip>
+                      <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                            aria-label="编辑书签"
+                            onClick={(e) => { e.stopPropagation(); setEditDialogOpen(true) }}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>编辑</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                            aria-label="复制链接"
+                            onClick={(e) => { e.stopPropagation(); handleCopyUrl() }}
+                          >
+                            <Copy className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>复制链接</TooltipContent>
+                      </Tooltip>
+                      </div>
+                    </div>
+                  </TooltipProvider>
                 </div>
               </CardContent>
             </div>
           </div>
         ) : (
-          <> {/* 网格模式：垂直布局 */}
-            {/* 固定分区布局：上半部分 - 封面图片区域 */}
+          <>
+            {/* 网格模式：垂直布局；上半部分 - 封面图片区域 */}
             {settings.showCover && (
               <div className="relative">
                 <BookmarkCover
@@ -252,49 +261,60 @@ export function EnhancedBookmarkCard({ bookmark }: EnhancedBookmarkCardProps) {
                 />
 
                 {/* 操作菜单 - 悬浮在封面图上 */}
-                <div className="absolute top-2 right-2">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm hover:bg-background/90"
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      {/* 查看操作组 */}
-                      <DropdownMenuItem onClick={(e) => { e.stopPropagation(); window.open(bookmark.url, '_blank') }}>
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        新窗口打开
-                      </DropdownMenuItem>
-
-                      <DropdownMenuSeparator />
-
-                      {/* 编辑操作组 */}
-                      <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setEditDialogOpen(true) }}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        编辑书签
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={(e) => { e.stopPropagation(); copyToClipboard(bookmark.url) }}>
-                        <Copy className="mr-2 h-4 w-4" />
-                        复制链接
-                      </DropdownMenuItem>
-
-                      <DropdownMenuSeparator />
-
-                      {/* 危险操作组 */}
-                      <DropdownMenuItem
-                        onClick={(e) => { e.stopPropagation(); setDeleteDialogOpen(true) }}
-                        className="text-destructive focus:text-destructive"
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        删除书签
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+                <TooltipProvider delayDuration={200}>
+                  <div className="absolute top-2 right-2 flex items-center gap-1">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={cn(
+                            "h-8 w-8 p-0 bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-opacity",
+                            bookmark.isFavorite
+                              ? "opacity-100"
+                              : "opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                          )}
+                          aria-label={bookmark.isFavorite ? "取消收藏" : "加入收藏"}
+                          aria-pressed={bookmark.isFavorite}
+                          onClick={(e) => { e.stopPropagation(); toggleFavorite(bookmark.id) }}
+                        >
+                          <Star className={cn("h-4 w-4", bookmark.isFavorite && "fill-amber-400 text-amber-400")} />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>{bookmark.isFavorite ? "取消收藏" : "加入收藏"}</TooltipContent>
+                    </Tooltip>
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+                          aria-label="编辑书签"
+                          onClick={(e) => { e.stopPropagation(); setEditDialogOpen(true) }}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>编辑</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+                          aria-label="复制链接"
+                          onClick={(e) => { e.stopPropagation(); handleCopyUrl() }}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>复制链接</TooltipContent>
+                    </Tooltip>
+                    </div>
+                  </div>
+                </TooltipProvider>
               </div>
             )}
 
@@ -362,58 +382,110 @@ export function EnhancedBookmarkCard({ bookmark }: EnhancedBookmarkCardProps) {
                 </div>
               </div>
 
-              {/* 当没有开启封面图显示时，操作菜单显示在这里 */}
+              {/* 当没有开启封面图显示时，操作按钮显示在这里 */}
               {!settings.showCover && (
-                <div className="absolute top-2 right-2">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      {/* 查看操作组 */}
-                      <DropdownMenuItem onClick={(e) => { e.stopPropagation(); window.open(bookmark.url, '_blank') }}>
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        新窗口打开
-                      </DropdownMenuItem>
-
-                      <DropdownMenuSeparator />
-
-                      {/* 编辑操作组 */}
-                      <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setEditDialogOpen(true) }}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        编辑书签
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={(e) => { e.stopPropagation(); copyToClipboard(bookmark.url) }}>
-                        <Copy className="mr-2 h-4 w-4" />
-                        复制链接
-                      </DropdownMenuItem>
-
-                      <DropdownMenuSeparator />
-
-                      {/* 危险操作组 */}
-                      <DropdownMenuItem
-                        onClick={(e) => { e.stopPropagation(); setDeleteDialogOpen(true) }}
-                        className="text-destructive focus:text-destructive"
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        删除书签
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+                <TooltipProvider delayDuration={200}>
+                  <div className="absolute top-2 right-2 flex items-center gap-0.5">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={cn(
+                            "h-8 w-8 p-0 transition-opacity",
+                            bookmark.isFavorite
+                              ? "opacity-100"
+                              : "opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                          )}
+                          aria-label={bookmark.isFavorite ? "取消收藏" : "加入收藏"}
+                          aria-pressed={bookmark.isFavorite}
+                          onClick={(e) => { e.stopPropagation(); toggleFavorite(bookmark.id) }}
+                        >
+                          <Star className={cn("h-4 w-4", bookmark.isFavorite && "fill-amber-400 text-amber-400")} />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>{bookmark.isFavorite ? "取消收藏" : "加入收藏"}</TooltipContent>
+                    </Tooltip>
+                    <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0"
+                          aria-label="编辑书签"
+                          onClick={(e) => { e.stopPropagation(); setEditDialogOpen(true) }}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>编辑</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0"
+                          aria-label="复制链接"
+                          onClick={(e) => { e.stopPropagation(); handleCopyUrl() }}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>复制链接</TooltipContent>
+                    </Tooltip>
+                    </div>
+                  </div>
+                </TooltipProvider>
               )}
             </CardContent>
           </>
         )}
       </Card>
+        </ContextMenuTrigger>
+        <ContextMenuContent className="w-48">
+          <ContextMenuItem onClick={() => toggleFavorite(bookmark.id)}>
+            <Star className={cn("mr-2 h-4 w-4", bookmark.isFavorite && "fill-amber-400 text-amber-400")} />
+            {bookmark.isFavorite ? "取消收藏" : "加入收藏"}
+          </ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenuItem onClick={() => setEditDialogOpen(true)}>
+            <Edit className="mr-2 h-4 w-4" />
+            编辑书签
+          </ContextMenuItem>
+          <ContextMenuItem onClick={handleCopyUrl}>
+            <Copy className="mr-2 h-4 w-4" />
+            复制链接
+          </ContextMenuItem>
+          <ContextMenuItem onClick={() => setMoveDialogOpen(true)}>
+            <Move className="mr-2 h-4 w-4" />
+            移动到...
+          </ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenuItem
+            onClick={() => setDeleteDialogOpen(true)}
+            className="text-destructive focus:text-destructive"
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            删除书签
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
 
       {/* 编辑书签对话框 */}
       <EditBookmarkDialog
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}
         bookmark={bookmark}
+      />
+
+      {/* 移动书签对话框 */}
+      <MoveBookmarkDialog
+        open={moveDialogOpen}
+        onOpenChange={setMoveDialogOpen}
+        bookmarkIds={[bookmark.id]}
+        currentSubCategoryId={bookmark.subCategoryId}
       />
 
       {/* 删除确认对话框 */}

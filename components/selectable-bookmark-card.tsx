@@ -68,16 +68,16 @@ export function SelectableBookmarkCard({
         <CardContent className="card-content p-4 sm:p-5">
           {/* 选择模式下的选择指示器 */}
           {isSelectionMode && (
-            <div className="absolute top-3 right-3 z-10">
+            <div className="absolute top-3 left-3 z-10">
               <div
                 role="checkbox"
                 aria-checked={isSelected}
                 aria-label={`选择书签 ${bookmark.title}`}
                 className={cn(
-                  "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors",
+                  "w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors",
                   isSelected
                     ? "bg-primary border-primary text-primary-foreground"
-                    : "border-muted-foreground/30 bg-background"
+                    : "border-muted-foreground/40 bg-background/90 backdrop-blur-sm"
                 )}
               >
                 {isSelected && <Check className="w-3 h-3" />}
